@@ -18,7 +18,7 @@ public final class WingsConfig {
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
-        builder.comment("General configuration for Wings Port").push("general");
+        builder.comment("General configuration for lv wings").push("general");
 
         WEAR_OBSTRUCTIONS = builder
             .comment("List of item IDs that prevent players from equipping wings.")
