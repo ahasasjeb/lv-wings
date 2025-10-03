@@ -20,11 +20,13 @@ This is a community-maintained fork of the Wings mod.
 通过喝下药水，你可以获得不同的翅膀，相比之前的版本，这个模组还添加了一个超级翅膀，但在生存模式下无法获取，可以获得更强力的药水效果，以及驱逐14格内的敌对生物。
 每个翅膀都会在飞行期间、着陆、起飞时消耗你的饱食度。
 
-## English Introduction
+## Introduction
 
 This version of Wings is a community-developed continuation that was originally started by pau101 and later ported to Minecraft 1.18.2 by jt789. When you drink the wing potions, you receive different types of wings with unique properties.
 
 Compared to earlier releases, this fork adds a "Super Wings" item (only obtainable in Creative mode), stronger potion effects, and an effect that repels hostile mobs within a 14-block radius. Each wing type consumes your hunger while flying, taking off, and landing.
+
+There are plans to continue maintaining the project in the future.
 
 ## Crafting and Brewing
 
@@ -54,6 +56,14 @@ Brewing steps:
 1. Place a Slow Falling potion into the Brewing Stand as the base.
 2. Put the corresponding ingredient into the top slot.
 3. Wait for brewing to complete to obtain the wing potion.
+
+## 介绍
+
+这个版本的 Wings 是一个由社区开发的延续项目，最初由 pau101 启动，后来由 jt789 移植到 Minecraft 1.18.2。当你饮用翅膀药水时，会获得具有独特属性的不同类型翅膀。
+
+与早期版本相比，此分支新增了一个“超级翅膀”物品（仅能在创造模式中获得）、更强的药水效果，以及一个在 14 格内驱逐敌对生物的效果。每种翅膀在飞行、起飞和降落时都会消耗你的饥饿值。
+
+未来计划将继续维护该项目。
 
 ## 🧪 合成表
 
