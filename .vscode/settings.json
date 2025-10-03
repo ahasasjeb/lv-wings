@@ -1,0 +1,9 @@
+{
+  "java.compile.exclusion": [
+    "**/反编译1.18.2MC源代码/**"
+  ],
+  "java.compile.nullAnalysis.mode": "automatic",
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.import.gradle.enabled": true,
+  "java.import.gradle.wrapper.enabled": true
+}
