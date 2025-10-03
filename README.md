@@ -26,9 +26,9 @@ This is a community-maintained fork of the Wings mod.
 
 ## Introduction
 
-This version of Wings is a community-developed continuation that was originally started by pau101 and later ported to Minecraft 1.18.2 by jt789. When you drink the wing potions, you receive different types of wings with unique properties.
+This version of Wings is a community-developed continuation project, originally started by pau101 and later ported to Minecraft 1.18.2 by jt789. When you drink a wings potion, you receive different types of wings with unique attributes.
 
-Compared to earlier releases, this fork adds a "Super Wings" item (only obtainable in Creative mode), stronger potion effects, and an effect that repels hostile mobs within a 14-block diameter. While wearing wings you will also see a hint to press R to enter flight. Each wing type consumes your hunger while flying, taking off, and landing.
+Compared to earlier versions, this branch adds a "Super Wings" item (obtainable only in Creative mode), stronger potion effects, and an effect that repels hostile mobs within a 14-block diameter. While wearing wings, press R to enter flight. Each type of wing consumes your hunger while flying, taking off, and landing.
 
 There are plans to continue maintaining the project in the future.
 
@@ -65,7 +65,7 @@ Brewing steps:
 
 这个版本的 Wings 是一个由社区开发的延续项目，最初由 pau101 启动，后来由 jt789 移植到 Minecraft 1.18.2。当你饮用翅膀药水时，会获得具有独特属性的不同类型翅膀。
 
-与早期版本相比，此分支新增了一个“超级翅膀”物品（仅能在创造模式中获得）、更强的药水效果，以及一个在直径 14 格的范围内驱逐敌对生物的效果。佩戴翅膀时，游戏界面会提示按 R 进入飞行。每种翅膀在飞行、起飞和降落时都会消耗你的饥饿值。
+与早期版本相比，此分支新增了一个“超级翅膀”物品（仅能在创造模式中获得）、更强的药水效果，以及一个在直径 14 格的范围内驱逐敌对生物的效果。佩戴翅膀时，按 R 进入飞行。每种翅膀在飞行、起飞和降落时都会消耗你的饱食度。
 
 未来计划将继续维护该项目。
 
@@ -82,16 +82,16 @@ Brewing steps:
 
 | 翅膀名称 | 中文名称 | 酿造材料 |
 |---------|---------|---------|
-| Angel Wings | 天使翅膀 | 羽毛 (Feather) |
-| Parrot Wings | 鹦鹉翅膀 | 红色染料 (Red Dye) |
-| Bat Wings | 蝙蝠翅膀 | 蝙蝠血瓶 (Bat Blood Bottle) |
-| Blue Butterfly Wings | 蓝蝴蝶翅膀 | 蓝色染料 (Blue Dye) |
-| Dragon Wings | 龙翅膀 | 皮革 (Leather) |
-| Evil Wings | 邪恶翅膀 | 骨头 (Bone) |
-| Fairy Wings | 精灵翅膀 | 滨菊 (Oxeye Daisy) |
-| Fire Wings | 火焰翅膀 | 烈焰粉 (Blaze Powder) |
-| Monarch Butterfly Wings | 帝王蝶翅膀 | 橙色染料 (Orange Dye) |
-| Slime Wings | 史莱姆翅膀 | 粘液球 (Slime Ball) |
+| Angel Wings | 天使翅膀 | 羽毛|
+| Parrot Wings | 鹦鹉翅膀 | 红色染料|
+| Bat Wings | 蝙蝠翅膀 | 蝙蝠血瓶|
+| Blue Butterfly Wings | 蓝蝴蝶翅膀 | 蓝色染料 |
+| Dragon Wings | 龙翅膀 | 皮革  |
+| Evil Wings | 邪恶翅膀 | 骨头 |
+| Fairy Wings | 精灵翅膀 | 滨菊  |
+| Fire Wings | 火焰翅膀 | 烈焰粉  |
+| Monarch Butterfly Wings | 帝王蝶翅膀 | 橙色染料  |
+| Slime Wings | 史莱姆翅膀 | 粘液球  |
 | Lvjia Super Wings | LVJIA超级翅膀 | 仅限创造模式 |
 
 **酿造步骤**:
