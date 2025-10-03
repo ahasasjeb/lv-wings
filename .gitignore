@@ -1,0 +1,29 @@
+# eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
+
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
+
+# gradle
+build
+.gradle
+
+# other
+eclipse
+run
+run-server
+logs
+
+# Files from Forge MDK
+forge*changelog.txt
+反编译1.18.2MC源代码
+MC1.19.4反编译和forge代码
