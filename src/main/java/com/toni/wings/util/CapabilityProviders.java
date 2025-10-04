@@ -3,14 +3,15 @@ package com.toni.wings.util;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
 import java.util.function.Consumer;
 
 public final class CapabilityProviders {
@@ -97,7 +98,7 @@ public final class CapabilityProviders {
         }
 
         @Override
-        public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
+        public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction facing) {
             for (ICapabilityProvider provider : this.providers) {
                 LazyOptional<T> instance = provider.getCapability(capability, facing);
                 if (instance.isPresent()) {
@@ -131,7 +132,7 @@ public final class CapabilityProviders {
         private static final EmptyProvider INSTANCE = new EmptyProvider();
 
         @Override
-        public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
+        public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction facing) {
             return LazyOptional.empty();
         }
     }
@@ -149,7 +150,7 @@ public final class CapabilityProviders {
         }
 
         @Override
-        public <C> LazyOptional<C> getCapability(@Nonnull Capability<C> capability, @Nullable Direction facing) {
+        public <C> LazyOptional<C> getCapability(@NotNull Capability<C> capability, @Nullable Direction facing) {
             return this.capability == capability ? this.lazy.cast() : LazyOptional.empty();
         }
     }
@@ -160,6 +161,7 @@ public final class CapabilityProviders {
         }
     }
 
+    @SuppressWarnings("deprecation")
     private static final class SerializingSingleProvider<T, N extends Tag> extends SingleProvider<T> implements INBTSerializable<N> {
         final NBTSerializer<T, N> serializer;
 
@@ -169,12 +171,12 @@ public final class CapabilityProviders {
         }
 
         @Override
-        public N serializeNBT() {
+        public N serializeNBT(HolderLookup.Provider registryAccess) {
             return this.serializer.serialize(this.instance);
         }
 
         @Override
-        public void deserializeNBT(N compound) {
+        public void deserializeNBT(HolderLookup.Provider registryAccess, N compound) {
             this.instance = this.serializer.deserialize(compound);
         }
     }

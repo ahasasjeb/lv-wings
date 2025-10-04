@@ -6,7 +6,6 @@ import com.toni.wings.client.apparatus.WingForm;
 import com.toni.wings.client.flight.Animator;
 import com.toni.wings.client.flight.AnimatorAvian;
 import com.toni.wings.client.flight.AnimatorInsectoid;
-import com.toni.wings.client.flight.FlightView;
 import com.toni.wings.client.model.ModelWings;
 import com.toni.wings.client.model.ModelWingsAvian;
 import com.toni.wings.client.model.ModelWingsInsectoid;
@@ -25,7 +24,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import org.lwjgl.glfw.GLFW;
 
@@ -40,7 +38,7 @@ public final class ClientProxy extends Proxy {
     @Override
     public void init(IEventBus modBus) {
         super.init(modBus);
-    LayerWings.init(modBus);
+        LayerWings.init(modBus);
         //modBus.register(BakeModels.class);
         MinecraftForge.EVENT_BUS.register(KeyInputListener.builder()
             .category("key.categories.wings")
@@ -59,14 +57,7 @@ public final class ClientProxy extends Proxy {
             .build()
         );
 
-    modBus.addListener(KeyInputListener::registerKeyMappings);
-    }
-
-    @Override
-    protected void registerCapabilities(RegisterCapabilitiesEvent event)
-    {
-        super.registerCapabilities(event);
-        event.register(FlightView.class);
+        modBus.addListener(KeyInputListener::registerKeyMappings);
     }
 
     @Override

@@ -35,6 +35,8 @@ public final class FlightDefault implements Flight {
 
     private static final float PITCH_OFFSET = 30.0F;
 
+    private static final ResourceLocation DEFAULT_WING_ID = WingsMod.Names.NONE;
+
     private final List<FlyingListener> flyingListeners = Lists.newArrayList();
 
     private final List<SyncListener> syncListeners = Lists.newArrayList();
@@ -50,6 +52,19 @@ public final class FlightDefault implements Flight {
     private FlightApparatus flightApparatus = FlightApparatus.NONE;
 
     private WingState state = this.voidState;
+
+    private static ResourceLocation wingIdFor(FlightApparatus wing) {
+        ResourceLocation key = wing != null ? WingsMod.WINGS.getKey(wing) : null;
+        return key != null ? key : DEFAULT_WING_ID;
+    }
+
+    private static FlightApparatus wingFrom(ResourceLocation id) {
+        return id != null ? WingsMod.WINGS.getOptional(id).orElse(FlightApparatus.NONE) : FlightApparatus.NONE;
+    }
+
+    private static FlightApparatus wingFrom(String rawId) {
+        return wingFrom(ResourceLocation.tryParse(rawId));
+    }
 
     @Override
     public void setIsFlying(boolean isFlying, PlayerSet players) {
@@ -221,18 +236,20 @@ public final class FlightDefault implements Flight {
     public void serialize(FriendlyByteBuf buf) {
         buf.writeBoolean(this.isFlying());
         buf.writeVarInt(this.getTimeFlying());
-        buf.writeUtf(WingsMod.WINGS.getKey(this.getWing()).toString());
+        buf.writeResourceLocation(wingIdFor(this.getWing()));
     }
 
     @Override
     public void deserialize(FriendlyByteBuf buf) {
         this.setIsFlying(buf.readBoolean());
         this.setTimeFlying(buf.readVarInt());
-        ResourceLocation wingId = ResourceLocation.tryParse(buf.readUtf(64));
-        FlightApparatus wing = wingId != null
-            ? WingsMod.WINGS.getOptional(wingId).orElse(FlightApparatus.NONE)
-            : FlightApparatus.NONE;
-        this.setWing(wing);
+        ResourceLocation wingId;
+        try {
+            wingId = buf.readResourceLocation();
+        } catch (IllegalArgumentException ex) {
+            wingId = DEFAULT_WING_ID;
+        }
+        this.setWing(wingFrom(wingId));
     }
 
     public static final class Serializer implements NBTSerializer<FlightDefault, CompoundTag> {
@@ -253,7 +270,7 @@ public final class FlightDefault implements Flight {
             CompoundTag compound = new CompoundTag();
             compound.putBoolean(IS_FLYING, instance.isFlying());
             compound.putInt(TIME_FLYING, instance.getTimeFlying());
-            compound.putString(WING, WingsMod.WINGS.getKey(instance.getWing()).toString());
+            compound.putString(WING, wingIdFor(instance.getWing()).toString());
             return compound;
         }
 
@@ -262,11 +279,10 @@ public final class FlightDefault implements Flight {
             FlightDefault f = this.factory.get();
             f.setIsFlying(compound.getBoolean(IS_FLYING));
             f.setTimeFlying(compound.getInt(TIME_FLYING));
-            ResourceLocation wingId = ResourceLocation.tryParse(compound.getString(WING));
-            FlightApparatus wing = wingId != null
-                ? WingsMod.WINGS.getOptional(wingId).orElse(FlightApparatus.NONE)
-                : FlightApparatus.NONE;
-            f.setWing(wing);
+            String wingIdRaw = compound.contains(WING, net.minecraft.nbt.Tag.TAG_STRING)
+                ? compound.getString(WING)
+                : DEFAULT_WING_ID.toString();
+            f.setWing(wingFrom(wingIdRaw));
             return f;
         }
     }

@@ -34,7 +34,7 @@ easycore.inMethod(PlayerEntity.m_7594_()) // updatePose
 /**
  * Add exhaustion for winged flight
  */
-easycore.inMethod(PlayerEntity.m_36378_(double, double, double)) // addMovementStat
+easycore.inMethod(ServerPlayerEntity.checkMovementStatistics(double, double, double)) // checkMovementStatistics
     .atLast(invokestatic(java.lang.Math.round(float), int)).append(
         aload(0),
         dload(1),

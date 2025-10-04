@@ -2,10 +2,13 @@ package com.toni.wings.server.item;
 
 import com.toni.wings.WingsMod;
 import com.toni.wings.server.apparatus.FlightApparatus;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -21,35 +24,40 @@ public final class WingsItems {
     public static final DeferredRegister<Item> REG = DeferredRegister.create(ForgeRegistries.ITEMS, WingsMod.ID);
 
     public static final RegistryObject<Item> BAT_BLOOD_BOTTLE = REG.register("bat_blood_bottle",
-        () -> new BatBloodBottleItem(new Item.Properties()
+        () -> new BatBloodBottleItem(properties("bat_blood_bottle")
             .craftRemainder(Items.GLASS_BOTTLE)
             .stacksTo(16)));
 
-    public static final RegistryObject<Item> ANGEL_WINGS_BOTTLE = REG.register("angel_wings_bottle", bottle(() -> WingsMod.ANGEL_WINGS));
-    public static final RegistryObject<Item> PARROT_WINGS_BOTTLE = REG.register("parrot_wings_bottle", bottle(() -> WingsMod.PARROT_WINGS));
-    public static final RegistryObject<Item> SLIME_WINGS_BOTTLE = REG.register("slime_wings_bottle", bottle(() -> WingsMod.SLIME_WINGS));
-    public static final RegistryObject<Item> BLUE_BUTTERFLY_WINGS_BOTTLE = REG.register("blue_butterfly_wings_bottle", bottle(() -> WingsMod.BLUE_BUTTERFLY_WINGS));
-    public static final RegistryObject<Item> MONARCH_BUTTERFLY_WINGS_BOTTLE = REG.register("monarch_butterfly_wings_bottle", bottle(() -> WingsMod.MONARCH_BUTTERFLY_WINGS));
-    public static final RegistryObject<Item> FIRE_WINGS_BOTTLE = REG.register("fire_wings_bottle", bottle(() -> WingsMod.FIRE_WINGS));
-    public static final RegistryObject<Item> BAT_WINGS_BOTTLE = REG.register("bat_wings_bottle", bottle(() -> WingsMod.BAT_WINGS));
-    public static final RegistryObject<Item> FAIRY_WINGS_BOTTLE = REG.register("fairy_wings_bottle", bottle(() -> WingsMod.FAIRY_WINGS));
-    public static final RegistryObject<Item> EVIL_WINGS_BOTTLE = REG.register("evil_wings_bottle", bottle(() -> WingsMod.EVIL_WINGS));
-    public static final RegistryObject<Item> DRAGON_WINGS_BOTTLE = REG.register("dragon_wings_bottle", bottle(() -> WingsMod.DRAGON_WINGS));
-    public static final RegistryObject<Item> LVJIA_SUPER_WINGS_BOTTLE = REG.register("lvjia_super_wings_bottle", bottle(() -> WingsMod.LVJIA_SUPER_WINGS));
+    public static final RegistryObject<Item> ANGEL_WINGS_BOTTLE = REG.register("angel_wings_bottle", bottle("angel_wings_bottle", () -> WingsMod.ANGEL_WINGS));
+    public static final RegistryObject<Item> PARROT_WINGS_BOTTLE = REG.register("parrot_wings_bottle", bottle("parrot_wings_bottle", () -> WingsMod.PARROT_WINGS));
+    public static final RegistryObject<Item> SLIME_WINGS_BOTTLE = REG.register("slime_wings_bottle", bottle("slime_wings_bottle", () -> WingsMod.SLIME_WINGS));
+    public static final RegistryObject<Item> BLUE_BUTTERFLY_WINGS_BOTTLE = REG.register("blue_butterfly_wings_bottle", bottle("blue_butterfly_wings_bottle", () -> WingsMod.BLUE_BUTTERFLY_WINGS));
+    public static final RegistryObject<Item> MONARCH_BUTTERFLY_WINGS_BOTTLE = REG.register("monarch_butterfly_wings_bottle", bottle("monarch_butterfly_wings_bottle", () -> WingsMod.MONARCH_BUTTERFLY_WINGS));
+    public static final RegistryObject<Item> FIRE_WINGS_BOTTLE = REG.register("fire_wings_bottle", bottle("fire_wings_bottle", () -> WingsMod.FIRE_WINGS));
+    public static final RegistryObject<Item> BAT_WINGS_BOTTLE = REG.register("bat_wings_bottle", bottle("bat_wings_bottle", () -> WingsMod.BAT_WINGS));
+    public static final RegistryObject<Item> FAIRY_WINGS_BOTTLE = REG.register("fairy_wings_bottle", bottle("fairy_wings_bottle", () -> WingsMod.FAIRY_WINGS));
+    public static final RegistryObject<Item> EVIL_WINGS_BOTTLE = REG.register("evil_wings_bottle", bottle("evil_wings_bottle", () -> WingsMod.EVIL_WINGS));
+    public static final RegistryObject<Item> DRAGON_WINGS_BOTTLE = REG.register("dragon_wings_bottle", bottle("dragon_wings_bottle", () -> WingsMod.DRAGON_WINGS));
+    public static final RegistryObject<Item> LVJIA_SUPER_WINGS_BOTTLE = REG.register("lvjia_super_wings_bottle", bottle("lvjia_super_wings_bottle", () -> WingsMod.LVJIA_SUPER_WINGS));
     //public static final RegistryObject<Item> METALLIC_WINGS_BOTTLE = REG.register("metallic_wings_bottle", bottle(() -> WingsMod.METALLIC_WINGS));
 
 
-    private static Supplier<Item> bottle(Supplier<FlightApparatus> wings) {
-        return () -> new WingsBottleItem(new Item.Properties()
+    private static Item.Properties properties(String name) {
+        return new Item.Properties().setId(ResourceKey.create(Registries.ITEM, WingsMod.locate(name)));
+    }
+
+    private static Supplier<Item> bottle(String name, Supplier<FlightApparatus> wings) {
+        return () -> new WingsBottleItem(properties(name)
             .craftRemainder(Items.GLASS_BOTTLE)
             .stacksTo(16), wings.get());
     }
 
-    public static void buildCreativeTabContents(CreativeModeTabEvent.BuildContents event) {
-        if (event.getTab() == CreativeModeTabs.FOOD_AND_DRINKS) {
+    public static void buildCreativeTabContents(BuildCreativeModeTabContentsEvent event) {
+        ResourceKey<CreativeModeTab> tabKey = event.getTabKey();
+        if (tabKey == CreativeModeTabs.FOOD_AND_DRINKS) {
             event.accept(BAT_BLOOD_BOTTLE.get());
         }
-        if (event.getTab() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+        if (tabKey == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             event.accept(ANGEL_WINGS_BOTTLE.get());
             event.accept(PARROT_WINGS_BOTTLE.get());
             event.accept(SLIME_WINGS_BOTTLE.get());

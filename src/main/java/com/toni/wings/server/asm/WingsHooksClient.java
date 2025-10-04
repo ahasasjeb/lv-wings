@@ -7,6 +7,7 @@ import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
+import net.minecraft.client.renderer.entity.state.PlayerRenderState;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -30,8 +31,21 @@ public final class WingsHooksClient {
         }
     }
 
-    public static void onApplyPlayerRotations(AbstractClientPlayer player, PoseStack matrixStack, float delta) {
-        MinecraftForge.EVENT_BUS.post(new ApplyPlayerRotationsEvent(player, matrixStack, delta));
+    private static final ThreadLocal<AbstractClientPlayer> RENDERING_PLAYER = new ThreadLocal<>();
+
+    public static void onExtractPlayerRenderState(AbstractClientPlayer player, PlayerRenderState state) {
+        RENDERING_PLAYER.set(player);
+    }
+
+    public static void onApplyPlayerRotations(PoseStack matrixStack, float delta) {
+        AbstractClientPlayer player = RENDERING_PLAYER.get();
+        if (player != null) {
+            try {
+                MinecraftForge.EVENT_BUS.post(new ApplyPlayerRotationsEvent(player, matrixStack, delta));
+            } finally {
+                RENDERING_PLAYER.remove();
+            }
+        }
     }
 
     public static void onTurn(Entity entity, float deltaYaw) {

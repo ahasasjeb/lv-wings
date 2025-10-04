@@ -2,7 +2,8 @@ plugins {
 	id 'eclipse'
 	id 'idea'
 	id 'maven-publish'
-	id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+	// Use the MDK-recommended minimum patch version for ForgeGradle
+	id 'net.minecraftforge.gradle' version '[6.0.36,6.2)'
 }
 
 version = "${minecraft_version}-${mod_version}"
@@ -19,19 +20,15 @@ println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty '
 minecraft {
 	accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 	mappings channel: mapping_channel, version: mapping_version
+	reobf = false
 	copyIdeResources = true
 
 	runs {
 		configureEach {
 			workingDirectory project.file('run')
 			property 'forge.logging.markers', 'REGISTRIES'
-			property 'forge.logging.console.level', 'debug'
-			property 'forge.enabledGameTestNamespaces', mod_id
-				mods {
-					"${mod_id}" {
-						source sourceSets.main
-					}
-				}
+					property 'forge.logging.console.level', 'debug'
+					property 'forge.enabledGameTestNamespaces', mod_id
 		}
 
 		client {
@@ -61,8 +58,22 @@ sourceSets {
 }
 
 repositories {
-	// Additional repositories for dependencies can be declared here
+	// Standard repositories used by the MDK template
+	mavenCentral()
+	maven {
+		name = 'Forge'
+		url = 'https://maven.minecraftforge.net'
+	}
+	maven {
+		name = 'Minecraft libraries'
+		url = 'https://libraries.minecraft.net'
+	}
 }
+
+// Note: avoid using a `minecraft { mods { ... } }` block here because some
+// ForgeGradle/UserDevExtension versions do not expose a `mods` DSL. The mod
+// sources are already picked up from `sourceSets.main` and from the
+// `processResources` and run configurations above.
 
 dependencies {
 	minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"

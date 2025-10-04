@@ -19,6 +19,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -50,7 +51,32 @@ public final class WingsMod {
         );
 
     public static final FlightApparatus NONE = Registry.register(WINGS, Names.NONE, FlightApparatus.NONE);
-    public static final FlightApparatus WINGLESS = Registry.register(WINGS, Names.WINGLESS, FlightApparatus.NONE);
+    public static final FlightApparatus WINGLESS = Registry.register(WINGS, Names.WINGLESS, new FlightApparatus() {
+        @Override
+        public void onFlight(Player player, Vec3 direction) {
+            FlightApparatus.NONE.onFlight(player, direction);
+        }
+
+        @Override
+        public void onLanding(Player player, Vec3 direction) {
+            FlightApparatus.NONE.onLanding(player, direction);
+        }
+
+        @Override
+        public boolean isUsable(Player player) {
+            return FlightApparatus.NONE.isUsable(player);
+        }
+
+        @Override
+        public boolean isLandable(Player player) {
+            return FlightApparatus.NONE.isLandable(player);
+        }
+
+        @Override
+        public FlightState createState(Flight flight) {
+            return FlightApparatus.NONE.createState(flight);
+        }
+    });
     public static final FlightApparatus ANGEL_WINGS = Registry.register(WINGS, Names.ANGEL, new SimpleFlightApparatus(WingsItemsConfig.ANGEL));
 	public static final FlightApparatus PARROT_WINGS = Registry.register(WINGS, Names.PARROT, new SimpleFlightApparatus(WingsItemsConfig.PARROT));
     public static final FlightApparatus BAT_WINGS = Registry.register(WINGS, Names.BAT, new SimpleFlightApparatus(WingsItemsConfig.BAT));

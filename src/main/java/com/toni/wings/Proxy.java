@@ -3,7 +3,6 @@ package com.toni.wings;
 import com.toni.wings.server.config.WingsConfig;
 import com.toni.wings.server.config.WingsItemsConfig;
 import com.toni.wings.server.config.WingsOreConfig;
-import com.toni.wings.server.dreamcatcher.InSomniable;
 import com.toni.wings.server.flight.Flight;
 import com.toni.wings.server.item.WingsItems;
 import com.toni.wings.server.net.Network;
@@ -18,7 +17,6 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.brewing.BrewingRecipeRegisterEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -31,7 +29,6 @@ public abstract class Proxy {
 
     public void init(IEventBus modBus) {
         modBus.addListener(this::setup);
-        modBus.addListener(this::registerCapabilities);
         MinecraftForge.EVENT_BUS.addListener(this::registerBrewingRecipes);
     }
 
@@ -59,12 +56,6 @@ public abstract class Proxy {
         reg.accept(Items.ORANGE_DYE, WingsItems.MONARCH_BUTTERFLY_WINGS_BOTTLE);
         reg.accept(Items.SLIME_BALL, WingsItems.SLIME_WINGS_BOTTLE);
         //reg.accept(Items.IRON_INGOT, WingsItems.METALLIC_WINGS_BOTTLE);
-    }
-
-    protected void registerCapabilities(RegisterCapabilitiesEvent event)
-    {
-        event.register(Flight.class);
-        event.register(InSomniable.class);
     }
 
     public void addFlightListeners(Player player, Flight instance) {
