@@ -27,7 +27,13 @@ public final class WingsHooksClient {
     public static void onSetPlayerRotationAngles(PlayerRenderState state, PlayerModel model) {
         AbstractClientPlayer player = RENDERING_PLAYER.get();
         if (player != null) {
-            MinecraftForge.EVENT_BUS.post(new AnimatePlayerModelEvent(player, model, state.ageInTicks, state.xRot));
+            try {
+                MinecraftForge.EVENT_BUS.post(new AnimatePlayerModelEvent(player, model, state.ageInTicks, state.xRot));
+            } finally {
+                RENDERING_PLAYER.remove();
+            }
+        } else {
+            RENDERING_PLAYER.remove();
         }
     }
 
@@ -40,12 +46,8 @@ public final class WingsHooksClient {
     public static void onApplyPlayerRotations(PlayerRenderState state, PoseStack matrixStack) {
         AbstractClientPlayer player = RENDERING_PLAYER.get();
         if (player != null) {
-            try {
-                float delta = state.ageInTicks - player.tickCount;
-                MinecraftForge.EVENT_BUS.post(new ApplyPlayerRotationsEvent(player, matrixStack, delta));
-            } finally {
-                RENDERING_PLAYER.remove();
-            }
+            float delta = state.ageInTicks - player.tickCount;
+            MinecraftForge.EVENT_BUS.post(new ApplyPlayerRotationsEvent(player, matrixStack, delta));
         }
     }
 

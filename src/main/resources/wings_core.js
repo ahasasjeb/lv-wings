@@ -130,7 +130,7 @@ easycore.inMethod(net.minecraftforge.client.ForgeHooksClient.shouldCauseReequipA
  * Add AnimatePlayerModelEvent
  */
 easycore.inMethod(PlayerModel.setupAnim(net.minecraft.client.renderer.entity.state.PlayerRenderState)) // setRotationAngles
-    .atFirst(invokespecial(net.minecraft.client.model.HumanoidModel.setupAnim(net.minecraft.client.renderer.entity.state.HumanoidRenderState))).append(
+    .atLast(_return).prepend(
         aload(1),
         aload(0),
         invokestatic(WingsHooksClient.onSetPlayerRotationAngles(net.minecraft.client.renderer.entity.state.PlayerRenderState, PlayerModel))
