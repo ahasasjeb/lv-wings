@@ -11,7 +11,6 @@ import net.minecraft.client.renderer.entity.state.PlayerRenderState;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MapItem;
 import net.minecraftforge.common.MinecraftForge;
@@ -25,9 +24,10 @@ public final class WingsHooksClient {
 
     private static int selectedItemSlot = 0;
 
-    public static void onSetPlayerRotationAngles(LivingEntity living, PlayerModel model, float ageTicks, float pitch) {
-        if (living instanceof Player) {
-            MinecraftForge.EVENT_BUS.post(new AnimatePlayerModelEvent((Player) living, model, ageTicks, pitch));
+    public static void onSetPlayerRotationAngles(PlayerRenderState state, PlayerModel model) {
+        AbstractClientPlayer player = RENDERING_PLAYER.get();
+        if (player != null) {
+            MinecraftForge.EVENT_BUS.post(new AnimatePlayerModelEvent(player, model, state.ageInTicks, state.xRot));
         }
     }
 
@@ -37,10 +37,11 @@ public final class WingsHooksClient {
         RENDERING_PLAYER.set(player);
     }
 
-    public static void onApplyPlayerRotations(PoseStack matrixStack, float delta) {
+    public static void onApplyPlayerRotations(PlayerRenderState state, PoseStack matrixStack) {
         AbstractClientPlayer player = RENDERING_PLAYER.get();
         if (player != null) {
             try {
+                float delta = state.ageInTicks - player.tickCount;
                 MinecraftForge.EVENT_BUS.post(new ApplyPlayerRotationsEvent(player, matrixStack, delta));
             } finally {
                 RENDERING_PLAYER.remove();

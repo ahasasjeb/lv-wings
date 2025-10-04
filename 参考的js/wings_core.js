@@ -1,14 +1,13 @@
 function initializeCoreMod() {
-Java.type('net.minecraftforge.coremod.api.ASMAPI').loadFile('easycorelib.js')
-//net/minecraftforge/coremod/api/ASMAPI.java
+Java.type('net.neoforged.coremod.api.ASMAPI').loadFile('easycorelib.js')
 
-easycore.include('me', 'com')
+easycore.include('me')
 
 var Player = net.minecraft.world.entity.player.Player,
     LivingEntity = net.minecraft.world.entity.LivingEntity,
     Entity = net.minecraft.world.entity.Entity,
-    WingsHooks = com.toni.wings.server.asm.WingsHooks,
-    WingsHooksClient = com.toni.wings.server.asm.WingsHooksClient,
+    WingsHooks = me.paulf.wings.server.asm.WingsHooks,
+    WingsHooksClient = me.paulf.wings.server.asm.WingsHooksClient,
     ResourceLocation = net.minecraft.resources.ResourceLocation,
     ServerGamePacketListenerImpl = net.minecraft.server.network.ServerGamePacketListenerImpl,
     ServerPlayer = net.minecraft.server.level.ServerPlayer,
@@ -117,7 +116,7 @@ easycore.inMethod(ItemInHandRenderer.renderArmWithItem(
 /**
  * Replace reequip logic to control visibility of offhand, existing implementation left as dead code
  */
-easycore.inMethod(net.minecraftforge.client.ForgeHooksClient.shouldCauseReequipAnimation(ItemStack, ItemStack, int), boolean)
+easycore.inMethod(net.neoforged.neoforge.client.ClientHooks.shouldCauseReequipAnimation(ItemStack, ItemStack, int), boolean)
     .atFirst().prepend(
         aload(0),
         aload(1),
