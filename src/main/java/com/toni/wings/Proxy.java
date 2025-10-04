@@ -17,8 +17,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.event.brewing.BrewingRecipeRegisterEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.RegistryObject;
@@ -31,6 +32,7 @@ public abstract class Proxy {
     public void init(IEventBus modBus) {
         modBus.addListener(this::setup);
         modBus.addListener(this::registerCapabilities);
+        MinecraftForge.EVENT_BUS.addListener(this::registerBrewingRecipes);
     }
 
     protected void setup(FMLCommonSetupEvent event) {
@@ -38,30 +40,25 @@ public abstract class Proxy {
         WingsConfig.validate();
         WingsItemsConfig.validate();
         WingsOreConfig.validate();
+    }
 
-        //CapabilityManager.INSTANCE.register(Flight.class, SimpleStorage.ofVoid(), FlightDefault::new);
-        //CapabilityManager.INSTANCE.register(InSomniable.class, SimpleStorage.ofVoid(), InSomniable::new);
-        event.enqueueWork(() -> {
-            BiConsumer<ItemLike, RegistryObject<Item>> reg = (item, obj) -> {
-                BrewingRecipeRegistry.addRecipe(
-                    new PotionMix(Potions.SLOW_FALLING, Ingredient.of(item), new ItemStack(obj.get()))
-                );
-                BrewingRecipeRegistry.addRecipe(
-                    new PotionMix(Potions.LONG_SLOW_FALLING, Ingredient.of(item), new ItemStack(obj.get()))
-                );
-            };
-            reg.accept(Items.FEATHER, WingsItems.ANGEL_WINGS_BOTTLE);
-            reg.accept(Items.RED_DYE, WingsItems.PARROT_WINGS_BOTTLE);
-            reg.accept(WingsItems.BAT_BLOOD_BOTTLE.get(), WingsItems.BAT_WINGS_BOTTLE);
-            reg.accept(Items.BLUE_DYE, WingsItems.BLUE_BUTTERFLY_WINGS_BOTTLE);
-            reg.accept(Items.LEATHER, WingsItems.DRAGON_WINGS_BOTTLE);
-            reg.accept(Items.BONE, WingsItems.EVIL_WINGS_BOTTLE);
-            reg.accept(Items.OXEYE_DAISY, WingsItems.FAIRY_WINGS_BOTTLE);
-            reg.accept(Items.BLAZE_POWDER, WingsItems.FIRE_WINGS_BOTTLE);
-            reg.accept(Items.ORANGE_DYE, WingsItems.MONARCH_BUTTERFLY_WINGS_BOTTLE);
-            reg.accept(Items.SLIME_BALL, WingsItems.SLIME_WINGS_BOTTLE);
-            //reg.accept(Items.IRON_INGOT, WingsItems.METALLIC_WINGS_BOTTLE);
-        });
+    private void registerBrewingRecipes(BrewingRecipeRegisterEvent event) {
+        BiConsumer<ItemLike, RegistryObject<Item>> reg = (item, obj) -> {
+            event.addRecipe(new PotionMix(Potions.SLOW_FALLING, Ingredient.of(item), new ItemStack(obj.get())));
+            event.addRecipe(new PotionMix(Potions.LONG_SLOW_FALLING, Ingredient.of(item), new ItemStack(obj.get())));
+        };
+
+        reg.accept(Items.FEATHER, WingsItems.ANGEL_WINGS_BOTTLE);
+        reg.accept(Items.RED_DYE, WingsItems.PARROT_WINGS_BOTTLE);
+        reg.accept(WingsItems.BAT_BLOOD_BOTTLE.get(), WingsItems.BAT_WINGS_BOTTLE);
+        reg.accept(Items.BLUE_DYE, WingsItems.BLUE_BUTTERFLY_WINGS_BOTTLE);
+        reg.accept(Items.LEATHER, WingsItems.DRAGON_WINGS_BOTTLE);
+        reg.accept(Items.BONE, WingsItems.EVIL_WINGS_BOTTLE);
+        reg.accept(Items.OXEYE_DAISY, WingsItems.FAIRY_WINGS_BOTTLE);
+        reg.accept(Items.BLAZE_POWDER, WingsItems.FIRE_WINGS_BOTTLE);
+        reg.accept(Items.ORANGE_DYE, WingsItems.MONARCH_BUTTERFLY_WINGS_BOTTLE);
+        reg.accept(Items.SLIME_BALL, WingsItems.SLIME_WINGS_BOTTLE);
+        //reg.accept(Items.IRON_INGOT, WingsItems.METALLIC_WINGS_BOTTLE);
     }
 
     protected void registerCapabilities(RegisterCapabilitiesEvent event)

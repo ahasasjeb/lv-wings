@@ -1,30 +1,53 @@
 package com.toni.wings.server.potion;
 
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.brewing.BrewingRecipe;
+import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nonnull;
 
 public class PotionMix extends BrewingRecipe {
-    private final Potion from;
+    private final Holder<Potion> from;
+    private final ResourceKey<Potion> fromKey;
 
-    public PotionMix(Potion from, Ingredient ingredient, Potion to) {
+    public PotionMix(Holder<Potion> from, Ingredient ingredient, Holder<Potion> to) {
         this(from, ingredient, createPotionStack(to));
     }
 
-    public PotionMix(Potion from, Ingredient ingredient, ItemStack result) {
-        super(Ingredient.of(createPotionStack(from)), ingredient, result);
+    public PotionMix(Holder<Potion> from, Ingredient ingredient, ItemStack result) {
+        super(Ingredient.of(Items.POTION), ingredient, result);
         this.from = from;
+        this.fromKey = from.unwrapKey().orElse(null);
     }
 
     @Override
-    public boolean isInput(ItemStack stack) {
-        return !stack.isEmpty() && PotionUtils.getPotion(stack) == this.from;
+    public boolean isInput(@NotNull @Nonnull ItemStack stack) {
+        if (stack.isEmpty()) {
+            return false;
+        }
+
+        PotionContents contents = stack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
+        return contents.potion().map(this::matchesFrom).orElse(false);
     }
 
-    private static ItemStack createPotionStack(Potion potion) {
-        return PotionUtils.setPotion(new ItemStack(Items.POTION), potion);
+    private boolean matchesFrom(Holder<Potion> candidate) {
+        if (this.fromKey != null) {
+            return candidate.is(this.fromKey);
+        }
+
+        return candidate.unwrapKey()
+            .map(this.from::is)
+            .orElse(candidate.value() == this.from.value());
+    }
+
+    private static ItemStack createPotionStack(Holder<Potion> potion) {
+        return PotionContents.createItemStack(Items.POTION, potion);
     }
 }
