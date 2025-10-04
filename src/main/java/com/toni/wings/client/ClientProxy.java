@@ -14,7 +14,6 @@ import com.toni.wings.client.renderer.LayerWings;
 import com.toni.wings.server.flight.Flight;
 import com.toni.wings.server.flight.Flights;
 import com.toni.wings.server.item.BatBloodBottleItem;
-import com.toni.wings.server.item.WingsItems;
 import com.toni.wings.server.net.serverbound.MessageControlFlying;
 import com.toni.wings.util.KeyInputListener;
 import net.minecraft.client.Minecraft;
@@ -23,7 +22,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.common.MinecraftForge;
@@ -61,7 +59,6 @@ public final class ClientProxy extends Proxy {
             .build()
         );
 
-        modBus.addListener(ClientProxy::registerItemColors);
     modBus.addListener(KeyInputListener::registerKeyMappings);
     }
 
@@ -126,9 +123,5 @@ public final class ClientProxy extends Proxy {
     private static net.minecraft.client.model.geom.EntityModelSet getModel()
     {
         return net.minecraft.client.Minecraft.getInstance().getEntityModels();
-    }
-
-    private static void registerItemColors(RegisterColorHandlersEvent.Item event) {
-        event.register((stack, tintIndex) -> tintIndex == 0 ? 0x9B172D : 0xFFFFFF, WingsItems.BAT_BLOOD_BOTTLE.get());
     }
 }
