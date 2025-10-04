@@ -2,10 +2,12 @@ package com.toni.wings.server.item;
 
 import com.toni.wings.WingsMod;
 import com.toni.wings.server.apparatus.FlightApparatus;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -45,11 +47,12 @@ public final class WingsItems {
             .stacksTo(16), wings.get());
     }
 
-    public static void buildCreativeTabContents(CreativeModeTabEvent.BuildContents event) {
-        if (event.getTab() == CreativeModeTabs.FOOD_AND_DRINKS) {
+    public static void buildCreativeTabContents(BuildCreativeModeTabContentsEvent event) {
+        ResourceKey<CreativeModeTab> tabKey = event.getTabKey();
+        if (tabKey == CreativeModeTabs.FOOD_AND_DRINKS) {
             event.accept(BAT_BLOOD_BOTTLE.get());
         }
-        if (event.getTab() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+        if (tabKey == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             event.accept(ANGEL_WINGS_BOTTLE.get());
             event.accept(PARROT_WINGS_BOTTLE.get());
             event.accept(SLIME_WINGS_BOTTLE.get());

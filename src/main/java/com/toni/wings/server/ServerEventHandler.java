@@ -37,7 +37,7 @@ public final class ServerEventHandler {
         InteractionHand hand = event.getHand();
         ItemStack stack = player.getItemInHand(hand);
         if (event.getTarget() instanceof Bat && stack.getItem() == Items.GLASS_BOTTLE) {
-            player.level.playSound(
+            player.level().playSound(
                 player,
                 player.getX(), player.getY(), player.getZ(),
                 SoundEvents.BOTTLE_FILL,

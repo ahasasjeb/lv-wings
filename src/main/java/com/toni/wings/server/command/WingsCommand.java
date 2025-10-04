@@ -47,9 +47,11 @@ public class WingsCommand {
             throw ERROR_GIVE_FAILED.create();
         }
         if (targets.size() == 1) {
-            ctx.getSource().sendSuccess(Component.translatable("commands.wings.give.success.single", targets.iterator().next().getDisplayName()), true);
+            Component message = Component.translatable("commands.wings.give.success.single", targets.iterator().next().getDisplayName());
+            ctx.getSource().sendSuccess(() -> message, true);
         } else {
-            ctx.getSource().sendSuccess(Component.translatable("commands.wings.give.success.multiple", targets.size()), true);
+            Component message = Component.translatable("commands.wings.give.success.multiple", targets.size());
+            ctx.getSource().sendSuccess(() -> message, true);
         }
         return count;
     }
@@ -66,9 +68,11 @@ public class WingsCommand {
             throw ERROR_TAKE_FAILED.create();
         }
         if (targets.size() == 1) {
-            ctx.getSource().sendSuccess(Component.translatable("commands.wings.take.success.single", targets.iterator().next().getDisplayName()), true);
+            Component message = Component.translatable("commands.wings.take.success.single", targets.iterator().next().getDisplayName());
+            ctx.getSource().sendSuccess(() -> message, true);
         } else {
-            ctx.getSource().sendSuccess(Component.translatable("commands.wings.take.success.multiple", targets.size()), true);
+            Component message = Component.translatable("commands.wings.take.success.multiple", targets.size());
+            ctx.getSource().sendSuccess(() -> message, true);
         }
         return count;
     }
@@ -86,9 +90,11 @@ public class WingsCommand {
             throw ERROR_TAKE_FAILED.create();
         }
         if (targets.size() == 1) {
-            ctx.getSource().sendSuccess(Component.translatable("commands.wings.take.success.single", targets.iterator().next().getDisplayName()), true);
+            Component message = Component.translatable("commands.wings.take.success.single", targets.iterator().next().getDisplayName());
+            ctx.getSource().sendSuccess(() -> message, true);
         } else {
-            ctx.getSource().sendSuccess(Component.translatable("commands.wings.take.success.multiple", targets.size()), true);
+            Component message = Component.translatable("commands.wings.take.success.multiple", targets.size());
+            ctx.getSource().sendSuccess(() -> message, true);
         }
         return count;
     }

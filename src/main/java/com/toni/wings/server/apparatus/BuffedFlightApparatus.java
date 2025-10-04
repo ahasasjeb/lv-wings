@@ -74,7 +74,7 @@ public final class BuffedFlightApparatus implements FlightApparatus {
             @Override
             public void onUpdate(Player player) {
                 base.onUpdate(player);
-                if (!player.level.isClientSide) {
+                if (!player.level().isClientSide) {
                     if (hasEffects) {
                         effects.forEach(effect -> effect.apply(player));
                     }
@@ -99,7 +99,7 @@ public final class BuffedFlightApparatus implements FlightApparatus {
         }
         double radiusSquared = radius * radius;
         AABB searchBox = player.getBoundingBox().inflate(radius);
-        List<Mob> hostiles = player.level.getEntitiesOfClass(Mob.class, searchBox,
+    List<Mob> hostiles = player.level().getEntitiesOfClass(Mob.class, searchBox,
             mob -> isRepellableHostile(mob, player, radiusSquared));
         if (hostiles.isEmpty()) {
             return;
