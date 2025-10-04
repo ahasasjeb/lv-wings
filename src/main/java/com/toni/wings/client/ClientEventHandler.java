@@ -38,7 +38,7 @@ public final class ClientEventHandler {
             float delta = event.getTicksExisted() - player.tickCount;
             float amt = flight.getFlyingAmount(delta);
             if (amt == 0.0F) return;
-            PlayerModel<?> model = event.getModel();
+        PlayerModel model = event.getModel();
             float pitch = event.getPitch();
             model.head.xRot = MathH.toRadians(MathH.lerp(pitch, pitch / 4.0F - 90.0F, amt));
             model.leftArm.xRot = MathH.lerp(model.leftArm.xRot, -3.2F, amt);

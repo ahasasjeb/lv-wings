@@ -24,7 +24,7 @@ public final class WingsHooksClient {
 
     private static int selectedItemSlot = 0;
 
-    public static void onSetPlayerRotationAngles(LivingEntity living, PlayerModel<?> model, float ageTicks, float pitch) {
+    public static void onSetPlayerRotationAngles(LivingEntity living, PlayerModel model, float ageTicks, float pitch) {
         if (living instanceof Player) {
             MinecraftForge.EVENT_BUS.post(new AnimatePlayerModelEvent((Player) living, model, ageTicks, pitch));
         }
