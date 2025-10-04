@@ -3,13 +3,13 @@ package com.toni.wings.server.net;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.NetworkEvent;
 
 import java.util.Objects;
 
 public class ClientMessageContext extends MessageContext {
-    public ClientMessageContext(NetworkEvent.Context context) {
+    public ClientMessageContext(CustomPayloadEvent.Context context) {
         super(context);
     }
 
@@ -27,6 +27,6 @@ public class ClientMessageContext extends MessageContext {
     }
 
     public Player getPlayer() {
-        return Objects.requireNonNull(this.context.getSender());
+        return Objects.requireNonNull(this.getMinecraft().player);
     }
 }

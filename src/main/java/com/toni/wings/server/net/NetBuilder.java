@@ -1,75 +1,68 @@
 package com.toni.wings.server.net;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.network.Channel;
+import net.minecraftforge.network.ChannelBuilder;
+import net.minecraftforge.network.SimpleChannel;
 
-import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public final class NetBuilder {
-    private final NetworkRegistry.ChannelBuilder builder;
-    private String version;
+    private final ChannelBuilder builder;
+    private Integer version;
     private SimpleChannel channel;
     private int id;
 
     public NetBuilder(ResourceLocation name) {
-        this.builder = NetworkRegistry.ChannelBuilder.named(name);
+        this.builder = ChannelBuilder.named(name);
     }
 
     public NetBuilder version(int version) {
-        return this.version(String.valueOf(version));
-    }
-
-    public NetBuilder version(String version) {
         if (this.version == null) {
-            this.version = Objects.requireNonNull(version);
-            this.builder.networkProtocolVersion(() -> version);
+            this.version = version;
+            this.builder.networkProtocolVersion(version);
             return this;
         }
         throw new IllegalArgumentException("version already assigned");
     }
 
+    public NetBuilder version(String version) {
+        return this.version(Integer.parseInt(version));
+    }
+
     public NetBuilder optionalServer() {
-        this.builder.clientAcceptedVersions(this.optionalVersion());
+        this.ensureVersion();
+        this.builder.optionalServer();
         return this;
     }
 
     public NetBuilder requiredServer() {
-        this.builder.clientAcceptedVersions(this.requiredVersion());
+        this.ensureVersion();
+        this.builder.clientAcceptedVersions(Channel.VersionTest.exact(this.version));
         return this;
     }
 
     public NetBuilder optionalClient() {
-        this.builder.serverAcceptedVersions(this.optionalVersion());
+        this.ensureVersion();
+        this.builder.optionalClient();
         return this;
     }
 
     public NetBuilder requiredClient() {
-        this.builder.serverAcceptedVersions(this.requiredVersion());
+        this.ensureVersion();
+        this.builder.serverAcceptedVersions(Channel.VersionTest.exact(this.version));
         return this;
     }
-
-    private Predicate<String> optionalVersion() {
-        String v = this.version;
-        if (v == null) {
+    
+    private void ensureVersion() {
+        if (this.version == null) {
             throw new IllegalStateException("version not specified");
         }
-    return NetworkRegistry.acceptMissingOr(v);
-    }
-
-    private Predicate<String> requiredVersion() {
-        String v = this.version;
-        if (v == null) {
-            throw new IllegalStateException("version not specified");
-        }
-        return v::equals;
     }
 
     private SimpleChannel channel() {
@@ -101,36 +94,36 @@ public final class NetBuilder {
     }
 
     interface ConsumerFactory<T extends Message, S extends MessageContext> {
-        BiConsumer<T, Supplier<NetworkEvent.Context>> create(Supplier<BiConsumer<? super T, S>> handlerFactory);
+        BiConsumer<T, CustomPayloadEvent.Context> create(Supplier<BiConsumer<? super T, S>> handlerFactory);
     }
 
     private static class NoopConsumerFactory<T extends Message, S extends MessageContext> implements ConsumerFactory<T, S> {
         @Override
-        public BiConsumer<T, Supplier<NetworkEvent.Context>> create(Supplier<BiConsumer<? super T, S>> handlerFactory) {
-            return (msg, ctx) -> ctx.get().setPacketHandled(false);
+        public BiConsumer<T, CustomPayloadEvent.Context> create(Supplier<BiConsumer<? super T, S>> handlerFactory) {
+            return (msg, ctx) -> ctx.setPacketHandled(false);
         }
     }
 
     private static class HandlerConsumerFactory<T extends Message, S extends MessageContext> implements ConsumerFactory<T, S> {
         private final LogicalSide side;
-        private final Function<NetworkEvent.Context, S> contextFactory;
+        private final Function<CustomPayloadEvent.Context, S> contextFactory;
 
-        HandlerConsumerFactory(LogicalSide side, Function<NetworkEvent.Context, S> contextFactory) {
+        HandlerConsumerFactory(LogicalSide side, Function<CustomPayloadEvent.Context, S> contextFactory) {
             this.side = side;
             this.contextFactory = contextFactory;
         }
 
         @Override
-        public BiConsumer<T, Supplier<NetworkEvent.Context>> create(Supplier<BiConsumer<? super T, S>> handlerFactory) {
+        public BiConsumer<T, CustomPayloadEvent.Context> create(Supplier<BiConsumer<? super T, S>> handlerFactory) {
             BiConsumer<? super T, S> handler = handlerFactory.get();
             return (msg, ctx) -> {
-                NetworkEvent.Context c = ctx.get();
-                LogicalSide receptionSide = c.getDirection().getReceptionSide();
-                if (receptionSide == this.side) {
-                    S s = this.contextFactory.apply(c);
-                    c.enqueueWork(() -> handler.accept(msg, s));
+                boolean matchesSide = (this.side == LogicalSide.SERVER && ctx.isServerSide())
+                    || (this.side == LogicalSide.CLIENT && ctx.isClientSide());
+                if (matchesSide) {
+                    S s = this.contextFactory.apply(ctx);
+                    ctx.enqueueWork(() -> handler.accept(msg, s));
                 }
-                c.setPacketHandled(true);
+                ctx.setPacketHandled(true);
             };
         }
     }
@@ -154,7 +147,7 @@ public final class NetBuilder {
                     msg.decode(buf);
                     return msg;
                 })
-                .consumerNetworkThread(this.consumerFactory.create(consumer))
+                .consumerMainThread(this.consumerFactory.create(consumer))
                 .add();
             return NetBuilder.this;
         }

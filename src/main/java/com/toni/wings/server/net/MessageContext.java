@@ -1,12 +1,12 @@
 package com.toni.wings.server.net;
 
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.NetworkEvent;
 
 public abstract class MessageContext {
-    protected final NetworkEvent.Context context;
+    protected final CustomPayloadEvent.Context context;
 
-    public MessageContext(NetworkEvent.Context context) {
+    public MessageContext(CustomPayloadEvent.Context context) {
         this.context = context;
     }
 
