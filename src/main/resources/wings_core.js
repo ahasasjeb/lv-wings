@@ -129,24 +129,40 @@ easycore.inMethod(net.minecraftforge.client.ForgeHooksClient.shouldCauseReequipA
 /**
  * Add AnimatePlayerModelEvent
  */
-easycore.inMethod(PlayerModel.setupAnim(LivingEntity, float, float, float, float, float)) // setRotationAngles
-    .atFirst(invokespecial(net.minecraft.client.model.HumanoidModel.setupAnim(LivingEntity, float, float, float, float, float))).append(
+easycore.inMethod(PlayerModel.setupAnim(net.minecraft.client.renderer.entity.state.PlayerRenderState)) // setRotationAngles
+    .atFirst(invokespecial(net.minecraft.client.model.HumanoidModel.setupAnim(net.minecraft.client.renderer.entity.state.HumanoidRenderState))).append(
         aload(1),
         aload(0),
-        fload(4),
-        fload(6),
-        invokestatic(WingsHooksClient.onSetPlayerRotationAngles(LivingEntity, PlayerModel, float, float))
+        invokestatic(WingsHooksClient.onSetPlayerRotationAngles(net.minecraft.client.renderer.entity.state.PlayerRenderState, PlayerModel))
+    )
+
+/**
+ * Track player for render state callbacks
+ */
+easycore.inMethod(net.minecraft.client.renderer.entity.player.PlayerRenderer.extractRenderState(
+        AbstractClientPlayer,
+        net.minecraft.client.renderer.entity.state.PlayerRenderState,
+        float
+    ))
+    .atFirst().prepend(
+        aload(1),
+        aload(2),
+        invokestatic(WingsHooksClient.onExtractPlayerRenderState(AbstractClientPlayer, net.minecraft.client.renderer.entity.state.PlayerRenderState))
     )
 
 /**
  * Add ApplyPlayerRotationsEvent
  */
-easycore.inMethod(net.minecraft.client.renderer.entity.player.PlayerRenderer.setupRotations(AbstractClientPlayer, PoseStack, float, float, float, float)) // applyRotations
+easycore.inMethod(net.minecraft.client.renderer.entity.player.PlayerRenderer.setupRotations(
+        net.minecraft.client.renderer.entity.state.PlayerRenderState,
+        PoseStack,
+        float,
+        float
+    )) // applyRotations
     .atLast(_return).prepend(
         aload(1),
         aload(2),
-        fload(5),
-        invokestatic(WingsHooksClient.onApplyPlayerRotations(AbstractClientPlayer, PoseStack, float))
+        invokestatic(WingsHooksClient.onApplyPlayerRotations(net.minecraft.client.renderer.entity.state.PlayerRenderState, PoseStack))
     )
 
 /**
