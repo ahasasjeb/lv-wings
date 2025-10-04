@@ -6,18 +6,23 @@ import com.toni.wings.WingsMod;
 import com.toni.wings.client.flight.FlightViews;
 import com.toni.wings.client.model.ModelWingsAvian;
 import com.toni.wings.client.model.ModelWingsInsectoid;
-import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.entity.state.PlayerRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 
-public final class LayerWings extends RenderLayer<LivingEntity, HumanoidModel<LivingEntity>> {
-    private final TransformFunction transform;
+import javax.annotation.Nonnull;
+
+public final class LayerWings extends RenderLayer<PlayerRenderState, PlayerModel> {
 
     public static final ModelLayerLocation INSECTOID_WINGS = layer("insectoid_wings");
     public static final ModelLayerLocation AVIAN_WINGS = layer("avian_wings");
@@ -27,24 +32,37 @@ public final class LayerWings extends RenderLayer<LivingEntity, HumanoidModel<Li
         modBus.addListener(LayerWings::initLayers);
     }
 
-    public LayerWings(LivingEntityRenderer<LivingEntity, HumanoidModel<LivingEntity>> renderer, TransformFunction transform) {
-        super(renderer);
-        this.transform = transform;
+    public LayerWings(RenderLayerParent<PlayerRenderState, PlayerModel> parent) {
+        super(parent);
     }
 
     @Override
-    public void render(PoseStack matrixStack, MultiBufferSource buffer, int packedLight, LivingEntity player, float limbSwing, float limbSwingAmount, float delta, float age, float headYaw, float headPitch) {
-        if (!player.isInvisible()) {
-            FlightViews.get(player).ifPresent(flight -> {
-                flight.ifFormPresent(form -> {
-                    VertexConsumer builder = buffer.getBuffer(form.getRenderType());
-                    matrixStack.pushPose();
-                    this.transform.apply(player, matrixStack);
-                    form.render(matrixStack, builder, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F, delta);
-                    matrixStack.popPose();
-                });
-            });
+    public void render(@Nonnull PoseStack poseStack, @Nonnull MultiBufferSource buffer, int packedLight, @Nonnull PlayerRenderState state, float limbSwing, float limbSwingAmount) {
+        Minecraft minecraft = Minecraft.getInstance();
+        ClientLevel level = minecraft.level;
+        if (level == null) {
+            return;
         }
+
+        if (!(level.getEntity(state.id) instanceof AbstractClientPlayer player)) {
+            return;
+        }
+
+        if (player.isInvisible()) {
+            return;
+        }
+
+        FlightViews.get(player).ifPresent(flight -> flight.ifFormPresent(form -> {
+            VertexConsumer builder = buffer.getBuffer(form.getRenderType());
+            poseStack.pushPose();
+            if (state.isCrouching) {
+                poseStack.translate(0.0D, 0.2D, 0.0D);
+            }
+            ModelPart body = ((PlayerModel) this.getParentModel()).body;
+            body.translateAndRotate(poseStack);
+            form.render(poseStack, builder, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F, state.ageInTicks);
+            poseStack.popPose();
+        }));
     }
 
     public static void initLayers(EntityRenderersEvent.RegisterLayerDefinitions event)
@@ -63,8 +81,4 @@ public final class LayerWings extends RenderLayer<LivingEntity, HumanoidModel<Li
         return new ModelLayerLocation(WingsMod.locate(name), layer);
     }
 
-    @FunctionalInterface
-    public interface TransformFunction {
-        void apply(LivingEntity player, PoseStack stack);
-    }
 }

@@ -6,7 +6,7 @@ import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = WingsMod.ID)
+@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = WingsMod.ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class DebugFlightAnimation {
     private DebugFlightAnimation() {
     }
@@ -14,7 +14,7 @@ public final class DebugFlightAnimation {
     private static State state = new DisabledState();
 
     @SubscribeEvent
-    public static void init(ModelEvent.RegisterAdditional event) {
+    public static void init(ModelEvent.ModifyBakingResult event) {
         state = state.init();
     }
 

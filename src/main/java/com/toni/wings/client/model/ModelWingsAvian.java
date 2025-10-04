@@ -7,6 +7,7 @@ import com.toni.wings.client.flight.AnimatorAvian;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.util.ARGB;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -39,8 +40,8 @@ public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
 
 
 
-    public ModelWingsAvian(ModelPart root) {
-        //this.root = root;
+        public ModelWingsAvian(ModelPart root) {
+                super(root);
 
         this.coracoidLeft = root.getChild("coracoidLeft");
         this.humerusLeft = coracoidLeft.getChild("humerusLeft");
@@ -159,6 +160,8 @@ public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
 
     @Override
     public void render(AnimatorAvian animator, float delta, PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+                int color = ARGB.colorFromFloat(alpha, red, green, blue);
+
         for (int i = 0; i < this.bonesLeft.size(); i++) {
             ModelPart left = this.bonesLeft.get(i);
             ModelPart right = this.bonesRight.get(i);
@@ -170,8 +173,8 @@ public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
             setAngles(left, right, animator.getFeatherRotation(i, delta));
         }
 
-        this.coracoidLeft.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
-        this.coracoidRight.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+                this.coracoidLeft.render(matrixStack, buffer, packedLight, packedOverlay, color);
+                this.coracoidRight.render(matrixStack, buffer, packedLight, packedOverlay, color);
 
     }
 
@@ -182,11 +185,6 @@ public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
         int width, int height
     ) {
         getCubes(model).add(Model3DTexture.create(offX, offY, offZ, width, height, u, v, 64, 64));
-
-    }
-
-    @Override
-    public void renderToBuffer(PoseStack p_103111_, VertexConsumer p_103112_, int p_103113_, int p_103114_, float p_103115_, float p_103116_, float p_103117_, float p_103118_) {
 
     }
 

@@ -6,18 +6,14 @@ import com.toni.wings.client.apparatus.WingForm;
 import com.toni.wings.client.renderer.LayerCapeWings;
 import com.toni.wings.client.renderer.LayerWings;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.CapeLayer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.util.Iterator;
@@ -25,6 +21,8 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static net.minecraftforge.fml.util.ObfuscationReflectionHelper.getPrivateValue;
+
+import javax.annotation.Nonnull;
 
 @OnlyIn(Dist.CLIENT)
 public class ReloadListener implements ResourceManagerReloadListener {
@@ -37,7 +35,7 @@ public class ReloadListener implements ResourceManagerReloadListener {
     }*/
 
     @Override
-    public void onResourceManagerReload(@NotNull ResourceManager rm) {
+    public void onResourceManagerReload(@Nonnull ResourceManager rm) {
 
         if(WingForm.isEmpty()){
             WingForm.register(WingsMod.ANGEL_WINGS, ClientProxy.createAvianWings(WingsMod.WINGS.getKey(WingsMod.ANGEL_WINGS)));
@@ -56,45 +54,38 @@ public class ReloadListener implements ResourceManagerReloadListener {
 
         Minecraft mc = Minecraft.getInstance();
         EntityRenderDispatcher manager = mc.getEntityRenderDispatcher();
-        Stream.concat(manager.getSkinMap().values().stream(), manager.renderers.values().stream())
-                .filter(LivingEntityRenderer.class::isInstance)
-                .map(r -> (LivingEntityRenderer<?, ?>) r)
-                .filter(render -> render.getModel() instanceof HumanoidModel<?>)
+    Stream<PlayerRenderer> skinRenderers = manager.getSkinMap().values().stream()
+        .filter(PlayerRenderer.class::isInstance)
+        .map(PlayerRenderer.class::cast);
+    Stream<PlayerRenderer> otherRenderers = manager.renderers.values().stream()
+                .filter(PlayerRenderer.class::isInstance)
+                .map(PlayerRenderer.class::cast);
+
+        Stream.concat(skinRenderers, otherRenderers)
                 .unordered()
                 .distinct()
-                .forEach(render -> {
-                    if (render instanceof PlayerRenderer playerRenderer) {
-                        replaceCapeLayer(playerRenderer);
-                    }
-                    ModelPart body = ((HumanoidModel<?>) render.getModel()).body;
-                    @SuppressWarnings("unchecked") LivingEntityRenderer<LivingEntity, HumanoidModel<LivingEntity>> livingRender = (LivingEntityRenderer<LivingEntity, HumanoidModel<LivingEntity>>) render;
-                    livingRender.addLayer(new LayerWings(livingRender, (player, stack) -> {
-                        if (player.isCrouching()) {
-                            stack.translate(0.0D, 0.2D, 0.0D);
-                        }
-                        body.translateAndRotate(stack);
-                    }));
-                });
+                .forEach(this::augmentPlayerRenderer);
+    }
+
+    private void augmentPlayerRenderer(PlayerRenderer renderer) {
+        replaceCapeLayer(renderer);
+        ensureWingsLayer(renderer);
+    }
+
+    private void ensureWingsLayer(PlayerRenderer renderer) {
+        List<?> layers = getLayers(renderer);
+        if (layers == null) {
+            return;
+        }
+        boolean hasLayer = layers.stream().anyMatch(LayerWings.class::isInstance);
+        if (!hasLayer) {
+            renderer.addLayer(new LayerWings(renderer));
+        }
     }
 
     private void replaceCapeLayer(PlayerRenderer renderer) {
-        List<?> layers = null;
-        RuntimeException failure = null;
-        for (String name : new String[]{"layers", "f_115291_"}) {
-            try {
-                layers = getPrivateValue(LivingEntityRenderer.class, renderer, name);
-                if (layers != null) {
-                    break;
-                }
-            } catch (RuntimeException ex) {
-                failure = ex;
-            }
-        }
-
+        List<?> layers = getLayers(renderer);
         if (layers == null) {
-            if (failure != null) {
-                LOGGER.warn("Failed to access player renderer layers; skipping cape replacement", failure);
-            }
             return;
         }
         boolean vanillaCapeRemoved = false;
@@ -112,7 +103,26 @@ public class ReloadListener implements ResourceManagerReloadListener {
             }
         }
         if (vanillaCapeRemoved && !hasCustomCape) {
-            renderer.addLayer(new LayerCapeWings(renderer));
+            renderer.addLayer(new LayerCapeWings(renderer, Minecraft.getInstance().getEntityModels()));
         }
+    }
+
+    private List<?> getLayers(PlayerRenderer renderer) {
+        List<?> layers = null;
+        RuntimeException failure = null;
+        for (String name : new String[]{"layers", "f_115291_"}) {
+            try {
+                layers = getPrivateValue(LivingEntityRenderer.class, renderer, name);
+                if (layers != null) {
+                    break;
+                }
+            } catch (RuntimeException ex) {
+                failure = ex;
+            }
+        }
+        if (layers == null && failure != null) {
+            LOGGER.warn("Failed to access player renderer layers; skipping cape replacement", failure);
+        }
+        return layers;
     }
 }

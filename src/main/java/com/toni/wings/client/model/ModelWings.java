@@ -11,8 +11,8 @@ import net.minecraft.world.phys.Vec3;
 
 
 public abstract class ModelWings<A extends Animator> extends Model {
-    public ModelWings() {
-        super(RenderType::entityCutout);
+    protected ModelWings(ModelPart root) {
+        super(root, RenderType::entityCutout);
     }
 
     public abstract void render(A animator, float delta, PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha);
