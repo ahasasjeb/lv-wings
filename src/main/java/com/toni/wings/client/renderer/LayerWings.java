@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.state.PlayerRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.util.Mth;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 
@@ -53,6 +54,7 @@ public final class LayerWings extends RenderLayer<PlayerRenderState, PlayerModel
         }
 
         FlightViews.get(player).ifPresent(flight -> flight.ifFormPresent(form -> {
+            float delta = Mth.clamp(state.ageInTicks - player.tickCount, 0.0F, 1.0F);
             VertexConsumer builder = buffer.getBuffer(form.getRenderType());
             poseStack.pushPose();
             if (state.isCrouching) {
@@ -60,7 +62,7 @@ public final class LayerWings extends RenderLayer<PlayerRenderState, PlayerModel
             }
             ModelPart body = ((PlayerModel) this.getParentModel()).body;
             body.translateAndRotate(poseStack);
-            form.render(poseStack, builder, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F, state.ageInTicks);
+            form.render(poseStack, builder, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F, delta);
             poseStack.popPose();
         }));
     }
