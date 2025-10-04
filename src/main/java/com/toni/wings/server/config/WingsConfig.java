@@ -22,7 +22,7 @@ public final class WingsConfig {
 
         WEAR_OBSTRUCTIONS = builder
             .comment("List of item IDs that prevent players from equipping wings.")
-            .defineList("wearObstructions", DEFAULT_WEAR_OBSTRUCTIONS, value -> value instanceof String && ResourceLocation.isValidResourceLocation((String) value));
+            .defineList("wearObstructions", DEFAULT_WEAR_OBSTRUCTIONS, value -> value instanceof String && ResourceLocation.tryParse((String) value) != null);
 
         builder.pop();
         SPEC = builder.build();
@@ -42,7 +42,7 @@ public final class WingsConfig {
             if (entry.isEmpty()) {
                 continue;
             }
-            if (!ResourceLocation.isValidResourceLocation(entry)) {
+            if (ResourceLocation.tryParse(entry) == null) {
                 LOGGER.warn("Ignoring invalid wear obstruction id '{}'. Expected a namespaced id such as 'minecraft:elytra'.", entry);
                 continue;
             }

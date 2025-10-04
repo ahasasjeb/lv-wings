@@ -4,12 +4,13 @@ import com.toni.wings.server.apparatus.FlightApparatus;
 import com.toni.wings.server.effect.WingsEffects;
 import com.toni.wings.server.flight.Flights;
 import com.toni.wings.server.sound.WingsSounds;
+import javax.annotation.Nonnull;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
@@ -21,7 +22,7 @@ public class BatBloodBottleItem extends Item {
     }
 
     @Override
-    public ItemStack finishUsingItem(ItemStack stack, Level world, LivingEntity living) {
+    public ItemStack finishUsingItem(@Nonnull ItemStack stack, @Nonnull Level world, @Nonnull LivingEntity living) {
         if (living instanceof ServerPlayer) {
             CriteriaTriggers.CONSUME_ITEM.trigger((ServerPlayer) living, stack);
             if (removeWings((ServerPlayer) living)) {
@@ -49,26 +50,26 @@ public class BatBloodBottleItem extends Item {
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(@Nonnull ItemStack stack, @Nonnull LivingEntity entity) {
         return 40;
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.DRINK;
+    public ItemUseAnimation getUseAnimation(@Nonnull ItemStack stack) {
+        return ItemUseAnimation.DRINK;
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+    public InteractionResult use(@Nonnull Level world, @Nonnull Player player, @Nonnull InteractionHand hand) {
         return ItemUtils.startUsingInstantly(world, player, hand);
     }
 
     public static boolean removeWings(Player player) {
-        return player.removeEffect(WingsEffects.WINGS.get());
+        return WingsEffects.WINGS.getHolder().map(player::removeEffect).orElse(false);
     }
 
     public static boolean removeWings(ServerPlayer player, FlightApparatus wings) {
         boolean changed = Flights.get(player).filter(flight -> flight.getWing() == wings).isPresent();
-        return changed && player.removeEffect(WingsEffects.WINGS.get());
+        return changed && WingsEffects.WINGS.getHolder().map(player::removeEffect).orElse(false);
     }
 }

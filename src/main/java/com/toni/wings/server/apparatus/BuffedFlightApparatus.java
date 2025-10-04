@@ -2,6 +2,7 @@ package com.toni.wings.server.apparatus;
 
 import com.toni.wings.server.flight.Flight;
 import com.toni.wings.server.item.WingSettings;
+import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Mob;
@@ -74,7 +75,7 @@ public final class BuffedFlightApparatus implements FlightApparatus {
             @Override
             public void onUpdate(Player player) {
                 base.onUpdate(player);
-                if (!player.level.isClientSide) {
+                if (!player.level().isClientSide) {
                     if (hasEffects) {
                         effects.forEach(effect -> effect.apply(player));
                     }
@@ -99,7 +100,7 @@ public final class BuffedFlightApparatus implements FlightApparatus {
         }
         double radiusSquared = radius * radius;
         AABB searchBox = player.getBoundingBox().inflate(radius);
-        List<Mob> hostiles = player.level.getEntitiesOfClass(Mob.class, searchBox,
+    List<Mob> hostiles = player.level().getEntitiesOfClass(Mob.class, searchBox,
             mob -> isRepellableHostile(mob, player, radiusSquared));
         if (hostiles.isEmpty()) {
             return;
@@ -184,7 +185,7 @@ public final class BuffedFlightApparatus implements FlightApparatus {
         }
     }
 
-    public record EffectSettings(MobEffect effect, int amplifier, int durationTicks, int refreshThreshold) {
+    public record EffectSettings(Holder<MobEffect> effect, int amplifier, int durationTicks, int refreshThreshold) {
         public EffectSettings {
             Objects.requireNonNull(effect, "效果");
             if (durationTicks <= 0) {
@@ -195,7 +196,7 @@ public final class BuffedFlightApparatus implements FlightApparatus {
             }
         }
 
-        public static EffectSettings of(MobEffect effect, int amplifier, int durationTicks, int refreshThreshold) {
+        public static EffectSettings of(Holder<MobEffect> effect, int amplifier, int durationTicks, int refreshThreshold) {
             return new EffectSettings(effect, amplifier, durationTicks, refreshThreshold);
         }
 

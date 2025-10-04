@@ -119,7 +119,9 @@ public final class FlightDefault implements Flight {
 
     @Override
     public boolean hasEffect(Player player) {
-        return WingsEffects.WINGS.filter(effect -> player.getEffect(effect) != null).isPresent();
+        return WingsEffects.WINGS.getHolder()
+            .map(holder -> player.getEffect(holder) != null)
+            .orElse(false);
     }
 
     @Override
@@ -156,7 +158,7 @@ public final class FlightDefault implements Flight {
                 player.fallDistance = 0.0F;
             }
         }
-        if (!player.level.isClientSide) {
+    if (!player.level().isClientSide) {
             if (this.flightApparatus.isUsable(player)) {
                 (this.state = this.state.next(this.flightApparatus)).onUpdate(player);
             } else if (this.isFlying()) {
@@ -174,7 +176,7 @@ public final class FlightDefault implements Flight {
                 this.setWing(FlightApparatus.NONE, PlayerSet.ofAll());
             }
             this.onWornUpdate(player);
-        } else if (!player.level.isClientSide) {
+    } else if (!player.level().isClientSide) {
             this.setWing(FlightApparatus.NONE, PlayerSet.ofAll());
             if (this.isFlying()) {
                 this.setIsFlying(false, PlayerSet.ofAll());
@@ -184,7 +186,7 @@ public final class FlightDefault implements Flight {
         if (this.isFlying()) {
             if (this.getTimeFlying() < MAX_TIME_FLYING) {
                 this.setTimeFlying(this.getTimeFlying() + 1);
-            } else if (player.isLocalPlayer() && player.isOnGround()) {
+            } else if (player.isLocalPlayer() && player.onGround()) {
                 this.setIsFlying(false, PlayerSet.ofOthers());
             }
         } else {
