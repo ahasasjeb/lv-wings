@@ -19,10 +19,8 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.ViewportEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
@@ -100,7 +98,7 @@ public final class ClientEventHandler {
     public static void onEmptyOffHandPresentEvent(EmptyOffHandPresentEvent event) {
         Flights.get(event.getPlayer()).ifPresent(flight -> {
             if (flight.isFlying()) {
-                event.setResult(Event.Result.ALLOW);
+                event.allow();
             }
         });
     }

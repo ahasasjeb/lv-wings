@@ -14,16 +14,16 @@ public final class VeinSettings {
     private static final int MAX_WORLD_HEIGHT = 320;
 
     private final String name;
-    private final ForgeConfigSpec.IntValue size;
-    private final ForgeConfigSpec.IntValue count;
-    private final ForgeConfigSpec.IntValue minHeight;
-    private final ForgeConfigSpec.IntValue maxHeight;
+    private final ModConfigSpec.IntValue size;
+    private final ModConfigSpec.IntValue count;
+    private final ModConfigSpec.IntValue minHeight;
+    private final ModConfigSpec.IntValue maxHeight;
     private final int defaultSize;
     private final int defaultCount;
     private final int defaultMinHeight;
     private final int defaultMaxHeight;
 
-    VeinSettings(String name, ForgeConfigSpec.Builder builder, int defaultSize, int defaultCount, int defaultMinHeight, int defaultMaxHeight) {
+    VeinSettings(String name, ModConfigSpec.Builder builder, int defaultSize, int defaultCount, int defaultMinHeight, int defaultMaxHeight) {
         this.name = name;
         this.defaultSize = defaultSize;
         this.defaultCount = defaultCount;
@@ -76,7 +76,7 @@ public final class VeinSettings {
         this.getMaxHeight();
     }
 
-    private int readInt(ForgeConfigSpec.IntValue value, String propertyName, int min, int max, int fallback) {
+    private int readInt(ModConfigSpec.IntValue value, String propertyName, int min, int max, int fallback) {
         int current = value.get();
         if (current < min || current > max) {
             LOGGER.warn("Ore '{}' property '{}' out of range: {} (expected {}-{}). Reverting to default {}.", this.name, propertyName, current, min, max, fallback);

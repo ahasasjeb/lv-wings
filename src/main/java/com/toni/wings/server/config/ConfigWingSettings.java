@@ -15,20 +15,20 @@ public final class ConfigWingSettings implements WingSettings {
     private static final double MAX_EXERTION = 10.0D;
 
     private final ResourceLocation key;
-    private final ForgeConfigSpec.IntValue requiredFlightSatiation;
-    private final ForgeConfigSpec.DoubleValue flyingExertion;
-    private final ForgeConfigSpec.IntValue requiredLandSatiation;
-    private final ForgeConfigSpec.DoubleValue landingExertion;
+    private final ModConfigSpec.IntValue requiredFlightSatiation;
+    private final ModConfigSpec.DoubleValue flyingExertion;
+    private final ModConfigSpec.IntValue requiredLandSatiation;
+    private final ModConfigSpec.DoubleValue landingExertion;
     private final int defaultFlightSatiation;
     private final double defaultFlyingExertion;
     private final int defaultLandSatiation;
     private final double defaultLandingExertion;
 
-    ConfigWingSettings(ResourceLocation key, ForgeConfigSpec.Builder builder) {
+    ConfigWingSettings(ResourceLocation key, ModConfigSpec.Builder builder) {
         this(key, builder, 5, 0.0001D, 2, 0.005D);
     }
 
-    ConfigWingSettings(ResourceLocation key, ForgeConfigSpec.Builder builder, int defaultFlightSatiation, double defaultFlyingExertion, int defaultLandSatiation, double defaultLandingExertion) {
+    ConfigWingSettings(ResourceLocation key, ModConfigSpec.Builder builder, int defaultFlightSatiation, double defaultFlyingExertion, int defaultLandSatiation, double defaultLandingExertion) {
         this.key = key;
     this.defaultFlightSatiation = defaultFlightSatiation;
     this.defaultFlyingExertion = defaultFlyingExertion;
@@ -88,7 +88,7 @@ public final class ConfigWingSettings implements WingSettings {
         this.getLandingExertion();
     }
 
-    private int readInt(ForgeConfigSpec.IntValue value, String propertyName, int min, int max, int fallback) {
+    private int readInt(ModConfigSpec.IntValue value, String propertyName, int min, int max, int fallback) {
         int current = value.get();
         if (current < min || current > max) {
             LOGGER.warn("翅膀 '{}' 属性 '{}' 超出范围: {} (预期 {}-{})。恢复为默认值 {}。", this.key, propertyName, current, min, max, fallback);
@@ -98,7 +98,7 @@ public final class ConfigWingSettings implements WingSettings {
         return current;
     }
 
-    private float readFloat(ForgeConfigSpec.DoubleValue value, String propertyName, double min, double max, double fallback) {
+    private float readFloat(ModConfigSpec.DoubleValue value, String propertyName, double min, double max, double fallback) {
         double current = value.get();
         if (Double.isNaN(current) || Double.isInfinite(current) || current < min || current > max) {
             LOGGER.warn("翅膀 '{}' 属性 '{}' 无效: {} (预期在 {} 和 {} 之间)。恢复为默认值 {}。", this.key, propertyName, current, min, max, fallback);

@@ -1,14 +1,15 @@
 package com.toni.wings.client;
 
-import com.toni.wings.WingsMod;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.ModelEvent;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = WingsMod.ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class WingsModels {
     private WingsModels() {
+    }
+
+    public static void init(IEventBus modBus) {
+        modBus.addListener(WingsModels::onRegister);
     }
 
     @SubscribeEvent

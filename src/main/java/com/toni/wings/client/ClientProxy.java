@@ -23,8 +23,8 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.neoforged.neoforge.client.settings.KeyModifier;
-import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.common.NeoForge;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.function.Supplier;
@@ -39,8 +39,9 @@ public final class ClientProxy extends Proxy {
     public void init(IEventBus modBus) {
         super.init(modBus);
         LayerWings.init(modBus);
+        WingsModels.init(modBus);
         //modBus.register(BakeModels.class);
-        MinecraftForge.EVENT_BUS.register(KeyInputListener.builder()
+        NeoForge.EVENT_BUS.register(KeyInputListener.builder()
             .category("key.categories.wings")
             .key("key.wings.fly", KeyConflictContext.IN_GAME, KeyModifier.NONE, GLFW.GLFW_KEY_R)
             .onPress(() -> {

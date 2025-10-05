@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import static net.neoforged.fml.util.ObfuscationReflectionHelper.getPrivateValue;
@@ -54,12 +55,12 @@ public class ReloadListener implements ResourceManagerReloadListener {
 
         Minecraft mc = Minecraft.getInstance();
         EntityRenderDispatcher manager = mc.getEntityRenderDispatcher();
-    Stream<PlayerRenderer> skinRenderers = manager.getSkinMap().values().stream()
-        .filter(PlayerRenderer.class::isInstance)
-        .map(PlayerRenderer.class::cast);
-    Stream<PlayerRenderer> otherRenderers = manager.renderers.values().stream()
-                .filter(PlayerRenderer.class::isInstance)
-                .map(PlayerRenderer.class::cast);
+        Stream<PlayerRenderer> skinRenderers = manager.getSkinMap().values().stream()
+            .filter(PlayerRenderer.class::isInstance)
+            .map(PlayerRenderer.class::cast);
+        Stream<PlayerRenderer> otherRenderers = getRendererMap(manager).values().stream()
+            .filter(PlayerRenderer.class::isInstance)
+            .map(PlayerRenderer.class::cast);
 
         Stream.concat(skinRenderers, otherRenderers)
                 .unordered()
@@ -124,5 +125,23 @@ public class ReloadListener implements ResourceManagerReloadListener {
             LOGGER.warn("Failed to access player renderer layers; skipping cape replacement", failure);
         }
         return layers;
+    }
+
+    private Map<?, ?> getRendererMap(EntityRenderDispatcher dispatcher) {
+        RuntimeException failure = null;
+        for (String name : new String[]{"renderers", "f_173940_"}) {
+            try {
+                Map<?, ?> map = getPrivateValue(EntityRenderDispatcher.class, dispatcher, name);
+                if (map != null) {
+                    return map;
+                }
+            } catch (RuntimeException ex) {
+                failure = ex;
+            }
+        }
+        if (failure != null) {
+            LOGGER.warn("Failed to access entity renderer map; player layer updates may be incomplete", failure);
+        }
+        return Map.of();
     }
 }

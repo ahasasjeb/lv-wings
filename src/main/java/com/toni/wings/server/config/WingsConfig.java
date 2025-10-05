@@ -13,11 +13,11 @@ public final class WingsConfig {
     private static final Logger LOGGER = LogManager.getLogger("WingsConfig");
     private static final List<String> DEFAULT_WEAR_OBSTRUCTIONS = List.of("minecraft:elytra");
 
-    public static final ForgeConfigSpec SPEC;
-    private static final ForgeConfigSpec.ConfigValue<List<? extends String>> WEAR_OBSTRUCTIONS;
+    public static final ModConfigSpec SPEC;
+    private static final ModConfigSpec.ConfigValue<List<? extends String>> WEAR_OBSTRUCTIONS;
 
     static {
-        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+        ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
         builder.comment("General configuration for lv wings").push("general");
 
         WEAR_OBSTRUCTIONS = builder

@@ -9,7 +9,7 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 import java.util.stream.Stream;
 
 public final class WingsItemsConfig {
-    public static final ForgeConfigSpec SPEC;
+    public static final ModConfigSpec SPEC;
     public static final ConfigWingSettings ANGEL;
     public static final ConfigWingSettings PARROT;
     public static final ConfigWingSettings SLIME;
@@ -23,7 +23,7 @@ public final class WingsItemsConfig {
     public static final ConfigWingSettings LVJIA_SUPER;
 
     static {
-        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+        ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
         builder.comment("Wing attribute configuration values").push("wings");
 
         ANGEL = new ConfigWingSettings(WingsMod.Names.ANGEL, builder);

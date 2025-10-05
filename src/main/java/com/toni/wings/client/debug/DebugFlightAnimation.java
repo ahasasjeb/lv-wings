@@ -2,11 +2,11 @@ package com.toni.wings.client.debug;
 
 import com.toni.wings.WingsMod;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ModelEvent;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = WingsMod.ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(value = Dist.CLIENT, modid = WingsMod.ID)
 public final class DebugFlightAnimation {
     private DebugFlightAnimation() {
     }

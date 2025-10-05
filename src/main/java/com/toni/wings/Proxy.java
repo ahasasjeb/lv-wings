@@ -8,6 +8,8 @@ import com.toni.wings.server.item.WingsItems;
 import com.toni.wings.server.net.Network;
 import com.toni.wings.server.net.clientbound.MessageSyncFlight;
 import com.toni.wings.server.potion.PotionMix;
+import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -16,20 +18,17 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.brewing.BrewingRecipeRegisterEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.registries.RegistryObject;
-
-import java.util.function.BiConsumer;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 
 public abstract class Proxy {
     protected final Network network = new Network();
 
     public void init(IEventBus modBus) {
         modBus.addListener(this::setup);
-        MinecraftForge.EVENT_BUS.addListener(this::registerBrewingRecipes);
+        NeoForge.EVENT_BUS.addListener(this::registerBrewingRecipes);
     }
 
     protected void setup(FMLCommonSetupEvent event) {
@@ -39,10 +38,11 @@ public abstract class Proxy {
         WingsOreConfig.validate();
     }
 
-    private void registerBrewingRecipes(BrewingRecipeRegisterEvent event) {
-        BiConsumer<ItemLike, RegistryObject<Item>> reg = (item, obj) -> {
-            event.addRecipe(new PotionMix(Potions.SLOW_FALLING, Ingredient.of(item), new ItemStack(obj.get())));
-            event.addRecipe(new PotionMix(Potions.LONG_SLOW_FALLING, Ingredient.of(item), new ItemStack(obj.get())));
+    private void registerBrewingRecipes(RegisterBrewingRecipesEvent event) {
+        var builder = event.getBuilder();
+        BiConsumer<ItemLike, Supplier<? extends Item>> reg = (item, supplier) -> {
+            builder.addRecipe(new PotionMix(Potions.SLOW_FALLING, Ingredient.of(item), new ItemStack(supplier.get())));
+            builder.addRecipe(new PotionMix(Potions.LONG_SLOW_FALLING, Ingredient.of(item), new ItemStack(supplier.get())));
         };
 
         reg.accept(Items.FEATHER, WingsItems.ANGEL_WINGS_BOTTLE);
@@ -58,6 +58,7 @@ public abstract class Proxy {
         //reg.accept(Items.IRON_INGOT, WingsItems.METALLIC_WINGS_BOTTLE);
     }
 
+    @SuppressWarnings("deprecation")
     public void addFlightListeners(Player player, Flight instance) {
         if (player instanceof ServerPlayer) {
             instance.registerFlyingListener(isFlying -> player.getAbilities().mayfly = isFlying);

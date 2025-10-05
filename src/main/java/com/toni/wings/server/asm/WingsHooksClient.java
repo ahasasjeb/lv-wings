@@ -14,7 +14,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MapItem;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.bus.api.Event;
 
 import java.lang.invoke.MethodHandle;
 
@@ -28,7 +27,7 @@ public final class WingsHooksClient {
         AbstractClientPlayer player = RENDERING_PLAYER.get();
         if (player != null) {
             try {
-                MinecraftForge.EVENT_BUS.post(new AnimatePlayerModelEvent(player, model, state.ageInTicks, state.xRot));
+                NeoForge.EVENT_BUS.post(new AnimatePlayerModelEvent(player, model, state.ageInTicks, state.xRot));
             } finally {
                 RENDERING_PLAYER.remove();
             }
@@ -47,7 +46,7 @@ public final class WingsHooksClient {
         AbstractClientPlayer player = RENDERING_PLAYER.get();
         if (player != null) {
             float delta = state.ageInTicks - player.tickCount;
-            MinecraftForge.EVENT_BUS.post(new ApplyPlayerRotationsEvent(player, matrixStack, delta));
+            NeoForge.EVENT_BUS.post(new ApplyPlayerRotationsEvent(player, matrixStack, delta));
         }
     }
 
@@ -56,7 +55,7 @@ public final class WingsHooksClient {
             LivingEntity living = (LivingEntity) entity;
             float theta = Mth.wrapDegrees(living.getYRot() - living.yBodyRot);
             GetLivingHeadLimitEvent ev = GetLivingHeadLimitEvent.create(living);
-            MinecraftForge.EVENT_BUS.post(ev);
+            NeoForge.EVENT_BUS.post(ev);
             float limit = ev.getHardLimit();
             if (theta < -limit || theta > limit) {
                 living.yBodyRot += deltaYaw;
@@ -86,8 +85,8 @@ public final class WingsHooksClient {
             }
             if (fromEmpty) {
                 EmptyOffHandPresentEvent ev = new EmptyOffHandPresentEvent(player);
-                MinecraftForge.EVENT_BUS.post(ev);
-                return ev.getResult() != Event.Result.ALLOW;
+                NeoForge.EVENT_BUS.post(ev);
+                return !ev.isAllowed();
             }
         }
         if (fromEmpty || toEmpty) {
