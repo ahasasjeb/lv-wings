@@ -12,6 +12,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -282,6 +284,21 @@ public final class FlightDefault implements Flight {
                 : DEFAULT_WING_ID.toString();
             f.setWing(wingFrom(wingIdRaw));
             return f;
+        }
+
+        public void serialize(FlightDefault instance, ValueOutput output) {
+            output.putBoolean(IS_FLYING, instance.isFlying());
+            output.putInt(TIME_FLYING, instance.getTimeFlying());
+            output.putString(WING, wingIdFor(instance.getWing()).toString());
+        }
+
+        public FlightDefault deserialize(ValueInput input) {
+            FlightDefault flight = this.factory.get();
+            flight.setIsFlying(input.getBooleanOr(IS_FLYING, false), PlayerSet.ofAll());
+            flight.setTimeFlying(input.getIntOr(TIME_FLYING, INITIAL_TIME_FLYING));
+            String wingIdRaw = input.getStringOr(WING, DEFAULT_WING_ID.toString());
+            flight.setWing(wingFrom(wingIdRaw));
+            return flight;
         }
     }
 

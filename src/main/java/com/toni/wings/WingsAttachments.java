@@ -3,9 +3,9 @@ package com.toni.wings;
 import com.toni.wings.server.dreamcatcher.InSomniable;
 import com.toni.wings.server.flight.Flight;
 import com.toni.wings.server.flight.FlightDefault;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
@@ -14,7 +14,6 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import javax.annotation.Nonnull;
-
 public final class WingsAttachments {
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES =
         DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, WingsMod.ID);
@@ -49,12 +48,12 @@ public final class WingsAttachments {
         throw new IllegalStateException("Flight attachment can only be applied to players");
     }
 
-    private static final class FlightAttachmentSerializer implements IAttachmentSerializer<CompoundTag, Flight> {
+    private static final class FlightAttachmentSerializer implements IAttachmentSerializer<Flight> {
         private static final FlightDefault.Serializer SERIALIZER = new FlightDefault.Serializer(FlightDefault::new);
 
         @Override
-    public Flight read(@Nonnull IAttachmentHolder holder, @Nonnull CompoundTag tag, @Nonnull HolderLookup.Provider provider) {
-            FlightDefault flight = SERIALIZER.deserialize(tag);
+        public Flight read(@Nonnull IAttachmentHolder holder, @Nonnull ValueInput input) {
+            FlightDefault flight = SERIALIZER.deserialize(input);
             if (holder instanceof Player player) {
                 WingsMod.instance().addFlightListeners(player, flight);
             }
@@ -62,25 +61,27 @@ public final class WingsAttachments {
         }
 
         @Override
-    public CompoundTag write(@Nonnull Flight attachment, @Nonnull HolderLookup.Provider provider) {
+        public boolean write(@Nonnull Flight attachment, @Nonnull ValueOutput output) {
             if (attachment instanceof FlightDefault flightDefault) {
-                return SERIALIZER.serialize(flightDefault);
+                SERIALIZER.serialize(flightDefault, output);
+                return true;
             }
             throw new IllegalStateException("Unsupported flight implementation: " + attachment.getClass());
         }
     }
 
-    private static final class InSomniableAttachmentSerializer implements IAttachmentSerializer<CompoundTag, InSomniable> {
+    private static final class InSomniableAttachmentSerializer implements IAttachmentSerializer<InSomniable> {
         private static final InSomniable.Serializer SERIALIZER = new InSomniable.Serializer();
 
         @Override
-    public InSomniable read(@Nonnull IAttachmentHolder holder, @Nonnull CompoundTag tag, @Nonnull HolderLookup.Provider provider) {
-            return SERIALIZER.deserialize(tag);
+        public InSomniable read(@Nonnull IAttachmentHolder holder, @Nonnull ValueInput input) {
+            return SERIALIZER.deserialize(input);
         }
 
         @Override
-    public CompoundTag write(@Nonnull InSomniable attachment, @Nonnull HolderLookup.Provider provider) {
-            return SERIALIZER.serialize(attachment);
+        public boolean write(@Nonnull InSomniable attachment, @Nonnull ValueOutput output) {
+            SERIALIZER.serialize(attachment, output);
+            return true;
         }
     }
 }

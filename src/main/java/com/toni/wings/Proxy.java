@@ -11,6 +11,7 @@ import com.toni.wings.server.net.clientbound.MessageSyncFlight;
 import com.toni.wings.server.potion.PotionMix;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -85,7 +86,9 @@ public abstract class Proxy {
     }
 
     private void sendToDimensionPlayers(ServerPlayer source, Flight instance) {
-        source.serverLevel().players().forEach(target -> {
+        ServerLevel level = source.level();
+
+        level.players().forEach(target -> {
             if (target != source) {
                 this.network.sendToPlayer(new MessageSyncFlight(source, instance), target);
             }

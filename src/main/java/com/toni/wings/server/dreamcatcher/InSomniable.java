@@ -10,6 +10,8 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 import java.util.function.IntConsumer;
 
@@ -133,6 +135,17 @@ public final class InSomniable {
             } else {
                 state = InSomniacState.INSTANCE;
             }
+            return new InSomniable(state);
+        }
+
+        public void serialize(InSomniable instance, ValueOutput output) {
+            instance.state.ifSearching(state -> output.putInt(SEARCH_STATE, state));
+        }
+
+        public InSomniable deserialize(ValueInput input) {
+            State state = input.getInt(SEARCH_STATE)
+                .map(value -> (State) new SearchState(value))
+                .orElse(InSomniacState.INSTANCE);
             return new InSomniable(state);
         }
     }
