@@ -22,7 +22,7 @@ public final class WingsConfig {
 
         WEAR_OBSTRUCTIONS = builder
             .comment("List of item IDs that prevent players from equipping wings.")
-            .defineList("wearObstructions", DEFAULT_WEAR_OBSTRUCTIONS, value -> value instanceof String && ResourceLocation.tryParse((String) value) != null);
+            .defineListAllowEmpty("wearObstructions", DEFAULT_WEAR_OBSTRUCTIONS, () -> "", value -> value instanceof String && ResourceLocation.tryParse((String) value) != null);
 
         builder.pop();
         SPEC = builder.build();

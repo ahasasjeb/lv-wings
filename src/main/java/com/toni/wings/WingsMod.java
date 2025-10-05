@@ -6,13 +6,13 @@ import com.toni.wings.server.ServerProxy;
 import com.toni.wings.server.apparatus.BuffedFlightApparatus;
 import com.toni.wings.server.apparatus.FlightApparatus;
 import com.toni.wings.server.apparatus.SimpleFlightApparatus;
-import com.toni.wings.server.flight.Flights;
 import com.toni.wings.server.config.WingsConfig;
 import com.toni.wings.server.config.WingsItemsConfig;
 import com.toni.wings.server.config.WingsOreConfig;
+import com.toni.wings.server.dreamcatcher.InSomniableCapability;
 import com.toni.wings.server.effect.WingsEffects;
 import com.toni.wings.server.flight.Flight;
-import com.toni.wings.server.dreamcatcher.InSomniableCapability;
+import com.toni.wings.server.flight.Flights;
 import com.toni.wings.server.item.WingsItems;
 import com.toni.wings.server.sound.WingsSounds;
 import net.minecraft.core.DefaultedMappedRegistry;
@@ -22,32 +22,29 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.DistExecutor;
-import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 @Mod(WingsMod.ID)
 public final class WingsMod {
     public static final String ID = "wings";
-
     private static WingsMod INSTANCE;
 
     public static final Registry<FlightApparatus> WINGS = new DefaultedMappedRegistry<>(Names.NONE.toString(), ResourceKey.createRegistryKey(locate("wings")), Lifecycle.experimental(), false);
 
-    // Deferred register for command argument types
-    private static final DeferredRegister<net.minecraft.commands.synchronization.ArgumentTypeInfo<?, ?>> COMMAND_ARGUMENT_TYPES = 
+    private static final DeferredRegister<net.minecraft.commands.synchronization.ArgumentTypeInfo<?, ?>> COMMAND_ARGUMENT_TYPES =
         DeferredRegister.create(net.minecraft.core.registries.Registries.COMMAND_ARGUMENT_TYPE, ID);
 
-    // Register the wings argument type
-    public static final DeferredHolder<net.minecraft.commands.synchronization.ArgumentTypeInfo<?, ?>, net.minecraft.commands.synchronization.SingletonArgumentInfo<com.toni.wings.server.command.WingsArgument>> WINGS_ARGUMENT_TYPE = 
-        COMMAND_ARGUMENT_TYPES.register("wings", () -> 
+    public static final DeferredHolder<net.minecraft.commands.synchronization.ArgumentTypeInfo<?, ?>, net.minecraft.commands.synchronization.SingletonArgumentInfo<com.toni.wings.server.command.WingsArgument>> WINGS_ARGUMENT_TYPE =
+        COMMAND_ARGUMENT_TYPES.register("wings", () ->
             net.minecraft.commands.synchronization.ArgumentTypeInfos.registerByClass(
-                com.toni.wings.server.command.WingsArgument.class, 
+                com.toni.wings.server.command.WingsArgument.class,
                 net.minecraft.commands.synchronization.SingletonArgumentInfo.contextFree(com.toni.wings.server.command.WingsArgument::wings)
             )
         );
@@ -75,12 +72,12 @@ public final class WingsMod {
         }
 
         @Override
-        public FlightState createState(Flight flight) {
+        public FlightApparatus.FlightState createState(Flight flight) {
             return FlightApparatus.NONE.createState(flight);
         }
     });
     public static final FlightApparatus ANGEL_WINGS = Registry.register(WINGS, Names.ANGEL, new SimpleFlightApparatus(WingsItemsConfig.ANGEL));
-	public static final FlightApparatus PARROT_WINGS = Registry.register(WINGS, Names.PARROT, new SimpleFlightApparatus(WingsItemsConfig.PARROT));
+    public static final FlightApparatus PARROT_WINGS = Registry.register(WINGS, Names.PARROT, new SimpleFlightApparatus(WingsItemsConfig.PARROT));
     public static final FlightApparatus BAT_WINGS = Registry.register(WINGS, Names.BAT, new SimpleFlightApparatus(WingsItemsConfig.BAT));
     public static final FlightApparatus BLUE_BUTTERFLY_WINGS = Registry.register(WINGS, Names.BLUE_BUTTERFLY, new SimpleFlightApparatus(WingsItemsConfig.BLUE_BUTTERFLY));
     public static final FlightApparatus DRAGON_WINGS = Registry.register(WINGS, Names.DRAGON, new SimpleFlightApparatus(WingsItemsConfig.DRAGON));
@@ -93,49 +90,29 @@ public final class WingsMod {
         new BuffedFlightApparatus(WingsItemsConfig.LVJIA_SUPER,
             BuffedFlightApparatus.EffectSettings.of(MobEffects.DAMAGE_RESISTANCE, 2, 40, 40),
             BuffedFlightApparatus.EffectSettings.of(MobEffects.JUMP, 1, 40, 40)));
-    //public static final FlightApparatus METALLIC_WINGS = Registry.register(WINGS, Names.METALLIC, new SimpleFlightApparatus(WingsItemsConfig.METALLIC));
 
+    private final Proxy proxy;
 
-    private Proxy proxy;
-
-    public WingsMod() {
+    public WingsMod(IEventBus modEventBus, ModContainer modContainer) {
         if (INSTANCE != null) throw new IllegalStateException("Already constructed!");
         INSTANCE = this;
-    IEventBus bus = getModEventBus();
-    WingsAttachments.register(bus);
-    bus.addListener(Flights::registerCapabilities);
-    bus.addListener(InSomniableCapability::registerCapabilities);
-    ModLoadingContext context = getModLoadingContext();
-    context.registerConfig(ModConfig.Type.COMMON, WingsConfig.SPEC, ID + "-common.toml");
-    context.registerConfig(ModConfig.Type.COMMON, WingsItemsConfig.SPEC, ID + "-items.toml");
-    context.registerConfig(ModConfig.Type.COMMON, WingsOreConfig.SPEC, ID + "-ores.toml");
-    WingsItems.REG.register(bus);
-    bus.addListener(WingsItems::buildCreativeTabContents);
-        WingsSounds.REG.register(bus);
-        WingsEffects.REG.register(bus);
-        COMMAND_ARGUMENT_TYPES.register(bus);
-        this.proxy = DistExecutor.unsafeRunForDist(() -> () -> new ClientProxy(), () -> () -> new ServerProxy());
-        this.proxy.init(bus);
-    }
 
-    @SuppressWarnings("removal")
-    private static IEventBus getModEventBus() {
-        return FMLJavaModLoadingContext.get().getModEventBus();
-    }
+        WingsAttachments.register(modEventBus);
+        modEventBus.addListener(Flights::registerCapabilities);
+        modEventBus.addListener(InSomniableCapability::registerCapabilities);
 
-    @SuppressWarnings("removal")
-    private static ModLoadingContext getModLoadingContext() {
-        return ModLoadingContext.get();
-    }
+        modContainer.registerConfig(ModConfig.Type.COMMON, WingsConfig.SPEC, ID + "-common.toml");
+        modContainer.registerConfig(ModConfig.Type.COMMON, WingsItemsConfig.SPEC, ID + "-items.toml");
+        modContainer.registerConfig(ModConfig.Type.COMMON, WingsOreConfig.SPEC, ID + "-ores.toml");
 
-    static class ProxyInit {
-        static Proxy createClient() {
-            return new ClientProxy();
-        }
+        WingsItems.REG.register(modEventBus);
+        modEventBus.addListener(WingsItems::buildCreativeTabContents);
+        WingsSounds.REG.register(modEventBus);
+        WingsEffects.REG.register(modEventBus);
+        COMMAND_ARGUMENT_TYPES.register(modEventBus);
 
-        static Proxy createServer() {
-            return new ServerProxy();
-        }
+        this.proxy = (FMLEnvironment.dist == Dist.CLIENT) ? new ClientProxy() : new ServerProxy();
+        this.proxy.init(modEventBus);
     }
 
     public void addFlightListeners(Player player, Flight instance) {
@@ -153,8 +130,7 @@ public final class WingsMod {
         return this.proxy;
     }
 
-    public static ResourceLocation locate(String name)
-    {
+    public static ResourceLocation locate(String name) {
         ResourceLocation location = ResourceLocation.tryBuild(WingsMod.ID, name);
         if (location == null) {
             throw new IllegalArgumentException("Invalid resource path: " + name);
