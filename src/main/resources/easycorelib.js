@@ -1,8 +1,8 @@
 // v1.0.0
 // v1.1.0 - Skip non opcode nodes for before and after predicates
 (function (scope) {
-
-var ASMAPI = Java.type("net.minecraftforge.coremod.api.ASMAPI");
+//net.neoforged.coremod.api.ASMAPI
+var ASMAPI = Java.type("net.neoforged.coremod.api.ASMAPI");
 var Label = Java.type("org.objectweb.asm.Label");
 var Type = Java.type("org.objectweb.asm.Type");
 var FieldInsnNode = Java.type("org.objectweb.asm.tree.FieldInsnNode");

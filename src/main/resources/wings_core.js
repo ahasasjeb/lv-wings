@@ -1,6 +1,6 @@
 function initializeCoreMod() {
-Java.type('net.minecraftforge.coremod.api.ASMAPI').loadFile('easycorelib.js')
-//net/minecraftforge/coremod/api/ASMAPI.java
+Java.type('net.neoforged.coremod.api.ASMAPI').loadFile('easycorelib.js')
+//net/minecraftforge/coremod/api/ASMAPI.java net/neoforged/coremod/api/ASMAPI.java
 
 easycore.include('me', 'com')
 
@@ -117,7 +117,7 @@ easycore.inMethod(ItemInHandRenderer.renderArmWithItem(
 /**
  * Replace reequip logic to control visibility of offhand, existing implementation left as dead code
  */
-easycore.inMethod(net.minecraftforge.client.ForgeHooksClient.shouldCauseReequipAnimation(ItemStack, ItemStack, int), boolean)
+easycore.inMethod(net.neoforged.neoforge.client.ClientHooks.shouldCauseReequipAnimation(ItemStack, ItemStack, int), boolean)
     .atFirst().prepend(
         aload(0),
         aload(1),
