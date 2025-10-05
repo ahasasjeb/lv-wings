@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.function.IntConsumer;
 
-import net.neoforged.neoforge.common.capabilities.AutoRegisterCapability;
+import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 
 @AutoRegisterCapability
 public final class InSomniable {

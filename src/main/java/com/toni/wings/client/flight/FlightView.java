@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.function.Consumer;
 
-import net.neoforged.neoforge.common.capabilities.AutoRegisterCapability;
+import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 
 @AutoRegisterCapability
 public interface FlightView {
