@@ -8,9 +8,6 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.function.Consumer;
 
-import net.minecraftforge.common.capabilities.AutoRegisterCapability;
-
-@AutoRegisterCapability
 public interface FlightView {
     void ifFormPresent(Consumer<FormRenderer> consumer);
 

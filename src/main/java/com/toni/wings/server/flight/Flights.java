@@ -1,43 +1,35 @@
 package com.toni.wings.server.flight;
 
+import com.toni.wings.WingsAttachments;
 import com.toni.wings.WingsMod;
-import com.toni.wings.util.CapabilityHolder;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.capabilities.Capability;
-import net.neoforged.neoforge.common.capabilities.CapabilityManager;
-import net.neoforged.neoforge.common.capabilities.CapabilityToken;
-import net.neoforged.neoforge.common.util.LazyOptional;
-import net.neoforged.neoforge.event.AttachCapabilitiesEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.minecraft.world.entity.EntityType;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.capabilities.EntityCapability;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
-@Mod.EventBusSubscriber(modid = WingsMod.ID)
+@EventBusSubscriber(modid = WingsMod.ID)
 public final class Flights {
     private Flights() {
     }
 
-    private static final CapabilityHolder<Player, Flight, CapabilityHolder.State<Player, Flight>> HOLDER = CapabilityHolder.create();
+    public static final EntityCapability<Flight, Void> FLIGHT_CAPABILITY =
+        EntityCapability.createVoid(WingsMod.locate("flight"), Flight.class);
 
     public static boolean has(Player player) {
-        return HOLDER.state().has(player, null);
+        return player.getCapability(FLIGHT_CAPABILITY) != null;
     }
 
-    public static LazyOptional<Flight> get(Player player) {
-        return HOLDER.state().get(player, null);
-    }
-
-    public static final Capability<Flight> FLIGHT_CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});
-
-    static void inject(Capability<Flight> capability) {
-        HOLDER.inject(capability);
+    public static Optional<Flight> get(Player player) {
+        return Optional.ofNullable(player.getCapability(FLIGHT_CAPABILITY));
     }
 
     public static void ifPlayer(Entity entity, BiConsumer<Player, Flight> action) {
@@ -45,31 +37,8 @@ public final class Flights {
     }
 
     public static void ifPlayer(Entity entity, Predicate<Player> condition, BiConsumer<Player, Flight> action) {
-        if (entity instanceof Player) {
-            Player player = (Player) entity;
-            get(player).filter(f -> condition.test(player))
-                .ifPresent(f -> action.accept(player, f));
-        }
-    }
-
-    @SubscribeEvent
-    public static void onAttachCapabilities(AttachCapabilitiesEvent<Entity> event) {
-        Entity entity = event.getObject();
-        if (entity instanceof Player) {
-            Supplier<FlightDefault> factory = () -> {
-                FlightDefault flight = new FlightDefault();
-                WingsMod.instance().addFlightListeners((Player) entity, flight);
-                return flight;
-            };
-            FlightDefault flight = factory.get();
-            inject(FLIGHT_CAPABILITY);
-            event.addCapability(
-                WingsMod.locate("flight"),
-                HOLDER.state().providerBuilder(flight)
-                    .serializedBy(new FlightDefault.Serializer(factory))
-                    .build()
-            );
-            MinecraftForge.EVENT_BUS.post(AttachFlightCapabilityEvent.create(event, flight));
+        if (entity instanceof Player player) {
+            get(player).filter(flight -> condition.test(player)).ifPresent(flight -> action.accept(player, flight));
         }
     }
 
@@ -101,6 +70,12 @@ public final class Flights {
     public static void onPlayerStartTracking(PlayerEvent.StartTracking event) {
         ifPlayer(event.getTarget(), (player, flight) ->
             flight.sync(Flight.PlayerSet.ofPlayer((ServerPlayer) event.getEntity()))
+        );
+    }
+
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerEntity(FLIGHT_CAPABILITY, EntityType.PLAYER, (player, ctx) ->
+            player.getData(WingsAttachments.FLIGHT.get())
         );
     }
 }

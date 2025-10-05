@@ -12,15 +12,15 @@ import net.minecraft.client.renderer.entity.layers.CapeLayer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.slf4j.Logger;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static net.minecraftforge.fml.util.ObfuscationReflectionHelper.getPrivateValue;
+import static net.neoforged.fml.util.ObfuscationReflectionHelper.getPrivateValue;
 
 import javax.annotation.Nonnull;
 

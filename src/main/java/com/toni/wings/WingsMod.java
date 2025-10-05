@@ -6,11 +6,13 @@ import com.toni.wings.server.ServerProxy;
 import com.toni.wings.server.apparatus.BuffedFlightApparatus;
 import com.toni.wings.server.apparatus.FlightApparatus;
 import com.toni.wings.server.apparatus.SimpleFlightApparatus;
+import com.toni.wings.server.flight.Flights;
 import com.toni.wings.server.config.WingsConfig;
 import com.toni.wings.server.config.WingsItemsConfig;
 import com.toni.wings.server.config.WingsOreConfig;
 import com.toni.wings.server.effect.WingsEffects;
 import com.toni.wings.server.flight.Flight;
+import com.toni.wings.server.dreamcatcher.InSomniableCapability;
 import com.toni.wings.server.item.WingsItems;
 import com.toni.wings.server.sound.WingsSounds;
 import net.minecraft.core.DefaultedMappedRegistry;
@@ -99,7 +101,10 @@ public final class WingsMod {
     public WingsMod() {
         if (INSTANCE != null) throw new IllegalStateException("Already constructed!");
         INSTANCE = this;
-        IEventBus bus = getModEventBus();
+    IEventBus bus = getModEventBus();
+    WingsAttachments.register(bus);
+    bus.addListener(Flights::registerCapabilities);
+    bus.addListener(InSomniableCapability::registerCapabilities);
     ModLoadingContext context = getModLoadingContext();
     context.registerConfig(ModConfig.Type.COMMON, WingsConfig.SPEC, ID + "-common.toml");
     context.registerConfig(ModConfig.Type.COMMON, WingsItemsConfig.SPEC, ID + "-items.toml");
