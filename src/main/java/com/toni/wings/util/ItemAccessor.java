@@ -1,9 +1,9 @@
 package com.toni.wings.util;
 
 import com.google.common.collect.ImmutableList;
-import net.neoforged.neoforge.common.capabilities.ICapabilityProvider;
+import net.minecraft.world.entity.LivingEntity;
 
-public final class ItemAccessor<T extends ICapabilityProvider> {
+public final class ItemAccessor<T extends LivingEntity> {
     private final ImmutableList<ItemPlacing<T>> placings;
 
     private ItemAccessor(ImmutableList<ItemPlacing<T>> placings) {
@@ -18,15 +18,15 @@ public final class ItemAccessor<T extends ICapabilityProvider> {
         return slots.build();
     }
 
-    public static <T extends ICapabilityProvider> ItemAccessor<T> none() {
+    public static <T extends LivingEntity> ItemAccessor<T> none() {
         return new ItemAccessor<>(ImmutableList.of());
     }
 
-    public static <T extends ICapabilityProvider> Builder<T> builder() {
+    public static <T extends LivingEntity> Builder<T> builder() {
         return new Builder<>();
     }
 
-    public static final class Builder<T extends ICapabilityProvider> {
+    public static final class Builder<T extends LivingEntity> {
         private final ImmutableList.Builder<ItemPlacing<T>> placings;
 
         private Builder() {
