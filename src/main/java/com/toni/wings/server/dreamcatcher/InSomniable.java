@@ -128,8 +128,8 @@ public final class InSomniable {
         @Override
         public InSomniable deserialize(CompoundTag compound) {
             State state;
-            if (compound.contains(SEARCH_STATE, net.minecraft.nbt.Tag.TAG_INT)) {
-                state = new SearchState(compound.getInt(SEARCH_STATE));
+            if (compound.contains(SEARCH_STATE)) {
+                state = new SearchState(compound.getInt(SEARCH_STATE).orElse(0x1FFFE));
             } else {
                 state = InSomniacState.INSTANCE;
             }

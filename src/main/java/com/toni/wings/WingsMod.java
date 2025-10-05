@@ -87,9 +87,9 @@ public final class WingsMod {
     public static final FlightApparatus SLIME_WINGS = Registry.register(WINGS, Names.SLIME, new SimpleFlightApparatus(WingsItemsConfig.SLIME));
     public static final FlightApparatus FIRE_WINGS = Registry.register(WINGS, Names.FIRE, new SimpleFlightApparatus(WingsItemsConfig.FIRE));
     public static final FlightApparatus LVJIA_SUPER_WINGS = Registry.register(WINGS, Names.LVJIA_SUPER,
-        new BuffedFlightApparatus(WingsItemsConfig.LVJIA_SUPER,
-            BuffedFlightApparatus.EffectSettings.of(MobEffects.DAMAGE_RESISTANCE, 2, 40, 40),
-            BuffedFlightApparatus.EffectSettings.of(MobEffects.JUMP, 1, 40, 40)));
+        (FlightApparatus) new BuffedFlightApparatus(WingsItemsConfig.LVJIA_SUPER,
+            BuffedFlightApparatus.EffectSettings.of(MobEffects.RESISTANCE, 2, 40, 40),
+            BuffedFlightApparatus.EffectSettings.of(MobEffects.JUMP_BOOST, 1, 40, 40)));
 
     private final Proxy proxy;
 

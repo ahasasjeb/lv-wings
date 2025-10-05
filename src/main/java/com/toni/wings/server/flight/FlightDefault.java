@@ -275,10 +275,10 @@ public final class FlightDefault implements Flight {
         @Override
         public FlightDefault deserialize(CompoundTag compound) {
             FlightDefault f = this.factory.get();
-            f.setIsFlying(compound.getBoolean(IS_FLYING));
-            f.setTimeFlying(compound.getInt(TIME_FLYING));
-            String wingIdRaw = compound.contains(WING, net.minecraft.nbt.Tag.TAG_STRING)
-                ? compound.getString(WING)
+            f.setIsFlying(compound.getBoolean(IS_FLYING).orElse(false), PlayerSet.ofAll());
+            f.setTimeFlying(compound.getInt(TIME_FLYING).orElse(INITIAL_TIME_FLYING));
+            String wingIdRaw = compound.contains(WING)
+                ? compound.getString(WING).orElse(DEFAULT_WING_ID.toString())
                 : DEFAULT_WING_ID.toString();
             f.setWing(wingFrom(wingIdRaw));
             return f;
