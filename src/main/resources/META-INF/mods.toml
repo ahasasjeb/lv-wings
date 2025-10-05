@@ -1,24 +1,2 @@
-modLoader = "javafml"
-loaderVersion = "${loader_version_range}"
-issueTrackerURL = "https://github.com/jowashere/WingsPort/issues"
-license = "${mod_license}"
-[[mods]]
-modId = "${mod_id}"
-version = "${mod_version}"
-displayName = "${mod_name}"
-displayURL = "https://www.curseforge.com/minecraft/mc-mods/wings-2"
-authors = "${mod_authors}"
-description = "${mod_description}"
-logoFile = "logo.png"
-[[dependencies.${mod_id}]]
-modId = "forge"
-mandatory = true
-versionRange = "${forge_version_range}"
-ordering = "NONE"
-side = "BOTH"
-[[dependencies.${mod_id}]]
-modId = "minecraft"
-mandatory = true
-versionRange = "${minecraft_version_range}"
-ordering = "NONE"
-side = "BOTH"
+# Legacy Forge metadata placeholder retained for reference.
+# The project now generates META-INF/neoforge.mods.toml from templates.

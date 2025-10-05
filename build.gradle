@@ -1,12 +1,16 @@
 plugins {
-	id 'eclipse'
-	id 'idea'
+	id 'java-library'
 	id 'maven-publish'
-	// Use the MDK-recommended minimum patch version for ForgeGradle
-	id 'net.minecraftforge.gradle' version '[6.0.36,6.2)'
+	id 'net.neoforged.moddev' version '2.0.112'
+	id 'idea'
+	id 'eclipse'
 }
 
-version = "${minecraft_version}-${mod_version}"
+tasks.named('wrapper', Wrapper).configure {
+	distributionType = Wrapper.DistributionType.BIN
+}
+
+version = mod_version
 group = mod_group_id
 
 base {
@@ -15,101 +19,106 @@ base {
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
-println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
+neoForge {
+	version = project.neo_version
 
-minecraft {
-	accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-	mappings channel: mapping_channel, version: mapping_version
-	reobf = false
-	copyIdeResources = true
+	parchment {
+		mappingsVersion = project.parchment_mappings_version
+		minecraftVersion = project.parchment_minecraft_version
+	}
+
+	accessTransformers = project.files('src/main/resources/META-INF/accesstransformer.cfg')
 
 	runs {
-		configureEach {
-			workingDirectory project.file('run')
-			property 'forge.logging.markers', 'REGISTRIES'
-					property 'forge.logging.console.level', 'debug'
-					property 'forge.enabledGameTestNamespaces', mod_id
-			jvmArgs(
-				'--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED',
-				'--add-opens=java.base/java.lang=ALL-UNNAMED',
-				'--add-opens=java.base/sun.nio.ch=ALL-UNNAMED',
-				'--add-opens=java.base/java.util=ALL-UNNAMED',
-				'--add-opens=java.base/java.util.concurrent=ALL-UNNAMED',
-				'--add-opens=java.base/java.io=ALL-UNNAMED',
-				'--add-exports=java.base/sun.nio.ch=ALL-UNNAMED',
-				'--add-exports=java.base/jdk.internal.ref=ALL-UNNAMED'
-			)
-		}
-
 		client {
+			client()
+			systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
 		}
 
 		server {
-			args '--nogui'
+			server()
+			programArgument '--nogui'
+			systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
 		}
 
 		gameTestServer {
+			type = "gameTestServer"
+			systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
 		}
 
 		data {
-			workingDirectory project.file('run-data')
-			args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+			clientData()
+			programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+			gameDirectory = project.file('run-data')
+		}
+
+		configureEach {
+			gameDirectory = project.file('run')
+			systemProperty 'forge.logging.markers', 'REGISTRIES'
+			logLevel = org.slf4j.event.Level.DEBUG
+		}
+	}
+
+	mods {
+		"${mod_id}" {
+			sourceSet(sourceSets.main)
 		}
 	}
 }
 
-sourceSets {
-	main {
-		output.resourcesDir = file("$buildDir/classes/java/main")
-		resources {
-			srcDir 'src/generated/resources'
-		}
-	}
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+configurations {
+	runtimeClasspath.extendsFrom localRuntime
 }
 
 repositories {
-	// Standard repositories used by the MDK template
 	mavenCentral()
-	maven {
-		name = 'Forge'
-		url = 'https://maven.minecraftforge.net'
-	}
-	maven {
-		name = 'Minecraft libraries'
-		url = 'https://libraries.minecraft.net'
-	}
 }
 
-// Note: avoid using a `minecraft { mods { ... } }` block here because some
-// ForgeGradle/UserDevExtension versions do not expose a `mods` DSL. The mod
-// sources are already picked up from `sourceSets.main` and from the
-// `processResources` and run configurations above.
-
-dependencies {
-	minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
+	var replaceProperties = [
+			minecraft_version      : minecraft_version,
+			minecraft_version_range: minecraft_version_range,
+			neo_version            : neo_version,
+			loader_version_range   : loader_version_range,
+			mod_id                 : mod_id,
+			mod_name               : mod_name,
+			mod_license            : mod_license,
+			mod_version            : mod_version,
+			mod_authors            : mod_authors,
+			mod_description        : mod_description,
+			mod_issue_url          : mod_issue_url,
+			mod_display_url        : mod_display_url,
+			mod_logo               : mod_logo
+	]
+	inputs.properties replaceProperties
+	expand replaceProperties
+	from "src/main/templates"
+	into "build/generated/sources/modMetadata"
 }
+
+sourceSets.main.resources.srcDir generateModMetadata
+neoForge.ideSyncTask generateModMetadata
 
 tasks.named('processResources', ProcessResources).configure {
 	var replaceProperties = [
-			minecraft_version: minecraft_version,
+			minecraft_version      : minecraft_version,
 			minecraft_version_range: minecraft_version_range,
-			forge_version: forge_version,
-			forge_version_range: forge_version_range,
-			loader_version_range: loader_version_range,
-			mod_id: mod_id,
-			mod_name: mod_name,
-			mod_license: mod_license,
-			mod_version: mod_version,
-			mod_authors: mod_authors,
-			mod_description: mod_description,
+			neo_version            : neo_version,
+			loader_version_range   : loader_version_range,
+			mod_id                 : mod_id,
+			mod_name               : mod_name,
+			mod_license            : mod_license,
+			mod_version            : mod_version,
+			mod_authors            : mod_authors,
+			mod_description        : mod_description
 	]
 	inputs.properties replaceProperties
-
-	filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
-		expand replaceProperties + [project: project]
+	exclude('META-INF/mods.toml')
+	filesMatching(['pack.mcmeta']) {
+		expand replaceProperties
 	}
-
-	destinationDir = sourceSets.main.output.classesDirs.singleFile
 }
 
 tasks.named('jar', Jar).configure {
@@ -119,7 +128,7 @@ tasks.named('jar', Jar).configure {
 				'Specification-Vendor'    : mod_authors,
 				'Specification-Version'   : '1',
 				'Implementation-Title'    : project.name,
-				'Implementation-Version'  : project.jar.archiveVersion,
+				'Implementation-Version'  : archiveVersion.get(),
 				'Implementation-Vendor'   : mod_authors,
 				'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
 		])
@@ -129,7 +138,7 @@ tasks.named('jar', Jar).configure {
 publishing {
 	publications {
 		register('mavenJava', MavenPublication) {
-			artifact jar
+			from components.java
 		}
 	}
 	repositories {
@@ -141,4 +150,11 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
 	options.encoding = 'UTF-8'
+}
+
+idea {
+	module {
+		downloadSources = true
+		downloadJavadoc = true
+	}
 }

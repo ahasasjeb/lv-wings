@@ -60,6 +60,94 @@
         "MCP_MAPPINGS": "official_1.19.4"
       },
       "preLaunchTask": "prepareRunServerCompile"
+    },
+    {
+      "type": "java",
+      "request": "launch",
+      "name": "Client",
+      "presentation": {
+        "group": "Mod Development - wings",
+        "order": 0
+      },
+      "projectName": "wings",
+      "mainClass": "net.neoforged.devlaunch.Main",
+      "args": [
+        "@E:\\zaxiang4\\lv-wings\\build\\moddev\\clientRunProgramArgs.txt"
+      ],
+      "vmArgs": [
+        "@E:\\zaxiang4\\lv-wings\\build\\moddev\\clientRunVmArgs.txt",
+        "-Dfml.modFolders\u003dwings%%E:\\zaxiang4\\lv-wings\\bin\\main"
+      ],
+      "cwd": "${workspaceFolder}\\run",
+      "env": {},
+      "console": "internalConsole",
+      "shortenCommandLine": "none"
+    },
+    {
+      "type": "java",
+      "request": "launch",
+      "name": "Data",
+      "presentation": {
+        "group": "Mod Development - wings",
+        "order": 1
+      },
+      "projectName": "wings",
+      "mainClass": "net.neoforged.devlaunch.Main",
+      "args": [
+        "@E:\\zaxiang4\\lv-wings\\build\\moddev\\dataRunProgramArgs.txt"
+      ],
+      "vmArgs": [
+        "@E:\\zaxiang4\\lv-wings\\build\\moddev\\dataRunVmArgs.txt",
+        "-Dfml.modFolders\u003dwings%%E:\\zaxiang4\\lv-wings\\bin\\main"
+      ],
+      "cwd": "${workspaceFolder}\\run",
+      "env": {},
+      "console": "internalConsole",
+      "shortenCommandLine": "none"
+    },
+    {
+      "type": "java",
+      "request": "launch",
+      "name": "GameTestServer",
+      "presentation": {
+        "group": "Mod Development - wings",
+        "order": 2
+      },
+      "projectName": "wings",
+      "mainClass": "net.neoforged.devlaunch.Main",
+      "args": [
+        "@E:\\zaxiang4\\lv-wings\\build\\moddev\\gameTestServerRunProgramArgs.txt"
+      ],
+      "vmArgs": [
+        "@E:\\zaxiang4\\lv-wings\\build\\moddev\\gameTestServerRunVmArgs.txt",
+        "-Dfml.modFolders\u003dwings%%E:\\zaxiang4\\lv-wings\\bin\\main"
+      ],
+      "cwd": "${workspaceFolder}\\run",
+      "env": {},
+      "console": "internalConsole",
+      "shortenCommandLine": "none"
+    },
+    {
+      "type": "java",
+      "request": "launch",
+      "name": "Server",
+      "presentation": {
+        "group": "Mod Development - wings",
+        "order": 3
+      },
+      "projectName": "wings",
+      "mainClass": "net.neoforged.devlaunch.Main",
+      "args": [
+        "@E:\\zaxiang4\\lv-wings\\build\\moddev\\serverRunProgramArgs.txt"
+      ],
+      "vmArgs": [
+        "@E:\\zaxiang4\\lv-wings\\build\\moddev\\serverRunVmArgs.txt",
+        "-Dfml.modFolders\u003dwings%%E:\\zaxiang4\\lv-wings\\bin\\main"
+      ],
+      "cwd": "${workspaceFolder}\\run",
+      "env": {},
+      "console": "internalConsole",
+      "shortenCommandLine": "none"
     }
   ]
 }
