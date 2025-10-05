@@ -45,7 +45,24 @@ public final class ClientEventHandler {
             model.rightArm.xRot = MathH.lerp(model.rightArm.xRot, -3.2F, amt);
             model.leftLeg.xRot = MathH.lerp(model.leftLeg.xRot, 0.0F, amt);
             model.rightLeg.xRot = MathH.lerp(model.rightLeg.xRot, 0.0F, amt);
-            model.hat.copyFrom(model.head);
+            model.hat.xRot = 0;
+            model.hat.yRot = 0;
+            model.hat.zRot = 0;
+            model.leftSleeve.xRot = 0;
+            model.leftSleeve.yRot = 0;
+            model.leftSleeve.zRot = 0;
+            model.rightSleeve.xRot = 0;
+            model.rightSleeve.yRot = 0;
+            model.rightSleeve.zRot = 0;
+            model.leftPants.xRot = 0;
+            model.leftPants.yRot = 0;
+            model.leftPants.zRot = 0;
+            model.rightPants.xRot = 0;
+            model.rightPants.yRot = 0;
+            model.rightPants.zRot = 0;
+            model.jacket.xRot = 0;
+            model.jacket.yRot = 0;
+            model.jacket.zRot = 0;
         });
     }
 
