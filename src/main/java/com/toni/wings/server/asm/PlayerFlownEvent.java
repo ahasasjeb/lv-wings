@@ -2,7 +2,7 @@ package com.toni.wings.server.asm;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 public final class PlayerFlownEvent extends PlayerEvent {
     private final Vec3 direction;

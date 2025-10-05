@@ -2,9 +2,9 @@ package com.toni.wings.server.effect;
 
 import com.toni.wings.WingsMod;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import net.neoforged.neoforge.registries.RegistryObject;
 
 public final class WingsEffects {
     private WingsEffects() {

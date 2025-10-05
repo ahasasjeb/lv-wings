@@ -2,7 +2,7 @@ package com.toni.wings.server.asm;
 
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 public class AnimatePlayerModelEvent extends PlayerEvent {
     private final PlayerModel model;

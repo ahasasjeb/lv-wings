@@ -1,7 +1,7 @@
 package com.toni.wings.util;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.neoforged.neoforge.common.capabilities.ICapabilityProvider;
 
 public final class ItemAccessor<T extends ICapabilityProvider> {
     private final ImmutableList<ItemPlacing<T>> placings;

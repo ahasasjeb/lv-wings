@@ -2,9 +2,9 @@ package com.toni.wings.server.flight;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.neoforge.common.capabilities.ICapabilityProvider;
+import net.neoforged.neoforge.event.AttachCapabilitiesEvent;
+import net.neoforged.bus.api.Event;
 
 public final class AttachFlightCapabilityEvent extends Event {
     private final AttachCapabilitiesEvent<Entity> event;

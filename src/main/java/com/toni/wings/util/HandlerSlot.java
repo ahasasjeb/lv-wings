@@ -1,7 +1,7 @@
 package com.toni.wings.util;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
+import net.neoforged.neoforge.items.IItemHandler;
 
 public final class HandlerSlot {
     private final IItemHandler handler;

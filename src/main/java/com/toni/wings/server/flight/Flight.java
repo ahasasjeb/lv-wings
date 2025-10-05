@@ -8,7 +8,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Consumer;
 
-import net.minecraftforge.common.capabilities.AutoRegisterCapability;
+import net.neoforged.neoforge.common.capabilities.AutoRegisterCapability;
 
 @AutoRegisterCapability
 public interface Flight {

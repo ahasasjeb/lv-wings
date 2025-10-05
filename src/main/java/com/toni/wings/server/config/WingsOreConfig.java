@@ -1,6 +1,6 @@
 package com.toni.wings.server.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public final class WingsOreConfig {
     public static final ForgeConfigSpec SPEC;

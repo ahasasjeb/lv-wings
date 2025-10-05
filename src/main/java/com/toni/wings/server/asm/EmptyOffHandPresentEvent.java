@@ -1,7 +1,7 @@
 package com.toni.wings.server.asm;
 
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
 
 @Event.HasResult
 public final class EmptyOffHandPresentEvent extends Event {

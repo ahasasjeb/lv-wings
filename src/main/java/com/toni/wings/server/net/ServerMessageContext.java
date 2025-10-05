@@ -3,8 +3,8 @@ package com.toni.wings.server.net;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.event.network.CustomPayloadEvent;
-import net.minecraftforge.fml.LogicalSide;
+import net.neoforged.neoforge.network.event.CustomPayloadEvent;
+import net.neoforged.fml.LogicalSide;
 
 import java.util.Objects;
 

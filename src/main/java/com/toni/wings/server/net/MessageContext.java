@@ -1,7 +1,7 @@
 package com.toni.wings.server.net;
 
-import net.minecraftforge.event.network.CustomPayloadEvent;
-import net.minecraftforge.fml.LogicalSide;
+import net.neoforged.neoforge.network.event.CustomPayloadEvent;
+import net.neoforged.fml.LogicalSide;
 
 public abstract class MessageContext {
     protected final CustomPayloadEvent.Context context;

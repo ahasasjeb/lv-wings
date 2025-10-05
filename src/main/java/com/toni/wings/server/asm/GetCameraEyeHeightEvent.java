@@ -1,7 +1,7 @@
 package com.toni.wings.server.asm;
 
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
 
 public final class GetCameraEyeHeightEvent extends Event {
     private final Entity entity;

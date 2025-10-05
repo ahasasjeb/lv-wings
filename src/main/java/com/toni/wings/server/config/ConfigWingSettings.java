@@ -3,7 +3,7 @@ package com.toni.wings.server.config;
 import com.toni.wings.server.item.ImmutableWingSettings;
 import com.toni.wings.server.item.WingSettings;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

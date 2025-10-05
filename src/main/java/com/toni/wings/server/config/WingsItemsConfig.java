@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.toni.wings.WingsMod;
 import com.toni.wings.server.item.WingSettings;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.stream.Stream;
 

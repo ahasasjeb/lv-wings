@@ -3,11 +3,11 @@ package com.toni.wings.util;
 import com.google.common.collect.ImmutableListMultimap;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.client.settings.IKeyConflictContext;
-import net.minecraftforge.client.settings.KeyModifier;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.client.settings.IKeyConflictContext;
+import net.neoforged.neoforge.client.settings.KeyModifier;
+import net.neoforged.bus.api.SubscribeEvent;
 
 public final class KeyInputListener {
     private static final java.util.List<KeyMapping> KEY_MAPPINGS = new java.util.ArrayList<>();

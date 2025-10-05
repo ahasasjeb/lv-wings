@@ -5,8 +5,8 @@ import com.toni.wings.server.net.clientbound.MessageSyncFlight;
 import com.toni.wings.server.net.serverbound.MessageControlFlying;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.SimpleChannel;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.SimpleChannel;
 
 public final class Network {
     private final SimpleChannel network = new NetBuilder(WingsMod.locate("net"))

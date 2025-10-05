@@ -1,12 +1,12 @@
 package com.toni.wings.server.net;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.event.network.CustomPayloadEvent;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.Channel;
-import net.minecraftforge.network.ChannelBuilder;
-import net.minecraftforge.network.SimpleChannel;
+import net.neoforged.neoforge.network.event.CustomPayloadEvent;
+import net.neoforged.fml.DistExecutor;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.network.Channel;
+import net.neoforged.neoforge.network.ChannelBuilder;
+import net.neoforged.neoforge.network.SimpleChannel;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;

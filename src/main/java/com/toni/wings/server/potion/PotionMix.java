@@ -8,7 +8,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.common.brewing.BrewingRecipe;
+import net.neoforged.neoforge.common.brewing.BrewingRecipe;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
