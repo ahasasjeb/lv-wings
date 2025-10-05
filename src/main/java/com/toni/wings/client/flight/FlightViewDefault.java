@@ -41,6 +41,8 @@ public final class FlightViewDefault implements FlightView {
 
     private WingState animator = ABSENT_ANIMATOR;
 
+    private int lastUpdateTick = Integer.MIN_VALUE;
+
     public FlightViewDefault(Player player, Flight flight) {
         this.player = player;
         this.flight = flight;
@@ -53,6 +55,11 @@ public final class FlightViewDefault implements FlightView {
 
     @Override
     public void tick() {
+        int currentTick = this.player.tickCount;
+        if (this.lastUpdateTick == currentTick) {
+            return;
+        }
+        this.lastUpdateTick = currentTick;
         this.animator = WingForm.get(this.flight.getWing())
             .map(view -> this.animator.next(view))
             .orElseGet(this.animator::nextAbsent);

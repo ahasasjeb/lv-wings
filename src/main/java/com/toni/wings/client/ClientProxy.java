@@ -10,6 +10,7 @@ import com.toni.wings.client.model.ModelWings;
 import com.toni.wings.client.model.ModelWingsAvian;
 import com.toni.wings.client.model.ModelWingsInsectoid;
 import com.toni.wings.client.renderer.LayerWings;
+import com.toni.wings.client.flight.FlightViews;
 import com.toni.wings.server.flight.Flight;
 import com.toni.wings.server.flight.Flights;
 import com.toni.wings.server.item.BatBloodBottleItem;
@@ -19,6 +20,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
@@ -115,5 +117,12 @@ public final class ClientProxy extends Proxy {
     private static net.minecraft.client.model.geom.EntityModelSet getModel()
     {
         return net.minecraft.client.Minecraft.getInstance().getEntityModels();
+    }
+
+    @Override
+    public void invalidateFlightView(Player player) {
+        if (player instanceof AbstractClientPlayer clientPlayer) {
+            FlightViews.invalidate(clientPlayer);
+        }
     }
 }

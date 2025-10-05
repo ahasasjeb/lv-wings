@@ -1,5 +1,6 @@
 package com.toni.wings.server.net.clientbound;
 
+import com.toni.wings.WingsAttachments;
 import com.toni.wings.WingsMod;
 import com.toni.wings.server.flight.Flight;
 import com.toni.wings.server.flight.FlightDefault;
@@ -34,11 +35,22 @@ public record MessageSyncFlight(int playerId, Flight flight) implements Message 
     }
 
     public static void handle(MessageSyncFlight message, IPayloadContext context) {
-        var level = context.player().level();
-        if (level != null) {
-            Flights.ifPlayer(level.getEntity(message.playerId()),
-                (player, flight) -> flight.clone(message.flight())
-            );
-        }
+        context.enqueueWork(() -> {
+            var level = context.player().level();
+            if (level == null) {
+                return;
+            }
+            var entity = level.getEntity(message.playerId());
+            if (!(entity instanceof Player player)) {
+                return;
+            }
+            Flight flight = Flights.get(player).orElse(null);
+            if (flight == null) {
+                flight = new FlightDefault();
+                player.setData(WingsAttachments.FLIGHT.get(), flight);
+            }
+            flight.clone(message.flight());
+            WingsMod.instance().invalidateFlightView(player);
+        });
     }
 }

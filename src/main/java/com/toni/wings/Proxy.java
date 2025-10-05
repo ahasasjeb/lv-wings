@@ -4,6 +4,7 @@ import com.toni.wings.server.config.WingsConfig;
 import com.toni.wings.server.config.WingsItemsConfig;
 import com.toni.wings.server.config.WingsOreConfig;
 import com.toni.wings.server.flight.Flight;
+import com.toni.wings.server.flight.Flights;
 import com.toni.wings.server.item.WingsItems;
 import com.toni.wings.server.net.Network;
 import com.toni.wings.server.net.clientbound.MessageSyncFlight;
@@ -30,6 +31,8 @@ public abstract class Proxy {
         modBus.addListener(this::setup);
         this.network.register(modBus);
         NeoForge.EVENT_BUS.addListener(this::registerBrewingRecipes);
+        NeoForge.EVENT_BUS.addListener(Flights::onPlayerLoggedIn);
+        NeoForge.EVENT_BUS.addListener(Flights::onPlayerStartTracking);
     }
 
     protected void setup(FMLCommonSetupEvent event) {
@@ -61,7 +64,7 @@ public abstract class Proxy {
 
     @SuppressWarnings("deprecation")
     public void addFlightListeners(Player player, Flight instance) {
-        if (player instanceof ServerPlayer) {
+        if (player instanceof ServerPlayer serverPlayer) {
             instance.registerFlyingListener(isFlying -> player.getAbilities().mayfly = isFlying);
             instance.registerFlyingListener(isFlying -> {
                 if (isFlying) {
@@ -69,11 +72,23 @@ public abstract class Proxy {
                 }
             });
             Flight.Notifier notifier = Flight.Notifier.of(
-                () -> this.network.sendToPlayer(new MessageSyncFlight(player, instance), (ServerPlayer) player),
+                () -> this.network.sendToPlayer(new MessageSyncFlight(player, instance), serverPlayer),
                 p -> this.network.sendToPlayer(new MessageSyncFlight(player, instance), p),
-                () -> this.network.sendToAllTracking(new MessageSyncFlight(player, instance), player)
+                () -> this.sendToDimensionPlayers(serverPlayer, instance)
             );
             instance.registerSyncListener(players -> players.notify(notifier));
+            instance.sync(Flight.PlayerSet.ofOthers());
         }
+    }
+
+    public void invalidateFlightView(Player player) {
+    }
+
+    private void sendToDimensionPlayers(ServerPlayer source, Flight instance) {
+        source.serverLevel().players().forEach(target -> {
+            if (target != source) {
+                this.network.sendToPlayer(new MessageSyncFlight(source, instance), target);
+            }
+        });
     }
 }

@@ -25,11 +25,19 @@ public final class Flights {
         EntityCapability.createVoid(WingsMod.locate("flight"), Flight.class);
 
     public static boolean has(Player player) {
-        return player.getCapability(FLIGHT_CAPABILITY) != null;
+        return resolve(player) != null;
     }
 
     public static Optional<Flight> get(Player player) {
-        return Optional.ofNullable(player.getCapability(FLIGHT_CAPABILITY));
+        return Optional.ofNullable(resolve(player));
+    }
+
+    private static Flight resolve(Player player) {
+        Flight flight = player.getCapability(FLIGHT_CAPABILITY);
+        if (flight == null && player.hasData(WingsAttachments.FLIGHT.get())) {
+            flight = player.getData(WingsAttachments.FLIGHT.get());
+        }
+        return flight;
     }
 
     public static void ifPlayer(Entity entity, BiConsumer<Player, Flight> action) {

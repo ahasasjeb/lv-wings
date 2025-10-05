@@ -69,15 +69,13 @@ easycore.inMethod(Camera.tick()) // interpolateHeight
 /**
  * Add smooth body rotation while flying
  */
-easycore.inMethod(LivingEntity.tickHeadTurn(float, float), float) // updateDistance
+easycore.inMethod(LivingEntity.tickHeadTurn(float)) // updateDistance
     .atFirst().prepend(
         aload(0),
         fload(1),
         invokestatic(WingsHooks.onUpdateBodyRotation(LivingEntity, float), boolean),
         ifeq(L0 = label()),
-        bipush(0),
-        i2f,
-        freturn,
+        _return(),
         L0
     )
 

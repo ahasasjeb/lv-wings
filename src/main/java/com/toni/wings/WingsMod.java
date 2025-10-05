@@ -123,6 +123,10 @@ public final class WingsMod {
         return INSTANCE;
     }
 
+    public void invalidateFlightView(Player player) {
+        this.requireProxy().invalidateFlightView(player);
+    }
+
     private Proxy requireProxy() {
         if (this.proxy == null) {
             throw new IllegalStateException("Proxy not initialized");

@@ -53,18 +53,21 @@ public final class LayerWings extends RenderLayer<PlayerRenderState, PlayerModel
             return;
         }
 
-        FlightViews.get(player).ifPresent(flight -> flight.ifFormPresent(form -> {
-            float delta = Mth.clamp(state.ageInTicks - player.tickCount, 0.0F, 1.0F);
-            VertexConsumer builder = buffer.getBuffer(form.getRenderType());
-            poseStack.pushPose();
-            if (state.isCrouching) {
-                poseStack.translate(0.0D, 0.2D, 0.0D);
-            }
-            ModelPart body = ((PlayerModel) this.getParentModel()).body;
-            body.translateAndRotate(poseStack);
-            form.render(poseStack, builder, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F, delta);
-            poseStack.popPose();
-        }));
+        FlightViews.get(player).ifPresent(flight -> {
+            flight.tick();
+            flight.ifFormPresent(form -> {
+                float delta = Mth.clamp(state.ageInTicks - player.tickCount, 0.0F, 1.0F);
+                VertexConsumer builder = buffer.getBuffer(form.getRenderType());
+                poseStack.pushPose();
+                if (state.isCrouching) {
+                    poseStack.translate(0.0D, 0.2D, 0.0D);
+                }
+                ModelPart body = ((PlayerModel) this.getParentModel()).body;
+                body.translateAndRotate(poseStack);
+                form.render(poseStack, builder, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F, delta);
+                poseStack.popPose();
+            });
+        });
     }
 
     public static void initLayers(EntityRenderersEvent.RegisterLayerDefinitions event)
