@@ -28,6 +28,7 @@ public abstract class Proxy {
 
     public void init(IEventBus modBus) {
         modBus.addListener(this::setup);
+        this.network.register(modBus);
         NeoForge.EVENT_BUS.addListener(this::registerBrewingRecipes);
     }
 

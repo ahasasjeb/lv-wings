@@ -3,11 +3,11 @@ package com.toni.wings.server.sound;
 import com.toni.wings.WingsMod;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.sounds.SoundEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-@Mod.EventBusSubscriber(modid = WingsMod.ID)
+@EventBusSubscriber(modid = WingsMod.ID)
 public final class WingsSounds {
     private WingsSounds() {
     }

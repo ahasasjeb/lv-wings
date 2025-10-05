@@ -1,35 +1,29 @@
 package com.toni.wings.server.net.serverbound;
 
+import com.toni.wings.WingsMod;
 import com.toni.wings.server.flight.Flight;
 import com.toni.wings.server.flight.Flights;
 import com.toni.wings.server.net.Message;
-import com.toni.wings.server.net.ServerMessageContext;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public final class MessageControlFlying implements Message {
-    private boolean isFlying;
-
-    public MessageControlFlying() {
-    }
-
-    public MessageControlFlying(boolean isFlying) {
-        this.isFlying = isFlying;
-    }
+public record MessageControlFlying(boolean isFlying) implements Message {
+    public static final CustomPacketPayload.Type<MessageControlFlying> TYPE = new CustomPacketPayload.Type<>(WingsMod.locate("control_flying"));
+    public static final StreamCodec<FriendlyByteBuf, MessageControlFlying> STREAM_CODEC =
+        StreamCodec.of((buf, message) -> buf.writeBoolean(message.isFlying()),
+            buf -> new MessageControlFlying(buf.readBoolean()));
 
     @Override
-    public void encode(FriendlyByteBuf buf) {
-        buf.writeBoolean(this.isFlying);
+    public CustomPacketPayload.Type<MessageControlFlying> type() {
+        return TYPE;
     }
 
-    @Override
-    public void decode(FriendlyByteBuf buf) {
-        this.isFlying = buf.readBoolean();
-    }
-
-    public static void handle(MessageControlFlying message, ServerMessageContext context) {
-        Player player = context.getPlayer();
+    public static void handle(MessageControlFlying message, IPayloadContext context) {
+        Player player = context.player();
         Flights.get(player).filter(f -> f.canFly(player))
-            .ifPresent(flight -> flight.setIsFlying(message.isFlying, Flight.PlayerSet.ofOthers()));
+            .ifPresent(flight -> flight.setIsFlying(message.isFlying(), Flight.PlayerSet.ofOthers()));
     }
 }

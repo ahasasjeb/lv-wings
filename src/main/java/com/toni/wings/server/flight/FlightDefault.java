@@ -134,9 +134,7 @@ public final class FlightDefault implements Flight {
 
     @Override
     public boolean hasEffect(Player player) {
-        return WingsEffects.WINGS.getHolder()
-            .map(holder -> player.getEffect(holder) != null)
-            .orElse(false);
+        return WingsEffects.WINGS.isBound() && player.hasEffect(WingsEffects.WINGS);
     }
 
     @Override

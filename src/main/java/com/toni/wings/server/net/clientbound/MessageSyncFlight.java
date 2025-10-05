@@ -1,47 +1,44 @@
 package com.toni.wings.server.net.clientbound;
 
+import com.toni.wings.WingsMod;
 import com.toni.wings.server.flight.Flight;
 import com.toni.wings.server.flight.FlightDefault;
 import com.toni.wings.server.flight.Flights;
-import com.toni.wings.server.net.ClientMessageContext;
 import com.toni.wings.server.net.Message;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public final class MessageSyncFlight implements Message {
-    private int playerId;
-
-    private final Flight flight;
-
-    public MessageSyncFlight() {
-        this(0, new FlightDefault());
-    }
+public record MessageSyncFlight(int playerId, Flight flight) implements Message {
+    public static final CustomPacketPayload.Type<MessageSyncFlight> TYPE = new CustomPacketPayload.Type<>(WingsMod.locate("sync_flight"));
+    public static final StreamCodec<FriendlyByteBuf, MessageSyncFlight> STREAM_CODEC =
+        StreamCodec.of((buf, message) -> {
+            buf.writeVarInt(message.playerId());
+            message.flight().serialize(buf);
+        }, buf -> {
+            int playerId = buf.readVarInt();
+            FlightDefault flight = new FlightDefault();
+            flight.deserialize(buf);
+            return new MessageSyncFlight(playerId, flight);
+        });
 
     public MessageSyncFlight(Player player, Flight flight) {
         this(player.getId(), flight);
     }
 
-    private MessageSyncFlight(int playerId, Flight flight) {
-        this.playerId = playerId;
-        this.flight = flight;
-    }
-
     @Override
-    public void encode(FriendlyByteBuf buf) {
-        buf.writeVarInt(this.playerId);
-        this.flight.serialize(buf);
-
+    public CustomPacketPayload.Type<MessageSyncFlight> type() {
+        return TYPE;
     }
 
-    @Override
-    public void decode(FriendlyByteBuf buf) {
-        this.playerId = buf.readVarInt();
-        this.flight.deserialize(buf);
-    }
-
-    public static void handle(MessageSyncFlight message, ClientMessageContext context) {
-        Flights.ifPlayer(context.getWorld().getEntity(message.playerId),
-            (player, flight) -> flight.clone(message.flight)
-        );
+    public static void handle(MessageSyncFlight message, IPayloadContext context) {
+        var level = context.player().level();
+        if (level != null) {
+            Flights.ifPlayer(level.getEntity(message.playerId()),
+                (player, flight) -> flight.clone(message.flight())
+            );
+        }
     }
 }

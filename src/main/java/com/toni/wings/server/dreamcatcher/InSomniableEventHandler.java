@@ -12,9 +12,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@Mod.EventBusSubscriber(modid = WingsMod.ID)
+@EventBusSubscriber(modid = WingsMod.ID)
 public final class InSomniableEventHandler {
     private InSomniableEventHandler() {
     }

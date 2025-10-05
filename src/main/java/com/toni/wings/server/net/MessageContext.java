@@ -1,13 +1,13 @@
 package com.toni.wings.server.net;
 
-import net.neoforged.neoforge.network.event.CustomPayloadEvent;
 import net.neoforged.fml.LogicalSide;
 
+/**
+ * @deprecated Replaced by NeoForge's {@code IPayloadContext}. Retained as a stub for source compatibility.
+ */
+@Deprecated
 public abstract class MessageContext {
-    protected final CustomPayloadEvent.Context context;
-
-    public MessageContext(CustomPayloadEvent.Context context) {
-        this.context = context;
+    protected MessageContext() {
     }
 
     public abstract LogicalSide getSide();

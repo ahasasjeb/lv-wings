@@ -17,16 +17,16 @@ import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.EventHooks;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
-import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.EntityMountEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
-@Mod.EventBusSubscriber(modid = WingsMod.ID)
+@EventBusSubscriber(modid = WingsMod.ID)
 public final class ServerEventHandler {
     private ServerEventHandler() {
     }
@@ -52,7 +52,7 @@ public final class ServerEventHandler {
             player.awardStat(Stats.ITEM_USED.get(Items.GLASS_BOTTLE));
             ItemStack batBlood = new ItemStack(WingsItems.BAT_BLOOD_BOTTLE.get());
             if (stack.isEmpty()) {
-                ForgeEventFactory.onPlayerDestroyItem(player, destroyed, hand);
+                EventHooks.onPlayerDestroyItem(player, destroyed, hand);
                 player.setItemInHand(hand, batBlood);
             } else if (!player.getInventory().add(batBlood)) {
                 player.drop(batBlood, false);
@@ -73,12 +73,10 @@ public final class ServerEventHandler {
     }
 
     @SubscribeEvent
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase == TickEvent.Phase.END) {
-            Flights.get(event.player).ifPresent(flight ->
-                flight.tick(event.player)
-            );
-        }
+    public static void onPlayerTick(PlayerTickEvent.Post event) {
+        Flights.get(event.getEntity()).ifPresent(flight ->
+            flight.tick(event.getEntity())
+        );
     }
 
     @SubscribeEvent

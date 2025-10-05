@@ -2,11 +2,11 @@ package com.toni.wings.server.config;
 
 import com.toni.wings.WingsMod;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 
-@Mod.EventBusSubscriber(modid = WingsMod.ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = WingsMod.ID)
 public final class WingsConfigEvents {
     private WingsConfigEvents() {
     }

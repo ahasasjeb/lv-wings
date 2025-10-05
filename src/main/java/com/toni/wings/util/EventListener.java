@@ -2,17 +2,18 @@ package com.toni.wings.util;
 
 import com.toni.wings.WingsMod;
 import com.toni.wings.client.ReloadListener;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
-@Mod.EventBusSubscriber(modid = WingsMod.ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(value = Dist.CLIENT, modid = WingsMod.ID)
 public class EventListener {
 
     @SubscribeEvent
-    public static void onRegisterClientReloadListeners(RegisterClientReloadListenersEvent event){
-        event.registerReloadListener(new ReloadListener());
+    public static void onAddClientReloadListeners(AddClientReloadListenersEvent event){
+        event.addListener(WingsMod.locate("client_reload_listener"), new ReloadListener());
     }
 
     @SubscribeEvent

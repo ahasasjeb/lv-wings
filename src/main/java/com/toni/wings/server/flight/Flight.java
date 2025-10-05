@@ -8,9 +8,6 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Consumer;
 
-import net.neoforged.neoforge.common.capabilities.AutoRegisterCapability;
-
-@AutoRegisterCapability
 public interface Flight {
     default void setIsFlying(boolean isFlying) {
         this.setIsFlying(isFlying, PlayerSet.empty());

@@ -47,7 +47,9 @@ public class WingsBottleItem extends Item {
             }
             return false;
         }).isPresent();
-        WingsEffects.WINGS.getHolder().ifPresent(holder -> player.addEffect(new MobEffectInstance(holder, MobEffectInstance.INFINITE_DURATION, 0, true, false)));
+        if (WingsEffects.WINGS.isBound()) {
+            player.addEffect(new MobEffectInstance(WingsEffects.WINGS, MobEffectInstance.INFINITE_DURATION, 0, true, false));
+        }
         return changed;
     }
 

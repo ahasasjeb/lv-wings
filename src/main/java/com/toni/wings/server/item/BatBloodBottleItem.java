@@ -32,11 +32,11 @@ public class BatBloodBottleItem extends Item {
     }
 
     public static boolean removeWings(Player player) {
-        return WingsEffects.WINGS.getHolder().map(player::removeEffect).orElse(false);
+        return WingsEffects.WINGS.isBound() && player.removeEffect(WingsEffects.WINGS);
     }
 
     public static boolean removeWings(ServerPlayer player, FlightApparatus wings) {
         boolean changed = Flights.get(player).filter(flight -> flight.getWing() == wings).isPresent();
-        return changed && WingsEffects.WINGS.getHolder().map(player::removeEffect).orElse(false);
+        return changed && WingsEffects.WINGS.isBound() && player.removeEffect(WingsEffects.WINGS);
     }
 }

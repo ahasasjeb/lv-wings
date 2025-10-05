@@ -1,9 +1,6 @@
 package com.toni.wings.server.net;
 
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
-public interface Message {
-    void encode(FriendlyByteBuf buf);
-
-    void decode(FriendlyByteBuf buf);
+public interface Message extends CustomPacketPayload {
 }
