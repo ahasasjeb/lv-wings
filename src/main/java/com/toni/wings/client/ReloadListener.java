@@ -15,10 +15,9 @@ import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
+
+import javax.annotation.Nonnull;
 
 import java.util.Iterator;
 import java.util.List;
@@ -26,7 +25,6 @@ import java.util.stream.Stream;
 
 import static net.minecraftforge.fml.util.ObfuscationReflectionHelper.getPrivateValue;
 
-@OnlyIn(Dist.CLIENT)
 public class ReloadListener implements ResourceManagerReloadListener {
 
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -37,7 +35,7 @@ public class ReloadListener implements ResourceManagerReloadListener {
     }*/
 
     @Override
-    public void onResourceManagerReload(@NotNull ResourceManager rm) {
+    public void onResourceManagerReload(@Nonnull ResourceManager rm) {
 
         if(WingForm.isEmpty()){
             WingForm.register(WingsMod.ANGEL_WINGS, ClientProxy.createAvianWings(WingsMod.WINGS.getKey(WingsMod.ANGEL_WINGS)));

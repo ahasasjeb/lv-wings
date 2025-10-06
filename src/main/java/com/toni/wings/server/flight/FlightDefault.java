@@ -130,7 +130,7 @@ public final class FlightDefault implements Flight {
     private void onWornUpdate(Player player) {
         if (player.isEffectiveAi()) {
             if (this.isFlying()) {
-                float speed = (float) Mth.clampedLerp(MIN_SPEED, MAX_SPEED, player.zza);
+                float speed = Mth.clampedLerp(MIN_SPEED, MAX_SPEED, player.zza);
                 float elevationBoost = MathH.transform(
                     Math.abs(player.getXRot()),
                     45.0F, 90.0F,
@@ -170,7 +170,7 @@ public final class FlightDefault implements Flight {
     public void tick(Player player) {
         boolean hasEffect = this.hasEffect(player);
         if (hasEffect || !player.isEffectiveAi()) {
-            if (!hasEffect && !player.level().isClientSide) {
+            if (!hasEffect && !player.level.isClientSide) {
                 this.setWing(FlightApparatus.NONE, PlayerSet.ofAll());
             }
             this.onWornUpdate(player);

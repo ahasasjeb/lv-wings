@@ -1,5 +1,6 @@
 package com.toni.wings.server.net.clientbound;
 
+import com.toni.wings.WingsMod;
 import com.toni.wings.server.flight.Flight;
 import com.toni.wings.server.flight.FlightDefault;
 import com.toni.wings.server.flight.Flights;
@@ -39,9 +40,16 @@ public final class MessageSyncFlight implements Message {
         this.flight.deserialize(buf);
     }
 
+    public Flight flight() {
+        return this.flight;
+    }
+
     public static void handle(MessageSyncFlight message, ClientMessageContext context) {
         Flights.ifPlayer(context.getWorld().getEntity(message.playerId),
-            (player, flight) -> flight.clone(message.flight)
+            (player, flight) -> {
+                flight.clone(message.flight());
+                WingsMod.instance().invalidateFlightView(player);
+            }
         );
     }
 }

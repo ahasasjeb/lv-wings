@@ -85,4 +85,8 @@ public abstract class Proxy {
             instance.registerSyncListener(players -> players.notify(notifier));
         }
     }
+
+    public void invalidateFlightView(Player player) {
+        // Default implementation does nothing
+    }
 }
