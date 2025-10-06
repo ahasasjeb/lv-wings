@@ -33,6 +33,7 @@ neoForge {
 		client {
 			client()
 			systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+			devLogin = true //正版登录
 		}
 
 		server {
