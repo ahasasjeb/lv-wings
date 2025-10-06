@@ -170,7 +170,7 @@ public final class FlightDefault implements Flight {
     public void tick(Player player) {
         boolean hasEffect = this.hasEffect(player);
         if (hasEffect || !player.isEffectiveAi()) {
-            if (!hasEffect) {
+            if (!hasEffect && !player.level().isClientSide) {
                 this.setWing(FlightApparatus.NONE, PlayerSet.ofAll());
             }
             this.onWornUpdate(player);
