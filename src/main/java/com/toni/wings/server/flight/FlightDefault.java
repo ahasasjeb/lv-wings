@@ -170,7 +170,7 @@ public final class FlightDefault implements Flight {
     public void tick(Player player) {
         boolean hasEffect = this.hasEffect(player);
         if (hasEffect || !player.isEffectiveAi()) {
-            if (!hasEffect) {
+            if (!hasEffect && !player.level.isClientSide) {
                 this.setWing(FlightApparatus.NONE, PlayerSet.ofAll());
             }
             this.onWornUpdate(player);
@@ -219,7 +219,8 @@ public final class FlightDefault implements Flight {
     public void serialize(FriendlyByteBuf buf) {
         buf.writeBoolean(this.isFlying());
         buf.writeVarInt(this.getTimeFlying());
-        buf.writeUtf(WingsMod.WINGS.getKey(this.getWing()).toString());
+        ResourceLocation wingKey = WingsMod.WINGS.getKey(this.getWing());
+        buf.writeUtf(wingKey != null ? wingKey.toString() : "");
     }
 
     @Override
@@ -251,7 +252,8 @@ public final class FlightDefault implements Flight {
             CompoundTag compound = new CompoundTag();
             compound.putBoolean(IS_FLYING, instance.isFlying());
             compound.putInt(TIME_FLYING, instance.getTimeFlying());
-            compound.putString(WING, WingsMod.WINGS.getKey(instance.getWing()).toString());
+            ResourceLocation wingKey = WingsMod.WINGS.getKey(instance.getWing());
+            compound.putString(WING, wingKey != null ? wingKey.toString() : "");
             return compound;
         }
 

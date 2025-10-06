@@ -15,8 +15,6 @@ import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -26,7 +24,6 @@ import java.util.stream.Stream;
 
 import static net.minecraftforge.fml.util.ObfuscationReflectionHelper.getPrivateValue;
 
-@OnlyIn(Dist.CLIENT)
 public class ReloadListener implements ResourceManagerReloadListener {
 
     private static final Logger LOGGER = LogUtils.getLogger();
