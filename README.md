@@ -11,6 +11,12 @@
 - **原始项目**: 由 [pau101](https://github.com/pau101/Wings) 创建。
 - **1.18.2 移植版**: 由 [jt789](https://github.com/jt789/WingsPort) 移植和维护。
 
+## ⚙️ 开发说明 / Development Notes
+
+- NeoForge 21.6 起禁用了 JS Coremod 与 ASM 变更，本项目已迁移至基于 Mixins 的注入方案。
+- 所有原先在 `wings_core.js` 中的飞行与渲染 hook 均已实现为 Java mixin（位于 `com.toni.wings.mixin`），并通过 `wings.mixins.json` 注册。
+- 构建流程无需再依赖 `easycorelib.js`，如需扩展请使用常规的事件或新增 mixin。
+
 # Wings
 
 This is a community-maintained fork of the Wings mod.

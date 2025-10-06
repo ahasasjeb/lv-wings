@@ -76,6 +76,10 @@ repositories {
 	mavenCentral()
 }
 
+dependencies {
+	compileOnly 'org.spongepowered:mixin:0.8.5'
+}
+
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
 	var replaceProperties = [
 			minecraft_version      : minecraft_version,

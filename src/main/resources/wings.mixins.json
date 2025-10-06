@@ -1,0 +1,21 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.toni.wings.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "LivingEntityMixin",
+    "ServerGamePacketListenerImplMixin",
+    "ServerPlayerMixin"
+  ],
+  "client": [
+    "CameraMixin",
+    "ClientHooksMixin",
+    "ItemInHandRendererMixin",
+    "PlayerModelMixin",
+    "PlayerRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
