@@ -219,7 +219,7 @@ public final class FlightDefault implements Flight {
     public void serialize(FriendlyByteBuf buf) {
         buf.writeBoolean(this.isFlying());
         buf.writeVarInt(this.getTimeFlying());
-        buf.writeUtf(WingsMod.WINGS.getKey(this.getWing()).toString());
+        buf.writeUtf(Objects.requireNonNull(WingsMod.WINGS.getKey(this.getWing())).toString());
     }
 
     @Override
@@ -251,7 +251,7 @@ public final class FlightDefault implements Flight {
             CompoundTag compound = new CompoundTag();
             compound.putBoolean(IS_FLYING, instance.isFlying());
             compound.putInt(TIME_FLYING, instance.getTimeFlying());
-            compound.putString(WING, WingsMod.WINGS.getKey(instance.getWing()).toString());
+            compound.putString(WING, Objects.requireNonNull(WingsMod.WINGS.getKey(instance.getWing())).toString());
             return compound;
         }
 
