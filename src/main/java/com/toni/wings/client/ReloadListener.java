@@ -12,8 +12,6 @@ import net.minecraft.client.renderer.entity.layers.CapeLayer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.slf4j.Logger;
 
 import java.util.Iterator;
@@ -25,7 +23,7 @@ import static net.neoforged.fml.util.ObfuscationReflectionHelper.getPrivateValue
 
 import javax.annotation.Nonnull;
 
-@OnlyIn(Dist.CLIENT)
+
 public class ReloadListener implements ResourceManagerReloadListener {
 
     private static final Logger LOGGER = LogUtils.getLogger();
