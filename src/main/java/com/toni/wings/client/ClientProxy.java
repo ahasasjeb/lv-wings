@@ -19,8 +19,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.common.MinecraftForge;
@@ -110,7 +108,7 @@ public final class ClientProxy extends Proxy {
         );
     }
 
-    @OnlyIn(Dist.CLIENT)
+    
     private static net.minecraft.client.model.geom.EntityModelSet getModel()
     {
         return net.minecraft.client.Minecraft.getInstance().getEntityModels();
