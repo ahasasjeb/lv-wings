@@ -36,8 +36,10 @@ public final class ClientEventHandler {
         Flights.get(player).ifPresent(flight -> {
             float delta = event.getTicksExisted() - player.tickCount;
             float amt = flight.getFlyingAmount(delta);
-            if (amt == 0.0F) return;
-        PlayerModel model = event.getModel();
+            if (amt == 0.0F || (player.onGround() && !flight.isFlying())) {
+                return;
+            }
+            PlayerModel model = event.getModel();
             float pitch = event.getPitch();
             model.head.xRot = MathH.toRadians(MathH.lerp(pitch, pitch / 4.0F - 90.0F, amt));
             model.leftArm.xRot = MathH.lerp(model.leftArm.xRot, -3.2F, amt);
@@ -71,7 +73,7 @@ public final class ClientEventHandler {
             PoseStack matrixStack = event.getMatrixStack();
             float delta = event.getDelta();
             float amt = flight.getFlyingAmount(delta);
-            if (amt > 0.0F) {
+            if (amt > 0.0F && (!player.onGround() || flight.isFlying())) {
                 float roll = MathH.lerpDegrees(
                     player.yBodyRotO - player.yRotO,
                     player.yBodyRot - player.getYRot(),
@@ -97,10 +99,10 @@ public final class ClientEventHandler {
 
     @SubscribeEvent
     public static void onCameraSetup(ViewportEvent.ComputeCameraAngles event) {
-    Flights.ifPlayer(event.getCamera().getEntity(), (player, flight) -> {
+        Flights.ifPlayer(event.getCamera().getEntity(), (player, flight) -> {
             float delta = (float) event.getPartialTick();
             float amt = flight.getFlyingAmount(delta);
-            if (amt > 0.0F) {
+            if (amt > 0.0F && (!player.onGround() || flight.isFlying())) {
                 float roll = MathH.lerpDegrees(
                     player.yBodyRotO - player.yRotO,
                     player.yBodyRot - player.getYRot(),
