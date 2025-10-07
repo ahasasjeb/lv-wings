@@ -1,5 +1,8 @@
 package com.toni.wings.client.model;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.toni.wings.client.renderer.SodiumBypassVertexConsumer;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.core.Direction;
 
@@ -10,6 +13,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.EnumSet;
 import java.util.Objects;
+
+import javax.annotation.Nonnull;
 
 // replace reflection with mixin 实际：改不了一点，贼TM麻烦
 public final class Model3DTexture extends ModelPart.Cube {
@@ -163,5 +168,10 @@ public final class Model3DTexture extends ModelPart.Cube {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void compile(@Nonnull PoseStack.Pose pose, @Nonnull VertexConsumer consumer, int packedLight, int packedOverlay, int packedColor) {
+        super.compile(pose, SodiumBypassVertexConsumer.wrap(consumer), packedLight, packedOverlay, packedColor);
     }
 }
