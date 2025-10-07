@@ -9,8 +9,6 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 public final class CapabilityProviders {
@@ -30,23 +28,6 @@ public final class CapabilityProviders {
     public static <T> NonSerializingSingleBuilder<T> builder(Capability<? super T> capability, T instance) {
         return new NonSerializingSingleBuilderImpl<>(capability, instance);
     }
-
-    /*public static <T> SingleBuilder<T> builder(Capability<T> capability) {
-        return new NonSerializingSingleBuilderImpl<>(capability, capability.getDefaultInstance())
-            .serializedBy(new NBTSerializer<T, Tag>() {
-                @Override
-                public Tag serialize(T instance) {
-                    return capability.ser
-                }
-
-                @Override
-                public T deserialize(Tag compound) {
-                    T instance = capability.getDefaultInstance();
-                    capability.readNBT(instance, null, compound);
-                    return instance;
-                }
-            });
-    }*/
 
     public static CompositeBuilder builder() {
         return new CompositeBuilderImpl();
@@ -97,7 +78,7 @@ public final class CapabilityProviders {
         }
 
         @Override
-        public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
+        public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
             for (ICapabilityProvider provider : this.providers) {
                 LazyOptional<T> instance = provider.getCapability(capability, facing);
                 if (instance.isPresent()) {
@@ -131,7 +112,7 @@ public final class CapabilityProviders {
         private static final EmptyProvider INSTANCE = new EmptyProvider();
 
         @Override
-        public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
+        public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
             return LazyOptional.empty();
         }
     }
@@ -149,7 +130,7 @@ public final class CapabilityProviders {
         }
 
         @Override
-        public <C> LazyOptional<C> getCapability(@Nonnull Capability<C> capability, @Nullable Direction facing) {
+        public <C> LazyOptional<C> getCapability(Capability<C> capability, Direction facing) {
             return this.capability == capability ? this.lazy.cast() : LazyOptional.empty();
         }
     }

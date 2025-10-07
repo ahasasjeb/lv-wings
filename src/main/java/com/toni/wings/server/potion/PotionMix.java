@@ -7,6 +7,8 @@ import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.brewing.BrewingRecipe;
 
+import javax.annotation.Nonnull;
+
 public class PotionMix extends BrewingRecipe {
     private final Potion from;
 
@@ -20,7 +22,7 @@ public class PotionMix extends BrewingRecipe {
     }
 
     @Override
-    public boolean isInput(ItemStack stack) {
+    public boolean isInput(@Nonnull ItemStack stack) {
         return !stack.isEmpty() && PotionUtils.getPotion(stack) == this.from;
     }
 

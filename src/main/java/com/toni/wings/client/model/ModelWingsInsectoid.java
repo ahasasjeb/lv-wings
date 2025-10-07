@@ -7,6 +7,8 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 
+import javax.annotation.Nonnull;
+
 public final class ModelWingsInsectoid extends ModelWings<AnimatorInsectoid> {
     //private final ModelPart root;
 
@@ -46,14 +48,14 @@ public final class ModelWingsInsectoid extends ModelWings<AnimatorInsectoid> {
     }
 
     @Override
-    public void render(AnimatorInsectoid animator, float delta, PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void render(@Nonnull AnimatorInsectoid animator, float delta, @Nonnull PoseStack matrixStack, @Nonnull VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         setAngles(this.wingLeft, this.wingRight, animator.getRotation(delta));
         this.wingLeft.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
         this.wingRight.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
     @Override
-    public void renderToBuffer(PoseStack p_103111_, VertexConsumer p_103112_, int p_103113_, int p_103114_, float p_103115_, float p_103116_, float p_103117_, float p_103118_) {
+    public void renderToBuffer(@Nonnull PoseStack p_103111_, @Nonnull VertexConsumer p_103112_, int p_103113_, int p_103114_, float p_103115_, float p_103116_, float p_103117_, float p_103118_) {
 
     }
 }

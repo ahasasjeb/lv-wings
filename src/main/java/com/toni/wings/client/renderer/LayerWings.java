@@ -16,6 +16,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 
+import javax.annotation.Nonnull;
+
 public final class LayerWings extends RenderLayer<LivingEntity, HumanoidModel<LivingEntity>> {
     private final TransformFunction transform;
 
@@ -33,7 +35,7 @@ public final class LayerWings extends RenderLayer<LivingEntity, HumanoidModel<Li
     }
 
     @Override
-    public void render(PoseStack matrixStack, MultiBufferSource buffer, int packedLight, LivingEntity player, float limbSwing, float limbSwingAmount, float delta, float age, float headYaw, float headPitch) {
+    public void render(@Nonnull PoseStack matrixStack, @Nonnull MultiBufferSource buffer, int packedLight, @Nonnull LivingEntity player, float limbSwing, float limbSwingAmount, float delta, float age, float headYaw, float headPitch) {
         if (!player.isInvisible()) {
             FlightViews.get(player).ifPresent(flight -> {
                 flight.ifFormPresent(form -> {

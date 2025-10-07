@@ -8,6 +8,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 
+import javax.annotation.Nonnull;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -158,7 +159,7 @@ public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
     }
 
     @Override
-    public void render(AnimatorAvian animator, float delta, PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void render(@Nonnull AnimatorAvian animator, float delta, @Nonnull PoseStack matrixStack, @Nonnull VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         for (int i = 0; i < this.bonesLeft.size(); i++) {
             ModelPart left = this.bonesLeft.get(i);
             ModelPart right = this.bonesRight.get(i);
@@ -186,7 +187,7 @@ public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack p_103111_, VertexConsumer p_103112_, int p_103113_, int p_103114_, float p_103115_, float p_103116_, float p_103117_, float p_103118_) {
+    public void renderToBuffer(@Nonnull PoseStack p_103111_, @Nonnull VertexConsumer p_103112_, int p_103113_, int p_103114_, float p_103115_, float p_103116_, float p_103117_, float p_103118_) {
 
     }
 

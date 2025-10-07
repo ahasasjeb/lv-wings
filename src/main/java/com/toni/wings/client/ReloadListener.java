@@ -13,11 +13,12 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.CapeLayer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.server.packs.resources.ResourceManager;
+
+import javax.annotation.Nonnull;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.util.Iterator;
@@ -37,7 +38,7 @@ public class ReloadListener implements ResourceManagerReloadListener {
     }*/
 
     @Override
-    public void onResourceManagerReload(@NotNull ResourceManager rm) {
+    public void onResourceManagerReload(@Nonnull ResourceManager rm) {
 
         if(WingForm.isEmpty()){
             WingForm.register(WingsMod.ANGEL_WINGS, ClientProxy.createAvianWings(WingsMod.WINGS.getKey(WingsMod.ANGEL_WINGS)));

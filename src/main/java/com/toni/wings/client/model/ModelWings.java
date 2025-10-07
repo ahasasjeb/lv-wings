@@ -9,7 +9,10 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.phys.Vec3;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 
+
+@ParametersAreNonnullByDefault
 public abstract class ModelWings<A extends Animator> extends Model {
     public ModelWings() {
         super(RenderType::entityCutout);

@@ -91,7 +91,8 @@ public final class FlightDefault implements Flight {
 
     @Override
     public float getFlyingAmount(float delta) {
-        return FLY_AMOUNT_CURVE.eval(MathH.lerp(this.getPrevTimeFlying(), this.getTimeFlying(), delta) / MAX_TIME_FLYING);
+        return FLY_AMOUNT_CURVE
+                .eval(MathH.lerp(this.getPrevTimeFlying(), this.getTimeFlying(), delta) / MAX_TIME_FLYING);
     }
 
     private void setPrevTimeFlying(int prevTimeFlying) {
@@ -132,21 +133,19 @@ public final class FlightDefault implements Flight {
             if (this.isFlying()) {
                 float speed = (float) Mth.clampedLerp(MIN_SPEED, MAX_SPEED, player.zza);
                 float elevationBoost = MathH.transform(
-                    Math.abs(player.getXRot()),
-                    45.0F, 90.0F,
-                    1.0F, 0.0F
-                );
+                        Math.abs(player.getXRot()),
+                        45.0F, 90.0F,
+                        1.0F, 0.0F);
                 float pitch = -MathH.toRadians(player.getXRot() - PITCH_OFFSET * elevationBoost);
                 float yaw = -MathH.toRadians(player.getYRot()) - MathH.PI;
-                float vxz = - Mth.cos(pitch);
+                float vxz = -Mth.cos(pitch);
                 float vy = Mth.sin(pitch);
                 float vz = Mth.cos(yaw);
                 float vx = Mth.sin(yaw);
                 player.setDeltaMovement(player.getDeltaMovement().add(
-                    vx * vxz * speed,
-                    vy * speed + Y_BOOST * (player.getXRot() > 0.0F ? elevationBoost : 1.0D),
-                    vz * vxz * speed
-                ));
+                        vx * vxz * speed,
+                        vy * speed + Y_BOOST * (player.getXRot() > 0.0F ? elevationBoost : 1.0D),
+                        vz * vxz * speed));
             }
             if (this.canLand(player)) {
                 Vec3 mot = player.getDeltaMovement();
@@ -156,7 +155,7 @@ public final class FlightDefault implements Flight {
                 player.fallDistance = 0.0F;
             }
         }
-    if (!player.level().isClientSide) {
+        if (!player.level().isClientSide) {
             if (this.flightApparatus.isUsable(player)) {
                 (this.state = this.state.next(this.flightApparatus)).onUpdate(player);
             } else if (this.isFlying()) {
@@ -170,11 +169,11 @@ public final class FlightDefault implements Flight {
     public void tick(Player player) {
         boolean hasEffect = this.hasEffect(player);
         if (hasEffect || !player.isEffectiveAi()) {
-            if (!hasEffect) {
+            if (!hasEffect && !player.level().isClientSide) {
                 this.setWing(FlightApparatus.NONE, PlayerSet.ofAll());
             }
             this.onWornUpdate(player);
-    } else if (!player.level().isClientSide) {
+        } else if (!player.level().isClientSide) {
             this.setWing(FlightApparatus.NONE, PlayerSet.ofAll());
             if (this.isFlying()) {
                 this.setIsFlying(false, PlayerSet.ofAll());
@@ -219,7 +218,7 @@ public final class FlightDefault implements Flight {
     public void serialize(FriendlyByteBuf buf) {
         buf.writeBoolean(this.isFlying());
         buf.writeVarInt(this.getTimeFlying());
-        buf.writeUtf(WingsMod.WINGS.getKey(this.getWing()).toString());
+        buf.writeUtf(Objects.requireNonNull(WingsMod.WINGS.getKey(this.getWing())).toString());
     }
 
     @Override
@@ -228,8 +227,8 @@ public final class FlightDefault implements Flight {
         this.setTimeFlying(buf.readVarInt());
         ResourceLocation wingId = ResourceLocation.tryParse(buf.readUtf(64));
         FlightApparatus wing = wingId != null
-            ? WingsMod.WINGS.getOptional(wingId).orElse(FlightApparatus.NONE)
-            : FlightApparatus.NONE;
+                ? WingsMod.WINGS.getOptional(wingId).orElse(FlightApparatus.NONE)
+                : FlightApparatus.NONE;
         this.setWing(wing);
     }
 
@@ -251,7 +250,7 @@ public final class FlightDefault implements Flight {
             CompoundTag compound = new CompoundTag();
             compound.putBoolean(IS_FLYING, instance.isFlying());
             compound.putInt(TIME_FLYING, instance.getTimeFlying());
-            compound.putString(WING, WingsMod.WINGS.getKey(instance.getWing()).toString());
+            compound.putString(WING, Objects.requireNonNull(WingsMod.WINGS.getKey(instance.getWing())).toString());
             return compound;
         }
 
@@ -262,8 +261,8 @@ public final class FlightDefault implements Flight {
             f.setTimeFlying(compound.getInt(TIME_FLYING));
             ResourceLocation wingId = ResourceLocation.tryParse(compound.getString(WING));
             FlightApparatus wing = wingId != null
-                ? WingsMod.WINGS.getOptional(wingId).orElse(FlightApparatus.NONE)
-                : FlightApparatus.NONE;
+                    ? WingsMod.WINGS.getOptional(wingId).orElse(FlightApparatus.NONE)
+                    : FlightApparatus.NONE;
             f.setWing(wing);
             return f;
         }
