@@ -31,7 +31,7 @@ public class WingsBottleItem extends Item {
     public ItemStack finishUsingItem(@Nonnull ItemStack stack, @Nonnull Level world, @Nonnull LivingEntity living) {
         ItemStack result = super.finishUsingItem(stack, world, living);
 
-        if (!world.isClientSide && living instanceof ServerPlayer player) {
+    if (!world.isClientSide() && living instanceof ServerPlayer player) {
             giveWing(player, this.wings);
             world.playSound(null, player.getX(), player.getY(), player.getZ(), WingsSounds.ITEM_ARMOR_EQUIP_WINGS.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
         }

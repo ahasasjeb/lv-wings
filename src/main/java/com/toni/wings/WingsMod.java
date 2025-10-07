@@ -22,7 +22,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -111,7 +110,7 @@ public final class WingsMod {
         WingsEffects.REG.register(modEventBus);
         COMMAND_ARGUMENT_TYPES.register(modEventBus);
 
-        this.proxy = (FMLEnvironment.dist == Dist.CLIENT) ? new ClientProxy() : new ServerProxy();
+    this.proxy = FMLEnvironment.getDist().isClient() ? new ClientProxy() : new ServerProxy();
         this.proxy.init(modEventBus);
     }
 

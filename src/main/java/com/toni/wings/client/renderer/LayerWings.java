@@ -1,7 +1,6 @@
 package com.toni.wings.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.toni.wings.WingsMod;
 import com.toni.wings.client.flight.FlightViews;
 import com.toni.wings.client.model.ModelWingsAvian;
@@ -11,10 +10,10 @@ import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.client.renderer.entity.state.PlayerRenderState;
+import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.util.Mth;
@@ -23,7 +22,7 @@ import net.neoforged.bus.api.IEventBus;
 
 import javax.annotation.Nonnull;
 
-public final class LayerWings extends RenderLayer<PlayerRenderState, PlayerModel> {
+public final class LayerWings extends RenderLayer<AvatarRenderState, PlayerModel> {
 
     public static final ModelLayerLocation INSECTOID_WINGS = layer("insectoid_wings");
     public static final ModelLayerLocation AVIAN_WINGS = layer("avian_wings");
@@ -33,12 +32,12 @@ public final class LayerWings extends RenderLayer<PlayerRenderState, PlayerModel
         modBus.addListener(LayerWings::initLayers);
     }
 
-    public LayerWings(RenderLayerParent<PlayerRenderState, PlayerModel> parent) {
+    public LayerWings(RenderLayerParent<AvatarRenderState, PlayerModel> parent) {
         super(parent);
     }
 
     @Override
-    public void render(@Nonnull PoseStack poseStack, @Nonnull MultiBufferSource buffer, int packedLight, @Nonnull PlayerRenderState state, float limbSwing, float limbSwingAmount) {
+    public void submit(@Nonnull PoseStack poseStack, @Nonnull SubmitNodeCollector submitNodeCollector, int packedLight, @Nonnull AvatarRenderState state, float limbSwing, float limbSwingAmount) {
         Minecraft minecraft = Minecraft.getInstance();
         ClientLevel level = minecraft.level;
         if (level == null) {
@@ -57,14 +56,19 @@ public final class LayerWings extends RenderLayer<PlayerRenderState, PlayerModel
             flight.tick();
             flight.ifFormPresent(form -> {
                 float delta = Mth.clamp(state.ageInTicks - player.tickCount, 0.0F, 1.0F);
-                VertexConsumer builder = buffer.getBuffer(form.getRenderType());
                 poseStack.pushPose();
                 if (state.isCrouching) {
                     poseStack.translate(0.0D, 0.2D, 0.0D);
                 }
                 ModelPart body = ((PlayerModel) this.getParentModel()).body;
                 body.translateAndRotate(poseStack);
-                form.render(poseStack, builder, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F, delta);
+                submitNodeCollector.submitCustomGeometry(poseStack, form.getRenderType(), (pose, buffer) -> {
+                    PoseStack renderStack = new PoseStack();
+                    PoseStack.Pose renderPose = renderStack.last();
+                    renderPose.pose().set(pose.pose());
+                    renderPose.normal().set(pose.normal());
+                    form.render(renderStack, buffer, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F, delta);
+                });
                 poseStack.popPose();
             });
         });

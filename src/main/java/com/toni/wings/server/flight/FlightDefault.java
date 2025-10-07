@@ -173,7 +173,7 @@ public final class FlightDefault implements Flight {
                 player.fallDistance = 0.0F;
             }
         }
-    if (!player.level().isClientSide) {
+    if (!player.level().isClientSide()) {
             if (this.flightApparatus.isUsable(player)) {
                 (this.state = this.state.next(this.flightApparatus)).onUpdate(player);
             } else if (this.isFlying()) {
@@ -187,11 +187,11 @@ public final class FlightDefault implements Flight {
     public void tick(Player player) {
         boolean hasEffect = this.hasEffect(player);
         if (hasEffect || !player.isEffectiveAi()) {
-            if (!hasEffect && !player.level().isClientSide) {
+            if (!hasEffect && !player.level().isClientSide()) {
                 this.setWing(FlightApparatus.NONE, PlayerSet.ofAll());
             }
             this.onWornUpdate(player);
-    } else if (!player.level().isClientSide) {
+    } else if (!player.level().isClientSide()) {
             this.setWing(FlightApparatus.NONE, PlayerSet.ofAll());
             if (this.isFlying()) {
                 this.setIsFlying(false, PlayerSet.ofAll());

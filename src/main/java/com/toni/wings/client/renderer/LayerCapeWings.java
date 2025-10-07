@@ -1,7 +1,6 @@
 package com.toni.wings.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.toni.wings.WingsMod;
 import com.toni.wings.client.flight.FlightViews;
 import com.toni.wings.server.flight.Flights;
@@ -12,31 +11,31 @@ import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.client.renderer.entity.state.PlayerRenderState;
+import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.resources.PlayerSkin;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.ClientAsset;
+import net.minecraft.world.entity.player.PlayerSkin;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.Nonnull;
 
-public class LayerCapeWings extends RenderLayer<PlayerRenderState, PlayerModel> {
+public class LayerCapeWings extends RenderLayer<AvatarRenderState, PlayerModel> {
 
-    private final HumanoidModel<PlayerRenderState> model;
+    private final HumanoidModel<AvatarRenderState> model;
 
-    public LayerCapeWings(RenderLayerParent<PlayerRenderState, PlayerModel> parent, EntityModelSet entityModelSet) {
+    public LayerCapeWings(RenderLayerParent<AvatarRenderState, PlayerModel> parent, EntityModelSet entityModelSet) {
         super(parent);
-        this.model = new PlayerCapeModel<>(entityModelSet.bakeLayer(ModelLayers.PLAYER_CAPE));
+        this.model = new PlayerCapeModel(entityModelSet.bakeLayer(ModelLayers.PLAYER_CAPE));
     }
 
     @Override
-    public void render(@Nonnull PoseStack poseStack, @Nonnull MultiBufferSource buffer, int packedLight, @Nonnull PlayerRenderState state, float limbSwing, float limbSwingAmount) {
+    public void submit(@Nonnull PoseStack poseStack, @Nonnull SubmitNodeCollector submitNodeCollector, int packedLight, @Nonnull AvatarRenderState state, float limbSwing, float limbSwingAmount) {
         if (state.isInvisible || !state.showCape) {
             return;
         }
@@ -56,17 +55,22 @@ public class LayerCapeWings extends RenderLayer<PlayerRenderState, PlayerModel> 
         }
 
         PlayerSkin skin = state.skin;
-        ResourceLocation capeTexture = skin.capeTexture();
+        ClientAsset.Texture capeTexture = skin.cape();
         if (capeTexture == null) {
             return;
         }
 
         poseStack.pushPose();
-        VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entitySolid(capeTexture));
-        PlayerModel parentModel = (PlayerModel) this.getParentModel();
-        parentModel.copyPropertiesTo(this.model);
-        this.model.setupAnim(state);
-        this.model.renderToBuffer(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY);
+        submitNodeCollector.submitModel(
+            this.model,
+            state,
+            poseStack,
+            RenderType.entitySolid(capeTexture.texturePath()),
+            packedLight,
+            OverlayTexture.NO_OVERLAY,
+            state.outlineColor,
+            null
+        );
         poseStack.popPose();
     }
 

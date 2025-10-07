@@ -17,6 +17,7 @@ import com.toni.wings.server.item.BatBloodBottleItem;
 import com.toni.wings.server.net.serverbound.MessageControlFlying;
 import com.toni.wings.util.KeyInputListener;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -33,6 +34,7 @@ public final class ClientProxy extends Proxy {
 
     private static ModelWings<AnimatorInsectoid> insectoidWings;
     private static ModelWings<AnimatorAvian> avianWings;
+    private static final KeyMapping.Category WINGS_KEY_CATEGORY = new KeyMapping.Category(WingsMod.locate("wings"));
 
 
     @Override
@@ -42,7 +44,7 @@ public final class ClientProxy extends Proxy {
         WingsModels.init(modBus);
         //modBus.register(BakeModels.class);
         NeoForge.EVENT_BUS.register(KeyInputListener.builder()
-            .category("key.categories.wings")
+            .category(WINGS_KEY_CATEGORY)
             .key("key.wings.fly", KeyConflictContext.IN_GAME, KeyModifier.NONE, GLFW.GLFW_KEY_R)
             .onPress(() -> {
                 Player player = Minecraft.getInstance().player;

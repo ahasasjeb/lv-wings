@@ -3,14 +3,15 @@ package com.toni.wings.util;
 import com.google.common.collect.ImmutableListMultimap;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.settings.IKeyConflictContext;
 import net.neoforged.neoforge.client.settings.KeyModifier;
-import net.neoforged.bus.api.SubscribeEvent;
 
 public final class KeyInputListener {
     private static final java.util.List<KeyMapping> KEY_MAPPINGS = new java.util.ArrayList<>();
+    private static final java.util.Set<KeyMapping.Category> KEY_CATEGORIES = new java.util.LinkedHashSet<>();
 
     private final ImmutableListMultimap<KeyMapping, Runnable> bindings;
 
@@ -31,7 +32,7 @@ public final class KeyInputListener {
     }
 
     public interface Builder {
-        CategoryBuilder category(String category);
+        CategoryBuilder category(KeyMapping.Category category);
 
         KeyInputListener build();
     }
@@ -52,7 +53,8 @@ public final class KeyInputListener {
         }
 
         @Override
-        public CategoryBuilder category(String category) {
+        public CategoryBuilder category(KeyMapping.Category category) {
+            KEY_CATEGORIES.add(category);
             return new CategoryBuilderRoot(this, category);
         }
 
@@ -70,7 +72,7 @@ public final class KeyInputListener {
         }
 
         @Override
-        public final CategoryBuilder category(String category) {
+        public final CategoryBuilder category(KeyMapping.Category category) {
             return this.parent.category(category);
         }
 
@@ -81,9 +83,9 @@ public final class KeyInputListener {
     }
 
     private static final class CategoryBuilderRoot extends ChildBuilder<BuilderRoot> implements CategoryBuilder {
-        private final String category;
+        private final KeyMapping.Category category;
 
-        private CategoryBuilderRoot(BuilderRoot delegate, String category) {
+        private CategoryBuilderRoot(BuilderRoot delegate, KeyMapping.Category category) {
             super(delegate);
             this.category = category;
         }
@@ -116,6 +118,7 @@ public final class KeyInputListener {
     }
 
     public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
+        KEY_CATEGORIES.forEach(event::registerCategory);
         KEY_MAPPINGS.forEach(event::register);
     }
 }

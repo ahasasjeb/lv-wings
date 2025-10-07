@@ -9,7 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.CapeLayer;
-import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import org.slf4j.Logger;
@@ -52,25 +52,28 @@ public class ReloadListener implements ResourceManagerReloadListener {
 
         Minecraft mc = Minecraft.getInstance();
         EntityRenderDispatcher manager = mc.getEntityRenderDispatcher();
-        Stream<PlayerRenderer> skinRenderers = manager.getSkinMap().values().stream()
-            .filter(PlayerRenderer.class::isInstance)
-            .map(PlayerRenderer.class::cast);
-        Stream<PlayerRenderer> otherRenderers = getRendererMap(manager).values().stream()
-            .filter(PlayerRenderer.class::isInstance)
-            .map(PlayerRenderer.class::cast);
+        Stream<AvatarRenderer<?>> playerRenderers = manager.getPlayerRenderers().values().stream()
+            .filter(AvatarRenderer.class::isInstance)
+            .map(AvatarRenderer.class::cast);
+        Stream<AvatarRenderer<?>> mannequinRenderers = manager.getMannequinRenderers().values().stream()
+            .filter(AvatarRenderer.class::isInstance)
+            .map(AvatarRenderer.class::cast);
+        Stream<AvatarRenderer<?>> otherRenderers = getRendererMap(manager).values().stream()
+            .filter(AvatarRenderer.class::isInstance)
+            .map(AvatarRenderer.class::cast);
 
-        Stream.concat(skinRenderers, otherRenderers)
+        Stream.concat(Stream.concat(playerRenderers, mannequinRenderers), otherRenderers)
                 .unordered()
                 .distinct()
                 .forEach(this::augmentPlayerRenderer);
     }
 
-    private void augmentPlayerRenderer(PlayerRenderer renderer) {
+    private void augmentPlayerRenderer(AvatarRenderer<?> renderer) {
         replaceCapeLayer(renderer);
         ensureWingsLayer(renderer);
     }
 
-    private void ensureWingsLayer(PlayerRenderer renderer) {
+    private void ensureWingsLayer(AvatarRenderer<?> renderer) {
         List<?> layers = getLayers(renderer);
         if (layers == null) {
             return;
@@ -81,7 +84,7 @@ public class ReloadListener implements ResourceManagerReloadListener {
         }
     }
 
-    private void replaceCapeLayer(PlayerRenderer renderer) {
+    private void replaceCapeLayer(AvatarRenderer<?> renderer) {
         List<?> layers = getLayers(renderer);
         if (layers == null) {
             return;
@@ -105,7 +108,7 @@ public class ReloadListener implements ResourceManagerReloadListener {
         }
     }
 
-    private List<?> getLayers(PlayerRenderer renderer) {
+    private List<?> getLayers(AvatarRenderer<?> renderer) {
         List<?> layers = null;
         RuntimeException failure = null;
         for (String name : new String[]{"layers", "f_115291_"}) {
