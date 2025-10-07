@@ -23,11 +23,11 @@ public final class VeinSettings {
     private final int defaultMinHeight;
     private final int defaultMaxHeight;
 
-    VeinSettings(String name, ModConfigSpec.Builder builder, int defaultSize, int defaultCount, int defaultMinHeight, int defaultMaxHeight) {
+    VeinSettings(String name, ModConfigSpec.Builder builder, int defaultSize, int defaultCount, int defaultMaxHeight) {
         this.name = name;
         this.defaultSize = defaultSize;
         this.defaultCount = defaultCount;
-        this.defaultMinHeight = defaultMinHeight;
+        this.defaultMinHeight = 0;
         this.defaultMaxHeight = defaultMaxHeight;
 
         builder.push(name);
@@ -39,34 +39,32 @@ public final class VeinSettings {
             .defineInRange("count", defaultCount, MIN_COUNT, MAX_COUNT);
         this.minHeight = builder
             .comment("Minimum generation height for '" + name + "'")
-            .defineInRange("minHeight", defaultMinHeight, MIN_WORLD_HEIGHT, MAX_WORLD_HEIGHT);
+            .defineInRange("minHeight", 0, MIN_WORLD_HEIGHT, MAX_WORLD_HEIGHT);
         this.maxHeight = builder
             .comment("Maximum generation height for '" + name + "'")
             .defineInRange("maxHeight", defaultMaxHeight, MIN_WORLD_HEIGHT, MAX_WORLD_HEIGHT);
         builder.pop();
     }
 
-    public int getSize() {
-        return this.readInt(this.size, "size", MIN_SIZE, MAX_SIZE, this.defaultSize);
+    public void getSize() {
+        this.readInt(this.size, "size", MIN_SIZE, MAX_SIZE, this.defaultSize);
     }
 
-    public int getCount() {
-        return this.readInt(this.count, "count", MIN_COUNT, MAX_COUNT, this.defaultCount);
+    public void getCount() {
+        this.readInt(this.count, "count", MIN_COUNT, MAX_COUNT, this.defaultCount);
     }
 
     public int getMinHeight() {
         return this.readInt(this.minHeight, "minHeight", MIN_WORLD_HEIGHT, MAX_WORLD_HEIGHT, this.defaultMinHeight);
     }
 
-    public int getMaxHeight() {
+    public void getMaxHeight() {
         int min = this.getMinHeight();
         int max = this.readInt(this.maxHeight, "maxHeight", MIN_WORLD_HEIGHT, MAX_WORLD_HEIGHT, this.defaultMaxHeight);
         if (max < min) {
             LOGGER.warn("Max height {} is below min height {} for ore '{}'. Reverting to {}.", max, min, this.name, min);
             this.maxHeight.set(min);
-            return min;
         }
-        return max;
     }
 
     public void validate() {

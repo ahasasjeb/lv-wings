@@ -11,8 +11,8 @@ public final class WingsOreConfig {
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
         builder.comment("Ore generation configuration values").push("worldgen");
 
-        FAIRY_DUST = new VeinSettings("fairy_dust", builder, 9, 10, 0, 64);
-        AMETHYST = new VeinSettings("amethyst", builder, 8, 1, 0, 16);
+        FAIRY_DUST = new VeinSettings("fairy_dust", builder, 9, 10, 64);
+        AMETHYST = new VeinSettings("amethyst", builder, 8, 1, 16);
 
         builder.pop();
         SPEC = builder.build();

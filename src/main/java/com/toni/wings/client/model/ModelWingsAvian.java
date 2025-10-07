@@ -17,25 +17,27 @@ import java.util.List;
 public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
         private static final Field CUBES_FIELD = findCubesField();
 
-    private ImmutableList<ModelPart> bonesLeft, bonesRight;
-    private ImmutableList<ModelPart> feathersLeft, feathersRight;
+    private final ImmutableList<ModelPart> bonesLeft;
+    private final ImmutableList<ModelPart> bonesRight;
+    private final ImmutableList<ModelPart> feathersLeft;
+    private final ImmutableList<ModelPart> feathersRight;
 
-    private ModelPart coracoidLeft;
-    private ModelPart humerusLeft;
-    private ModelPart ulnaLeft;
-    private ModelPart carpalsLeft;
-    private ModelPart coracoidRight;
-    private ModelPart humerusRight;
-    private ModelPart ulnaRight;
-    private ModelPart carpalsRight;
-    private ModelPart feathersCoracoidLeft;
-    private ModelPart feathersPrimaryLeft;
-    private ModelPart feathersSecondaryLeft;
-    private ModelPart feathersTertiaryLeft;
-    private ModelPart feathersCoracoidRight;
-    private ModelPart feathersPrimaryRight;
-    private ModelPart feathersSecondaryRight;
-    private ModelPart feathersTertiaryRight;
+    private final ModelPart coracoidLeft;
+    private final ModelPart humerusLeft;
+    private final ModelPart ulnaLeft;
+    private final ModelPart carpalsLeft;
+    private final ModelPart coracoidRight;
+    private final ModelPart humerusRight;
+    private final ModelPart ulnaRight;
+    private final ModelPart carpalsRight;
+    private final ModelPart feathersCoracoidLeft;
+    private final ModelPart feathersPrimaryLeft;
+    private final ModelPart feathersSecondaryLeft;
+    private final ModelPart feathersTertiaryLeft;
+    private final ModelPart feathersCoracoidRight;
+    private final ModelPart feathersPrimaryRight;
+    private final ModelPart feathersSecondaryRight;
+    private final ModelPart feathersTertiaryRight;
 
 
 

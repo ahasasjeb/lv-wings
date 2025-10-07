@@ -14,15 +14,15 @@ public final class WingsSound extends AbstractTickableSoundInstance {
     private final Flight flight;
 
     public WingsSound(Player player, Flight flight) {
-        this(player, flight, true, 0, Math.nextAfter(0.0F, 1.0D));
+        this(player, flight, Math.nextAfter(0.0F, 1.0D));
     }
 
-    private WingsSound(Player player, Flight flight, boolean repeat, int repeatDelay, float volume) {
+    private WingsSound(Player player, Flight flight, float volume) {
         super(WingsSounds.ITEM_WINGS_FLYING.get(), SoundSource.PLAYERS, RandomSource.create());
         this.player = player;
         this.flight = flight;
-        this.looping = repeat;
-        this.delay = repeatDelay;
+        this.looping = true;
+        this.delay = 0;
         this.volume = volume;
     }
 

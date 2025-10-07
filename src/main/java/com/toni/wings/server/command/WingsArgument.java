@@ -29,7 +29,7 @@ public class WingsArgument implements ArgumentType<FlightApparatus> {
         return new WingsArgument();
     }
 
-    public static FlightApparatus getWings(CommandContext<CommandSourceStack> ctx, String value) throws CommandSyntaxException {
+    public static FlightApparatus getWings(CommandContext<CommandSourceStack> ctx, String value) {
         return ctx.getArgument(value, FlightApparatus.class);
     }
 

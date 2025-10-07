@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.toni.wings.util.Access;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
@@ -24,7 +25,7 @@ public final class WingsHooksClient {
     private static int selectedItemSlot = 0;
 
     public static void onSetPlayerRotationAngles(AvatarRenderState state, PlayerModel model) {
-        AbstractClientPlayer player = RENDERING_PLAYER.get();
+        AbstractClientPlayer player = resolvePlayer(state);
         if (player != null) {
             try {
                 NeoForge.EVENT_BUS.post(new AnimatePlayerModelEvent(player, model, state.ageInTicks, state.xRot));
@@ -43,11 +44,29 @@ public final class WingsHooksClient {
     }
 
     public static void onApplyPlayerRotations(AvatarRenderState state, PoseStack matrixStack) {
-        AbstractClientPlayer player = RENDERING_PLAYER.get();
+        AbstractClientPlayer player = resolvePlayer(state);
         if (player != null) {
             float delta = state.ageInTicks - player.tickCount;
             NeoForge.EVENT_BUS.post(new ApplyPlayerRotationsEvent(player, matrixStack, delta));
         }
+    }
+
+    private static AbstractClientPlayer resolvePlayer(AvatarRenderState state) {
+        AbstractClientPlayer player = RENDERING_PLAYER.get();
+        if (player != null) {
+            return player;
+        }
+        if (state != null) {
+            Minecraft minecraft = Minecraft.getInstance();
+            ClientLevel level = minecraft.level;
+            if (level != null) {
+                Entity entity = level.getEntity(state.id);
+                if (entity instanceof AbstractClientPlayer found) {
+                    return found;
+                }
+            }
+        }
+        return null;
     }
 
     public static void onTurn(Entity entity, float deltaYaw) {

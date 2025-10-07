@@ -231,10 +231,6 @@ public final class BuffedFlightApparatus implements FlightApparatus {
             }
         }
 
-        public static MobAvoidanceSettings disabled() {
-            return DISABLED;
-        }
-
         public boolean isEnabled() {
             return this.radius > 0.0D && this.intervalTicks > 0 && (this.horizontalPush > 0.0D || this.verticalPush > 0.0D);
         }

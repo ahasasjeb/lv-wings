@@ -4,8 +4,8 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 
 public class WingedEffect extends MobEffect {
-    protected WingedEffect(int color) {
-        super(MobEffectCategory.BENEFICIAL, color);
+    protected WingedEffect() {
+        super(MobEffectCategory.BENEFICIAL, 9947876);
     }
 
     @Override
