@@ -64,8 +64,22 @@ public final class WingsHooksClient {
         }
     }
 
-    public static boolean onCheckRenderEmptyHand(boolean isMainHand, ItemStack itemStackMainHand) {
-        return isMainHand || !Holder.OPTIFUCK && !isMap(itemStackMainHand);
+    public static boolean shouldRenderEmptyOffhand(AbstractClientPlayer player, ItemStack mainHandItem) {
+        if (player.isInvisible() || Holder.OPTIFUCK || isMap(mainHandItem)) {
+            return false;
+        }
+
+        if (player.isFallFlying()) {
+            return true;
+        }
+
+        if (player instanceof LocalPlayer localPlayer) {
+            EmptyOffHandPresentEvent event = new EmptyOffHandPresentEvent(localPlayer);
+            NeoForge.EVENT_BUS.post(event);
+            return event.isAllowed();
+        }
+
+        return false;
     }
 
     public static boolean onCheckDoReequipAnimation(ItemStack from, ItemStack to, int slot) {
