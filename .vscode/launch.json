@@ -72,11 +72,11 @@
       "projectName": "wings",
       "mainClass": "net.neoforged.devlaunch.Main",
       "args": [
-        "@E:\\zaxiang4\\lv-wings\\build\\moddev\\clientRunProgramArgs.txt"
+        "@C:\\Users\\l1196\\Downloads\\lv-wings\\build\\moddev\\clientRunProgramArgs.txt"
       ],
       "vmArgs": [
-        "@E:\\zaxiang4\\lv-wings\\build\\moddev\\clientRunVmArgs.txt",
-        "-Dfml.modFolders\u003dwings%%E:\\zaxiang4\\lv-wings\\bin\\main"
+        "@C:\\Users\\l1196\\Downloads\\lv-wings\\build\\moddev\\clientRunVmArgs.txt",
+        "-Dfml.modFolders\u003dwings%%C:\\Users\\l1196\\Downloads\\lv-wings\\bin\\main"
       ],
       "cwd": "${workspaceFolder}\\run",
       "env": {},
@@ -94,11 +94,11 @@
       "projectName": "wings",
       "mainClass": "net.neoforged.devlaunch.Main",
       "args": [
-        "@E:\\zaxiang4\\lv-wings\\build\\moddev\\dataRunProgramArgs.txt"
+        "@C:\\Users\\l1196\\Downloads\\lv-wings\\build\\moddev\\dataRunProgramArgs.txt"
       ],
       "vmArgs": [
-        "@E:\\zaxiang4\\lv-wings\\build\\moddev\\dataRunVmArgs.txt",
-        "-Dfml.modFolders\u003dwings%%E:\\zaxiang4\\lv-wings\\bin\\main"
+        "@C:\\Users\\l1196\\Downloads\\lv-wings\\build\\moddev\\dataRunVmArgs.txt",
+        "-Dfml.modFolders\u003dwings%%C:\\Users\\l1196\\Downloads\\lv-wings\\bin\\main"
       ],
       "cwd": "${workspaceFolder}\\run",
       "env": {},
@@ -116,11 +116,11 @@
       "projectName": "wings",
       "mainClass": "net.neoforged.devlaunch.Main",
       "args": [
-        "@E:\\zaxiang4\\lv-wings\\build\\moddev\\gameTestServerRunProgramArgs.txt"
+        "@C:\\Users\\l1196\\Downloads\\lv-wings\\build\\moddev\\gameTestServerRunProgramArgs.txt"
       ],
       "vmArgs": [
-        "@E:\\zaxiang4\\lv-wings\\build\\moddev\\gameTestServerRunVmArgs.txt",
-        "-Dfml.modFolders\u003dwings%%E:\\zaxiang4\\lv-wings\\bin\\main"
+        "@C:\\Users\\l1196\\Downloads\\lv-wings\\build\\moddev\\gameTestServerRunVmArgs.txt",
+        "-Dfml.modFolders\u003dwings%%C:\\Users\\l1196\\Downloads\\lv-wings\\bin\\main"
       ],
       "cwd": "${workspaceFolder}\\run",
       "env": {},
@@ -138,11 +138,11 @@
       "projectName": "wings",
       "mainClass": "net.neoforged.devlaunch.Main",
       "args": [
-        "@E:\\zaxiang4\\lv-wings\\build\\moddev\\serverRunProgramArgs.txt"
+        "@C:\\Users\\l1196\\Downloads\\lv-wings\\build\\moddev\\serverRunProgramArgs.txt"
       ],
       "vmArgs": [
-        "@E:\\zaxiang4\\lv-wings\\build\\moddev\\serverRunVmArgs.txt",
-        "-Dfml.modFolders\u003dwings%%E:\\zaxiang4\\lv-wings\\bin\\main"
+        "@C:\\Users\\l1196\\Downloads\\lv-wings\\build\\moddev\\serverRunVmArgs.txt",
+        "-Dfml.modFolders\u003dwings%%C:\\Users\\l1196\\Downloads\\lv-wings\\bin\\main"
       ],
       "cwd": "${workspaceFolder}\\run",
       "env": {},

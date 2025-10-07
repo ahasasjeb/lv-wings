@@ -57,7 +57,14 @@ public final class LayerWings extends RenderLayer<PlayerRenderState, PlayerModel
             flight.tick();
             flight.ifFormPresent(form -> {
                 float delta = Mth.clamp(state.ageInTicks - player.tickCount, 0.0F, 1.0F);
-                VertexConsumer builder = buffer.getBuffer(form.getRenderType());
+                net.minecraft.client.renderer.RenderType renderType = form.getRenderType();
+                VertexConsumer builder = buffer.getBuffer(renderType);
+                
+                // Wrap the vertex consumer for endPortal render type to fix Sodium compatibility
+                if (isEndPortalRenderType(renderType)) {
+                    builder = new PortalVertexConsumer(builder);
+                }
+                
                 poseStack.pushPose();
                 if (state.isCrouching) {
                     poseStack.translate(0.0D, 0.2D, 0.0D);
@@ -84,6 +91,20 @@ public final class LayerWings extends RenderLayer<PlayerRenderState, PlayerModel
     private static ModelLayerLocation layer(String name, String layer)
     {
         return new ModelLayerLocation(WingsMod.locate(name), layer);
+    }
+
+    /**
+     * Check if a RenderType is the endPortal render type.
+     * We compare by name since RenderType.endPortal() returns a singleton instance.
+     */
+    private static boolean isEndPortalRenderType(net.minecraft.client.renderer.RenderType renderType) {
+        try {
+            // Try to get the name field via toString or direct comparison
+            net.minecraft.client.renderer.RenderType endPortal = net.minecraft.client.renderer.RenderType.endPortal();
+            return renderType == endPortal;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 }

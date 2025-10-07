@@ -1,7 +1,11 @@
 package com.toni.wings.client.model;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.toni.wings.client.renderer.SodiumBypassVertexConsumer;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.core.Direction;
+import javax.annotation.Nonnull;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
@@ -163,5 +167,10 @@ public final class Model3DTexture extends ModelPart.Cube {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void compile(@Nonnull PoseStack.Pose pose, @Nonnull VertexConsumer buffer, int light, int overlay, int color) {
+        super.compile(pose, SodiumBypassVertexConsumer.wrap(buffer), light, overlay, color);
     }
 }
