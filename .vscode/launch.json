@@ -86,10 +86,32 @@
     {
       "type": "java",
       "request": "launch",
-      "name": "Data",
+      "name": "ClientAuth",
       "presentation": {
         "group": "Mod Development - wings",
         "order": 1
+      },
+      "projectName": "wings",
+      "mainClass": "net.neoforged.devlaunch.Main",
+      "args": [
+        "@D:\\lv-wings\\build\\moddev\\clientAuthRunProgramArgs.txt"
+      ],
+      "vmArgs": [
+        "@D:\\lv-wings\\build\\moddev\\clientAuthRunVmArgs.txt",
+        "-Dfml.modFolders\u003dwings%%D:\\lv-wings\\bin\\main"
+      ],
+      "cwd": "${workspaceFolder}\\run",
+      "env": {},
+      "console": "internalConsole",
+      "shortenCommandLine": "none"
+    },
+    {
+      "type": "java",
+      "request": "launch",
+      "name": "Data",
+      "presentation": {
+        "group": "Mod Development - wings",
+        "order": 2
       },
       "projectName": "wings",
       "mainClass": "net.neoforged.devlaunch.Main",
@@ -111,7 +133,7 @@
       "name": "GameTestServer",
       "presentation": {
         "group": "Mod Development - wings",
-        "order": 2
+        "order": 3
       },
       "projectName": "wings",
       "mainClass": "net.neoforged.devlaunch.Main",
@@ -133,7 +155,7 @@
       "name": "Server",
       "presentation": {
         "group": "Mod Development - wings",
-        "order": 3
+        "order": 4
       },
       "projectName": "wings",
       "mainClass": "net.neoforged.devlaunch.Main",
