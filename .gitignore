@@ -24,9 +24,7 @@ run-server
 logs
 
 # Files from Forge MDK
-forge*changelog.txt
-反编译1.18.2MC源代码
-MC1.19.4反编译和forge代码
-mc1.21.4反编译和neoforge
-forge-1.21.4-54.1.8-mdk
-NeoforgeMDK
+decompile1.21.1
+decompile1.21.4
+NeoForge-1.21.1
+NeoForge-1.21.4
