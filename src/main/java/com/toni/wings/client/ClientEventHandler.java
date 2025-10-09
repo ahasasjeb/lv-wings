@@ -36,8 +36,6 @@ public final class ClientEventHandler {
         Flights.get(player).ifPresent(flight -> {
             float delta = event.getTicksExisted() - player.tickCount;
             float amt = flight.getFlyingAmount(delta);
-            // 修改：只有当 amt 为 0 时才跳过动画
-            // 这样即使玩家着陆 (!isFlying)，只要 flyingAmount > 0，仍会播放过渡动画
             if (amt == 0.0F) {
                 return;
             }
@@ -75,8 +73,6 @@ public final class ClientEventHandler {
             PoseStack matrixStack = event.getMatrixStack();
             float delta = event.getDelta();
             float amt = flight.getFlyingAmount(delta);
-            // 修改：只要 amt > 0 就应用旋转，不检查 onGround 状态
-            // 这样着陆过渡期间仍会保持飞行姿势
             if (amt > 0.0F) {
                 float roll = MathH.lerpDegrees(
                     player.yBodyRotO - player.yRotO,
@@ -106,7 +102,6 @@ public final class ClientEventHandler {
         Flights.ifPlayer(event.getCamera().getEntity(), (player, flight) -> {
             float delta = (float) event.getPartialTick();
             float amt = flight.getFlyingAmount(delta);
-            // 修改：只要 amt > 0 就应用相机滚转，不检查 onGround 状态
             if (amt > 0.0F) {
                 float roll = MathH.lerpDegrees(
                     player.yBodyRotO - player.yRotO,
