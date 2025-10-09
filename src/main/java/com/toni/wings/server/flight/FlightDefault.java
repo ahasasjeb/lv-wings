@@ -131,7 +131,7 @@ public final class FlightDefault implements Flight {
 
     @Override
     public boolean canFly(Player player) {
-        return (this.hasEffect(player) && this.flightApparatus.isUsable(player));
+        return this.hasEffect(player) && this.flightApparatus.isUsable(player);
     }
 
     @Override
