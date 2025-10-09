@@ -149,7 +149,6 @@ public final class WingsMod {
             NONE = create("none"),
             WINGLESS = create("wingless"),
             ANGEL = create("angel_wings"),
-            //METALLIC = create("metallic_wings"),
             PARROT = create("parrot_wings"),
             SLIME = create("slime_wings"),
             BLUE_BUTTERFLY = create("blue_butterfly_wings"),
