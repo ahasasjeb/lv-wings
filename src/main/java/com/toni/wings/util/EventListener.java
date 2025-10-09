@@ -5,15 +5,15 @@ import com.toni.wings.client.ReloadListener;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
+import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
 @EventBusSubscriber(value = Dist.CLIENT, modid = WingsMod.ID)
 public class EventListener {
 
     @SubscribeEvent
-    public static void onAddClientReloadListeners(AddClientReloadListenersEvent event){
-        event.addListener(WingsMod.locate("client_reload_listener"), new ReloadListener());
+    public static void onRegisterClientReloadListeners(RegisterClientReloadListenersEvent event) {
+        event.registerReloadListener(new ReloadListener());
     }
 
     @SubscribeEvent

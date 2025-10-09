@@ -1,10 +1,10 @@
 package com.toni.wings.server.asm;
 
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Equipable;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -55,7 +55,14 @@ public final class WingsHooks {
     }
 
     public static boolean onReplaceItemSlotCheck(Item item, ItemStack stack) {
-        return stack.get(DataComponents.EQUIPPABLE) != null
-            || item.components().get(DataComponents.EQUIPPABLE) != null;
+        if (stack.isEmpty()) {
+            return false;
+        }
+
+        if (Equipable.get(stack) != null) {
+            return true;
+        }
+
+        return item instanceof Equipable;
     }
 }

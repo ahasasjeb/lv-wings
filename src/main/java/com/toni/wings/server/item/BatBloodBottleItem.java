@@ -6,11 +6,14 @@ import com.toni.wings.server.flight.Flights;
 import com.toni.wings.server.sound.WingsSounds;
 import javax.annotation.Nonnull;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 
 public class BatBloodBottleItem extends Item {
@@ -29,6 +32,21 @@ public class BatBloodBottleItem extends Item {
         }
 
         return result;
+    }
+
+    @Override
+    public UseAnim getUseAnimation(@Nonnull ItemStack stack) {
+        return UseAnim.DRINK;
+    }
+
+    @Override
+    public SoundEvent getDrinkingSound() {
+        return SoundEvents.HONEY_DRINK;
+    }
+
+    @Override
+    public SoundEvent getEatingSound() {
+        return SoundEvents.HONEY_DRINK;
     }
 
     public static boolean removeWings(Player player) {

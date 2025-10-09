@@ -102,7 +102,7 @@ public class ReloadListener implements ResourceManagerReloadListener {
             }
         }
         if (vanillaCapeRemoved && !hasCustomCape) {
-            renderer.addLayer(new LayerCapeWings(renderer, Minecraft.getInstance().getEntityModels()));
+            renderer.addLayer(new LayerCapeWings(renderer));
         }
     }
 

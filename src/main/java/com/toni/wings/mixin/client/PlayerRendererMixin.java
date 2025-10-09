@@ -4,7 +4,6 @@ import com.toni.wings.server.asm.WingsHooksClient;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
-import net.minecraft.client.renderer.entity.state.PlayerRenderState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -13,15 +12,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(PlayerRenderer.class)
 public abstract class PlayerRendererMixin {
 
-    @Inject(method = "extractRenderState(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/client/renderer/entity/state/PlayerRenderState;F)V",
-            at = @At("HEAD"))
-    private void wings$recordRenderState(AbstractClientPlayer player, PlayerRenderState state, float partialTick, CallbackInfo ci) {
-        WingsHooksClient.onExtractPlayerRenderState(player, state);
-    }
-
-    @Inject(method = "setupRotations(Lnet/minecraft/client/renderer/entity/state/PlayerRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;FF)V",
+    @Inject(method = "setupRotations(Lnet/minecraft/client/player/AbstractClientPlayer;Lcom/mojang/blaze3d/vertex/PoseStack;FFFF)V",
             at = @At("TAIL"))
-    private void wings$applyPlayerRotations(PlayerRenderState state, PoseStack poseStack, float bodyYaw, float partialTick, CallbackInfo ci) {
-        WingsHooksClient.onApplyPlayerRotations(state, poseStack);
+    private void wings$applyPlayerRotations(AbstractClientPlayer player, PoseStack poseStack, float bob, float yBodyRot, float partialTick, float scale, CallbackInfo ci) {
+        WingsHooksClient.onApplyPlayerRotations(player, poseStack, partialTick);
     }
 }

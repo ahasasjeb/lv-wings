@@ -7,7 +7,6 @@ import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
-import net.minecraft.client.renderer.entity.state.PlayerRenderState;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -23,31 +22,12 @@ public final class WingsHooksClient {
 
     private static int selectedItemSlot = 0;
 
-    public static void onSetPlayerRotationAngles(PlayerRenderState state, PlayerModel model) {
-        AbstractClientPlayer player = RENDERING_PLAYER.get();
-        if (player != null) {
-            try {
-                NeoForge.EVENT_BUS.post(new AnimatePlayerModelEvent(player, model, state.ageInTicks, state.xRot));
-            } finally {
-                RENDERING_PLAYER.remove();
-            }
-        } else {
-            RENDERING_PLAYER.remove();
-        }
+    public static void onSetPlayerRotationAngles(AbstractClientPlayer player, PlayerModel<?> model, float ageInTicks, float headPitch) {
+        NeoForge.EVENT_BUS.post(new AnimatePlayerModelEvent(player, model, ageInTicks, headPitch));
     }
 
-    private static final ThreadLocal<AbstractClientPlayer> RENDERING_PLAYER = new ThreadLocal<>();
-
-    public static void onExtractPlayerRenderState(AbstractClientPlayer player, PlayerRenderState state) {
-        RENDERING_PLAYER.set(player);
-    }
-
-    public static void onApplyPlayerRotations(PlayerRenderState state, PoseStack matrixStack) {
-        AbstractClientPlayer player = RENDERING_PLAYER.get();
-        if (player != null) {
-            float delta = state.ageInTicks - player.tickCount;
-            NeoForge.EVENT_BUS.post(new ApplyPlayerRotationsEvent(player, matrixStack, delta));
-        }
+    public static void onApplyPlayerRotations(AbstractClientPlayer player, PoseStack matrixStack, float partialTick) {
+        NeoForge.EVENT_BUS.post(new ApplyPlayerRotationsEvent(player, matrixStack, partialTick));
     }
 
     public static void onTurn(Entity entity, float deltaYaw) {

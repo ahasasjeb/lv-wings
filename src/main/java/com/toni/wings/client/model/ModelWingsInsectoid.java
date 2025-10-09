@@ -3,13 +3,15 @@ package com.toni.wings.client.model;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.toni.wings.client.flight.AnimatorInsectoid;
+import com.toni.wings.util.MathH;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.util.ARGB;
+import net.minecraft.world.phys.Vec3;
+
+import javax.annotation.Nonnull;
 
 public final class ModelWingsInsectoid extends ModelWings<AnimatorInsectoid> {
-    //private final ModelPart root;
 
     private final ModelPart wingLeft;
 
@@ -47,11 +49,22 @@ public final class ModelWingsInsectoid extends ModelWings<AnimatorInsectoid> {
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
 
-    @Override
     public void render(AnimatorInsectoid animator, float delta, PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         setAngles(this.wingLeft, this.wingRight, animator.getRotation(delta));
-        int color = ARGB.colorFromFloat(alpha, red, green, blue);
+        int color = ((int)(alpha * 255) << 24) | ((int)(red * 255) << 16) | ((int)(green * 255) << 8) | (int)(blue * 255);
         this.wingLeft.render(matrixStack, buffer, packedLight, packedOverlay, color);
         this.wingRight.render(matrixStack, buffer, packedLight, packedOverlay, color);
+    }
+
+    @Override
+    public void renderToBuffer(@Nonnull PoseStack poseStack, @Nonnull VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+        // Since the mod uses custom render method, this is not used, but implement to satisfy abstract method
+        this.root.render(poseStack, buffer, packedLight, packedOverlay, color);
+    }
+
+    static void setAngles(ModelPart left, ModelPart right, Vec3 angles) {
+        right.xRot = (left.xRot = MathH.toRadians((float) angles.x));
+        right.yRot = -(left.yRot = MathH.toRadians((float) angles.y));
+        right.zRot = -(left.zRot = MathH.toRadians((float) angles.z));
     }
 }

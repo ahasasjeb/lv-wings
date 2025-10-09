@@ -4,10 +4,13 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.toni.wings.client.flight.AnimatorAvian;
+import com.toni.wings.util.MathH;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.util.ARGB;
+import net.minecraft.world.phys.Vec3;
+
+import javax.annotation.Nonnull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -158,9 +161,8 @@ public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
 
-    @Override
     public void render(AnimatorAvian animator, float delta, PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-                int color = ARGB.colorFromFloat(alpha, red, green, blue);
+                int color = ((int)(alpha * 255) << 24) | ((int)(red * 255) << 16) | ((int)(green * 255) << 8) | (int)(blue * 255);
 
         for (int i = 0; i < this.bonesLeft.size(); i++) {
             ModelPart left = this.bonesLeft.get(i);
@@ -176,6 +178,18 @@ public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
                 this.coracoidLeft.render(matrixStack, buffer, packedLight, packedOverlay, color);
                 this.coracoidRight.render(matrixStack, buffer, packedLight, packedOverlay, color);
 
+    }
+
+    @Override
+        public void renderToBuffer(@Nonnull PoseStack poseStack, @Nonnull VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+        // Since the mod uses custom render method, this is not used, but implement to satisfy abstract method
+        this.root.render(poseStack, buffer, packedLight, packedOverlay, color);
+    }
+
+    static void setAngles(ModelPart left, ModelPart right, Vec3 angles) {
+        right.xRot = (left.xRot = MathH.toRadians((float) angles.x));
+        right.yRot = -(left.yRot = MathH.toRadians((float) angles.y));
+        right.zRot = -(left.zRot = MathH.toRadians((float) angles.z));
     }
 
     private static void add3DTexture(

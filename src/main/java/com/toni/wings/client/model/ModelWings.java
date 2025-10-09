@@ -7,12 +7,22 @@ import com.toni.wings.util.MathH;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.function.Function;
 
 
 public abstract class ModelWings<A extends Animator> extends Model {
+    protected final ModelPart root;
+
     protected ModelWings(ModelPart root) {
-        super(root, RenderType::entityCutout);
+        this(root, RenderType::entityCutout);
+    }
+
+    protected ModelWings(ModelPart root, Function<ResourceLocation, RenderType> renderType) {
+        super(renderType);
+        this.root = root;
     }
 
     public abstract void render(A animator, float delta, PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha);

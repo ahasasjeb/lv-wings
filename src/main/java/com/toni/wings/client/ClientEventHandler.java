@@ -37,31 +37,19 @@ public final class ClientEventHandler {
             float delta = event.getTicksExisted() - player.tickCount;
             float amt = flight.getFlyingAmount(delta);
             if (amt == 0.0F) return;
-        PlayerModel model = event.getModel();
+            PlayerModel<?> model = event.getModel();
             float pitch = event.getPitch();
             model.head.xRot = MathH.toRadians(MathH.lerp(pitch, pitch / 4.0F - 90.0F, amt));
             model.leftArm.xRot = MathH.lerp(model.leftArm.xRot, -3.2F, amt);
             model.rightArm.xRot = MathH.lerp(model.rightArm.xRot, -3.2F, amt);
             model.leftLeg.xRot = MathH.lerp(model.leftLeg.xRot, 0.0F, amt);
             model.rightLeg.xRot = MathH.lerp(model.rightLeg.xRot, 0.0F, amt);
-            model.hat.xRot = 0;
-            model.hat.yRot = 0;
-            model.hat.zRot = 0;
-            model.leftSleeve.xRot = 0;
-            model.leftSleeve.yRot = 0;
-            model.leftSleeve.zRot = 0;
-            model.rightSleeve.xRot = 0;
-            model.rightSleeve.yRot = 0;
-            model.rightSleeve.zRot = 0;
-            model.leftPants.xRot = 0;
-            model.leftPants.yRot = 0;
-            model.leftPants.zRot = 0;
-            model.rightPants.xRot = 0;
-            model.rightPants.yRot = 0;
-            model.rightPants.zRot = 0;
-            model.jacket.xRot = 0;
-            model.jacket.yRot = 0;
-            model.jacket.zRot = 0;
+            model.hat.copyFrom(model.head);
+            model.leftSleeve.copyFrom(model.leftArm);
+            model.rightSleeve.copyFrom(model.rightArm);
+            model.leftPants.copyFrom(model.leftLeg);
+            model.rightPants.copyFrom(model.rightLeg);
+            model.jacket.copyFrom(model.body);
         });
     }
 

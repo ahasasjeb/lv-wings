@@ -6,11 +6,14 @@ import com.toni.wings.server.flight.Flight;
 import com.toni.wings.server.flight.Flights;
 import com.toni.wings.server.sound.WingsSounds;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import javax.annotation.Nonnull;
 
@@ -37,6 +40,21 @@ public class WingsBottleItem extends Item {
         }
 
         return result;
+    }
+
+    @Override
+    public UseAnim getUseAnimation(@Nonnull ItemStack stack) {
+        return UseAnim.DRINK;
+    }
+
+    @Override
+    public SoundEvent getDrinkingSound() {
+        return SoundEvents.GENERIC_DRINK;
+    }
+
+    @Override
+    public SoundEvent getEatingSound() {
+        return SoundEvents.GENERIC_DRINK;
     }
 
     public static boolean giveWing(ServerPlayer player, FlightApparatus wings) {
