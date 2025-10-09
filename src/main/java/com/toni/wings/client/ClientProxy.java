@@ -42,7 +42,6 @@ public final class ClientProxy extends Proxy {
         super.init(modBus);
         LayerWings.init(modBus);
         WingsModels.init(modBus);
-        //modBus.register(BakeModels.class);
         NeoForge.EVENT_BUS.register(KeyInputListener.builder()
             .category(WINGS_KEY_CATEGORY)
             .key("key.wings.fly", KeyConflictContext.IN_GAME, KeyModifier.NONE, GLFW.GLFW_KEY_R)

@@ -60,7 +60,6 @@ public abstract class Proxy {
         reg.accept(Items.BLAZE_POWDER, WingsItems.FIRE_WINGS_BOTTLE);
         reg.accept(Items.ORANGE_DYE, WingsItems.MONARCH_BUTTERFLY_WINGS_BOTTLE);
         reg.accept(Items.SLIME_BALL, WingsItems.SLIME_WINGS_BOTTLE);
-        //reg.accept(Items.IRON_INGOT, WingsItems.METALLIC_WINGS_BOTTLE);
     }
 
     @SuppressWarnings("deprecation")

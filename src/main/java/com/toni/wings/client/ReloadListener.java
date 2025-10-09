@@ -27,11 +27,6 @@ public class ReloadListener implements ResourceManagerReloadListener {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    /*@SubscribeEvent
-    public static void onModelBakeEvent(RenderLivingEvent.Pre event) {
-        if(event.getEntity().hasEffect(WingsEffects.WINGS))
-    }*/
-
     @Override
     public void onResourceManagerReload(@Nonnull ResourceManager rm) {
 
@@ -47,7 +42,6 @@ public class ReloadListener implements ResourceManagerReloadListener {
             WingForm.register(WingsMod.MONARCH_BUTTERFLY_WINGS, ClientProxy.createInsectoidWings(WingsMod.WINGS.getKey(WingsMod.MONARCH_BUTTERFLY_WINGS)));
             WingForm.register(WingsMod.SLIME_WINGS, ClientProxy.createInsectoidWings(WingsMod.WINGS.getKey(WingsMod.SLIME_WINGS)));
             WingForm.register(WingsMod.LVJIA_SUPER_WINGS, ClientProxy.createEndPortalWings(WingsMod.WINGS.getKey(WingsMod.LVJIA_SUPER_WINGS)));
-            //WingForm.register(WingsMod.METALLIC_WINGS, ClientProxy.createAvianWings(WingsMod.WINGS.getKey(WingsMod.METALLIC_WINGS)));
         }
 
         Minecraft mc = Minecraft.getInstance();

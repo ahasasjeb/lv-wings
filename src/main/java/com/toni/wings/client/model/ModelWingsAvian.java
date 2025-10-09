@@ -56,7 +56,6 @@ public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
         this.carpalsRight = ulnaRight.getChild("carpalsRight");
 
         this.feathersCoracoidLeft = coracoidLeft.getChild("feathersCoracoidLeft");
-        //this.feathersCoracoidLeft = new ModelPart(new ArrayList<>(ModelPart.Cube()))
         add3DTexture(this.feathersCoracoidLeft, 6, 40, 0, 0, -1, 6, 8);
         this.feathersTertiaryLeft = humerusLeft.getChild("feathersTertiaryLeft");
         add3DTexture(this.feathersTertiaryLeft, 10, 14, 0, 0, -0.5F, 10, 14);
