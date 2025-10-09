@@ -67,7 +67,7 @@ public final class LayerWings extends RenderLayer<AvatarRenderState, PlayerModel
                     PoseStack.Pose renderPose = renderStack.last();
                     renderPose.pose().set(pose.pose());
                     renderPose.normal().set(pose.normal());
-                    form.render(renderStack, buffer, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F, delta);
+                    form.render(renderStack, SodiumBypassVertexConsumer.wrap(buffer), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F, delta);
                 });
                 poseStack.popPose();
             });
