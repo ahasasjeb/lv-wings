@@ -1,7 +1,3 @@
-**去gradle.properties修改为你的Java路径才能进行构建！**
-
-**Change gradle.properties to your Java path so the build can proceed!**
-
 # Wings
 
 这是 Wings Mod 的一个社区维护分支。
