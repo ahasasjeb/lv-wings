@@ -10,6 +10,7 @@ import com.toni.wings.client.model.ModelWings;
 import com.toni.wings.client.model.ModelWingsAvian;
 import com.toni.wings.client.model.ModelWingsInsectoid;
 import com.toni.wings.client.renderer.LayerWings;
+import com.toni.wings.client.renderer.PortalWingRenderType;
 import com.toni.wings.server.flight.Flight;
 import com.toni.wings.server.flight.Flights;
 import com.toni.wings.server.item.BatBloodBottleItem;
@@ -81,7 +82,12 @@ public final class ClientProxy extends Proxy {
 
     static WingForm<AnimatorAvian> createEndPortalWings(ResourceLocation name) {
         avianWings = new ModelWingsAvian(getModel().bakeLayer(LayerWings.AVIAN_WINGS));
-        return ClientProxy.createWings(name, AnimatorAvian::new, avianWings, RenderType::endPortal);
+        return WingForm.of(
+            AnimatorAvian::new,
+            avianWings,
+            PortalWingRenderType.PORTAL_TEXTURE,
+            PortalWingRenderType::get
+        );
     }
 
 
