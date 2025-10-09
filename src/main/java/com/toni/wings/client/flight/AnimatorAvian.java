@@ -9,7 +9,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.Random;
 
 public final class AnimatorAvian implements Animator {
-    private static final int LAND_TRANSITION_DURATION = 2;
+    private static final int LAND_TRANSITION_DURATION = 12;
 
     private static final int GLIDE_TRANSITION_DURATION = 60;
 
