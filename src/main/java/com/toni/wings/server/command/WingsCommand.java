@@ -13,6 +13,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Collection;
+import java.util.List;
 
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
@@ -25,10 +26,15 @@ public class WingsCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(literal("wings").requires(cs -> cs.hasPermission(2))
             .then(literal("give")
+                .then(argument("wings", WingsArgument.wings())
+                    .executes(WingsCommand::giveWingSelf))
                 .then(argument("targets", EntityArgument.players())
                     .then(argument("wings", WingsArgument.wings())
                         .executes(WingsCommand::giveWing))))
             .then(literal("take")
+                .executes(WingsCommand::takeWingsSelf)
+                .then(argument("wings", WingsArgument.wings())
+                    .executes(WingsCommand::takeSpecificWingsSelf))
                 .then(argument("targets", EntityArgument.players())
                     .then(argument("wings", WingsArgument.wings()).executes(WingsCommand::takeSpecificWings))
                     .executes(WingsCommand::takeWings))));
@@ -37,6 +43,16 @@ public class WingsCommand {
     private static int giveWing(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         Collection<ServerPlayer> targets = EntityArgument.getPlayers(ctx, "targets");
         FlightApparatus wings = WingsArgument.getWings(ctx, "wings");
+        return giveWing(ctx, targets, wings);
+    }
+
+    private static int giveWingSelf(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        ServerPlayer player = ctx.getSource().getPlayerOrException();
+        FlightApparatus wings = WingsArgument.getWings(ctx, "wings");
+        return giveWing(ctx, List.of(player), wings);
+    }
+
+    private static int giveWing(CommandContext<CommandSourceStack> ctx, Collection<ServerPlayer> targets, FlightApparatus wings) throws CommandSyntaxException {
         int count = 0;
         for (ServerPlayer player : targets) {
             if (WingsBottleItem.giveWing(player, wings)) {
@@ -56,6 +72,15 @@ public class WingsCommand {
 
     private static int takeWings(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         Collection<ServerPlayer> targets = EntityArgument.getPlayers(ctx, "targets");
+        return takeWings(ctx, targets);
+    }
+
+    private static int takeWingsSelf(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        ServerPlayer player = ctx.getSource().getPlayerOrException();
+        return takeWings(ctx, List.of(player));
+    }
+
+    private static int takeWings(CommandContext<CommandSourceStack> ctx, Collection<ServerPlayer> targets) throws CommandSyntaxException {
         int count = 0;
         for (ServerPlayer player : targets) {
             if (BatBloodBottleItem.removeWings(player)) {
@@ -76,6 +101,16 @@ public class WingsCommand {
     private static int takeSpecificWings(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         Collection<ServerPlayer> targets = EntityArgument.getPlayers(ctx, "targets");
         FlightApparatus wings = WingsArgument.getWings(ctx, "wings");
+        return takeSpecificWings(ctx, targets, wings);
+    }
+
+    private static int takeSpecificWingsSelf(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        ServerPlayer player = ctx.getSource().getPlayerOrException();
+        FlightApparatus wings = WingsArgument.getWings(ctx, "wings");
+        return takeSpecificWings(ctx, List.of(player), wings);
+    }
+
+    private static int takeSpecificWings(CommandContext<CommandSourceStack> ctx, Collection<ServerPlayer> targets, FlightApparatus wings) throws CommandSyntaxException {
         int count = 0;
         for (ServerPlayer player : targets) {
             if (BatBloodBottleItem.removeWings(player, wings)) {
