@@ -110,6 +110,9 @@ public final class ClientEventHandler {
 
     @SubscribeEvent
     public static void onEntityJoinWorld(EntityJoinLevelEvent event) {
+        if (event.getEntity() instanceof AbstractClientPlayer clientPlayer) {
+            FlightViews.invalidate(clientPlayer);
+        }
         Flights.ifPlayer(event.getEntity(), Player::isLocalPlayer, (player, flight) ->
             Minecraft.getInstance().getSoundManager().play(new WingsSound(player, flight))
         );
