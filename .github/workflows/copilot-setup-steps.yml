@@ -1,10 +1,13 @@
 name: Build
 
 on:
+  workflow_dispatch:
   push:
-    branches: [ main ]
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
   pull_request:
-    branches: [ main ]
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
 
 jobs:
   copilot-setup-steps:
