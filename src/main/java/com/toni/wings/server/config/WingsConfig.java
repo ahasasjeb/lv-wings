@@ -33,6 +33,11 @@ public final class WingsConfig {
 
     public static List<String> getWearObstructions() {
         List<? extends String> entries = WEAR_OBSTRUCTIONS.get();
+        if (entries == null) {
+            LOGGER.warn("Wear obstructions list is null. Reverting to defaults {}.", DEFAULT_WEAR_OBSTRUCTIONS);
+            WEAR_OBSTRUCTIONS.set(DEFAULT_WEAR_OBSTRUCTIONS);
+            return Collections.unmodifiableList(new ArrayList<>(DEFAULT_WEAR_OBSTRUCTIONS));
+        }
         List<String> sanitized = new ArrayList<>();
         for (Object entryObj : entries) {
             if (entryObj == null) {

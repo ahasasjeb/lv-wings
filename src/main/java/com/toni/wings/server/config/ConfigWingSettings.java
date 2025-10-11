@@ -89,6 +89,10 @@ public final class ConfigWingSettings implements WingSettings {
     }
 
     private int readInt(ModConfigSpec.IntValue value, String propertyName, int min, int max, int fallback) {
+        if (value == null) {
+            LOGGER.warn("翅膀 '{}' 属性 '{}' 为空。恢复为默认值 {}。", this.key, propertyName, fallback);
+            return fallback;
+        }
         int current = value.get();
         if (current < min || current > max) {
             LOGGER.warn("翅膀 '{}' 属性 '{}' 超出范围: {} (预期 {}-{})。恢复为默认值 {}。", this.key, propertyName, current, min, max, fallback);
@@ -99,6 +103,10 @@ public final class ConfigWingSettings implements WingSettings {
     }
 
     private float readFloat(ModConfigSpec.DoubleValue value, String propertyName, double min, double max, double fallback) {
+        if (value == null) {
+            LOGGER.warn("翅膀 '{}' 属性 '{}' 为空。恢复为默认值 {}。", this.key, propertyName, fallback);
+            return (float) fallback;
+        }
         double current = value.get();
         if (Double.isNaN(current) || Double.isInfinite(current) || current < min || current > max) {
             LOGGER.warn("翅膀 '{}' 属性 '{}' 无效: {} (预期在 {} 和 {} 之间)。恢复为默认值 {}。", this.key, propertyName, current, min, max, fallback);
