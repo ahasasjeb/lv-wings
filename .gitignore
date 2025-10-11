@@ -12,7 +12,6 @@ out
 *.iws
 *.iml
 .idea
-AGENTS.md
 
 # gradle
 build
