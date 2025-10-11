@@ -75,6 +75,10 @@ public final class VeinSettings {
     }
 
     private int readInt(ModConfigSpec.IntValue value, String propertyName, int min, int max, int fallback) {
+        if (value == null) {
+            LOGGER.warn("Ore '{}' property '{}' is null. Reverting to default {}.", this.name, propertyName, fallback);
+            return fallback;
+        }
         int current = value.get();
         if (current < min || current > max) {
             LOGGER.warn("Ore '{}' property '{}' out of range: {} (expected {}-{}). Reverting to default {}.", this.name, propertyName, current, min, max, fallback);

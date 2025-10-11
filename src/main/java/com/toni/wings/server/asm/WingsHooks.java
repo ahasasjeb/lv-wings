@@ -55,6 +55,9 @@ public final class WingsHooks {
     }
 
     public static boolean onReplaceItemSlotCheck(Item item, ItemStack stack) {
+        if (stack == null || item == null) {
+            return false;
+        }
         return stack.get(DataComponents.EQUIPPABLE) != null
             || item.components().get(DataComponents.EQUIPPABLE) != null;
     }
