@@ -22,7 +22,13 @@ public final class WingsConfigEvents {
     }
 
     private static void validate(ModConfig config) {
+        if (config == null) {
+            return;
+        }
         Object spec = config.getSpec();
+        if (spec == null) {
+            return;
+        }
         if (spec == WingsConfig.SPEC) {
             WingsConfig.validate();
         } else if (spec == WingsItemsConfig.SPEC) {
