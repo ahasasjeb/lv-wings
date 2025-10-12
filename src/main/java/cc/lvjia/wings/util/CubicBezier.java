@@ -35,42 +35,6 @@ public final class CubicBezier {
         this.sampleValues = sampleValues;
     }
 
-    public float eval(float x) {
-        if (this.x1 == this.y1 && this.x2 == this.y2) {
-            return x;
-        }
-        if (x == 0) {
-            return 0;
-        }
-        if (x == 1) {
-            return 1;
-        }
-        return calcBezier(this.getTForX(x), this.y1, this.y2);
-    }
-
-    private float getTForX(float x) {
-        float intervalStart = 0;
-        int currentSample = 1;
-        for (final int lastSample = SPLINE_TABLE_SIZE - 1;
-             currentSample != lastSample && this.sampleValues[currentSample] <= x;
-             currentSample++
-        ) {
-            intervalStart += SAMPLE_STEP_SIZE;
-        }
-        currentSample--;
-        float slope = (this.sampleValues[currentSample + 1] - this.sampleValues[currentSample]);
-        float dist = (x - this.sampleValues[currentSample]) / slope;
-        float guessForT = intervalStart + dist * SAMPLE_STEP_SIZE;
-        float initialSlope = getSlope(guessForT, this.x1, this.x2);
-        if (initialSlope >= NEWTON_MIN_SLOPE) {
-            return newtonRaphsonIterate(x, guessForT, this.x1, this.x2);
-        }
-        if (initialSlope == 0) {
-            return guessForT;
-        }
-        return binarySubdivide(x, intervalStart, intervalStart + SAMPLE_STEP_SIZE, this.x1, this.x2);
-    }
-
     private static float binarySubdivide(float x, float a, float b, float x1, float x2) {
         float currentX, currentT;
         int i = 0;
@@ -124,5 +88,41 @@ public final class CubicBezier {
             sampleValues[i] = calcBezier(i * SAMPLE_STEP_SIZE, x1, x2);
         }
         return sampleValues;
+    }
+
+    public float eval(float x) {
+        if (this.x1 == this.y1 && this.x2 == this.y2) {
+            return x;
+        }
+        if (x == 0) {
+            return 0;
+        }
+        if (x == 1) {
+            return 1;
+        }
+        return calcBezier(this.getTForX(x), this.y1, this.y2);
+    }
+
+    private float getTForX(float x) {
+        float intervalStart = 0;
+        int currentSample = 1;
+        for (final int lastSample = SPLINE_TABLE_SIZE - 1;
+             currentSample != lastSample && this.sampleValues[currentSample] <= x;
+             currentSample++
+        ) {
+            intervalStart += SAMPLE_STEP_SIZE;
+        }
+        currentSample--;
+        float slope = (this.sampleValues[currentSample + 1] - this.sampleValues[currentSample]);
+        float dist = (x - this.sampleValues[currentSample]) / slope;
+        float guessForT = intervalStart + dist * SAMPLE_STEP_SIZE;
+        float initialSlope = getSlope(guessForT, this.x1, this.x2);
+        if (initialSlope >= NEWTON_MIN_SLOPE) {
+            return newtonRaphsonIterate(x, guessForT, this.x1, this.x2);
+        }
+        if (initialSlope == 0) {
+            return guessForT;
+        }
+        return binarySubdivide(x, intervalStart, intervalStart + SAMPLE_STEP_SIZE, this.x1, this.x2);
     }
 }

@@ -19,16 +19,21 @@ public final class KeyInputListener {
         this.bindings = bindings;
     }
 
+    public static Builder builder() {
+        return new BuilderRoot();
+    }
+
+    public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
+        KEY_CATEGORIES.forEach(event::registerCategory);
+        KEY_MAPPINGS.forEach(event::register);
+    }
+
     @SubscribeEvent
     public void onKey(InputEvent.Key event) {
         this.bindings.asMap().entrySet().stream()
-            .filter(e -> e.getKey().consumeClick())
-            .flatMap(e -> e.getValue().stream())
-            .forEach(Runnable::run);
-    }
-
-    public static Builder builder() {
-        return new BuilderRoot();
+                .filter(e -> e.getKey().consumeClick())
+                .flatMap(e -> e.getValue().stream())
+                .forEach(Runnable::run);
     }
 
     public interface Builder {
@@ -115,10 +120,5 @@ public final class KeyInputListener {
         public BindingBuilder key(String desc, IKeyConflictContext context, KeyModifier modifier, int keyCode) {
             return this.parent.key(desc, context, modifier, keyCode);
         }
-    }
-
-    public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
-        KEY_CATEGORIES.forEach(event::registerCategory);
-        KEY_MAPPINGS.forEach(event::register);
     }
 }

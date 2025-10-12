@@ -1,12 +1,12 @@
 package cc.lvjia.wings.server.flight;
 
-import com.google.common.collect.Lists;
 import cc.lvjia.wings.WingsMod;
 import cc.lvjia.wings.server.apparatus.FlightApparatus;
 import cc.lvjia.wings.server.effect.WingsEffects;
 import cc.lvjia.wings.util.CubicBezier;
 import cc.lvjia.wings.util.MathH;
 import cc.lvjia.wings.util.NBTSerializer;
+import com.google.common.collect.Lists;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -83,13 +83,13 @@ public final class FlightDefault implements Flight {
     }
 
     @Override
-    public void setTimeFlying(int timeFlying) {
-        this.timeFlying = timeFlying;
+    public int getTimeFlying() {
+        return this.timeFlying;
     }
 
     @Override
-    public int getTimeFlying() {
-        return this.timeFlying;
+    public void setTimeFlying(int timeFlying) {
+        this.timeFlying = timeFlying;
     }
 
     @Override
@@ -111,12 +111,12 @@ public final class FlightDefault implements Flight {
         return FLY_AMOUNT_CURVE.eval(MathH.lerp(this.getPrevTimeFlying(), this.getTimeFlying(), delta) / MAX_TIME_FLYING);
     }
 
-    private void setPrevTimeFlying(int prevTimeFlying) {
-        this.prevTimeFlying = prevTimeFlying;
-    }
-
     private int getPrevTimeFlying() {
         return this.prevTimeFlying;
+    }
+
+    private void setPrevTimeFlying(int prevTimeFlying) {
+        this.prevTimeFlying = prevTimeFlying;
     }
 
     @Override
@@ -147,22 +147,22 @@ public final class FlightDefault implements Flight {
     private void onWornUpdate(Player player) {
         if (player.isEffectiveAi()) {
             if (this.isFlying()) {
-                float speed = (float) Mth.clampedLerp(MIN_SPEED, MAX_SPEED, player.zza);
+                float speed = Mth.clampedLerp(MIN_SPEED, MAX_SPEED, player.zza);
                 float elevationBoost = MathH.transform(
-                    Math.abs(player.getXRot()),
-                    45.0F, 90.0F,
-                    1.0F, 0.0F
+                        Math.abs(player.getXRot()),
+                        45.0F, 90.0F,
+                        1.0F, 0.0F
                 );
                 float pitch = -MathH.toRadians(player.getXRot() - PITCH_OFFSET * elevationBoost);
                 float yaw = -MathH.toRadians(player.getYRot()) - MathH.PI;
-                float vxz = - Mth.cos(pitch);
+                float vxz = -Mth.cos(pitch);
                 float vy = Mth.sin(pitch);
                 float vz = Mth.cos(yaw);
                 float vx = Mth.sin(yaw);
                 player.setDeltaMovement(player.getDeltaMovement().add(
-                    vx * vxz * speed,
-                    vy * speed + Y_BOOST * (player.getXRot() > 0.0F ? elevationBoost : 1.0D),
-                    vz * vxz * speed
+                        vx * vxz * speed,
+                        vy * speed + Y_BOOST * (player.getXRot() > 0.0F ? elevationBoost : 1.0D),
+                        vz * vxz * speed
                 ));
             }
             if (this.canLand(player)) {
@@ -173,7 +173,7 @@ public final class FlightDefault implements Flight {
                 player.fallDistance = 0.0F;
             }
         }
-    if (!player.level().isClientSide()) {
+        if (!player.level().isClientSide()) {
             if (this.flightApparatus.isUsable(player)) {
                 (this.state = this.state.next(this.flightApparatus)).onUpdate(player);
             } else if (this.isFlying()) {
@@ -191,7 +191,7 @@ public final class FlightDefault implements Flight {
                 this.setWing(FlightApparatus.NONE, PlayerSet.ofAll());
             }
             this.onWornUpdate(player);
-    } else if (!player.level().isClientSide()) {
+        } else if (!player.level().isClientSide()) {
             this.setWing(FlightApparatus.NONE, PlayerSet.ofAll());
             if (this.isFlying()) {
                 this.setIsFlying(false, PlayerSet.ofAll());
@@ -280,8 +280,8 @@ public final class FlightDefault implements Flight {
             f.setIsFlying(compound.getBoolean(IS_FLYING).orElse(false), PlayerSet.ofAll());
             f.setTimeFlying(compound.getInt(TIME_FLYING).orElse(INITIAL_TIME_FLYING));
             String wingIdRaw = compound.contains(WING)
-                ? compound.getString(WING).orElse(DEFAULT_WING_ID.toString())
-                : DEFAULT_WING_ID.toString();
+                    ? compound.getString(WING).orElse(DEFAULT_WING_ID.toString())
+                    : DEFAULT_WING_ID.toString();
             f.setWing(wingFrom(wingIdRaw));
             return f;
         }

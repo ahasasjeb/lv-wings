@@ -12,6 +12,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+
 import javax.annotation.Nonnull;
 
 public class WingsBottleItem extends Item {
@@ -20,23 +21,6 @@ public class WingsBottleItem extends Item {
     public WingsBottleItem(Properties properties, FlightApparatus wings) {
         super(properties);
         this.wings = wings;
-    }
-
-    @Override
-    public boolean isFoil(@Nonnull ItemStack stack) {
-        return true;
-    }
-
-    @Override
-    public ItemStack finishUsingItem(@Nonnull ItemStack stack, @Nonnull Level world, @Nonnull LivingEntity living) {
-        ItemStack result = super.finishUsingItem(stack, world, living);
-
-    if (!world.isClientSide() && living instanceof ServerPlayer player) {
-            giveWing(player, this.wings);
-            world.playSound(null, player.getX(), player.getY(), player.getZ(), WingsSounds.ITEM_ARMOR_EQUIP_WINGS.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
-        }
-
-        return result;
     }
 
     public static boolean giveWing(ServerPlayer player, FlightApparatus wings) {
@@ -51,6 +35,23 @@ public class WingsBottleItem extends Item {
             player.addEffect(new MobEffectInstance(WingsEffects.WINGS, MobEffectInstance.INFINITE_DURATION, 0, true, false));
         }
         return changed;
+    }
+
+    @Override
+    public boolean isFoil(@Nonnull ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    public ItemStack finishUsingItem(@Nonnull ItemStack stack, @Nonnull Level world, @Nonnull LivingEntity living) {
+        ItemStack result = super.finishUsingItem(stack, world, living);
+
+        if (!world.isClientSide() && living instanceof ServerPlayer player) {
+            giveWing(player, this.wings);
+            world.playSound(null, player.getX(), player.getY(), player.getZ(), WingsSounds.ITEM_ARMOR_EQUIP_WINGS.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+        }
+
+        return result;
     }
 
 }

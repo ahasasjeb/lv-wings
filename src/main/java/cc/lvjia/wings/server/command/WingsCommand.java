@@ -1,12 +1,12 @@
 package cc.lvjia.wings.server.command;
 
+import cc.lvjia.wings.server.apparatus.FlightApparatus;
+import cc.lvjia.wings.server.item.BatBloodBottleItem;
+import cc.lvjia.wings.server.item.WingsBottleItem;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import cc.lvjia.wings.server.apparatus.FlightApparatus;
-import cc.lvjia.wings.server.item.BatBloodBottleItem;
-import cc.lvjia.wings.server.item.WingsBottleItem;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
@@ -25,19 +25,19 @@ public class WingsCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(literal("wings").requires(cs -> cs.hasPermission(2))
-            .then(literal("give")
-                .then(argument("wings", WingsArgument.wings())
-                    .executes(WingsCommand::giveWingSelf))
-                .then(argument("targets", EntityArgument.players())
-                    .then(argument("wings", WingsArgument.wings())
-                        .executes(WingsCommand::giveWing))))
-            .then(literal("take")
-                .executes(WingsCommand::takeWingsSelf)
-                .then(argument("wings", WingsArgument.wings())
-                    .executes(WingsCommand::takeSpecificWingsSelf))
-                .then(argument("targets", EntityArgument.players())
-                    .executes(WingsCommand::takeWings)
-                    .then(argument("wings", WingsArgument.wings()).executes(WingsCommand::takeSpecificWings)))));
+                .then(literal("give")
+                        .then(argument("wings", WingsArgument.wings())
+                                .executes(WingsCommand::giveWingSelf))
+                        .then(argument("targets", EntityArgument.players())
+                                .then(argument("wings", WingsArgument.wings())
+                                        .executes(WingsCommand::giveWing))))
+                .then(literal("take")
+                        .executes(WingsCommand::takeWingsSelf)
+                        .then(argument("wings", WingsArgument.wings())
+                                .executes(WingsCommand::takeSpecificWingsSelf))
+                        .then(argument("targets", EntityArgument.players())
+                                .executes(WingsCommand::takeWings)
+                                .then(argument("wings", WingsArgument.wings()).executes(WingsCommand::takeSpecificWings)))));
     }
 
     private static Collection<ServerPlayer> getSelf(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {

@@ -14,18 +14,17 @@ import java.util.Map;
 public final class SodiumBypassVertexConsumer implements VertexConsumer {
 
     private static final Map<VertexConsumer, SodiumBypassVertexConsumer> CACHE = Collections.synchronizedMap(new IdentityHashMap<>());
+    private final VertexConsumer delegate;
+
+    private SodiumBypassVertexConsumer(VertexConsumer delegate) {
+        this.delegate = delegate;
+    }
 
     public static VertexConsumer wrap(@Nonnull VertexConsumer delegate) {
         if (delegate instanceof SodiumBypassVertexConsumer) {
             return delegate;
         }
         return CACHE.computeIfAbsent(delegate, SodiumBypassVertexConsumer::new);
-    }
-
-    private final VertexConsumer delegate;
-
-    private SodiumBypassVertexConsumer(VertexConsumer delegate) {
-        this.delegate = delegate;
     }
 
     @Override

@@ -1,24 +1,24 @@
 package cc.lvjia.wings.client.renderer;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import cc.lvjia.wings.WingsMod;
 import cc.lvjia.wings.client.flight.FlightViews;
 import cc.lvjia.wings.client.model.ModelWingsAvian;
 import cc.lvjia.wings.client.model.ModelWingsInsectoid;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.util.Mth;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
 import javax.annotation.Nonnull;
 
@@ -27,13 +27,25 @@ public final class LayerWings extends RenderLayer<AvatarRenderState, PlayerModel
     public static final ModelLayerLocation INSECTOID_WINGS = layer("insectoid_wings");
     public static final ModelLayerLocation AVIAN_WINGS = layer("avian_wings");
 
-    public static void init(IEventBus modBus)
-    {
+    public LayerWings(RenderLayerParent<AvatarRenderState, PlayerModel> parent) {
+        super(parent);
+    }
+
+    public static void init(IEventBus modBus) {
         modBus.addListener(LayerWings::initLayers);
     }
 
-    public LayerWings(RenderLayerParent<AvatarRenderState, PlayerModel> parent) {
-        super(parent);
+    public static void initLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(INSECTOID_WINGS, ModelWingsInsectoid::createBodyLayer);
+        event.registerLayerDefinition(AVIAN_WINGS, ModelWingsAvian::createBodyLayer);
+    }
+
+    private static ModelLayerLocation layer(String name) {
+        return layer(name, "main");
+    }
+
+    private static ModelLayerLocation layer(String name, String layer) {
+        return new ModelLayerLocation(WingsMod.locate(name), layer);
     }
 
     @Override
@@ -60,7 +72,7 @@ public final class LayerWings extends RenderLayer<AvatarRenderState, PlayerModel
                 if (state.isCrouching) {
                     poseStack.translate(0.0D, 0.2D, 0.0D);
                 }
-                ModelPart body = ((PlayerModel) this.getParentModel()).body;
+                ModelPart body = this.getParentModel().body;
                 body.translateAndRotate(poseStack);
                 submitNodeCollector.submitCustomGeometry(poseStack, form.getRenderType(), (pose, buffer) -> {
                     PoseStack renderStack = new PoseStack();
@@ -72,22 +84,6 @@ public final class LayerWings extends RenderLayer<AvatarRenderState, PlayerModel
                 poseStack.popPose();
             });
         });
-    }
-
-    public static void initLayers(EntityRenderersEvent.RegisterLayerDefinitions event)
-    {
-        event.registerLayerDefinition(INSECTOID_WINGS, ModelWingsInsectoid::createBodyLayer);
-        event.registerLayerDefinition(AVIAN_WINGS, ModelWingsAvian::createBodyLayer);
-    }
-
-    private static ModelLayerLocation layer(String name)
-    {
-        return layer(name, "main");
-    }
-
-    private static ModelLayerLocation layer(String name, String layer)
-    {
-        return new ModelLayerLocation(WingsMod.locate(name), layer);
     }
 
 }

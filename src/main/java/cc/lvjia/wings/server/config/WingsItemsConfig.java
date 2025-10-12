@@ -1,8 +1,8 @@
 package cc.lvjia.wings.server.config;
 
-import com.google.common.collect.ImmutableMap;
 import cc.lvjia.wings.WingsMod;
 import cc.lvjia.wings.server.item.WingSettings;
+import com.google.common.collect.ImmutableMap;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
@@ -47,11 +47,11 @@ public final class WingsItemsConfig {
 
     public static ImmutableMap<ResourceLocation, WingSettings> createWingAttributes() {
         return Stream.of(ANGEL, PARROT, SLIME, BLUE_BUTTERFLY, MONARCH_BUTTERFLY, FIRE, BAT, FAIRY, EVIL, DRAGON, LVJIA_SUPER)
-            .collect(ImmutableMap.toImmutableMap(ConfigWingSettings::getKey, ConfigWingSettings::toImmutable));
+                .collect(ImmutableMap.toImmutableMap(ConfigWingSettings::getKey, ConfigWingSettings::toImmutable));
     }
 
     public static void validate() {
         Stream.of(ANGEL, PARROT, SLIME, BLUE_BUTTERFLY, MONARCH_BUTTERFLY, FIRE, BAT, FAIRY, EVIL, DRAGON, LVJIA_SUPER)
-            .forEach(ConfigWingSettings::validate);
+                .forEach(ConfigWingSettings::validate);
     }
 }

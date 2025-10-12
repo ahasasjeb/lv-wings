@@ -1,8 +1,8 @@
 package cc.lvjia.wings.client.model;
 
+import cc.lvjia.wings.client.flight.AnimatorInsectoid;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import cc.lvjia.wings.client.flight.AnimatorInsectoid;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
@@ -13,7 +13,7 @@ public final class ModelWingsInsectoid extends ModelWings<AnimatorInsectoid> {
 
     private final ModelPart wingLeft;
 
-   private final ModelPart wingRight;
+    private final ModelPart wingRight;
 
     public ModelWingsInsectoid(ModelPart root) {
         super(root);

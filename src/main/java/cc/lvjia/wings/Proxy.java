@@ -9,8 +9,6 @@ import cc.lvjia.wings.server.item.WingsItems;
 import cc.lvjia.wings.server.net.Network;
 import cc.lvjia.wings.server.net.clientbound.MessageSyncFlight;
 import cc.lvjia.wings.server.potion.PotionMix;
-import java.util.function.BiConsumer;
-import java.util.function.Supplier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -24,6 +22,9 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
+
+import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 public abstract class Proxy {
     protected final Network network = new Network();
@@ -72,9 +73,9 @@ public abstract class Proxy {
                 }
             });
             Flight.Notifier notifier = Flight.Notifier.of(
-                () -> this.network.sendToPlayer(new MessageSyncFlight(player, instance), serverPlayer),
-                p -> this.network.sendToPlayer(new MessageSyncFlight(player, instance), p),
-                () -> this.sendToDimensionPlayers(serverPlayer, instance)
+                    () -> this.network.sendToPlayer(new MessageSyncFlight(player, instance), serverPlayer),
+                    p -> this.network.sendToPlayer(new MessageSyncFlight(player, instance), p),
+                    () -> this.sendToDimensionPlayers(serverPlayer, instance)
             );
             instance.registerSyncListener(players -> players.notify(notifier));
             instance.sync(Flight.PlayerSet.ofOthers());

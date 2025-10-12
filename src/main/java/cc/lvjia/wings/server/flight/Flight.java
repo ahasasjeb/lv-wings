@@ -12,24 +12,26 @@ public interface Flight {
     default void setIsFlying(boolean isFlying) {
         this.setIsFlying(isFlying, PlayerSet.empty());
     }
+
     void setIsFlying(boolean isFlying, PlayerSet players);
 
     boolean isFlying();
+
     default void toggleIsFlying(PlayerSet players) {
         this.setIsFlying(!this.isFlying(), players);
     }
 
-    void setTimeFlying(int timeFlying);
-
     int getTimeFlying();
 
-    default void setWing(FlightApparatus wing) {
-        this.setWing(wing, PlayerSet.empty());
-    }
+    void setTimeFlying(int timeFlying);
 
     void setWing(FlightApparatus wing, PlayerSet players);
 
     FlightApparatus getWing();
+
+    default void setWing(FlightApparatus wing) {
+        this.setWing(wing, PlayerSet.empty());
+    }
 
     float getFlyingAmount(float delta);
 
@@ -40,6 +42,7 @@ public interface Flight {
     boolean canFly(Player player);
 
     boolean hasEffect(Player player);
+
     boolean canLand(Player player);
 
     void tick(Player player);
@@ -55,24 +58,22 @@ public interface Flight {
     void deserialize(FriendlyByteBuf buf);
 
     interface FlyingListener {
-        void onChange(boolean isFlying);
-
         static Consumer<FlyingListener> onChangeUsing(boolean isFlying) {
             return l -> l.onChange(isFlying);
         }
+
+        void onChange(boolean isFlying);
     }
 
     interface SyncListener {
-        void onSync(PlayerSet players);
-
         static Consumer<SyncListener> onSyncUsing(PlayerSet players) {
             return l -> l.onSync(players);
         }
+
+        void onSync(PlayerSet players);
     }
 
     interface PlayerSet {
-        void notify(Notifier notifier);
-
         static PlayerSet empty() {
             return n -> {
             };
@@ -96,15 +97,11 @@ public interface Flight {
                 n.notifyOthers();
             };
         }
+
+        void notify(Notifier notifier);
     }
 
     interface Notifier {
-        void notifySelf();
-
-        void notifyPlayer(ServerPlayer player);
-
-        void notifyOthers();
-
         static Notifier of(Runnable notifySelf, Consumer<ServerPlayer> notifyPlayer, Runnable notifyOthers) {
             return new Notifier() {
                 @Override
@@ -123,5 +120,11 @@ public interface Flight {
                 }
             };
         }
+
+        void notifySelf();
+
+        void notifyPlayer(ServerPlayer player);
+
+        void notifyOthers();
     }
 }

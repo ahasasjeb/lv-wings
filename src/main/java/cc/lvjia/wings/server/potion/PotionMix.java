@@ -27,6 +27,10 @@ public class PotionMix extends BrewingRecipe {
         this.fromKey = from.unwrapKey().orElse(null);
     }
 
+    private static ItemStack createPotionStack(Holder<Potion> potion) {
+        return PotionContents.createItemStack(Items.POTION, potion);
+    }
+
     @Override
     public boolean isInput(@NotNull @Nonnull ItemStack stack) {
         if (stack.isEmpty()) {
@@ -43,11 +47,7 @@ public class PotionMix extends BrewingRecipe {
         }
 
         return candidate.unwrapKey()
-            .map(this.from::is)
-            .orElse(candidate.value() == this.from.value());
-    }
-
-    private static ItemStack createPotionStack(Holder<Potion> potion) {
-        return PotionContents.createItemStack(Items.POTION, potion);
+                .map(this.from::is)
+                .orElse(candidate.value() == this.from.value());
     }
 }

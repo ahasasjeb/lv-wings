@@ -12,21 +12,21 @@ public final class GetCameraEyeHeightEvent extends Event {
         this.entity = entity;
     }
 
-    public Entity getEntity() {
-        return this.entity;
+    public static GetCameraEyeHeightEvent create(Entity entity, float eyeHeight) {
+        GetCameraEyeHeightEvent ev = new GetCameraEyeHeightEvent(entity);
+        ev.setValue(eyeHeight);
+        return ev;
     }
 
-    public void setValue(float value) {
-        this.value = value;
+    public Entity getEntity() {
+        return this.entity;
     }
 
     public float getValue() {
         return this.value;
     }
 
-    public static GetCameraEyeHeightEvent create(Entity entity, float eyeHeight) {
-        GetCameraEyeHeightEvent ev = new GetCameraEyeHeightEvent(entity);
-        ev.setValue(eyeHeight);
-        return ev;
+    public void setValue(float value) {
+        this.value = value;
     }
 }

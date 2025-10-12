@@ -1,7 +1,7 @@
 package cc.lvjia.wings.server.asm;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import cc.lvjia.wings.util.Access;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -19,10 +19,11 @@ import net.neoforged.neoforge.common.NeoForge;
 import java.lang.invoke.MethodHandle;
 
 public final class WingsHooksClient {
+    private static final ThreadLocal<AbstractClientPlayer> RENDERING_PLAYER = new ThreadLocal<>();
+    private static int selectedItemSlot = 0;
+
     private WingsHooksClient() {
     }
-
-    private static int selectedItemSlot = 0;
 
     public static void onSetPlayerRotationAngles(AvatarRenderState state, PlayerModel model) {
         AbstractClientPlayer player = resolvePlayer(state);
@@ -36,8 +37,6 @@ public final class WingsHooksClient {
             RENDERING_PLAYER.remove();
         }
     }
-
-    private static final ThreadLocal<AbstractClientPlayer> RENDERING_PLAYER = new ThreadLocal<>();
 
     public static void onExtractPlayerRenderState(AbstractClientPlayer player, AvatarRenderState state) {
         RENDERING_PLAYER.set(player);
@@ -70,8 +69,7 @@ public final class WingsHooksClient {
     }
 
     public static void onTurn(Entity entity, float deltaYaw) {
-        if (entity instanceof LivingEntity) {
-            LivingEntity living = (LivingEntity) entity;
+        if (entity instanceof LivingEntity living) {
             float theta = Mth.wrapDegrees(living.getYRot() - living.yBodyRot);
             GetLivingHeadLimitEvent ev = GetLivingHeadLimitEvent.create(living);
             NeoForge.EVENT_BUS.post(ev);
@@ -120,12 +118,12 @@ public final class WingsHooksClient {
     }
 
     private static final class GetItemStackMainHand {
+        private static final MethodHandle MH = Access.getter(ItemInHandRenderer.class)
+                .name("f_109300_", "mainHandItem")
+                .type(ItemStack.class);
+
         private GetItemStackMainHand() {
         }
-
-        private static final MethodHandle MH = Access.getter(ItemInHandRenderer.class)
-            .name("f_109300_", "mainHandItem")
-            .type(ItemStack.class);
 
         private static ItemStack invoke(ItemInHandRenderer instance) {
             try {
@@ -138,6 +136,7 @@ public final class WingsHooksClient {
 
     private static final class Holder {
         private static final boolean OPTIFUCK;
+
         static {
             boolean present;
             try {

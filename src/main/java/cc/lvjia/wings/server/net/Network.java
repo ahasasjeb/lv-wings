@@ -21,7 +21,7 @@ public final class Network {
         PayloadRegistrar registrar = event.registrar(VERSION);
 
         registrar.optional()
-            .playToServer(MessageControlFlying.TYPE, MessageControlFlying.STREAM_CODEC, MessageControlFlying::handle);
+                .playToServer(MessageControlFlying.TYPE, MessageControlFlying.STREAM_CODEC, MessageControlFlying::handle);
 
         registrar.playToClient(MessageSyncFlight.TYPE, MessageSyncFlight.STREAM_CODEC, MessageSyncFlight::handle);
     }

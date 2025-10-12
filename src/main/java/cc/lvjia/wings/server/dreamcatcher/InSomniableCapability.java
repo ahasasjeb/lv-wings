@@ -14,11 +14,11 @@ import java.util.Optional;
 
 @EventBusSubscriber(modid = WingsMod.ID)
 public final class InSomniableCapability {
+    public static final EntityCapability<InSomniable, Void> INSOMNIABLE_CAPABILITY =
+            EntityCapability.createVoid(WingsMod.locate("insomniable"), InSomniable.class);
+
     private InSomniableCapability() {
     }
-
-    public static final EntityCapability<InSomniable, Void> INSOMNIABLE_CAPABILITY =
-        EntityCapability.createVoid(WingsMod.locate("insomniable"), InSomniable.class);
 
     public static Optional<InSomniable> getInSomniable(Player player) {
         return Optional.ofNullable(player.getCapability(INSOMNIABLE_CAPABILITY));
@@ -27,14 +27,14 @@ public final class InSomniableCapability {
     @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event) {
         getInSomniable(event.getOriginal())
-            .ifPresent(oldInstance -> getInSomniable(event.getEntity())
-                .ifPresent(newInstance -> newInstance.clone(oldInstance))
-            );
+                .ifPresent(oldInstance -> getInSomniable(event.getEntity())
+                        .ifPresent(newInstance -> newInstance.clone(oldInstance))
+                );
     }
 
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerEntity(INSOMNIABLE_CAPABILITY, EntityType.PLAYER, (player, ctx) ->
-            player.getData(WingsAttachments.INSOMNIABLE.get())
+                player.getData(WingsAttachments.INSOMNIABLE.get())
         );
     }
 }

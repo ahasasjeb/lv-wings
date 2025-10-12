@@ -32,17 +32,17 @@ public final class VeinSettings {
 
         builder.push(name);
         this.size = builder
-            .comment("Vein size for ore '" + name + "'")
-            .defineInRange("size", defaultSize, MIN_SIZE, MAX_SIZE);
+                .comment("Vein size for ore '" + name + "'")
+                .defineInRange("size", defaultSize, MIN_SIZE, MAX_SIZE);
         this.count = builder
-            .comment("Number of ore veins per chunk for '" + name + "'")
-            .defineInRange("count", defaultCount, MIN_COUNT, MAX_COUNT);
+                .comment("Number of ore veins per chunk for '" + name + "'")
+                .defineInRange("count", defaultCount, MIN_COUNT, MAX_COUNT);
         this.minHeight = builder
-            .comment("Minimum generation height for '" + name + "'")
-            .defineInRange("minHeight", 0, MIN_WORLD_HEIGHT, MAX_WORLD_HEIGHT);
+                .comment("Minimum generation height for '" + name + "'")
+                .defineInRange("minHeight", 0, MIN_WORLD_HEIGHT, MAX_WORLD_HEIGHT);
         this.maxHeight = builder
-            .comment("Maximum generation height for '" + name + "'")
-            .defineInRange("maxHeight", defaultMaxHeight, MIN_WORLD_HEIGHT, MAX_WORLD_HEIGHT);
+                .comment("Maximum generation height for '" + name + "'")
+                .defineInRange("maxHeight", defaultMaxHeight, MIN_WORLD_HEIGHT, MAX_WORLD_HEIGHT);
         builder.pop();
     }
 

@@ -30,25 +30,25 @@ public final class ConfigWingSettings implements WingSettings {
 
     ConfigWingSettings(ResourceLocation key, ModConfigSpec.Builder builder, int defaultFlightSatiation, double defaultFlyingExertion, int defaultLandSatiation, double defaultLandingExertion) {
         this.key = key;
-    this.defaultFlightSatiation = defaultFlightSatiation;
-    this.defaultFlyingExertion = defaultFlyingExertion;
-    this.defaultLandSatiation = defaultLandSatiation;
-    this.defaultLandingExertion = defaultLandingExertion;
+        this.defaultFlightSatiation = defaultFlightSatiation;
+        this.defaultFlyingExertion = defaultFlyingExertion;
+        this.defaultLandSatiation = defaultLandSatiation;
+        this.defaultLandingExertion = defaultLandingExertion;
 
-    builder.push(key.getPath());
+        builder.push(key.getPath());
 
         this.requiredFlightSatiation = builder
-            .comment("使用 " + key + " 开始飞行所需的最低饱食度")
-            .defineInRange("requiredFlightSatiation", defaultFlightSatiation, MIN_SATIATION, MAX_SATIATION);
+                .comment("使用 " + key + " 开始飞行所需的最低饱食度")
+                .defineInRange("requiredFlightSatiation", defaultFlightSatiation, MIN_SATIATION, MAX_SATIATION);
         this.flyingExertion = builder
-            .comment("使用 " + key + " 飞行时每刻消耗的饱食度")
-            .defineInRange("flyingExertion", defaultFlyingExertion, MIN_EXERTION, MAX_EXERTION);
+                .comment("使用 " + key + " 飞行时每刻消耗的饱食度")
+                .defineInRange("flyingExertion", defaultFlyingExertion, MIN_EXERTION, MAX_EXERTION);
         this.requiredLandSatiation = builder
-            .comment("使用 " + key + " 安全着陆所需的最低饱食度")
-            .defineInRange("requiredLandSatiation", defaultLandSatiation, MIN_SATIATION, MAX_SATIATION);
+                .comment("使用 " + key + " 安全着陆所需的最低饱食度")
+                .defineInRange("requiredLandSatiation", defaultLandSatiation, MIN_SATIATION, MAX_SATIATION);
         this.landingExertion = builder
-            .comment("使用 " + key + " 着陆时消耗的饱食度")
-            .defineInRange("landingExertion", defaultLandingExertion, MIN_EXERTION, MAX_EXERTION);
+                .comment("使用 " + key + " 着陆时消耗的饱食度")
+                .defineInRange("landingExertion", defaultLandingExertion, MIN_EXERTION, MAX_EXERTION);
 
         builder.pop();
     }
@@ -59,22 +59,22 @@ public final class ConfigWingSettings implements WingSettings {
 
     @Override
     public int getRequiredFlightSatiation() {
-    return this.readInt(this.requiredFlightSatiation, "requiredFlightSatiation", MIN_SATIATION, MAX_SATIATION, this.defaultFlightSatiation);
+        return this.readInt(this.requiredFlightSatiation, "requiredFlightSatiation", MIN_SATIATION, MAX_SATIATION, this.defaultFlightSatiation);
     }
 
     @Override
     public float getFlyingExertion() {
-    return this.readFloat(this.flyingExertion, "flyingExertion", MIN_EXERTION, MAX_EXERTION, this.defaultFlyingExertion);
+        return this.readFloat(this.flyingExertion, "flyingExertion", MIN_EXERTION, MAX_EXERTION, this.defaultFlyingExertion);
     }
 
     @Override
     public int getRequiredLandSatiation() {
-    return this.readInt(this.requiredLandSatiation, "requiredLandSatiation", MIN_SATIATION, MAX_SATIATION, this.defaultLandSatiation);
+        return this.readInt(this.requiredLandSatiation, "requiredLandSatiation", MIN_SATIATION, MAX_SATIATION, this.defaultLandSatiation);
     }
 
     @Override
     public float getLandingExertion() {
-    return this.readFloat(this.landingExertion, "landingExertion", MIN_EXERTION, MAX_EXERTION, this.defaultLandingExertion);
+        return this.readFloat(this.landingExertion, "landingExertion", MIN_EXERTION, MAX_EXERTION, this.defaultLandingExertion);
     }
 
     public WingSettings toImmutable() {

@@ -16,7 +16,7 @@ public abstract class ServerGamePacketListenerImplMixin {
      * 重定向飞行检查，允许翅膀飞行时的移动
      */
     @Redirect(method = "handleMovePlayer(Lnet/minecraft/network/protocol/game/ServerboundMovePlayerPacket;)V",
-              at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayer;isFallFlying()Z"))
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayer;isFallFlying()Z"))
     private boolean wings$redirectFlightCheck(ServerPlayer player) {
         return WingsHooks.onFlightCheck(player, player.isFallFlying());
     }

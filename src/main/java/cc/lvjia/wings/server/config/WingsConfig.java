@@ -10,10 +10,9 @@ import java.util.Collections;
 import java.util.List;
 
 public final class WingsConfig {
+    public static final ModConfigSpec SPEC;
     private static final Logger LOGGER = LogManager.getLogger("WingsConfig");
     private static final List<String> DEFAULT_WEAR_OBSTRUCTIONS = List.of("minecraft:elytra");
-
-    public static final ModConfigSpec SPEC;
     private static final ModConfigSpec.ConfigValue<List<? extends String>> WEAR_OBSTRUCTIONS;
 
     static {
@@ -21,8 +20,8 @@ public final class WingsConfig {
         builder.comment("General configuration for lv wings").push("general");
 
         WEAR_OBSTRUCTIONS = builder
-            .comment("List of item IDs that prevent players from equipping wings.")
-            .defineListAllowEmpty("wearObstructions", DEFAULT_WEAR_OBSTRUCTIONS, () -> "", value -> value instanceof String && ResourceLocation.tryParse((String) value) != null);
+                .comment("List of item IDs that prevent players from equipping wings.")
+                .defineListAllowEmpty("wearObstructions", DEFAULT_WEAR_OBSTRUCTIONS, () -> "", value -> value instanceof String && ResourceLocation.tryParse((String) value) != null);
 
         builder.pop();
         SPEC = builder.build();

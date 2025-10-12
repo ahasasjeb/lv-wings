@@ -24,11 +24,15 @@ public abstract class ItemInHandRendererMixin {
     @Shadow
     private ItemStack mainHandItem;
 
-    /** 强制使用相反手臂渲染的标记 */
+    /**
+     * 强制使用相反手臂渲染的标记
+     */
     @Unique
     private boolean wings$forceOppositeArm;
 
-    /** 当前渲染的手部 */
+    /**
+     * 当前渲染的手部
+     */
     @Unique
     private InteractionHand wings$currentHand;
 
@@ -46,7 +50,7 @@ public abstract class ItemInHandRendererMixin {
      * 允许空手渲染，用于翅膀飞行时的动画
      */
     @ModifyVariable(method = "renderArmWithItem(Lnet/minecraft/client/player/AbstractClientPlayer;FFLnet/minecraft/world/InteractionHand;FLnet/minecraft/world/item/ItemStack;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;I)V",
-                    at = @At(value = "STORE"), ordinal = 0)
+            at = @At(value = "STORE"), ordinal = 0)
     private boolean wings$allowEmptyOffhandRender(boolean original) {
         boolean allowed = WingsHooksClient.onCheckRenderEmptyHand(original, this.mainHandItem);
         this.wings$forceOppositeArm = !original && allowed && this.wings$currentHand == InteractionHand.OFF_HAND;
@@ -54,11 +58,12 @@ public abstract class ItemInHandRendererMixin {
     }
 
     // The first STORE following the boolean flag writes the local HumanoidArm in 1.21.9.
+
     /**
      * 恢复副手手臂渲染，确保正确的动画方向
      */
     @ModifyVariable(method = "renderArmWithItem(Lnet/minecraft/client/player/AbstractClientPlayer;FFLnet/minecraft/world/InteractionHand;FLnet/minecraft/world/item/ItemStack;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;I)V",
-                    at = @At(value = "STORE"), ordinal = 0)
+            at = @At(value = "STORE"), ordinal = 0)
     private HumanoidArm wings$restoreOffhandArm(HumanoidArm arm, AbstractClientPlayer player, float f, float f1, InteractionHand hand, float f2, ItemStack stack, float f3, PoseStack poseStack, SubmitNodeCollector collector, int light) {
         if (this.wings$forceOppositeArm && hand == InteractionHand.OFF_HAND) {
             return player.getMainArm().getOpposite();

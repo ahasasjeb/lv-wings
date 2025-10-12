@@ -9,10 +9,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.NoteBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 @EventBusSubscriber(modid = WingsMod.ID)
 public final class InSomniableEventHandler {
@@ -28,11 +28,11 @@ public final class InSomniableEventHandler {
             BlockState state = world.getBlockState(pos);
             Block block = state.getBlock();
             if (block == Blocks.NOTE_BLOCK && world.isEmptyBlock(pos.above()) &&
-                world.mayInteract(player, pos) &&
-                !player.blockActionRestricted(world, pos, ((ServerPlayer) player).gameMode.getGameModeForPlayer())
+                    world.mayInteract(player, pos) &&
+                    !player.blockActionRestricted(world, pos, ((ServerPlayer) player).gameMode.getGameModeForPlayer())
             ) {
                 InSomniableCapability.getInSomniable(player).ifPresent(inSomniable ->
-                    inSomniable.onPlay(world, player, pos, state.getValue(NoteBlock.NOTE))
+                        inSomniable.onPlay(world, player, pos, state.getValue(NoteBlock.NOTE))
                 );
             }
         }

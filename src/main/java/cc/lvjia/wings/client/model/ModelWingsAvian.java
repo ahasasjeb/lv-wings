@@ -1,9 +1,9 @@
 package cc.lvjia.wings.client.model;
 
+import cc.lvjia.wings.client.flight.AnimatorAvian;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import cc.lvjia.wings.client.flight.AnimatorAvian;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
-        private static final Field CUBES_FIELD = findCubesField();
+    private static final Field CUBES_FIELD = findCubesField();
 
     private final ImmutableList<ModelPart> bonesLeft;
     private final ImmutableList<ModelPart> bonesRight;
@@ -40,10 +40,8 @@ public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
     private final ModelPart feathersTertiaryRight;
 
 
-
-
-        public ModelWingsAvian(ModelPart root) {
-                super(root);
+    public ModelWingsAvian(ModelPart root) {
+        super(root);
 
         this.coracoidLeft = root.getChild("coracoidLeft");
         this.humerusLeft = coracoidLeft.getChild("humerusLeft");
@@ -93,8 +91,8 @@ public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
         PartDefinition root = meshdefinition.getRoot();
 
         PartDefinition coracoidLeft = root.addOrReplaceChild("coracoidLeft", CubeListBuilder.create()
-                .texOffs(0, 28)
-                .addBox(0, -1.5F, -1.5F, 5, 3, 3, new CubeDeformation(0.0F)),
+                        .texOffs(0, 28)
+                        .addBox(0, -1.5F, -1.5F, 5, 3, 3, new CubeDeformation(0.0F)),
                 PartPose.offset(1.5F, 5.5F, 2.5F));
 
         PartDefinition coracoidRight = root.addOrReplaceChild("coracoidRight", CubeListBuilder.create()
@@ -159,9 +157,44 @@ public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
 
+    private static void add3DTexture(
+            ModelPart model,
+            int u, int v,
+            float offX, float offY, float offZ,
+            int width, int height
+    ) {
+        getCubes(model).add(Model3DTexture.create(offX, offY, offZ, width, height, u, v, 64, 64));
+
+    }
+
+    private static Field findCubesField() {
+        for (Field field : ModelPart.class.getDeclaredFields()) {
+            if (Modifier.isStatic(field.getModifiers())) {
+                continue;
+            }
+            if (List.class.isAssignableFrom(field.getType())) {
+                field.setAccessible(true);
+                return field;
+            }
+        }
+        throw new IllegalStateException("Unable to locate ModelPart cubes field");
+    }
+
+    @SuppressWarnings("unchecked")
+    private static List<ModelPart.Cube> getCubes(ModelPart part) {
+        try {
+            List<ModelPart.Cube> cubes = (List<ModelPart.Cube>) CUBES_FIELD.get(part);
+            List<ModelPart.Cube> mutable = new ArrayList<>(cubes);
+            CUBES_FIELD.set(part, mutable);
+            return mutable;
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public void render(AnimatorAvian animator, float delta, PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-                int color = ARGB.colorFromFloat(alpha, red, green, blue);
+        int color = ARGB.colorFromFloat(alpha, red, green, blue);
 
         for (int i = 0; i < this.bonesLeft.size(); i++) {
             ModelPart left = this.bonesLeft.get(i);
@@ -174,43 +207,8 @@ public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
             setAngles(left, right, animator.getFeatherRotation(i, delta));
         }
 
-                this.coracoidLeft.render(matrixStack, buffer, packedLight, packedOverlay, color);
-                this.coracoidRight.render(matrixStack, buffer, packedLight, packedOverlay, color);
+        this.coracoidLeft.render(matrixStack, buffer, packedLight, packedOverlay, color);
+        this.coracoidRight.render(matrixStack, buffer, packedLight, packedOverlay, color);
 
     }
-
-    private static void add3DTexture(
-        ModelPart model,
-        int u, int v,
-        float offX, float offY, float offZ,
-        int width, int height
-    ) {
-        getCubes(model).add(Model3DTexture.create(offX, offY, offZ, width, height, u, v, 64, 64));
-
-    }
-
-        private static Field findCubesField() {
-                for (Field field : ModelPart.class.getDeclaredFields()) {
-                        if (Modifier.isStatic(field.getModifiers())) {
-                                continue;
-                        }
-                        if (List.class.isAssignableFrom(field.getType())) {
-                                field.setAccessible(true);
-                                return field;
-                        }
-                }
-                throw new IllegalStateException("Unable to locate ModelPart cubes field");
-        }
-
-        @SuppressWarnings("unchecked")
-        private static List<ModelPart.Cube> getCubes(ModelPart part) {
-                try {
-                        List<ModelPart.Cube> cubes = (List<ModelPart.Cube>) CUBES_FIELD.get(part);
-                        List<ModelPart.Cube> mutable = new ArrayList<>(cubes);
-                        CUBES_FIELD.set(part, mutable);
-                        return mutable;
-                } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
-                }
-        }
 }

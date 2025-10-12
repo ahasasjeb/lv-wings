@@ -16,11 +16,9 @@ public final class WingForm<A extends Animator> {
     private static final Map<FlightApparatus, WingForm<?>> FORMS = new HashMap<>();
 
     private final Supplier<A> animator;
-
-    private ModelWings<A> model;
-
     private final ResourceLocation texture;
     private final Supplier<RenderType> renderType;
+    private ModelWings<A> model;
 
     private WingForm(Supplier<A> animator, ModelWings<A> model, ResourceLocation texture, Supplier<RenderType> renderType) {
         this.animator = Objects.requireNonNull(animator);
@@ -28,22 +26,6 @@ public final class WingForm<A extends Animator> {
         this.model = Objects.requireNonNull(model);
         this.texture = Objects.requireNonNull(texture);
         this.renderType = Objects.requireNonNull(renderType);
-    }
-
-    public A createAnimator() {
-        return this.animator.get();
-    }
-
-    public ModelWings<A> getModel() {
-        return this.model;
-    }
-
-    public void setModel(ModelWings<A> model){
-        this.model = model;
-    }
-
-    public ResourceLocation getTexture() {
-        return this.texture;
     }
 
     public static <A extends Animator> WingForm<A> of(Supplier<A> animator, ModelWings<A> model, ResourceLocation texture) {
@@ -54,10 +36,6 @@ public final class WingForm<A extends Animator> {
         return new WingForm<>(animator, model, texture, renderType);
     }
 
-    public RenderType getRenderType() {
-        return this.renderType.get();
-    }
-
     public static Optional<WingForm<?>> get(FlightApparatus wings) {
         return Optional.ofNullable(FORMS.get(wings));
     }
@@ -66,12 +44,32 @@ public final class WingForm<A extends Animator> {
         FORMS.put(wings, form);
     }
 
-    public static Map<FlightApparatus, WingForm<?>> getFormsMap(){
+    public static Map<FlightApparatus, WingForm<?>> getFormsMap() {
         return FORMS;
     }
 
-    public static boolean isEmpty(){
+    public static boolean isEmpty() {
         return FORMS.isEmpty();
+    }
+
+    public A createAnimator() {
+        return this.animator.get();
+    }
+
+    public ModelWings<A> getModel() {
+        return this.model;
+    }
+
+    public void setModel(ModelWings<A> model) {
+        this.model = model;
+    }
+
+    public ResourceLocation getTexture() {
+        return this.texture;
+    }
+
+    public RenderType getRenderType() {
+        return this.renderType.get();
     }
 
 

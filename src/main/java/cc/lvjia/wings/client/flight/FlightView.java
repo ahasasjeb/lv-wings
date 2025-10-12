@@ -1,8 +1,8 @@
 package cc.lvjia.wings.client.flight;
 
+import cc.lvjia.wings.util.function.FloatConsumer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import cc.lvjia.wings.util.function.FloatConsumer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 

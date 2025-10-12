@@ -16,6 +16,10 @@ public final class ImmutableWingSettings implements WingSettings {
         this.landingExertion = landingExertion;
     }
 
+    public static ImmutableWingSettings of(int requiredFlightSatiation, float flyingExertion, int requiredLandSatiation, float landingExertion) {
+        return new ImmutableWingSettings(requiredFlightSatiation, flyingExertion, requiredLandSatiation, landingExertion);
+    }
+
     @Override
     public int getRequiredFlightSatiation() {
         return this.requiredFlightSatiation;
@@ -34,9 +38,5 @@ public final class ImmutableWingSettings implements WingSettings {
     @Override
     public float getLandingExertion() {
         return this.landingExertion;
-    }
-
-    public static ImmutableWingSettings of(int requiredFlightSatiation, float flyingExertion, int requiredLandSatiation, float landingExertion) {
-        return new ImmutableWingSettings(requiredFlightSatiation, flyingExertion, requiredLandSatiation, landingExertion);
     }
 }

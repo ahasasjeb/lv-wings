@@ -3,14 +3,12 @@ package cc.lvjia.wings.util;
 import net.minecraft.util.Mth;
 
 public final class MathH {
+    public static final float PI = (float) Math.PI;
+    private static final float DEG_TO_RAD = (float) (Math.PI / 180.0D);
+    private static final float RAD_TO_DEG = (float) (180.0D / Math.PI);
+
     private MathH() {
     }
-
-    public static final float PI = (float) Math.PI;
-
-    private static final float DEG_TO_RAD = (float) (Math.PI / 180.0D);
-
-    private static final float RAD_TO_DEG = (float) (180.0D / Math.PI);
 
     public static float toRadians(float degrees) {
         return degrees * DEG_TO_RAD;

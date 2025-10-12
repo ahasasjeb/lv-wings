@@ -1,12 +1,11 @@
 package cc.lvjia.wings;
 
-import cc.lvjia.wings.server.command.WingsArgument;
-import com.mojang.serialization.Lifecycle;
 import cc.lvjia.wings.client.ClientProxy;
 import cc.lvjia.wings.server.ServerProxy;
 import cc.lvjia.wings.server.apparatus.BuffedFlightApparatus;
 import cc.lvjia.wings.server.apparatus.FlightApparatus;
 import cc.lvjia.wings.server.apparatus.SimpleFlightApparatus;
+import cc.lvjia.wings.server.command.WingsArgument;
 import cc.lvjia.wings.server.config.WingsConfig;
 import cc.lvjia.wings.server.config.WingsItemsConfig;
 import cc.lvjia.wings.server.config.WingsOreConfig;
@@ -16,6 +15,7 @@ import cc.lvjia.wings.server.flight.Flight;
 import cc.lvjia.wings.server.flight.Flights;
 import cc.lvjia.wings.server.item.WingsItems;
 import cc.lvjia.wings.server.sound.WingsSounds;
+import com.mojang.serialization.Lifecycle;
 import net.minecraft.core.DefaultedMappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -34,21 +34,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 @Mod(WingsMod.ID)
 public final class WingsMod {
     public static final String ID = "wings";
-    private static WingsMod INSTANCE;
-
     public static final Registry<FlightApparatus> WINGS = new DefaultedMappedRegistry<>(Names.NONE.toString(), ResourceKey.createRegistryKey(locate("wings")), Lifecycle.experimental(), false);
-
-    private static final DeferredRegister<net.minecraft.commands.synchronization.ArgumentTypeInfo<?, ?>> COMMAND_ARGUMENT_TYPES =
-        DeferredRegister.create(net.minecraft.core.registries.Registries.COMMAND_ARGUMENT_TYPE, ID);
-
-    public static final DeferredHolder<net.minecraft.commands.synchronization.ArgumentTypeInfo<?, ?>, net.minecraft.commands.synchronization.SingletonArgumentInfo<WingsArgument>> WINGS_ARGUMENT_TYPE =
-        COMMAND_ARGUMENT_TYPES.register("wings", () ->
-            net.minecraft.commands.synchronization.ArgumentTypeInfos.registerByClass(
-                WingsArgument.class,
-                net.minecraft.commands.synchronization.SingletonArgumentInfo.contextFree(WingsArgument::wings)
-            )
-        );
-
     public static final FlightApparatus NONE = Registry.register(WINGS, Names.NONE, FlightApparatus.NONE);
     public static final FlightApparatus WINGLESS = Registry.register(WINGS, Names.WINGLESS, new FlightApparatus() {
         @Override
@@ -87,10 +73,19 @@ public final class WingsMod {
     public static final FlightApparatus SLIME_WINGS = Registry.register(WINGS, Names.SLIME, new SimpleFlightApparatus(WingsItemsConfig.SLIME));
     public static final FlightApparatus FIRE_WINGS = Registry.register(WINGS, Names.FIRE, new SimpleFlightApparatus(WingsItemsConfig.FIRE));
     public static final FlightApparatus LVJIA_SUPER_WINGS = Registry.register(WINGS, Names.LVJIA_SUPER,
-        (FlightApparatus) new BuffedFlightApparatus(WingsItemsConfig.LVJIA_SUPER,
-            BuffedFlightApparatus.EffectSettings.of(MobEffects.RESISTANCE, 2, 40, 40),
-            BuffedFlightApparatus.EffectSettings.of(MobEffects.JUMP_BOOST, 1, 40, 40)));
-
+            (FlightApparatus) new BuffedFlightApparatus(WingsItemsConfig.LVJIA_SUPER,
+                    BuffedFlightApparatus.EffectSettings.of(MobEffects.RESISTANCE, 2, 40, 40),
+                    BuffedFlightApparatus.EffectSettings.of(MobEffects.JUMP_BOOST, 1, 40, 40)));
+    private static final DeferredRegister<net.minecraft.commands.synchronization.ArgumentTypeInfo<?, ?>> COMMAND_ARGUMENT_TYPES =
+            DeferredRegister.create(net.minecraft.core.registries.Registries.COMMAND_ARGUMENT_TYPE, ID);
+    public static final DeferredHolder<net.minecraft.commands.synchronization.ArgumentTypeInfo<?, ?>, net.minecraft.commands.synchronization.SingletonArgumentInfo<WingsArgument>> WINGS_ARGUMENT_TYPE =
+            COMMAND_ARGUMENT_TYPES.register("wings", () ->
+                    net.minecraft.commands.synchronization.ArgumentTypeInfos.registerByClass(
+                            WingsArgument.class,
+                            net.minecraft.commands.synchronization.SingletonArgumentInfo.contextFree(WingsArgument::wings)
+                    )
+            );
+    private static WingsMod INSTANCE;
     private final Proxy proxy;
 
     public WingsMod(IEventBus modEventBus, ModContainer modContainer) {
@@ -111,16 +106,24 @@ public final class WingsMod {
         WingsEffects.REG.register(modEventBus);
         COMMAND_ARGUMENT_TYPES.register(modEventBus);
 
-    this.proxy = FMLEnvironment.getDist().isClient() ? new ClientProxy() : new ServerProxy();
+        this.proxy = FMLEnvironment.getDist().isClient() ? new ClientProxy() : new ServerProxy();
         this.proxy.init(modEventBus);
-    }
-
-    public void addFlightListeners(Player player, Flight instance) {
-        this.requireProxy().addFlightListeners(player, instance);
     }
 
     public static WingsMod instance() {
         return INSTANCE;
+    }
+
+    public static ResourceLocation locate(String name) {
+        ResourceLocation location = ResourceLocation.tryBuild(WingsMod.ID, name);
+        if (location == null) {
+            throw new IllegalArgumentException("Invalid resource path: " + name);
+        }
+        return location;
+    }
+
+    public void addFlightListeners(Player player, Flight instance) {
+        this.requireProxy().addFlightListeners(player, instance);
     }
 
     public void invalidateFlightView(Player player) {
@@ -134,32 +137,24 @@ public final class WingsMod {
         return this.proxy;
     }
 
-    public static ResourceLocation locate(String name) {
-        ResourceLocation location = ResourceLocation.tryBuild(WingsMod.ID, name);
-        if (location == null) {
-            throw new IllegalArgumentException("Invalid resource path: " + name);
-        }
-        return location;
-    }
-
     public static final class Names {
+        public static final ResourceLocation
+                NONE = create("none"),
+                WINGLESS = create("wingless"),
+                ANGEL = create("angel_wings"),
+                PARROT = create("parrot_wings"),
+                SLIME = create("slime_wings"),
+                BLUE_BUTTERFLY = create("blue_butterfly_wings"),
+                MONARCH_BUTTERFLY = create("monarch_butterfly_wings"),
+                FIRE = create("fire_wings"),
+                BAT = create("bat_wings"),
+                FAIRY = create("fairy_wings"),
+                EVIL = create("evil_wings"),
+                DRAGON = create("dragon_wings"),
+                LVJIA_SUPER = create("lvjia_super_wing");
+
         private Names() {
         }
-
-        public static final ResourceLocation
-            NONE = create("none"),
-            WINGLESS = create("wingless"),
-            ANGEL = create("angel_wings"),
-            PARROT = create("parrot_wings"),
-            SLIME = create("slime_wings"),
-            BLUE_BUTTERFLY = create("blue_butterfly_wings"),
-            MONARCH_BUTTERFLY = create("monarch_butterfly_wings"),
-            FIRE = create("fire_wings"),
-            BAT = create("bat_wings"),
-            FAIRY = create("fairy_wings"),
-            EVIL = create("evil_wings"),
-            DRAGON = create("dragon_wings"),
-            LVJIA_SUPER = create("lvjia_super_wing");
 
         private static ResourceLocation create(String path) {
             ResourceLocation location = ResourceLocation.tryBuild(ID, path);

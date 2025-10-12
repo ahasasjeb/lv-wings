@@ -37,57 +37,8 @@ public final class BuffedFlightApparatus implements FlightApparatus {
         this.delegate = Objects.requireNonNull(delegate, "委托");
         this.mobAvoidance = Objects.requireNonNull(mobAvoidance, "敌对生物回避设置");
         this.effects = Arrays.stream(effects)
-            .filter(Objects::nonNull)
-            .collect(Collectors.toUnmodifiableList());
-    }
-
-    @Override
-    public void onFlight(Player player, Vec3 direction) {
-        this.delegate.onFlight(player, direction);
-    }
-
-    @Override
-    public void onLanding(Player player, Vec3 direction) {
-        this.delegate.onLanding(player, direction);
-    }
-
-    @Override
-    public boolean isUsable(Player player) {
-        return this.delegate.isUsable(player);
-    }
-
-    @Override
-    public boolean isLandable(Player player) {
-        return this.delegate.isLandable(player);
-    }
-
-    @Override
-    public FlightState createState(Flight flight) {
-        FlightState base = this.delegate.createState(flight);
-        boolean hasEffects = !this.effects.isEmpty();
-        boolean avoidanceEnabled = this.mobAvoidance.isEnabled();
-        if (!hasEffects && !avoidanceEnabled) {
-            return base;
-        }
-        return new FlightState() {
-            private int mobAvoidanceCooldown;
-
-            @Override
-            public void onUpdate(Player player) {
-                base.onUpdate(player);
-                if (!player.level().isClientSide()) {
-                    if (hasEffects) {
-                        effects.forEach(effect -> effect.apply(player));
-                    }
-                    if (avoidanceEnabled) {
-                        if (--this.mobAvoidanceCooldown <= 0) {
-                            this.mobAvoidanceCooldown = Math.max(1, mobAvoidance.intervalTicks());
-                            applyHostileMobAvoidance(player, mobAvoidance);
-                        }
-                    }
-                }
-            }
-        };
+                .filter(Objects::nonNull)
+                .collect(Collectors.toUnmodifiableList());
     }
 
     private static void applyHostileMobAvoidance(Player player, MobAvoidanceSettings settings) {
@@ -100,8 +51,8 @@ public final class BuffedFlightApparatus implements FlightApparatus {
         }
         double radiusSquared = radius * radius;
         AABB searchBox = player.getBoundingBox().inflate(radius);
-    List<Mob> hostiles = player.level().getEntitiesOfClass(Mob.class, searchBox,
-            mob -> isRepellableHostile(mob, player, radiusSquared));
+        List<Mob> hostiles = player.level().getEntitiesOfClass(Mob.class, searchBox,
+                mob -> isRepellableHostile(mob, player, radiusSquared));
         if (hostiles.isEmpty()) {
             return;
         }
@@ -124,10 +75,7 @@ public final class BuffedFlightApparatus implements FlightApparatus {
         if (mob.isAlliedTo(player)) {
             return false;
         }
-        if (mob.distanceToSqr(player) > radiusSquared) {
-            return false;
-        }
-        return true;
+        return !(mob.distanceToSqr(player) > radiusSquared);
     }
 
     private static void neutralizeAggression(Mob mob, Player player) {
@@ -183,6 +131,55 @@ public final class BuffedFlightApparatus implements FlightApparatus {
         if (pushX != 0.0D || pushY != 0.0D || pushZ != 0.0D) {
             mob.push(pushX, pushY, pushZ);
         }
+    }
+
+    @Override
+    public void onFlight(Player player, Vec3 direction) {
+        this.delegate.onFlight(player, direction);
+    }
+
+    @Override
+    public void onLanding(Player player, Vec3 direction) {
+        this.delegate.onLanding(player, direction);
+    }
+
+    @Override
+    public boolean isUsable(Player player) {
+        return this.delegate.isUsable(player);
+    }
+
+    @Override
+    public boolean isLandable(Player player) {
+        return this.delegate.isLandable(player);
+    }
+
+    @Override
+    public FlightState createState(Flight flight) {
+        FlightState base = this.delegate.createState(flight);
+        boolean hasEffects = !this.effects.isEmpty();
+        boolean avoidanceEnabled = this.mobAvoidance.isEnabled();
+        if (!hasEffects && !avoidanceEnabled) {
+            return base;
+        }
+        return new FlightState() {
+            private int mobAvoidanceCooldown;
+
+            @Override
+            public void onUpdate(Player player) {
+                base.onUpdate(player);
+                if (!player.level().isClientSide()) {
+                    if (hasEffects) {
+                        effects.forEach(effect -> effect.apply(player));
+                    }
+                    if (avoidanceEnabled) {
+                        if (--this.mobAvoidanceCooldown <= 0) {
+                            this.mobAvoidanceCooldown = Math.max(1, mobAvoidance.intervalTicks());
+                            applyHostileMobAvoidance(player, mobAvoidance);
+                        }
+                    }
+                }
+            }
+        };
     }
 
     public record EffectSettings(Holder<MobEffect> effect, int amplifier, int durationTicks, int refreshThreshold) {

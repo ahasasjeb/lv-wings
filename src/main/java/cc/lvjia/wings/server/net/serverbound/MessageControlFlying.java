@@ -13,17 +13,17 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 public record MessageControlFlying(boolean isFlying) implements Message {
     public static final CustomPacketPayload.Type<MessageControlFlying> TYPE = new CustomPacketPayload.Type<>(WingsMod.locate("control_flying"));
     public static final StreamCodec<FriendlyByteBuf, MessageControlFlying> STREAM_CODEC =
-        StreamCodec.of((buf, message) -> buf.writeBoolean(message.isFlying()),
-            buf -> new MessageControlFlying(buf.readBoolean()));
-
-    @Override
-    public CustomPacketPayload.Type<MessageControlFlying> type() {
-        return TYPE;
-    }
+            StreamCodec.of((buf, message) -> buf.writeBoolean(message.isFlying()),
+                    buf -> new MessageControlFlying(buf.readBoolean()));
 
     public static void handle(MessageControlFlying message, IPayloadContext context) {
         Player player = context.player();
         Flights.get(player).filter(f -> f.canFly(player))
-            .ifPresent(flight -> flight.setIsFlying(message.isFlying(), Flight.PlayerSet.ofOthers()));
+                .ifPresent(flight -> flight.setIsFlying(message.isFlying(), Flight.PlayerSet.ofOthers()));
+    }
+
+    @Override
+    public CustomPacketPayload.Type<MessageControlFlying> type() {
+        return TYPE;
     }
 }

@@ -4,8 +4,8 @@ import cc.lvjia.wings.WingsAttachments;
 import cc.lvjia.wings.WingsMod;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.EntityCapability;
@@ -18,11 +18,11 @@ import java.util.function.Predicate;
 
 @EventBusSubscriber(modid = WingsMod.ID)
 public final class Flights {
+    public static final EntityCapability<Flight, Void> FLIGHT_CAPABILITY =
+            EntityCapability.createVoid(WingsMod.locate("flight"), Flight.class);
+
     private Flights() {
     }
-
-    public static final EntityCapability<Flight, Void> FLIGHT_CAPABILITY =
-        EntityCapability.createVoid(WingsMod.locate("flight"), Flight.class);
 
     public static boolean has(Player player) {
         return resolve(player) != null;
@@ -54,7 +54,7 @@ public final class Flights {
     public static void onPlayerClone(PlayerEvent.Clone event) {
         if (!event.isWasDeath()) {
             get(event.getOriginal()).ifPresent(oldInstance ->
-                get(event.getEntity()).ifPresent(newInstance -> newInstance.clone(oldInstance))
+                    get(event.getEntity()).ifPresent(newInstance -> newInstance.clone(oldInstance))
             );
         }
     }
@@ -77,13 +77,13 @@ public final class Flights {
     @SubscribeEvent
     public static void onPlayerStartTracking(PlayerEvent.StartTracking event) {
         ifPlayer(event.getTarget(), (player, flight) ->
-            flight.sync(Flight.PlayerSet.ofPlayer((ServerPlayer) event.getEntity()))
+                flight.sync(Flight.PlayerSet.ofPlayer((ServerPlayer) event.getEntity()))
         );
     }
 
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerEntity(FLIGHT_CAPABILITY, EntityType.PLAYER, (player, ctx) ->
-            player.getData(WingsAttachments.FLIGHT.get())
+                player.getData(WingsAttachments.FLIGHT.get())
         );
     }
 }

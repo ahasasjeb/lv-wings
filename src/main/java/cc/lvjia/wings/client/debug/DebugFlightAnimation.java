@@ -8,10 +8,10 @@ import net.neoforged.neoforge.client.event.ModelEvent;
 
 @EventBusSubscriber(value = Dist.CLIENT, modid = WingsMod.ID)
 public final class DebugFlightAnimation {
+    private static State state = new DisabledState();
+
     private DebugFlightAnimation() {
     }
-
-    private static State state = new DisabledState();
 
     @SubscribeEvent
     public static void init(ModelEvent.ModifyBakingResult event) {

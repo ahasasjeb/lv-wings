@@ -1,7 +1,5 @@
 package cc.lvjia.wings.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 import cc.lvjia.wings.WingsMod;
 import cc.lvjia.wings.client.audio.WingsSound;
 import cc.lvjia.wings.client.flight.FlightView;
@@ -12,22 +10,29 @@ import cc.lvjia.wings.server.asm.EmptyOffHandPresentEvent;
 import cc.lvjia.wings.server.asm.GetCameraEyeHeightEvent;
 import cc.lvjia.wings.server.flight.Flights;
 import cc.lvjia.wings.util.MathH;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.ViewportEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 @EventBusSubscriber(value = Dist.CLIENT, modid = WingsMod.ID)
 public final class ClientEventHandler {
+    private static ResourceKey<Level> lastPlayerDimension;
+
     private ClientEventHandler() {
     }
 
@@ -76,10 +81,9 @@ public final class ClientEventHandler {
             float amt = flight.getFlyingAmount(delta);
             if (amt > 0.0F) {
                 float roll = MathH.lerpDegrees(
-                    player.yBodyRotO - player.yRotO,
-                    player.yBodyRot - player.getYRot(),
-                    delta
-                );
+                        player.yBodyRotO - player.yRotO,
+                        player.yBodyRot - player.getYRot(),
+                        delta);
                 float pitch = -MathH.lerpDegrees(player.xRotO, player.getXRot(), delta) - 90.0F;
                 matrixStack.mulPose(Axis.ZP.rotationDegrees(MathH.lerpDegrees(0.0F, roll, amt)));
                 matrixStack.mulPose(Axis.XP.rotationDegrees(MathH.lerpDegrees(0.0F, pitch, amt)));
@@ -92,9 +96,8 @@ public final class ClientEventHandler {
     public static void onGetCameraEyeHeight(GetCameraEyeHeightEvent event) {
         Entity entity = event.getEntity();
         if (entity instanceof LocalPlayer) {
-            FlightViews.get((LocalPlayer) entity).ifPresent(flight ->
-                flight.tickEyeHeight(event.getValue(), event::setValue)
-            );
+            FlightViews.get((LocalPlayer) entity)
+                    .ifPresent(flight -> flight.tickEyeHeight(event.getValue(), event::setValue));
         }
     }
 
@@ -105,10 +108,9 @@ public final class ClientEventHandler {
             float amt = flight.getFlyingAmount(delta);
             if (amt > 0.0F) {
                 float roll = MathH.lerpDegrees(
-                    player.yBodyRotO - player.yRotO,
-                    player.yBodyRot - player.getYRot(),
-                    delta
-                );
+                        player.yBodyRotO - player.yRotO,
+                        player.yBodyRot - player.getYRot(),
+                        delta);
                 float targetRoll = MathH.lerpDegrees(0.0F, -roll * 0.25F, amt);
                 // Failsafe: guard against sporadic extreme values that flip the camera sideways
                 if (!Float.isFinite(targetRoll) || Math.abs(targetRoll) > 75.0F) {
@@ -132,9 +134,8 @@ public final class ClientEventHandler {
 
     @SubscribeEvent
     public static void onEntityJoinWorld(EntityJoinLevelEvent event) {
-        Flights.ifPlayer(event.getEntity(), Player::isLocalPlayer, (player, flight) ->
-            Minecraft.getInstance().getSoundManager().play(new WingsSound(player, flight))
-        );
+        Flights.ifPlayer(event.getEntity(), Player::isLocalPlayer,
+                (player, flight) -> Minecraft.getInstance().getSoundManager().play(new WingsSound(player, flight)));
     }
 
     @SubscribeEvent
@@ -142,6 +143,21 @@ public final class ClientEventHandler {
         Player entity = event.getEntity();
         if (entity instanceof AbstractClientPlayer player) {
             FlightViews.get(player).ifPresent(FlightView::tick);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onClientTick(ClientTickEvent.Post event) {
+        Minecraft mc = Minecraft.getInstance();
+        LocalPlayer player = mc.player;
+        if (player == null) {
+            lastPlayerDimension = null;
+            return;
+        }
+        ResourceKey<Level> current = player.level().dimension();
+        if (current != lastPlayerDimension) {
+            lastPlayerDimension = current;
+            FlightViews.invalidate(player);
         }
     }
 }

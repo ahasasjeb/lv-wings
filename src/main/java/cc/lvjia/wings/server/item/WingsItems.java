@@ -17,17 +17,12 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import java.util.function.Supplier;
 
 public final class WingsItems {
-    private WingsItems() {
-    }
-
     public static final DeferredRegister<Item> REG = DeferredRegister.create(Registries.ITEM, WingsMod.ID);
-
     public static final DeferredHolder<Item, Item> BAT_BLOOD_BOTTLE = REG.register("bat_blood_bottle",
             () -> new BatBloodBottleItem(properties("bat_blood_bottle")
                     .craftRemainder(Items.GLASS_BOTTLE)
-                        .usingConvertsTo(Items.GLASS_BOTTLE)
+                    .usingConvertsTo(Items.GLASS_BOTTLE)
                     .stacksTo(16)));
-
     public static final DeferredHolder<Item, Item> ANGEL_WINGS_BOTTLE = REG.register("angel_wings_bottle",
             bottle("angel_wings_bottle", () -> WingsMod.ANGEL_WINGS));
     public static final DeferredHolder<Item, Item> PARROT_WINGS_BOTTLE = REG.register("parrot_wings_bottle",
@@ -51,6 +46,8 @@ public final class WingsItems {
             bottle("dragon_wings_bottle", () -> WingsMod.DRAGON_WINGS));
     public static final DeferredHolder<Item, Item> LVJIA_SUPER_WINGS_BOTTLE = REG.register("lvjia_super_wings_bottle",
             bottle("lvjia_super_wings_bottle", () -> WingsMod.LVJIA_SUPER_WINGS));
+    private WingsItems() {
+    }
 
     private static Item.Properties properties(String name) {
         return new Item.Properties()
@@ -61,39 +58,39 @@ public final class WingsItems {
     private static Supplier<Item> bottle(String name, Supplier<FlightApparatus> wings) {
         return () -> new WingsBottleItem(properties(name)
                 .craftRemainder(Items.GLASS_BOTTLE)
-                        .usingConvertsTo(Items.GLASS_BOTTLE)
+                .usingConvertsTo(Items.GLASS_BOTTLE)
                 .stacksTo(16), wings.get());
     }
 
     public static void buildCreativeTabContents(BuildCreativeModeTabContentsEvent event) {
         ResourceKey<CreativeModeTab> tabKey = event.getTabKey();
-                if (tabKey == CreativeModeTabs.FOOD_AND_DRINKS) {
-                        event.accept(BAT_BLOOD_BOTTLE.get());
-                        event.accept(ANGEL_WINGS_BOTTLE.get());
-                        event.accept(PARROT_WINGS_BOTTLE.get());
-                        event.accept(SLIME_WINGS_BOTTLE.get());
-                        event.accept(BLUE_BUTTERFLY_WINGS_BOTTLE.get());
-                        event.accept(MONARCH_BUTTERFLY_WINGS_BOTTLE.get());
-                        event.accept(FIRE_WINGS_BOTTLE.get());
-                        event.accept(BAT_WINGS_BOTTLE.get());
-                        event.accept(FAIRY_WINGS_BOTTLE.get());
-                        event.accept(EVIL_WINGS_BOTTLE.get());
-                        event.accept(DRAGON_WINGS_BOTTLE.get());
-                        event.accept(LVJIA_SUPER_WINGS_BOTTLE.get());
-                }
-                if (tabKey == CreativeModeTabs.TOOLS_AND_UTILITIES) {
-                        event.accept(ANGEL_WINGS_BOTTLE.get());
-                        event.accept(PARROT_WINGS_BOTTLE.get());
-                        event.accept(SLIME_WINGS_BOTTLE.get());
-                        event.accept(BLUE_BUTTERFLY_WINGS_BOTTLE.get());
-                        event.accept(MONARCH_BUTTERFLY_WINGS_BOTTLE.get());
-                        event.accept(FIRE_WINGS_BOTTLE.get());
-                        event.accept(BAT_WINGS_BOTTLE.get());
-                        event.accept(FAIRY_WINGS_BOTTLE.get());
-                        event.accept(EVIL_WINGS_BOTTLE.get());
-                        event.accept(DRAGON_WINGS_BOTTLE.get());
-                        event.accept(LVJIA_SUPER_WINGS_BOTTLE.get());
-                }
+        if (tabKey == CreativeModeTabs.FOOD_AND_DRINKS) {
+            event.accept(BAT_BLOOD_BOTTLE.get());
+            event.accept(ANGEL_WINGS_BOTTLE.get());
+            event.accept(PARROT_WINGS_BOTTLE.get());
+            event.accept(SLIME_WINGS_BOTTLE.get());
+            event.accept(BLUE_BUTTERFLY_WINGS_BOTTLE.get());
+            event.accept(MONARCH_BUTTERFLY_WINGS_BOTTLE.get());
+            event.accept(FIRE_WINGS_BOTTLE.get());
+            event.accept(BAT_WINGS_BOTTLE.get());
+            event.accept(FAIRY_WINGS_BOTTLE.get());
+            event.accept(EVIL_WINGS_BOTTLE.get());
+            event.accept(DRAGON_WINGS_BOTTLE.get());
+            event.accept(LVJIA_SUPER_WINGS_BOTTLE.get());
+        }
+        if (tabKey == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+            event.accept(ANGEL_WINGS_BOTTLE.get());
+            event.accept(PARROT_WINGS_BOTTLE.get());
+            event.accept(SLIME_WINGS_BOTTLE.get());
+            event.accept(BLUE_BUTTERFLY_WINGS_BOTTLE.get());
+            event.accept(MONARCH_BUTTERFLY_WINGS_BOTTLE.get());
+            event.accept(FIRE_WINGS_BOTTLE.get());
+            event.accept(BAT_WINGS_BOTTLE.get());
+            event.accept(FAIRY_WINGS_BOTTLE.get());
+            event.accept(EVIL_WINGS_BOTTLE.get());
+            event.accept(DRAGON_WINGS_BOTTLE.get());
+            event.accept(LVJIA_SUPER_WINGS_BOTTLE.get());
+        }
     }
 
 }

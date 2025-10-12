@@ -1,51 +1,43 @@
 package cc.lvjia.wings.client.model;
 
+import cc.lvjia.wings.client.renderer.SodiumBypassVertexConsumer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import cc.lvjia.wings.client.renderer.SodiumBypassVertexConsumer;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.core.Direction;
 
 import javax.annotation.Nonnull;
-import java.lang.reflect.Array;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.util.EnumSet;
 import java.util.Objects;
 
 // replace reflection with mixin 实际：改不了一点，贼TM麻烦
 public final class Model3DTexture extends ModelPart.Cube {
+    private static final Field POLYGONS_FIELD = findPolygonsField();
     private final int width;
-
     private final int height;
-
     private final float u1;
-
     private final float v1;
-
     private final float u2;
-
     private final float v2;
 
     private Model3DTexture(
-        float posX, float posY, float posZ,
-        int width, int height,
-        float u1, float v1,
-        float u2, float v2
+            float posX, float posY, float posZ,
+            int width, int height,
+            float u1, float v1,
+            float u2, float v2
     ) {
-    super(0, 0, posX, posY, posZ, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, false, 64.0F, 64.0F, EnumSet.noneOf(Direction.class));
+        super(0, 0, posX, posY, posZ, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, false, 64.0F, 64.0F, EnumSet.noneOf(Direction.class));
         this.width = width;
         this.height = height;
         this.u1 = u1;
         this.v1 = v1;
         this.u2 = u2;
         this.v2 = v2;
-    int faceCount = 2 + 2 * width + 2 * height;
-    Object polygonsOld = Objects.requireNonNull(getPolygons(this));
-    Class<?> polygonClass = polygonsOld.getClass().getComponentType();
-    Field verticesField = findArrayField(polygonClass, "vertices");
+        int faceCount = 2 + 2 * width + 2 * height;
+        Object polygonsOld = Objects.requireNonNull(getPolygons(this));
+        Class<?> polygonClass = polygonsOld.getClass().getComponentType();
+        Field verticesField = findArrayField(polygonClass, "vertices");
         Class<?> vertexArrayClass = verticesField.getType();
         Class<?> vertexClass = vertexArrayClass.getComponentType();
         Constructor<?> vertexCtor;
@@ -110,21 +102,11 @@ public final class Model3DTexture extends ModelPart.Cube {
         setPolygons(this, polygons);
     }
 
-    interface FaceAdder {
-        void add(float x, float y, float z, float x2, float y2, float z2, float u1, float v1, float u2, float v2, Direction normal);
-    }
-
-    @Override
-    public void compile(@Nonnull PoseStack.Pose pose, @Nonnull VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
-        // Wrap buffer to bypass Sodium's vertex writer optimization
-        super.compile(pose, SodiumBypassVertexConsumer.wrap(buffer), packedLight, packedOverlay, color);
-    }
-
     public static ModelPart.Cube create(
-        float posX, float posY, float posZ,
-        int width, int height,
-        int u, int v,
-        int textureWidth, int textureHeight
+            float posX, float posY, float posZ,
+            int width, int height,
+            int u, int v,
+            int textureWidth, int textureHeight
     ) {
         ModelPart.Cube cube = new Model3DTexture(
                 posX, posY, posZ,
@@ -134,8 +116,6 @@ public final class Model3DTexture extends ModelPart.Cube {
         );
         return cube;
     }
-
-    private static final Field POLYGONS_FIELD = findPolygonsField();
 
     private static Field findPolygonsField() {
         for (Field field : ModelPart.Cube.class.getDeclaredFields()) {
@@ -174,5 +154,15 @@ public final class Model3DTexture extends ModelPart.Cube {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void compile(@Nonnull PoseStack.Pose pose, @Nonnull VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+        // Wrap buffer to bypass Sodium's vertex writer optimization
+        super.compile(pose, SodiumBypassVertexConsumer.wrap(buffer), packedLight, packedOverlay, color);
+    }
+
+    interface FaceAdder {
+        void add(float x, float y, float z, float x2, float y2, float z2, float u1, float v1, float u2, float v2, Direction normal);
     }
 }

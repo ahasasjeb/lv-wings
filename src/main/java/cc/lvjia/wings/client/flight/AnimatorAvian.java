@@ -1,7 +1,7 @@
 package cc.lvjia.wings.client.flight;
 
-import com.google.common.collect.ImmutableMap;
 import cc.lvjia.wings.util.MathH;
+import com.google.common.collect.ImmutableMap;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.levelgen.synth.SimplexNoise;
 import net.minecraft.world.phys.Vec3;
@@ -83,6 +83,10 @@ public final class AnimatorAvian implements Animator {
         this.flap(this.movement.update());
     }
 
+    private float getWeight(int index) {
+        return Math.min(Math.abs(index - 1), 2) / 2.0F;
+    }
+
     private interface Movement {
         Vec3 getWingRotation(int index, float delta);
 
@@ -94,17 +98,49 @@ public final class AnimatorAvian implements Animator {
         }
     }
 
+    @FunctionalInterface
+    private interface RotationGetter {
+        Vec3 get(Movement movement, int index, float delta);
+    }
+
+    private record WingPose(ImmutableMap<Integer, Vec3> rotations) {
+
+        private static Builder builder() {
+                return new Builder();
+            }
+
+            public Vec3 get(int index) {
+                return this.rotations.getOrDefault(index, Vec3.ZERO);
+            }
+
+            private static final class Builder {
+                private final ImmutableMap.Builder<Integer, Vec3> rotations = ImmutableMap.builder();
+
+                private Builder() {
+                }
+
+                private Builder with(int index, double x, double y, double z) {
+                    this.rotations.put(index, new Vec3(x, y, z));
+                    return this;
+                }
+
+                private WingPose build() {
+                    return new WingPose(this.rotations.build());
+                }
+            }
+        }
+
     private final class RestPosition implements Movement {
         private final WingPose wing = WingPose.builder()
-            .with(0, 0.0D, -23.5D, -16.0D)
-            .with(1, 0.0D, 13.0D, 29.0D)
-            .with(2, 0.0D, 12.0D, -28.0D)
-            .with(3, 0.0D, 4.0D, 18.3D)
-            .build();
+                .with(0, 0.0D, -23.5D, -16.0D)
+                .with(1, 0.0D, 13.0D, 29.0D)
+                .with(2, 0.0D, 12.0D, -28.0D)
+                .with(3, 0.0D, 4.0D, 18.3D)
+                .build();
 
         private final WingPose feather = WingPose.builder()
-            .with(0, 0.0D, 0.0D, 23.48D)
-            .build();
+                .with(0, 0.0D, 0.0D, 23.48D)
+                .build();
 
         @Override
         public Vec3 getWingRotation(int index, float delta) {
@@ -122,10 +158,6 @@ public final class AnimatorAvian implements Animator {
         }
     }
 
-    private float getWeight(int index) {
-        return Math.min(Math.abs(index - 1), 2) / 2.0F;
-    }
-
     private final class LandMovement implements Movement {
         @Override
         public Vec3 getWingRotation(int index, float delta) {
@@ -134,7 +166,7 @@ public final class AnimatorAvian implements Animator {
             float cycle = time - pos * 1.2F;
             double x = (Math.sin(cycle + MathH.PI / 2.0D) - 1.0D) / 2.0D * 20.0D + (1.0D - pos) * 50.0D;
             double y = (Math.sin(cycle) * 20.0D + (1.0D - pos) * 14.0D) *
-                (1.0D - pos * (Math.min(Math.sin(cycle + MathH.PI), 0.0D) / 2.0D + 1.0D) * Math.sin(time));
+                    (1.0D - pos * (Math.min(Math.sin(cycle + MathH.PI), 0.0D) / 2.0D + 1.0D) * Math.sin(time));
             return AnimatorAvian.this.restPosition.getWingRotation(index, delta).add(new Vec3(x, y, 4.0D));
         }
 
@@ -177,18 +209,18 @@ public final class AnimatorAvian implements Animator {
 
     private final class IdleMovement implements Movement {
         private final WingPose wing = WingPose.builder()
-            .with(0, 40.0D, -60.0D, -50.0D)
-            .with(1, 72.0D, 10.0D, 100.0D)
-            .with(2, 0.0D, -10.0D, -120.0D)
-            .with(3, 10.0D, 0.0D, 100.0D)
-            .build();
+                .with(0, 40.0D, -60.0D, -50.0D)
+                .with(1, 72.0D, 10.0D, 100.0D)
+                .with(2, 0.0D, -10.0D, -120.0D)
+                .with(3, 10.0D, 0.0D, 100.0D)
+                .build();
 
         private final WingPose feather = WingPose.builder()
-            .with(0, 10.0D, 20.0D, 23.48D)
-            .with(1, 0.0D, 20.0D, -70.0D)
-            .with(2, 0.0D, 10.0D, 40.0D)
-            .with(3, -20.0D, 0.0D, 20.0D)
-            .build();
+                .with(0, 10.0D, 20.0D, 23.48D)
+                .with(1, 0.0D, 20.0D, -70.0D)
+                .with(2, 0.0D, 10.0D, 40.0D)
+                .with(3, -20.0D, 0.0D, 20.0D)
+                .build();
 
         @Override
         public Vec3 getWingRotation(int index, float delta) {
@@ -222,7 +254,7 @@ public final class AnimatorAvian implements Animator {
             float cycle = time - pos * 1.2F;
             double x = (Math.sin(cycle + MathH.PI / 2.0D) - 1.0D) / 2.0D * 16.0D + 8.0D;
             double y = (Math.sin(cycle) * 26.0D + 12.0D) *
-                (1.0D - pos * (Math.min(Math.sin(cycle + MathH.PI), 0.0D) / 2.0D + 1.0D) * Math.sin(time));
+                    (1.0D - pos * (Math.min(Math.sin(cycle + MathH.PI), 0.0D) / 2.0D + 1.0D) * Math.sin(time));
             return AnimatorAvian.this.restPosition.getWingRotation(index, delta).add(x, y, 0.0D);
         }
 
@@ -245,11 +277,11 @@ public final class AnimatorAvian implements Animator {
         private final SimplexNoise noise = new SimplexNoise(new LegacyRandomSource(new Random().nextLong()));
 
         private final WingPose wing = WingPose.builder()
-            .with(0, 30.0D, -23.0D, -50.0D)
-            .with(1, -10.0D, 5.0D, -10.0D)
-            .with(2, -30.0D, -20.0D, -20.0D)
-            .with(3, -20.0D, 0.0D, 20.0D)
-            .build();
+                .with(0, 30.0D, -23.0D, -50.0D)
+                .with(1, -10.0D, 5.0D, -10.0D)
+                .with(2, -30.0D, -20.0D, -20.0D)
+                .with(3, -20.0D, 0.0D, 20.0D)
+                .build();
 
         private int time;
 
@@ -304,9 +336,9 @@ public final class AnimatorAvian implements Animator {
             Vec3 endRot = getter.get(this.end, index, delta);
             float t = MathH.easeInOut(MathH.lerp(this.lastTime, this.time, delta) / this.duration);
             return new Vec3(
-                MathH.lerpDegrees(startRot.x, endRot.x, t),
-                MathH.lerpDegrees(startRot.y, endRot.y, t),
-                MathH.lerpDegrees(startRot.z, endRot.z, t)
+                    MathH.lerpDegrees(startRot.x, endRot.x, t),
+                    MathH.lerpDegrees(startRot.y, endRot.y, t),
+                    MathH.lerpDegrees(startRot.z, endRot.z, t)
             );
         }
 
@@ -327,43 +359,6 @@ public final class AnimatorAvian implements Animator {
         @Override
         public void onEnd() {
             this.isActive = false;
-        }
-    }
-
-    @FunctionalInterface
-    private interface RotationGetter {
-        Vec3 get(Movement movement, int index, float delta);
-    }
-
-    private static final class WingPose {
-        private final ImmutableMap<Integer, Vec3> rotations;
-
-        private WingPose(ImmutableMap<Integer, Vec3> rotations) {
-            this.rotations = rotations;
-        }
-
-        public Vec3 get(int index) {
-            return this.rotations.getOrDefault(index, Vec3.ZERO);
-        }
-
-        private static Builder builder() {
-            return new Builder();
-        }
-
-        private static final class Builder {
-            private final ImmutableMap.Builder<Integer, Vec3> rotations = ImmutableMap.builder();
-
-            private Builder() {
-            }
-
-            private Builder with(int index, double x, double y, double z) {
-                this.rotations.put(index, new Vec3(x, y, z));
-                return this;
-            }
-
-            private WingPose build() {
-                return new WingPose(this.rotations.build());
-            }
         }
     }
 }

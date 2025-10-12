@@ -44,25 +44,25 @@ public final class InSomniable {
 
     private static final class SearchState implements State {
         private final int[] mask = {
-            0xBFBE,
-            0xFFFD,
-            0xFFFF,
-            0xCD43,
-            0xFFFF,
-            0x7EFF,
-            0xFFFF,
-            0xF7FF,
-            0xFBFF
+                0xBFBE,
+                0xFFFD,
+                0xFFFF,
+                0xCD43,
+                0xFFFF,
+                0x7EFF,
+                0xFFFF,
+                0xF7FF,
+                0xFBFF
         };
 
         private final String[] members = {
-            "wings.dreamcatcher.jiu",
-            "wings.dreamcatcher.sua",
-            "wings.dreamcatcher.siyeon",
-            "wings.dreamcatcher.handong",
-            "wings.dreamcatcher.yoohyeon",
-            "wings.dreamcatcher.dami",
-            "wings.dreamcatcher.gahyeon",
+                "wings.dreamcatcher.jiu",
+                "wings.dreamcatcher.sua",
+                "wings.dreamcatcher.siyeon",
+                "wings.dreamcatcher.handong",
+                "wings.dreamcatcher.yoohyeon",
+                "wings.dreamcatcher.dami",
+                "wings.dreamcatcher.gahyeon",
         };
 
         private int state;
@@ -144,8 +144,8 @@ public final class InSomniable {
 
         public InSomniable deserialize(ValueInput input) {
             State state = input.getInt(SEARCH_STATE)
-                .map(value -> (State) new SearchState(value))
-                .orElse(InSomniacState.INSTANCE);
+                    .map(value -> (State) new SearchState(value))
+                    .orElse(InSomniacState.INSTANCE);
             return new InSomniable(state);
         }
     }

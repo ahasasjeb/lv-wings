@@ -38,12 +38,12 @@ public final class ServerEventHandler {
         ItemStack stack = player.getItemInHand(hand);
         if (event.getTarget() instanceof Bat && stack.getItem() == Items.GLASS_BOTTLE) {
             player.level().playSound(
-                player,
-                player.getX(), player.getY(), player.getZ(),
-                SoundEvents.BOTTLE_FILL,
-                SoundSource.NEUTRAL,
-                1.0F,
-                1.0F
+                    player,
+                    player.getX(), player.getY(), player.getZ(),
+                    SoundEvents.BOTTLE_FILL,
+                    SoundSource.NEUTRAL,
+                    1.0F,
+                    1.0F
             );
             ItemStack destroyed = stack.copy();
             if (!player.getAbilities().instabuild) {
@@ -75,21 +75,21 @@ public final class ServerEventHandler {
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Flights.get(event.getEntity()).ifPresent(flight ->
-            flight.tick(event.getEntity())
+                flight.tick(event.getEntity())
         );
     }
 
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent event) {
         Flights.ifPlayer(event.getEntity(), (player, flight) ->
-            flight.setIsFlying(false, Flight.PlayerSet.ofAll())
+                flight.setIsFlying(false, Flight.PlayerSet.ofAll())
         );
     }
 
     @SubscribeEvent
     public static void onPlayerFlightCheck(PlayerFlightCheckEvent event) {
         Flights.get(event.getEntity()).filter(Flight::isFlying)
-            .ifPresent(flight -> event.setFlying());
+                .ifPresent(flight -> event.setFlying());
     }
 
     @SubscribeEvent

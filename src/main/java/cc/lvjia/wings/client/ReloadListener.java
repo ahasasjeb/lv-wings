@@ -1,10 +1,10 @@
 package cc.lvjia.wings.client;
 
-import com.mojang.logging.LogUtils;
 import cc.lvjia.wings.WingsMod;
 import cc.lvjia.wings.client.apparatus.WingForm;
 import cc.lvjia.wings.client.renderer.LayerCapeWings;
 import cc.lvjia.wings.client.renderer.LayerWings;
+import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
@@ -14,14 +14,13 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import org.slf4j.Logger;
 
+import javax.annotation.Nonnull;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
 import static net.neoforged.fml.util.ObfuscationReflectionHelper.getPrivateValue;
-
-import javax.annotation.Nonnull;
 
 public class ReloadListener implements ResourceManagerReloadListener {
 
@@ -30,7 +29,7 @@ public class ReloadListener implements ResourceManagerReloadListener {
     @Override
     public void onResourceManagerReload(@Nonnull ResourceManager rm) {
 
-        if(WingForm.isEmpty()){
+        if (WingForm.isEmpty()) {
             WingForm.register(WingsMod.ANGEL_WINGS, ClientProxy.createAvianWings(WingsMod.WINGS.getKey(WingsMod.ANGEL_WINGS)));
             WingForm.register(WingsMod.PARROT_WINGS, ClientProxy.createAvianWings(WingsMod.WINGS.getKey(WingsMod.PARROT_WINGS)));
             WingForm.register(WingsMod.BAT_WINGS, ClientProxy.createAvianWings(WingsMod.WINGS.getKey(WingsMod.BAT_WINGS)));
@@ -47,14 +46,14 @@ public class ReloadListener implements ResourceManagerReloadListener {
         Minecraft mc = Minecraft.getInstance();
         EntityRenderDispatcher manager = mc.getEntityRenderDispatcher();
         Stream<AvatarRenderer<?>> playerRenderers = manager.getPlayerRenderers().values().stream()
-            .filter(AvatarRenderer.class::isInstance)
-            .map(AvatarRenderer.class::cast);
+                .filter(AvatarRenderer.class::isInstance)
+                .map(AvatarRenderer.class::cast);
         Stream<AvatarRenderer<?>> mannequinRenderers = manager.getMannequinRenderers().values().stream()
-            .filter(AvatarRenderer.class::isInstance)
-            .map(AvatarRenderer.class::cast);
+                .filter(AvatarRenderer.class::isInstance)
+                .map(AvatarRenderer.class::cast);
         Stream<AvatarRenderer<?>> otherRenderers = getRendererMap(manager).values().stream()
-            .filter(AvatarRenderer.class::isInstance)
-            .map(AvatarRenderer.class::cast);
+                .filter(AvatarRenderer.class::isInstance)
+                .map(AvatarRenderer.class::cast);
 
         Stream.concat(Stream.concat(playerRenderers, mannequinRenderers), otherRenderers)
                 .unordered()

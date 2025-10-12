@@ -10,13 +10,19 @@ import java.lang.reflect.Field;
 import java.util.function.BiFunction;
 
 public final class Access {
+    private static final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();
+
     private Access() {
     }
 
-    private static final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();
-
     public static <T> NamingGetterHandleBuilder<T> getter(Class<T> refc) {
         return new NamingGetterHandleBuilder<>(refc);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T extends Throwable> RuntimeException rethrow(Throwable t) throws T {
+        //noinspection unchecked
+        throw (T) t;
     }
 
     private static abstract class NamingBuilder<T, F> {
@@ -64,10 +70,6 @@ public final class Access {
             super(refc, names);
         }
 
-        public <R> MethodHandle type(Class<R> type) {
-            return find(this.refc, this.names, MethodType.methodType(type, this.refc));
-        }
-
         private static MethodHandle find(Class<?> refc, ObjectArrayList<String> names, MethodType type) {
             for (ObjectListIterator<String> it = names.iterator(); ; ) {
                 String name = it.next();
@@ -96,11 +98,9 @@ public final class Access {
                 }
             }
         }
-    }
 
-    @SuppressWarnings("unchecked")
-    public static <T extends Throwable> RuntimeException rethrow(Throwable t) throws T {
-        //noinspection unchecked
-        throw (T) t;
+        public <R> MethodHandle type(Class<R> type) {
+            return find(this.refc, this.names, MethodType.methodType(type, this.refc));
+        }
     }
 }

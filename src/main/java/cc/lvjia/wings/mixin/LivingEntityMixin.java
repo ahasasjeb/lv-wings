@@ -28,7 +28,7 @@ public abstract class LivingEntityMixin {
      * 重定向视觉游泳检查，区分翅膀飞行和游泳状态
      */
     @Redirect(method = "isVisuallySwimming()Z",
-              at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isFallFlying()Z"))
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isFallFlying()Z"))
     private boolean wings$redirectVisualSwimmingFlightCheck(LivingEntity instance) {
         return WingsHooks.onFlightCheck(instance, instance.isFallFlying());
     }

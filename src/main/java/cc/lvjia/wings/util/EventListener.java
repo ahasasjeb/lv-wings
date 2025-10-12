@@ -11,7 +11,7 @@ import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 public class EventListener {
 
     @SubscribeEvent
-    public static void onAddClientReloadListeners(AddClientReloadListenersEvent event){
+    public static void onAddClientReloadListeners(AddClientReloadListenersEvent event) {
         event.addListener(WingsMod.locate("client_reload_listener"), new ReloadListener());
     }
 
