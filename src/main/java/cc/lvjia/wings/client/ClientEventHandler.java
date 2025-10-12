@@ -16,6 +16,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
@@ -108,7 +109,14 @@ public final class ClientEventHandler {
                     player.yBodyRot - player.getYRot(),
                     delta
                 );
-                event.setRoll(MathH.lerpDegrees(0.0F, -roll * 0.25F, amt));
+                float targetRoll = MathH.lerpDegrees(0.0F, -roll * 0.25F, amt);
+                // Failsafe: guard against sporadic extreme values that flip the camera sideways
+                if (!Float.isFinite(targetRoll) || Math.abs(targetRoll) > 75.0F) {
+                    targetRoll = 0.0F;
+                } else {
+                    targetRoll = Mth.clamp(targetRoll, -60.0F, 60.0F);
+                }
+                event.setRoll(targetRoll);
             }
         });
     }
