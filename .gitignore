@@ -21,6 +21,7 @@ build
 eclipse
 run
 run-server
+.vscode
 logs
 
 # Files from Forge MDK

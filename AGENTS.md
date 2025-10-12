@@ -3,3 +3,4 @@ Target version: 1.21.10
 Java 21
 Build: ./gradlew build
 No prepareRunClientCompile
+src\main\java\cc\lvjia\wings\WingsMod.java
