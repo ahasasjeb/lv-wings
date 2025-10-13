@@ -16,8 +16,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.event.TickEvent;
@@ -28,7 +31,26 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = WingsMod.ID)
 public final class ClientEventHandler {
+    private static ResourceKey<Level> lastPlayerDimension;
+
     private ClientEventHandler() {
+    }
+
+    @SubscribeEvent
+    public static void onClientTick(TickEvent.ClientTickEvent event) {
+        if (event.phase != TickEvent.Phase.END) {
+            return;
+        }
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) {
+            lastPlayerDimension = null;
+            return;
+        }
+        ResourceKey<Level> current = player.level().dimension();
+        if (current != lastPlayerDimension) {
+            lastPlayerDimension = current;
+            FlightViews.invalidate(player);
+        }
     }
 
     @SubscribeEvent
@@ -81,7 +103,7 @@ public final class ClientEventHandler {
 
     @SubscribeEvent
     public static void onCameraSetup(ViewportEvent.ComputeCameraAngles event) {
-    Flights.ifPlayer(event.getCamera().getEntity(), (player, flight) -> {
+        Flights.ifPlayer(event.getCamera().getEntity(), (player, flight) -> {
             float delta = (float) event.getPartialTick();
             float amt = flight.getFlyingAmount(delta);
             if (amt > 0.0F) {
@@ -90,7 +112,13 @@ public final class ClientEventHandler {
                     player.yBodyRot - player.getYRot(),
                     delta
                 );
-                event.setRoll(MathH.lerpDegrees(0.0F, -roll * 0.25F, amt));
+                float targetRoll = MathH.lerpDegrees(0.0F, -roll * 0.25F, amt);
+                if (!Float.isFinite(targetRoll) || Math.abs(targetRoll) > 75.0F) {
+                    targetRoll = 0.0F;
+                } else {
+                    targetRoll = Mth.clamp(targetRoll, -60.0F, 60.0F);
+                }
+                event.setRoll(targetRoll);
             }
         });
     }

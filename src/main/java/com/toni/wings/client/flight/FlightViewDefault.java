@@ -66,6 +66,11 @@ public final class FlightViewDefault implements FlightView {
         }
     }
 
+    @Override
+    public void invalidate() {
+        this.animator = ABSENT_ANIMATOR;
+    }
+
     private interface Strategy {
         void update(Flight flight, Player player);
 

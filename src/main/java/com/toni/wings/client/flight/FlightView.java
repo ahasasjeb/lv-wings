@@ -15,6 +15,9 @@ public interface FlightView {
 
     void tickEyeHeight(float value, FloatConsumer valueOut);
 
+    default void invalidate() {
+    }
+
     interface FormRenderer {
         ResourceLocation getTexture();
 

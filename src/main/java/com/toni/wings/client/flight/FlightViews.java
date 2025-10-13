@@ -30,6 +30,10 @@ public final class FlightViews {
         return HOLDER.state().get(player, null);
     }
 
+    public static void invalidate(LivingEntity player) {
+        get(player).ifPresent(FlightView::invalidate);
+    }
+
     /*@CapabilityInject(FlightView.class)
     static void inject(Capability<FlightView> capability) {
         HOLDER.inject(capability);
