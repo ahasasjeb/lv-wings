@@ -103,4 +103,5 @@ public final class Flights {
             flight.sync(Flight.PlayerSet.ofPlayer((ServerPlayer) event.getEntity()))
         );
     }
+
 }

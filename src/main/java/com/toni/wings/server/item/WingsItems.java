@@ -51,8 +51,6 @@ public final class WingsItems {
         ResourceKey<CreativeModeTab> tabKey = event.getTabKey();
         if (tabKey == CreativeModeTabs.FOOD_AND_DRINKS) {
             event.accept(BAT_BLOOD_BOTTLE.get());
-        }
-        if (tabKey == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             event.accept(ANGEL_WINGS_BOTTLE.get());
             event.accept(PARROT_WINGS_BOTTLE.get());
             event.accept(SLIME_WINGS_BOTTLE.get());
