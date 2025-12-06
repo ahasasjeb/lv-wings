@@ -5,9 +5,11 @@ import com.toni.wings.server.asm.GetLivingHeadLimitEvent;
 import com.toni.wings.server.asm.PlayerFlightCheckEvent;
 import com.toni.wings.server.asm.PlayerFlownEvent;
 import com.toni.wings.server.command.WingsCommand;
+import com.toni.wings.server.effect.WingsEffects;
 import com.toni.wings.server.flight.Flight;
 import com.toni.wings.server.flight.Flights;
 import com.toni.wings.server.item.WingsItems;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -23,6 +25,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -100,6 +103,22 @@ public final class ServerEventHandler {
         Flights.get(player).ifPresent(flight -> {
             flight.onFlown(player, event.getDirection());
         });
+    }
+
+    @SubscribeEvent
+    public static void onPlayerClone(PlayerEvent.Clone event) {
+        if (event.isWasDeath()) {
+            return;
+        }
+        Player cloned = event.getEntity();
+        if (cloned.level().isClientSide) {
+            return;
+        }
+        Player original = event.getOriginal();
+        MobEffectInstance wings = original.getEffect(WingsEffects.WINGS.get());
+        if (wings != null) {
+            cloned.addEffect(new MobEffectInstance(wings));
+        }
     }
 
     @SubscribeEvent
