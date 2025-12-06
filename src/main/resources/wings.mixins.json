@@ -1,0 +1,23 @@
+{
+  "required": true,
+  "package": "com.toni.wings.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "wings.refmap.json",
+  "mixins": [
+    "LivingEntityMixin",
+    "PlayerMixin",
+    "ServerGamePacketListenerImplMixin"
+  ],
+  "client": [
+    "client.CameraMixin",
+    "client.EntityTurnMixin",
+    "client.ForgeHooksClientMixin",
+    "client.ItemInHandRendererMixin",
+    "client.LocalPlayerMixin",
+    "client.PlayerModelMixin",
+    "client.PlayerRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
