@@ -6,7 +6,7 @@ import cc.lvjia.wings.client.model.ModelWingsAvian;
 import cc.lvjia.wings.client.model.ModelWingsInsectoid;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.multiplayer.ClientLevel;

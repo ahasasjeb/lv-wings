@@ -19,8 +19,9 @@ import cc.lvjia.wings.util.KeyInputListener;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
@@ -36,32 +37,32 @@ public final class ClientProxy extends Proxy {
     private static ModelWings<AnimatorInsectoid> insectoidWings;
     private static ModelWings<AnimatorAvian> avianWings;
 
-    static WingForm<AnimatorAvian> createAvianWings(ResourceLocation name) {
+    static WingForm<AnimatorAvian> createAvianWings(Identifier name) {
         avianWings = new ModelWingsAvian(getModel().bakeLayer(LayerWings.AVIAN_WINGS));
         return ClientProxy.createWings(name, AnimatorAvian::new, avianWings);
     }
 
-    static WingForm<AnimatorAvian> createEndPortalWings(ResourceLocation name) {
+    static WingForm<AnimatorAvian> createEndPortalWings(Identifier name) {
         avianWings = new ModelWingsAvian(getModel().bakeLayer(LayerWings.AVIAN_WINGS));
-        return ClientProxy.createWings(name, AnimatorAvian::new, avianWings, RenderType::endPortal);
+        return ClientProxy.createWings(name, AnimatorAvian::new, avianWings, RenderTypes::endPortal);
     }
 
-    static WingForm<AnimatorInsectoid> createInsectoidWings(ResourceLocation name) {
+    static WingForm<AnimatorInsectoid> createInsectoidWings(Identifier name) {
         insectoidWings = new ModelWingsInsectoid(getModel().bakeLayer(LayerWings.INSECTOID_WINGS));
         return ClientProxy.createWings(name, AnimatorInsectoid::new, insectoidWings);
     }
 
-    private static <A extends Animator> WingForm<A> createWings(ResourceLocation name, Supplier<A> animator, ModelWings<A> model) {
+    private static <A extends Animator> WingForm<A> createWings(Identifier name, Supplier<A> animator, ModelWings<A> model) {
         return createWings(name, animator, model, null);
     }
 
-    private static <A extends Animator> WingForm<A> createWings(ResourceLocation name, Supplier<A> animator, ModelWings<A> model, Supplier<RenderType> renderType) {
+    private static <A extends Animator> WingForm<A> createWings(Identifier name, Supplier<A> animator, ModelWings<A> model, Supplier<RenderType> renderType) {
         String texturePath = String.format("textures/entity/%s.png", name.getPath());
-        ResourceLocation texture = ResourceLocation.tryBuild(name.getNamespace(), texturePath);
+        Identifier texture = Identifier.tryBuild(name.getNamespace(), texturePath);
         if (texture == null) {
             throw new IllegalArgumentException("Invalid texture path: " + texturePath);
         }
-        Supplier<RenderType> actualRenderType = renderType != null ? renderType : () -> RenderType.entityCutout(texture);
+        Supplier<RenderType> actualRenderType = renderType != null ? renderType : () -> RenderTypes.entityCutout(texture);
         return WingForm.of(
                 animator,
                 model,

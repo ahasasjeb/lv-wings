@@ -19,7 +19,7 @@ import com.mojang.serialization.Lifecycle;
 import net.minecraft.core.DefaultedMappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -114,8 +114,8 @@ public final class WingsMod {
         return INSTANCE;
     }
 
-    public static ResourceLocation locate(String name) {
-        ResourceLocation location = ResourceLocation.tryBuild(WingsMod.ID, name);
+    public static Identifier locate(String name) {
+        Identifier location = Identifier.tryBuild(WingsMod.ID, name);
         if (location == null) {
             throw new IllegalArgumentException("Invalid resource path: " + name);
         }
@@ -138,7 +138,7 @@ public final class WingsMod {
     }
 
     public static final class Names {
-        public static final ResourceLocation
+        public static final Identifier
                 NONE = create("none"),
                 WINGLESS = create("wingless"),
                 ANGEL = create("angel_wings"),
@@ -156,8 +156,8 @@ public final class WingsMod {
         private Names() {
         }
 
-        private static ResourceLocation create(String path) {
-            ResourceLocation location = ResourceLocation.tryBuild(ID, path);
+        private static Identifier create(String path) {
+            Identifier location = Identifier.tryBuild(ID, path);
             if (location == null) {
                 throw new IllegalArgumentException("Invalid resource path: " + path);
             }

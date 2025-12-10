@@ -2,7 +2,7 @@ package cc.lvjia.wings.server.config;
 
 import cc.lvjia.wings.server.item.ImmutableWingSettings;
 import cc.lvjia.wings.server.item.WingSettings;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,7 +14,7 @@ public final class ConfigWingSettings implements WingSettings {
     private static final double MIN_EXERTION = 0.0D;
     private static final double MAX_EXERTION = 10.0D;
 
-    private final ResourceLocation key;
+    private final Identifier key;
     private final ModConfigSpec.IntValue requiredFlightSatiation;
     private final ModConfigSpec.DoubleValue flyingExertion;
     private final ModConfigSpec.IntValue requiredLandSatiation;
@@ -24,11 +24,11 @@ public final class ConfigWingSettings implements WingSettings {
     private final int defaultLandSatiation;
     private final double defaultLandingExertion;
 
-    ConfigWingSettings(ResourceLocation key, ModConfigSpec.Builder builder) {
+    ConfigWingSettings(Identifier key, ModConfigSpec.Builder builder) {
         this(key, builder, 5, 0.0001D, 2, 0.005D);
     }
 
-    ConfigWingSettings(ResourceLocation key, ModConfigSpec.Builder builder, int defaultFlightSatiation, double defaultFlyingExertion, int defaultLandSatiation, double defaultLandingExertion) {
+    ConfigWingSettings(Identifier key, ModConfigSpec.Builder builder, int defaultFlightSatiation, double defaultFlyingExertion, int defaultLandSatiation, double defaultLandingExertion) {
         this.key = key;
         this.defaultFlightSatiation = defaultFlightSatiation;
         this.defaultFlyingExertion = defaultFlyingExertion;
@@ -53,7 +53,7 @@ public final class ConfigWingSettings implements WingSettings {
         builder.pop();
     }
 
-    public ResourceLocation getKey() {
+    public Identifier getKey() {
         return this.key;
     }
 

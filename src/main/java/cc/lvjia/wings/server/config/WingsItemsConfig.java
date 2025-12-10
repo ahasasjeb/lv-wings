@@ -3,7 +3,7 @@ package cc.lvjia.wings.server.config;
 import cc.lvjia.wings.WingsMod;
 import cc.lvjia.wings.server.item.WingSettings;
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.stream.Stream;
@@ -45,7 +45,7 @@ public final class WingsItemsConfig {
     private WingsItemsConfig() {
     }
 
-    public static ImmutableMap<ResourceLocation, WingSettings> createWingAttributes() {
+    public static ImmutableMap<Identifier, WingSettings> createWingAttributes() {
         return Stream.of(ANGEL, PARROT, SLIME, BLUE_BUTTERFLY, MONARCH_BUTTERFLY, FIRE, BAT, FAIRY, EVIL, DRAGON, LVJIA_SUPER)
                 .collect(ImmutableMap.toImmutableMap(ConfigWingSettings::getKey, ConfigWingSettings::toImmutable));
     }

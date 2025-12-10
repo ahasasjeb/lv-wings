@@ -6,13 +6,14 @@ import cc.lvjia.wings.server.flight.Flights;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.PlayerCapeModel;
-import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.player.PlayerCapeModel;
+import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
@@ -64,7 +65,7 @@ public class LayerCapeWings extends RenderLayer<AvatarRenderState, PlayerModel> 
                 this.model,
                 state,
                 poseStack,
-                RenderType.entitySolid(capeTexture.texturePath()),
+            RenderTypes.entitySolid(capeTexture.texturePath()),
                 packedLight,
                 OverlayTexture.NO_OVERLAY,
                 state.outlineColor,

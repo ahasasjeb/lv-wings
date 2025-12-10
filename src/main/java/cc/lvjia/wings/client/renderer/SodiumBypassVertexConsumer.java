@@ -40,6 +40,12 @@ public final class SodiumBypassVertexConsumer implements VertexConsumer {
     }
 
     @Override
+    public VertexConsumer setColor(int color) {
+        this.delegate.setColor(color);
+        return this;
+    }
+
+    @Override
     public VertexConsumer setUv(float u, float v) {
         this.delegate.setUv(u, v);
         return this;
@@ -60,6 +66,12 @@ public final class SodiumBypassVertexConsumer implements VertexConsumer {
     @Override
     public VertexConsumer setNormal(float normalX, float normalY, float normalZ) {
         this.delegate.setNormal(normalX, normalY, normalZ);
+        return this;
+    }
+
+    @Override
+    public VertexConsumer setLineWidth(float width) {
+        this.delegate.setLineWidth(width);
         return this;
     }
 }

@@ -3,8 +3,9 @@ package cc.lvjia.wings.client.apparatus;
 import cc.lvjia.wings.client.flight.Animator;
 import cc.lvjia.wings.client.model.ModelWings;
 import cc.lvjia.wings.server.apparatus.FlightApparatus;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.resources.Identifier;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,11 +17,11 @@ public final class WingForm<A extends Animator> {
     private static final Map<FlightApparatus, WingForm<?>> FORMS = new HashMap<>();
 
     private final Supplier<A> animator;
-    private final ResourceLocation texture;
+    private final Identifier texture;
     private final Supplier<RenderType> renderType;
     private ModelWings<A> model;
 
-    private WingForm(Supplier<A> animator, ModelWings<A> model, ResourceLocation texture, Supplier<RenderType> renderType) {
+    private WingForm(Supplier<A> animator, ModelWings<A> model, Identifier texture, Supplier<RenderType> renderType) {
         this.animator = Objects.requireNonNull(animator);
 
         this.model = Objects.requireNonNull(model);
@@ -28,11 +29,11 @@ public final class WingForm<A extends Animator> {
         this.renderType = Objects.requireNonNull(renderType);
     }
 
-    public static <A extends Animator> WingForm<A> of(Supplier<A> animator, ModelWings<A> model, ResourceLocation texture) {
-        return new WingForm<>(animator, model, texture, () -> RenderType.entityCutout(texture));
+    public static <A extends Animator> WingForm<A> of(Supplier<A> animator, ModelWings<A> model, Identifier texture) {
+        return new WingForm<>(animator, model, texture, () -> RenderTypes.entityCutout(texture));
     }
 
-    public static <A extends Animator> WingForm<A> of(Supplier<A> animator, ModelWings<A> model, ResourceLocation texture, Supplier<RenderType> renderType) {
+    public static <A extends Animator> WingForm<A> of(Supplier<A> animator, ModelWings<A> model, Identifier texture, Supplier<RenderType> renderType) {
         return new WingForm<>(animator, model, texture, renderType);
     }
 
@@ -64,7 +65,7 @@ public final class WingForm<A extends Animator> {
         this.model = model;
     }
 
-    public ResourceLocation getTexture() {
+    public Identifier getTexture() {
         return this.texture;
     }
 

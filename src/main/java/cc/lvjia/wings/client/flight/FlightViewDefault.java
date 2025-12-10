@@ -7,8 +7,8 @@ import cc.lvjia.wings.server.flight.Flight;
 import cc.lvjia.wings.util.function.FloatConsumer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 
@@ -151,7 +151,7 @@ public final class FlightViewDefault implements FlightView {
                 public void ifFormPresent(Consumer<FormRenderer> consumer) {
                     consumer.accept(new FormRenderer() {
                         @Override
-                        public ResourceLocation getTexture() {
+                        public Identifier getTexture() {
                             return WingStrategy.this.shape.getTexture();
                         }
 

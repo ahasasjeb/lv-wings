@@ -1,6 +1,6 @@
 package cc.lvjia.wings.server.config;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +21,7 @@ public final class WingsConfig {
 
         WEAR_OBSTRUCTIONS = builder
                 .comment("List of item IDs that prevent players from equipping wings.")
-                .defineListAllowEmpty("wearObstructions", DEFAULT_WEAR_OBSTRUCTIONS, () -> "", value -> value instanceof String && ResourceLocation.tryParse((String) value) != null);
+                .defineListAllowEmpty("wearObstructions", DEFAULT_WEAR_OBSTRUCTIONS, () -> "", value -> value instanceof String && Identifier.tryParse((String) value) != null);
 
         builder.pop();
         SPEC = builder.build();
@@ -46,7 +46,7 @@ public final class WingsConfig {
             if (entry.isEmpty()) {
                 continue;
             }
-            if (ResourceLocation.tryParse(entry) == null) {
+            if (Identifier.tryParse(entry) == null) {
                 LOGGER.warn("Ignoring invalid wear obstruction id '{}'. Expected a namespaced id such as 'minecraft:elytra'.", entry);
                 continue;
             }

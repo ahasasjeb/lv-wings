@@ -13,7 +13,7 @@ import cc.lvjia.wings.util.MathH;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceKey;
@@ -103,7 +103,12 @@ public final class ClientEventHandler {
 
     @SubscribeEvent
     public static void onCameraSetup(ViewportEvent.ComputeCameraAngles event) {
-        Flights.ifPlayer(event.getCamera().getEntity(), (player, flight) -> {
+        Entity cameraEntity = Minecraft.getInstance().getCameraEntity();
+        if (cameraEntity == null) {
+            return;
+        }
+
+        Flights.ifPlayer(cameraEntity, (player, flight) -> {
             float delta = (float) event.getPartialTick();
             float amt = flight.getFlyingAmount(delta);
             if (amt > 0.0F) {

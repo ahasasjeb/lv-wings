@@ -9,7 +9,7 @@ import cc.lvjia.wings.util.NBTSerializer;
 import com.google.common.collect.Lists;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
@@ -37,7 +37,7 @@ public final class FlightDefault implements Flight {
 
     private static final float PITCH_OFFSET = 30.0F;
 
-    private static final ResourceLocation DEFAULT_WING_ID = WingsMod.Names.NONE;
+    private static final Identifier DEFAULT_WING_ID = WingsMod.Names.NONE;
 
     private final List<FlyingListener> flyingListeners = Lists.newArrayList();
 
@@ -55,17 +55,17 @@ public final class FlightDefault implements Flight {
 
     private WingState state = this.voidState;
 
-    private static ResourceLocation wingIdFor(FlightApparatus wing) {
-        ResourceLocation key = wing != null ? WingsMod.WINGS.getKey(wing) : null;
+    private static Identifier wingIdFor(FlightApparatus wing) {
+        Identifier key = wing != null ? WingsMod.WINGS.getKey(wing) : null;
         return key != null ? key : DEFAULT_WING_ID;
     }
 
-    private static FlightApparatus wingFrom(ResourceLocation id) {
+    private static FlightApparatus wingFrom(Identifier id) {
         return id != null ? WingsMod.WINGS.getOptional(id).orElse(FlightApparatus.NONE) : FlightApparatus.NONE;
     }
 
     private static FlightApparatus wingFrom(String rawId) {
-        return wingFrom(ResourceLocation.tryParse(rawId));
+        return wingFrom(Identifier.tryParse(rawId));
     }
 
     @Override
@@ -236,16 +236,16 @@ public final class FlightDefault implements Flight {
     public void serialize(FriendlyByteBuf buf) {
         buf.writeBoolean(this.isFlying());
         buf.writeVarInt(this.getTimeFlying());
-        buf.writeResourceLocation(wingIdFor(this.getWing()));
+        buf.writeIdentifier(wingIdFor(this.getWing()));
     }
 
     @Override
     public void deserialize(FriendlyByteBuf buf) {
         this.setIsFlying(buf.readBoolean());
         this.setTimeFlying(buf.readVarInt());
-        ResourceLocation wingId;
+        Identifier wingId;
         try {
-            wingId = buf.readResourceLocation();
+            wingId = buf.readIdentifier();
         } catch (IllegalArgumentException ex) {
             wingId = DEFAULT_WING_ID;
         }

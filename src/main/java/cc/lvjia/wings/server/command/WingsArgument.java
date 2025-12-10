@@ -12,7 +12,7 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -35,7 +35,7 @@ public class WingsArgument implements ArgumentType<FlightApparatus> {
 
     @Override
     public FlightApparatus parse(StringReader reader) throws CommandSyntaxException {
-        ResourceLocation key = ResourceLocation.read(reader);
+        Identifier key = Identifier.read(reader);
         return WingsMod.WINGS.getOptional(key).orElseThrow(() -> ERROR_UNKNOWN_WING.create(key));
     }
 

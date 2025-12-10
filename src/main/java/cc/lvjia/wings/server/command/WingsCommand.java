@@ -7,10 +7,13 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import net.minecraft.commands.Commands;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.PermissionCheck;
+import net.minecraft.server.permissions.Permissions;
 
 import java.util.Collection;
 import java.util.List;
@@ -23,8 +26,10 @@ public class WingsCommand {
 
     private static final SimpleCommandExceptionType ERROR_TAKE_FAILED = new SimpleCommandExceptionType(Component.translatable("commands.wings.take.failed"));
 
+    private static final PermissionCheck PERMISSION_CHECK = new PermissionCheck.Require(Permissions.COMMANDS_GAMEMASTER);
+
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(literal("wings").requires(cs -> cs.hasPermission(2))
+        dispatcher.register(literal("wings").requires(Commands.hasPermission(PERMISSION_CHECK))
                 .then(literal("give")
                         .then(argument("wings", WingsArgument.wings())
                                 .executes(WingsCommand::giveWingSelf))
