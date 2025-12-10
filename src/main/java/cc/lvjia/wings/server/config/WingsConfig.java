@@ -14,6 +14,8 @@ public final class WingsConfig {
     private static final Logger LOGGER = LogManager.getLogger("WingsConfig");
     private static final List<String> DEFAULT_WEAR_OBSTRUCTIONS = List.of("minecraft:elytra");
     private static final ModConfigSpec.ConfigValue<List<? extends String>> WEAR_OBSTRUCTIONS;
+    private static final boolean DEFAULT_ALLOW_UNDERWATER_FLIGHT = false;
+    private static final ModConfigSpec.BooleanValue ALLOW_UNDERWATER_FLIGHT;
 
     static {
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
@@ -22,6 +24,10 @@ public final class WingsConfig {
         WEAR_OBSTRUCTIONS = builder
                 .comment("List of item IDs that prevent players from equipping wings.")
                 .defineListAllowEmpty("wearObstructions", DEFAULT_WEAR_OBSTRUCTIONS, () -> "", value -> value instanceof String && Identifier.tryParse((String) value) != null);
+
+        ALLOW_UNDERWATER_FLIGHT = builder
+            .comment("Whether players can fly while underwater. Disabled by default.")
+            .define("allowUnderwaterFlight", DEFAULT_ALLOW_UNDERWATER_FLIGHT);
 
         builder.pop();
         SPEC = builder.build();
@@ -66,7 +72,18 @@ public final class WingsConfig {
         return getWearObstructions().toArray(String[]::new);
     }
 
+    public static boolean isUnderwaterFlightAllowed() {
+        Boolean allow = ALLOW_UNDERWATER_FLIGHT.get();
+        if (allow == null) {
+            LOGGER.warn("Underwater flight flag is null. Reverting to default {}.", DEFAULT_ALLOW_UNDERWATER_FLIGHT);
+            ALLOW_UNDERWATER_FLIGHT.set(DEFAULT_ALLOW_UNDERWATER_FLIGHT);
+            return DEFAULT_ALLOW_UNDERWATER_FLIGHT;
+        }
+        return allow;
+    }
+
     public static void validate() {
         getWearObstructions();
+        isUnderwaterFlightAllowed();
     }
 }

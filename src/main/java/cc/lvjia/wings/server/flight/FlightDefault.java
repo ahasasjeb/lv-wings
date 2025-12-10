@@ -2,6 +2,7 @@ package cc.lvjia.wings.server.flight;
 
 import cc.lvjia.wings.WingsMod;
 import cc.lvjia.wings.server.apparatus.FlightApparatus;
+import cc.lvjia.wings.server.config.WingsConfig;
 import cc.lvjia.wings.server.effect.WingsEffects;
 import cc.lvjia.wings.util.CubicBezier;
 import cc.lvjia.wings.util.MathH;
@@ -131,7 +132,7 @@ public final class FlightDefault implements Flight {
 
     @Override
     public boolean canFly(Player player) {
-        return this.hasEffect(player) && this.flightApparatus.isUsable(player);
+        return !this.isUnderwaterFlightBlocked(player) && this.hasEffect(player) && this.flightApparatus.isUsable(player);
     }
 
     @Override
@@ -145,7 +146,15 @@ public final class FlightDefault implements Flight {
     }
 
     private void onWornUpdate(Player player) {
-        if (player.isEffectiveAi()) {
+        boolean underwaterFlightBlocked = this.isUnderwaterFlightBlocked(player);
+        if (underwaterFlightBlocked && this.isFlying()) {
+            if (player.level().isClientSide()) {
+                this.setIsFlying(false, PlayerSet.empty());
+            } else {
+                this.setIsFlying(false, PlayerSet.ofAll());
+            }
+        }
+        if (player.isEffectiveAi() && !underwaterFlightBlocked) {
             if (this.isFlying()) {
                 float speed = Mth.clampedLerp(MIN_SPEED, MAX_SPEED, player.zza);
                 float elevationBoost = MathH.transform(
@@ -174,6 +183,10 @@ public final class FlightDefault implements Flight {
             }
         }
         if (!player.level().isClientSide()) {
+            if (underwaterFlightBlocked) {
+                this.state = this.state.notFlying();
+                return;
+            }
             if (this.flightApparatus.isUsable(player)) {
                 (this.state = this.state.next(this.flightApparatus)).onUpdate(player);
             } else if (this.isFlying()) {
@@ -326,5 +339,9 @@ public final class FlightDefault implements Flight {
         private void onUpdate(Player player) {
             this.activity.onUpdate(player);
         }
+    }
+
+    private boolean isUnderwaterFlightBlocked(Player player) {
+        return player.isUnderWater() && !WingsConfig.isUnderwaterFlightAllowed();
     }
 }
