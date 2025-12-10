@@ -12,17 +12,15 @@ import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.ClientAsset;
 import net.minecraft.world.entity.player.PlayerSkin;
 
-import javax.annotation.Nonnull;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class LayerCapeWings extends RenderLayer<AvatarRenderState, PlayerModel> {
@@ -35,7 +33,7 @@ public class LayerCapeWings extends RenderLayer<AvatarRenderState, PlayerModel> 
     }
 
     @Override
-    public void submit(@Nonnull PoseStack poseStack, @Nonnull SubmitNodeCollector submitNodeCollector, int packedLight, @Nonnull AvatarRenderState state, float limbSwing, float limbSwingAmount) {
+    public void submit(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int packedLight, AvatarRenderState state, float limbSwing, float limbSwingAmount) {
         if (state.isInvisible || !state.showCape) {
             return;
         }

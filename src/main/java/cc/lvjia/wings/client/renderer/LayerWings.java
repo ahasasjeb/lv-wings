@@ -20,7 +20,7 @@ import net.minecraft.util.Mth;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
-import javax.annotation.Nonnull;
+import java.util.Objects;
 
 public final class LayerWings extends RenderLayer<AvatarRenderState, PlayerModel> {
 
@@ -49,7 +49,7 @@ public final class LayerWings extends RenderLayer<AvatarRenderState, PlayerModel
     }
 
     @Override
-    public void submit(@Nonnull PoseStack poseStack, @Nonnull SubmitNodeCollector submitNodeCollector, int packedLight, @Nonnull AvatarRenderState state, float limbSwing, float limbSwingAmount) {
+    public void submit(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int packedLight, AvatarRenderState state, float limbSwing, float limbSwingAmount) {
         Minecraft minecraft = Minecraft.getInstance();
         ClientLevel level = minecraft.level;
         if (level == null) {
@@ -79,7 +79,7 @@ public final class LayerWings extends RenderLayer<AvatarRenderState, PlayerModel
                     PoseStack.Pose renderPose = renderStack.last();
                     renderPose.pose().set(pose.pose());
                     renderPose.normal().set(pose.normal());
-                    form.render(renderStack, SodiumBypassVertexConsumer.wrap(buffer), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F, delta);
+                    form.render(renderStack, Objects.requireNonNull(SodiumBypassVertexConsumer.wrap(buffer), "vertex consumer"), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F, delta);
                 });
                 poseStack.popPose();
             });

@@ -7,8 +7,10 @@ import net.neoforged.fml.LogicalSide;
  */
 @Deprecated
 public abstract class MessageContext {
+    @Deprecated
     protected MessageContext() {
     }
 
+    @Deprecated
     public abstract LogicalSide getSide();
 }

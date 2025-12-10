@@ -14,7 +14,6 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import org.slf4j.Logger;
 
-import javax.annotation.Nonnull;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +26,7 @@ public class ReloadListener implements ResourceManagerReloadListener {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     @Override
-    public void onResourceManagerReload(@Nonnull ResourceManager rm) {
+    public void onResourceManagerReload(ResourceManager rm) {
 
         if (WingForm.isEmpty()) {
             WingForm.register(WingsMod.ANGEL_WINGS, ClientProxy.createAvianWings(WingsMod.WINGS.getKey(WingsMod.ANGEL_WINGS)));

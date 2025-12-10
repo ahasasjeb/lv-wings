@@ -14,8 +14,6 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
-import javax.annotation.Nonnull;
-
 public final class WingsAttachments {
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES =
             DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, WingsMod.ID);
@@ -54,7 +52,7 @@ public final class WingsAttachments {
         private static final FlightDefault.Serializer SERIALIZER = new FlightDefault.Serializer(FlightDefault::new);
 
         @Override
-        public Flight read(@Nonnull IAttachmentHolder holder, @Nonnull ValueInput input) {
+        public Flight read(IAttachmentHolder holder, ValueInput input) {
             FlightDefault flight = SERIALIZER.deserialize(input);
             if (holder instanceof Player player) {
                 WingsMod.instance().addFlightListeners(player, flight);
@@ -63,7 +61,7 @@ public final class WingsAttachments {
         }
 
         @Override
-        public boolean write(@Nonnull Flight attachment, @Nonnull ValueOutput output) {
+        public boolean write(Flight attachment, ValueOutput output) {
             if (attachment instanceof FlightDefault flightDefault) {
                 SERIALIZER.serialize(flightDefault, output);
                 return true;
@@ -76,12 +74,12 @@ public final class WingsAttachments {
         private static final InSomniable.Serializer SERIALIZER = new InSomniable.Serializer();
 
         @Override
-        public InSomniable read(@Nonnull IAttachmentHolder holder, @Nonnull ValueInput input) {
+        public InSomniable read(IAttachmentHolder holder, ValueInput input) {
             return SERIALIZER.deserialize(input);
         }
 
         @Override
-        public boolean write(@Nonnull InSomniable attachment, @Nonnull ValueOutput output) {
+        public boolean write(InSomniable attachment, ValueOutput output) {
             SERIALIZER.serialize(attachment, output);
             return true;
         }

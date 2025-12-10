@@ -12,8 +12,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-import javax.annotation.Nonnull;
-
 public class BatBloodBottleItem extends Item {
     public BatBloodBottleItem(Properties properties) {
         super(properties);
@@ -29,7 +27,7 @@ public class BatBloodBottleItem extends Item {
     }
 
     @Override
-    public ItemStack finishUsingItem(@Nonnull ItemStack stack, @Nonnull Level world, @Nonnull LivingEntity living) {
+    public ItemStack finishUsingItem(ItemStack stack, Level world, LivingEntity living) {
         ItemStack result = super.finishUsingItem(stack, world, living);
 
         if (!world.isClientSide() && living instanceof ServerPlayer player) {

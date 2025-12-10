@@ -9,9 +9,6 @@ import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.brewing.BrewingRecipe;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nonnull;
 
 public class PotionMix extends BrewingRecipe {
     private final Holder<Potion> from;
@@ -32,7 +29,7 @@ public class PotionMix extends BrewingRecipe {
     }
 
     @Override
-    public boolean isInput(@NotNull @Nonnull ItemStack stack) {
+    public boolean isInput(ItemStack stack) {
         if (stack.isEmpty()) {
             return false;
         }

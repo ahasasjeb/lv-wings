@@ -6,7 +6,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.core.Direction;
 
-import javax.annotation.Nonnull;
 import java.lang.reflect.*;
 import java.util.EnumSet;
 import java.util.Objects;
@@ -157,7 +156,7 @@ public final class Model3DTexture extends ModelPart.Cube {
     }
 
     @Override
-    public void compile(@Nonnull PoseStack.Pose pose, @Nonnull VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+    public void compile(PoseStack.Pose pose, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
         // Wrap buffer to bypass Sodium's vertex writer optimization
         super.compile(pose, SodiumBypassVertexConsumer.wrap(buffer), packedLight, packedOverlay, color);
     }
