@@ -158,7 +158,8 @@ public final class Model3DTexture extends ModelPart.Cube {
     @Override
     public void compile(PoseStack.Pose pose, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
         // Wrap buffer to bypass Sodium's vertex writer optimization
-        super.compile(pose, SodiumBypassVertexConsumer.wrap(buffer), packedLight, packedOverlay, color);
+        VertexConsumer safeBuffer = Objects.requireNonNull(buffer, "vertex consumer");
+        super.compile(pose, SodiumBypassVertexConsumer.wrap(safeBuffer), packedLight, packedOverlay, color);
     }
 
     interface FaceAdder {

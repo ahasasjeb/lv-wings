@@ -5,6 +5,7 @@ import cc.lvjia.wings.client.flight.FlightViews;
 import cc.lvjia.wings.client.model.ModelWingsAvian;
 import cc.lvjia.wings.client.model.ModelWingsInsectoid;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -75,11 +76,12 @@ public final class LayerWings extends RenderLayer<AvatarRenderState, PlayerModel
                 ModelPart body = this.getParentModel().body;
                 body.translateAndRotate(poseStack);
                 submitNodeCollector.submitCustomGeometry(poseStack, form.getRenderType(), (pose, buffer) -> {
+                    VertexConsumer safeBuffer = Objects.requireNonNull(buffer, "vertex consumer");
                     PoseStack renderStack = new PoseStack();
                     PoseStack.Pose renderPose = renderStack.last();
                     renderPose.pose().set(pose.pose());
                     renderPose.normal().set(pose.normal());
-                    form.render(renderStack, Objects.requireNonNull(SodiumBypassVertexConsumer.wrap(buffer), "vertex consumer"), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F, delta);
+                    form.render(renderStack, SodiumBypassVertexConsumer.wrap(safeBuffer), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F, delta);
                 });
                 poseStack.popPose();
             });
