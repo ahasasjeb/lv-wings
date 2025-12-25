@@ -44,14 +44,14 @@ public final class Model3DTexture extends ModelPart.Cube {
             vertexCtor = vertexClass.getDeclaredConstructor(float.class, float.class, float.class, float.class, float.class);
             vertexCtor.setAccessible(true);
         } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Model3DTexture: cannot access vertex constructor (float,float,float,float,float)", e);
         }
         Constructor<?> polygonCtor;
         try {
             polygonCtor = polygonClass.getDeclaredConstructor(vertexArrayClass, float.class, float.class, float.class, float.class, float.class, float.class, boolean.class, Direction.class);
             polygonCtor.setAccessible(true);
         } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Model3DTexture: cannot access polygon constructor signature", e);
         }
         Object[] polygons = (Object[]) Array.newInstance(polygonClass, faceCount);
         int[] quadIndex = {0};
@@ -71,7 +71,7 @@ public final class Model3DTexture extends ModelPart.Cube {
                 Array.set(vertices, 3, vertexCtor.newInstance(fx1, fy1, v ? fz1 : fz0, 0.0F, 0.0F));
                 polygons[quadIndex[0]++] = polygonCtor.newInstance(vertices, fu1, fv1, fu2, fv2, 64.0F, 64.0F, false, normal);
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("Model3DTexture: failed to construct polygon for normal " + normal, e);
             }
         };
         faces.add(x0, y0, z0, x1, y1, z0, this.u1, this.v1, this.u2, this.v2, Direction.NORTH);
@@ -143,7 +143,7 @@ public final class Model3DTexture extends ModelPart.Cube {
         try {
             return POLYGONS_FIELD.get(cube);
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Model3DTexture: failed to read ModelPart.Cube polygons via reflection", e);
         }
     }
 
@@ -151,7 +151,7 @@ public final class Model3DTexture extends ModelPart.Cube {
         try {
             POLYGONS_FIELD.set(cube, value);
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Model3DTexture: failed to set ModelPart.Cube polygons via reflection", e);
         }
     }
 
