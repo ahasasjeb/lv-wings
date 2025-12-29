@@ -9,9 +9,7 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MapItem;
 import net.neoforged.neoforge.common.NeoForge;
@@ -66,19 +64,6 @@ public final class WingsHooksClient {
             }
         }
         return null;
-    }
-
-    public static void onTurn(Entity entity, float deltaYaw) {
-        if (entity instanceof LivingEntity living) {
-            float theta = Mth.wrapDegrees(living.getYRot() - living.yBodyRot);
-            GetLivingHeadLimitEvent ev = GetLivingHeadLimitEvent.create(living);
-            NeoForge.EVENT_BUS.post(ev);
-            float limit = ev.getHardLimit();
-            if (theta < -limit || theta > limit) {
-                living.yBodyRot += deltaYaw;
-                living.yBodyRotO += deltaYaw;
-            }
-        }
     }
 
     public static boolean onCheckRenderEmptyHand(boolean isMainHand, ItemStack itemStackMainHand) {

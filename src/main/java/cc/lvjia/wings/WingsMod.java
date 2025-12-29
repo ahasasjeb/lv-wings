@@ -1,7 +1,6 @@
 package cc.lvjia.wings;
 
 import cc.lvjia.wings.client.ClientProxy;
-import cc.lvjia.wings.server.ServerProxy;
 import cc.lvjia.wings.server.apparatus.BuffedFlightApparatus;
 import cc.lvjia.wings.server.apparatus.FlightApparatus;
 import cc.lvjia.wings.server.apparatus.SimpleFlightApparatus;
@@ -106,7 +105,7 @@ public final class WingsMod {
         WingsEffects.REG.register(modEventBus);
         COMMAND_ARGUMENT_TYPES.register(modEventBus);
 
-        this.proxy = FMLEnvironment.getDist().isClient() ? new ClientProxy() : new ServerProxy();
+        this.proxy = FMLEnvironment.getDist().isClient() ? new ClientProxy() : new Proxy();
         this.proxy.init(modEventBus);
     }
 

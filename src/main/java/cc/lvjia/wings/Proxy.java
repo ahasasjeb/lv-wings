@@ -26,7 +26,7 @@ import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
-public abstract class Proxy {
+public class Proxy {
     protected final Network network = new Network();
 
     public void init(IEventBus modBus) {
