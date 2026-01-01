@@ -5,33 +5,21 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.ARGB;
 
 public final class ModelWingsInsectoid extends ModelWings<AnimatorInsectoid> {
-    //private final ModelPart root;
-
     private final ModelPart wingLeft;
-
     private final ModelPart wingRight;
 
     public ModelWingsInsectoid(ModelPart root) {
         super(root);
-
-        //this.root = root;
         this.wingLeft = root.getChild("WingLeft");
         this.wingRight = root.getChild("WingRight");
-
-        /*this.texWidth = this.texHeight = 64;
-        this.root = new ModelPart(this, 0, 0);
-        this.wingLeft = new ModelPart(this, 0, 0);
-        this.wingLeft.setPos(0, 2, 3.5F);
-        this.wingLeft.addBox(0, -8, 0, 19, 24, 0, 0);
-        this.wingRight = new ModelPart(this, 0, 24);
-        this.wingRight.setPos(0, 2, 3.5F);
-        this.wingRight.addBox(-19, -8, 0, 19, 24, 0, 0);
-        this.root.addChild(this.wingLeft);
-        this.root.addChild(this.wingRight);*/
     }
 
     public static LayerDefinition createBodyLayer() {

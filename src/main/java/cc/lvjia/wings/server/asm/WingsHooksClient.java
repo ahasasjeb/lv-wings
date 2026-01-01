@@ -67,7 +67,7 @@ public final class WingsHooksClient {
     }
 
     public static boolean onCheckRenderEmptyHand(boolean isMainHand, ItemStack itemStackMainHand) {
-        return isMainHand || !Holder.OPTIFUCK && !isMap(itemStackMainHand);
+        return isMainHand || !Holder.OPTIFINE_PRESENT && !isMap(itemStackMainHand);
     }
 
     public static boolean onCheckDoReequipAnimation(ItemStack from, ItemStack to, int slot) {
@@ -120,17 +120,17 @@ public final class WingsHooksClient {
     }
 
     private static final class Holder {
-        private static final boolean OPTIFUCK;
+        private static final boolean OPTIFINE_PRESENT;
 
         static {
             boolean present;
             try {
                 Class.forName("optifine.ZipResourceProvider");
                 present = true;
-            } catch (ClassNotFoundException thankGod) {
+            } catch (ClassNotFoundException e) {
                 present = false;
             }
-            OPTIFUCK = present;
+            OPTIFINE_PRESENT = present;
         }
     }
 }
