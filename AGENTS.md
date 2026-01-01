@@ -1,6 +1,6 @@
 Project type: Minecraft NeoForge Mod
-Target version: 26.1
-Java 25
+Target version: 1.21.11
+Java 21
 Build: ./gradlew build
 No prepareRunClientCompile
 src\main\java\cc\lvjia\wings\WingsMod.java
