@@ -8,6 +8,11 @@ import net.minecraft.world.entity.player.Player;
 
 import java.util.function.Consumer;
 
+/**
+ * 客户端飞行动画状态机。
+ * <p>
+ * 根据玩家速度向量与飞行/下落情况在若干状态间切换，并驱动 {@link Animator} 播放对应动画。
+ */
 public abstract class State {
     static final int STATE_DELAY = 2;
 
@@ -27,6 +32,7 @@ public abstract class State {
     }
 
     public final State update(Flight flight, double x, double y, double z, Player player) {
+        // 增加一点延迟，避免速度抖动导致状态频繁切换。
         if (this.time++ > this.stateDelay) {
             return this.getNext(flight, x, y, z, player);
         }
@@ -47,6 +53,7 @@ public abstract class State {
     }
 
     private float getPitch(double x, double y, double z) {
+        // 根据速度向量计算“俯仰角阈值”，用于判断何时进入滑翔。
         return MathH.toDegrees((float) -Math.atan2(y, Mth.sqrt((float) (x * x + z * z))));
     }
 

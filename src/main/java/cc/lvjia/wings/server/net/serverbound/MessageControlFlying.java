@@ -10,6 +10,11 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
+/**
+ * 客户端 -> 服务端：请求切换飞行状态。
+ * <p>
+ * 服务端会再次校验玩家是否允许飞行（例如是否拥有翅膀/是否满足条件）。
+ */
 public record MessageControlFlying(boolean isFlying) implements Message {
     public static final CustomPacketPayload.Type<MessageControlFlying> TYPE = new CustomPacketPayload.Type<>(WingsMod.locate("control_flying"));
     public static final StreamCodec<FriendlyByteBuf, MessageControlFlying> STREAM_CODEC =
