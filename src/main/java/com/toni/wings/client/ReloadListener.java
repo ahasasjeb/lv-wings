@@ -25,8 +25,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static net.minecraftforge.fml.util.ObfuscationReflectionHelper.getPrivateValue;
-
 @OnlyIn(Dist.CLIENT)
 public class ReloadListener implements ResourceManagerReloadListener {
 
@@ -79,41 +77,57 @@ public class ReloadListener implements ResourceManagerReloadListener {
     }
 
     private void replaceCapeLayer(PlayerRenderer renderer) {
-        List<?> layers = null;
-        RuntimeException failure = null;
-        for (String name : new String[]{"layers", "f_115291_"}) {
-            try {
-                layers = getPrivateValue(LivingEntityRenderer.class, renderer, name);
-                if (layers != null) {
-                    break;
-                }
-            } catch (RuntimeException ex) {
-                failure = ex;
-            }
-        }
-
+        List<?> layers = findLayers(renderer);
         if (layers == null) {
-            if (failure != null) {
-                LOGGER.warn("Failed to access player renderer layers; skipping cape replacement", failure);
-            }
             return;
         }
+
         boolean vanillaCapeRemoved = false;
         boolean hasCustomCape = false;
-        Iterator<?> iterator = layers.iterator();
-        while (iterator.hasNext()) {
-            Object layer = iterator.next();
-            if (layer instanceof LayerCapeWings) {
-                hasCustomCape = true;
-                continue;
+
+        try {
+            Iterator<?> iterator = layers.iterator();
+            while (iterator.hasNext()) {
+                Object layer = iterator.next();
+                if (layer instanceof LayerCapeWings) {
+                    hasCustomCape = true;
+                    continue;
+                }
+                if (layer instanceof CapeLayer) {
+                    iterator.remove();
+                    vanillaCapeRemoved = true;
+                }
             }
-            if (layer instanceof CapeLayer) {
-                iterator.remove();
-                vanillaCapeRemoved = true;
-            }
+        } catch (UnsupportedOperationException ex) {
+            LOGGER.warn("Cannot modify player renderer layers; skipping cape replacement", ex);
+            return;
         }
+
         if (vanillaCapeRemoved && !hasCustomCape) {
             renderer.addLayer(new LayerCapeWings(renderer));
         }
+    }
+
+    private List<?> findLayers(LivingEntityRenderer<?, ?> renderer) {
+        // Try to locate the layers list across subclasses and obfuscated names to support vanilla and Embeddium.
+        for (Class<?> cls = renderer.getClass(); cls != null; cls = cls.getSuperclass()) {
+            for (String name : new String[]{"layers", "f_115291_", "field_115291"}) {
+                try {
+                    var field = cls.getDeclaredField(name);
+                    field.setAccessible(true);
+                    Object value = field.get(renderer);
+                    if (value instanceof List<?> list) {
+                        return list;
+                    }
+                } catch (NoSuchFieldException ignored) {
+                    // keep searching
+                } catch (ReflectiveOperationException ex) {
+                    LOGGER.warn("Failed accessing renderer layers via '{}' on {}", name, cls.getName(), ex);
+                    return null;
+                }
+            }
+        }
+        LOGGER.warn("Unable to locate player renderer layers; skipping cape replacement");
+        return null;
     }
 }
