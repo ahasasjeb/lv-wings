@@ -4,8 +4,8 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
-import java.util.IdentityHashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 /**
  * Wraps a {@link VertexConsumer} without implementing Sodium's VertexBufferWriter interface, forcing Sodium to
@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public final class SodiumBypassVertexConsumer implements VertexConsumer {
 
-    private static final Map<VertexConsumer, SodiumBypassVertexConsumer> CACHE = Collections.synchronizedMap(new IdentityHashMap<>());
+    private static final Map<VertexConsumer, SodiumBypassVertexConsumer> CACHE = Collections.synchronizedMap(new WeakHashMap<>());
     private final VertexConsumer delegate;
 
     private SodiumBypassVertexConsumer(VertexConsumer delegate) {
