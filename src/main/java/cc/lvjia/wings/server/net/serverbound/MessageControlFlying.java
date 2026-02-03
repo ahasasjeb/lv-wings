@@ -22,9 +22,14 @@ public record MessageControlFlying(boolean isFlying) implements Message {
                     buf -> new MessageControlFlying(buf.readBoolean()));
 
     public static void handle(MessageControlFlying message, IPayloadContext context) {
-        Player player = context.player();
-        Flights.get(player).filter(f -> f.canFly(player))
-                .ifPresent(flight -> flight.setIsFlying(message.isFlying(), Flight.PlayerSet.ofOthers()));
+        context.enqueueWork(() -> {
+            Player player = context.player();
+            if (player == null) {
+                return;
+            }
+            Flights.get(player).filter(f -> f.canFly(player))
+                    .ifPresent(flight -> flight.setIsFlying(message.isFlying(), Flight.PlayerSet.ofOthers()));
+        });
     }
 
     @Override

@@ -15,6 +15,7 @@ import cc.lvjia.wings.server.flight.Flight;
 import cc.lvjia.wings.server.flight.Flights;
 import cc.lvjia.wings.server.item.BatBloodBottleItem;
 import cc.lvjia.wings.server.net.serverbound.MessageControlFlying;
+import cc.lvjia.wings.server.net.Message;
 import cc.lvjia.wings.util.KeyInputListener;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -24,6 +25,7 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.neoforged.neoforge.client.settings.KeyModifier;
 import net.neoforged.neoforge.common.NeoForge;
@@ -109,10 +111,15 @@ public final class ClientProxy extends Proxy {
                     },
                     p -> {
                     },
-                    () -> this.network.sendToServer(new MessageControlFlying(flight.isFlying()))
+                    () -> this.sendToServer(new MessageControlFlying(flight.isFlying()))
             );
             flight.registerSyncListener(players -> players.notify(notifier));
         }
+    }
+
+    @Override
+    public void sendToServer(Message message) {
+        ClientPacketDistributor.sendToServer(message);
     }
 
     @Override

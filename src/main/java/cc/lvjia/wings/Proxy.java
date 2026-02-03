@@ -7,6 +7,7 @@ import cc.lvjia.wings.server.flight.Flight;
 import cc.lvjia.wings.server.flight.Flights;
 import cc.lvjia.wings.server.item.WingsItems;
 import cc.lvjia.wings.server.net.Network;
+import cc.lvjia.wings.server.net.Message;
 import cc.lvjia.wings.server.net.clientbound.MessageSyncFlight;
 import cc.lvjia.wings.server.potion.PotionMix;
 import net.minecraft.server.level.ServerLevel;
@@ -83,6 +84,10 @@ public class Proxy {
     }
 
     public void invalidateFlightView(Player player) {
+    }
+
+    public void sendToServer(Message message) {
+        throw new UnsupportedOperationException("sendToServer is client-only");
     }
 
     private void sendToDimensionPlayers(ServerPlayer source, Flight instance) {

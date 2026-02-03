@@ -5,7 +5,6 @@ import cc.lvjia.wings.server.net.serverbound.MessageControlFlying;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -32,10 +31,6 @@ public final class Network {
                 .playToServer(MessageControlFlying.TYPE, MessageControlFlying.STREAM_CODEC, MessageControlFlying::handle);
 
         registrar.playToClient(MessageSyncFlight.TYPE, MessageSyncFlight.STREAM_CODEC, MessageSyncFlight::handle);
-    }
-
-    public void sendToServer(Message message) {
-        ClientPacketDistributor.sendToServer(message);
     }
 
     public void sendToPlayer(Message message, ServerPlayer player) {
