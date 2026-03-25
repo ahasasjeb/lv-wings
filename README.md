@@ -94,3 +94,6 @@ Brewing steps:
 1. 在药水酿造台中放入**缓降药水**
 2. 在上方槽位放入对应的材料
 3. 等待酿造完成即可获得对应的翅膀药水
+
+由GPT-5.2-codex、GPT-5.3-codex、Minimax 2.7维护，人类进入游戏测试。
+Maintained by GPT-5.2-codex, GPT-5.3-codex, and Minimax 2.7, humans enter the game for testing.
