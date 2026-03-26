@@ -1,8 +1,5 @@
 package cc.lvjia.wings;
 
-import cc.lvjia.wings.server.config.WingsConfig;
-import cc.lvjia.wings.server.config.WingsItemsConfig;
-import cc.lvjia.wings.server.config.WingsOreConfig;
 import cc.lvjia.wings.server.flight.Flight;
 import cc.lvjia.wings.server.flight.Flights;
 import cc.lvjia.wings.server.item.WingsItems;
@@ -10,7 +7,6 @@ import cc.lvjia.wings.server.net.Network;
 import cc.lvjia.wings.server.net.Message;
 import cc.lvjia.wings.server.net.clientbound.MessageSyncFlight;
 import cc.lvjia.wings.server.potion.PotionMix;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -20,7 +16,6 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 
@@ -31,18 +26,10 @@ public class Proxy {
     protected final Network network = new Network();
 
     public void init(IEventBus modBus) {
-        modBus.addListener(this::setup);
         this.network.register(modBus);
         NeoForge.EVENT_BUS.addListener(this::registerBrewingRecipes);
         NeoForge.EVENT_BUS.addListener(Flights::onPlayerLoggedIn);
         NeoForge.EVENT_BUS.addListener(Flights::onPlayerStartTracking);
-    }
-
-    protected void setup(FMLCommonSetupEvent event) {
-        // Validate configs after they are loaded
-        WingsConfig.validate();
-        WingsItemsConfig.validate();
-        WingsOreConfig.validate();
     }
 
     private void registerBrewingRecipes(RegisterBrewingRecipesEvent event) {
@@ -76,7 +63,7 @@ public class Proxy {
             Flight.Notifier notifier = Flight.Notifier.of(
                     () -> this.network.sendToPlayer(new MessageSyncFlight(player, instance), serverPlayer),
                     p -> this.network.sendToPlayer(new MessageSyncFlight(player, instance), p),
-                    () -> this.sendToDimensionPlayers(serverPlayer, instance)
+                    () -> this.network.sendToAllTracking(new MessageSyncFlight(player, instance), serverPlayer)
             );
             instance.registerSyncListener(players -> players.notify(notifier));
             instance.sync(Flight.PlayerSet.ofOthers());
@@ -88,15 +75,5 @@ public class Proxy {
 
     public void sendToServer(Message message) {
         throw new UnsupportedOperationException("sendToServer is client-only");
-    }
-
-    private void sendToDimensionPlayers(ServerPlayer source, Flight instance) {
-        ServerLevel level = source.level();
-
-        level.players().forEach(target -> {
-            if (target != source) {
-                this.network.sendToPlayer(new MessageSyncFlight(source, instance), target);
-            }
-        });
     }
 }

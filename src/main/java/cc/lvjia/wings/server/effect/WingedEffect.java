@@ -11,9 +11,4 @@ public class WingedEffect extends MobEffect {
         // 颜色值用于客户端 UI 显示。
         super(MobEffectCategory.BENEFICIAL, 9947876);
     }
-
-    @Override
-    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
-        return true;
-    }
 }
