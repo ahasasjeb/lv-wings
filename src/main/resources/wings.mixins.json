@@ -12,6 +12,7 @@
     "CameraMixin",
     "ClientHooksMixin",
     "ItemInHandRendererMixin",
+    "client.LivingEntityRendererAccessor",
     "PlayerModelMixin",
     "PlayerRendererMixin"
   ],

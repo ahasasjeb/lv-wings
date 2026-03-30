@@ -19,6 +19,7 @@ import cc.lvjia.wings.server.net.Message;
 import cc.lvjia.wings.util.KeyInputListener;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
@@ -36,22 +37,32 @@ import java.util.function.Supplier;
 public final class ClientProxy extends Proxy {
 
     private static final KeyMapping.Category WINGS_KEY_CATEGORY = new KeyMapping.Category(WingsMod.locate("wings"));
-    private static ModelWings<AnimatorInsectoid> insectoidWings;
-    private static ModelWings<AnimatorAvian> avianWings;
 
-    static WingForm<AnimatorAvian> createAvianWings(Identifier name) {
-        avianWings = new ModelWingsAvian(getModel().bakeLayer(LayerWings.AVIAN_WINGS));
-        return ClientProxy.createWings(name, AnimatorAvian::new, avianWings);
+    public static void registerWingForms(EntityModelSet modelSet) {
+        WingForm.clear();
+        WingForm.register(WingsMod.ANGEL_WINGS, createAvianWings(modelSet, WingsMod.WINGS.getKey(WingsMod.ANGEL_WINGS)));
+        WingForm.register(WingsMod.PARROT_WINGS, createAvianWings(modelSet, WingsMod.WINGS.getKey(WingsMod.PARROT_WINGS)));
+        WingForm.register(WingsMod.BAT_WINGS, createAvianWings(modelSet, WingsMod.WINGS.getKey(WingsMod.BAT_WINGS)));
+        WingForm.register(WingsMod.BLUE_BUTTERFLY_WINGS, createInsectoidWings(modelSet, WingsMod.WINGS.getKey(WingsMod.BLUE_BUTTERFLY_WINGS)));
+        WingForm.register(WingsMod.DRAGON_WINGS, createAvianWings(modelSet, WingsMod.WINGS.getKey(WingsMod.DRAGON_WINGS)));
+        WingForm.register(WingsMod.EVIL_WINGS, createAvianWings(modelSet, WingsMod.WINGS.getKey(WingsMod.EVIL_WINGS)));
+        WingForm.register(WingsMod.FAIRY_WINGS, createInsectoidWings(modelSet, WingsMod.WINGS.getKey(WingsMod.FAIRY_WINGS)));
+        WingForm.register(WingsMod.FIRE_WINGS, createAvianWings(modelSet, WingsMod.WINGS.getKey(WingsMod.FIRE_WINGS)));
+        WingForm.register(WingsMod.MONARCH_BUTTERFLY_WINGS, createInsectoidWings(modelSet, WingsMod.WINGS.getKey(WingsMod.MONARCH_BUTTERFLY_WINGS)));
+        WingForm.register(WingsMod.SLIME_WINGS, createInsectoidWings(modelSet, WingsMod.WINGS.getKey(WingsMod.SLIME_WINGS)));
+        WingForm.register(WingsMod.LVJIA_SUPER_WINGS, createEndPortalWings(modelSet, WingsMod.WINGS.getKey(WingsMod.LVJIA_SUPER_WINGS)));
     }
 
-    static WingForm<AnimatorAvian> createEndPortalWings(Identifier name) {
-        avianWings = new ModelWingsAvian(getModel().bakeLayer(LayerWings.AVIAN_WINGS));
-        return ClientProxy.createWings(name, AnimatorAvian::new, avianWings, RenderTypes::endPortal);
+    static WingForm<AnimatorAvian> createAvianWings(EntityModelSet modelSet, Identifier name) {
+        return ClientProxy.createWings(name, AnimatorAvian::new, new ModelWingsAvian(modelSet.bakeLayer(LayerWings.AVIAN_WINGS)));
     }
 
-    static WingForm<AnimatorInsectoid> createInsectoidWings(Identifier name) {
-        insectoidWings = new ModelWingsInsectoid(getModel().bakeLayer(LayerWings.INSECTOID_WINGS));
-        return ClientProxy.createWings(name, AnimatorInsectoid::new, insectoidWings);
+    static WingForm<AnimatorAvian> createEndPortalWings(EntityModelSet modelSet, Identifier name) {
+        return ClientProxy.createWings(name, AnimatorAvian::new, new ModelWingsAvian(modelSet.bakeLayer(LayerWings.AVIAN_WINGS)), RenderTypes::endPortal);
+    }
+
+    static WingForm<AnimatorInsectoid> createInsectoidWings(EntityModelSet modelSet, Identifier name) {
+        return ClientProxy.createWings(name, AnimatorInsectoid::new, new ModelWingsInsectoid(modelSet.bakeLayer(LayerWings.INSECTOID_WINGS)));
     }
 
     private static <A extends Animator> WingForm<A> createWings(Identifier name, Supplier<A> animator, ModelWings<A> model) {
@@ -71,10 +82,6 @@ public final class ClientProxy extends Proxy {
                 texture,
                 actualRenderType
         );
-    }
-
-    private static net.minecraft.client.model.geom.EntityModelSet getModel() {
-        return net.minecraft.client.Minecraft.getInstance().getEntityModels();
     }
 
     @Override

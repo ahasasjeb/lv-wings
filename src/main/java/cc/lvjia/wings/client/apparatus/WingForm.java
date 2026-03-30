@@ -45,6 +45,10 @@ public final class WingForm<A extends Animator> {
         FORMS.put(wings, form);
     }
 
+    public static void clear() {
+        FORMS.clear();
+    }
+
     public static Map<FlightApparatus, WingForm<?>> getFormsMap() {
         return FORMS;
     }

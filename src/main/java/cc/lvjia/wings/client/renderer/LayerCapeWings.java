@@ -23,7 +23,7 @@ import net.minecraft.world.entity.player.PlayerSkin;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class LayerCapeWings extends RenderLayer<AvatarRenderState, PlayerModel> {
+public final class LayerCapeWings extends RenderLayer<AvatarRenderState, PlayerModel> {
 
     private final HumanoidModel<AvatarRenderState> model;
 
