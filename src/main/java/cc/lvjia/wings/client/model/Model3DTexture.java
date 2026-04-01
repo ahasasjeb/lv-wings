@@ -14,7 +14,6 @@ import java.lang.reflect.Modifier;
 import java.util.EnumSet;
 import java.util.Objects;
 
-// replace reflection with mixin 实际：改不了一点，贼TM麻烦
 public final class Model3DTexture extends ModelPart.Cube {
     private static final Field POLYGONS_FIELD = findPolygonsField();
     private final int width;
