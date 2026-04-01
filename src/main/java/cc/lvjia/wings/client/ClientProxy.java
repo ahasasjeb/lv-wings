@@ -30,11 +30,14 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.neoforged.neoforge.client.settings.KeyModifier;
 import net.neoforged.neoforge.common.NeoForge;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.function.Supplier;
 
 public final class ClientProxy extends Proxy {
+    private static final Logger LOGGER = LogManager.getLogger("WingsClient");
 
     private static final KeyMapping.Category WINGS_KEY_CATEGORY = new KeyMapping.Category(WingsMod.locate("wings"));
 
@@ -125,6 +128,7 @@ public final class ClientProxy extends Proxy {
 
     @Override
     public void sendToServer(Message message) {
+        LOGGER.debug("Sending {} to server", message.type().id());
         ClientPacketDistributor.sendToServer(message);
     }
 

@@ -8,6 +8,8 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * 模组网络通道注册与发送工具。
@@ -15,6 +17,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
  * 负责在 {@link RegisterPayloadHandlersEvent} 时注册 payload 处理器，并提供常用的发送方法。
  */
 public final class Network {
+    private static final Logger LOGGER = LogManager.getLogger("WingsNetwork");
     /**
      * payload 注册版本号：用于网络协议变更时进行兼容控制。
      */
@@ -31,13 +34,17 @@ public final class Network {
                 .playToServer(MessageControlFlying.TYPE, MessageControlFlying.STREAM_CODEC, MessageControlFlying::handle);
 
         registrar.playToClient(MessageSyncFlight.TYPE, MessageSyncFlight.STREAM_CODEC, MessageSyncFlight::handle);
+
+        LOGGER.info("Network payloads registered (version={})", VERSION);
     }
 
     public void sendToPlayer(Message message, ServerPlayer player) {
+        LOGGER.debug("Sending {} to player {}", message.type().id(), player.getName().getString());
         PacketDistributor.sendToPlayer(player, message);
     }
 
     public void sendToAllTracking(Message message, Entity entity) {
+        LOGGER.debug("Sending {} tracking entity={}", message.type().id(), entity.getName().getString());
         PacketDistributor.sendToPlayersTrackingEntity(entity, message);
     }
 }

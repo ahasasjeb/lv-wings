@@ -11,6 +11,8 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * 服务端 -> 客户端：同步指定玩家的飞行数据。
@@ -18,6 +20,8 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
  * 客户端收到后会把数据写入玩家的 attachment，并刷新相关渲染/视图缓存。
  */
 public record MessageSyncFlight(int playerId, Flight flight) implements Message {
+    private static final Logger LOGGER = LogManager.getLogger("WingsNetwork");
+
     public static final CustomPacketPayload.Type<MessageSyncFlight> TYPE = new CustomPacketPayload.Type<>(WingsMod.locate("sync_flight"));
     public static final StreamCodec<FriendlyByteBuf, MessageSyncFlight> STREAM_CODEC =
             StreamCodec.of((buf, message) -> {
@@ -39,19 +43,24 @@ public record MessageSyncFlight(int playerId, Flight flight) implements Message 
         context.enqueueWork(() -> {
             var level = context.player().level();
             if (level == null) {
+                LOGGER.warn("Received sync_flight but level is null");
                 return;
             }
             var entity = level.getEntity(message.playerId());
             if (!(entity instanceof Player player)) {
+                LOGGER.warn("Received sync_flight for invalid entity id={}", message.playerId());
                 return;
             }
             Flight flight = Flights.get(player).orElse(null);
             if (flight == null) {
+                LOGGER.debug("Creating new flight attachment for player {}", player.getName().getString());
                 flight = new FlightDefault();
                 player.setData(WingsAttachments.FLIGHT.get(), flight);
             }
             flight.clone(message.flight());
             WingsMod.instance().invalidateFlightView(player);
+            LOGGER.debug("Synced flight data for player {} (flying={}, wing={})",
+                    player.getName().getString(), flight.isFlying(), flight.getWing());
         });
     }
 
