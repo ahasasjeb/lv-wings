@@ -1,9 +1,10 @@
 package cc.lvjia.wings.server.net.serverbound;
 
+import cc.lvjia.wings.WingsAttachments;
 import cc.lvjia.wings.WingsMod;
 import cc.lvjia.wings.server.flight.Flight;
-import cc.lvjia.wings.server.flight.Flights;
 import cc.lvjia.wings.server.net.Message;
+import cc.lvjia.wings.server.net.clientbound.MessageSyncFlight;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -32,17 +33,16 @@ public record MessageControlFlying(boolean isFlying) implements Message {
                 LOGGER.warn("Received control_flying from null player");
                 return;
             }
-            var flightOpt = Flights.get(player);
-            if (flightOpt.isEmpty()) {
-                LOGGER.debug("Player {} has no flight data, ignoring control_flying", player.getName().getString());
-                return;
-            }
-            if (!flightOpt.get().canFly(player)) {
+            Flight flight = player.getData(WingsAttachments.FLIGHT.get());
+            if (!flight.canFly(player)) {
                 LOGGER.debug("Player {} failed canFly check, ignoring control_flying", player.getName().getString());
+                context.reply(new MessageSyncFlight(player, flight));
                 return;
             }
             LOGGER.debug("Player {} {} flying", player.getName().getString(), message.isFlying() ? "started" : "stopped");
-            flightOpt.get().setIsFlying(message.isFlying(), Flight.PlayerSet.ofOthers());
+            flight.setIsFlying(message.isFlying(), Flight.PlayerSet.ofOthers());
+            // Always send the authoritative state back to the initiator to resolve client prediction drift.
+            context.reply(new MessageSyncFlight(player, flight));
         });
     }
 

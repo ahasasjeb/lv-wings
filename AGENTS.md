@@ -2,10 +2,7 @@ Project type: Minecraft NeoForge Mod
 Target version: 26.1
 Java 25
 Build: ./gradlew build
-No prepareRunClientCompile
-src\main\java\cc\lvjia\wings\WingsMod.java
-src\main\java\cc\lvjia\wings\Proxy.java
-The 87.md file in the root directory documents some bug fixes
+No ./gradlew prepareRunClientCompile
 
 Conservatively remove dead code you encounter while editing,there’s no need to actively hunt for it.
 If a new feature is complex, create a new Java class. Any code changes should be ensured to be necessary, not adding a bunch of unnecessary stuff.
