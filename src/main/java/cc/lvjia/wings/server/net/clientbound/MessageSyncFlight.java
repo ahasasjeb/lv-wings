@@ -4,7 +4,6 @@ import cc.lvjia.wings.WingsAttachments;
 import cc.lvjia.wings.WingsMod;
 import cc.lvjia.wings.server.flight.Flight;
 import cc.lvjia.wings.server.flight.FlightDefault;
-import cc.lvjia.wings.server.flight.Flights;
 import cc.lvjia.wings.server.net.Message;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -51,11 +50,10 @@ public record MessageSyncFlight(int playerId, Flight flight) implements Message 
                 LOGGER.warn("Received sync_flight for invalid entity id={}", message.playerId());
                 return;
             }
-            Flight flight = Flights.get(player).orElse(null);
-            if (flight == null) {
+            boolean hadFlight = player.hasData(WingsAttachments.FLIGHT.get());
+            Flight flight = player.getData(WingsAttachments.FLIGHT.get());
+            if (!hadFlight) {
                 LOGGER.debug("Creating new flight attachment for player {}", player.getName().getString());
-                flight = new FlightDefault();
-                player.setData(WingsAttachments.FLIGHT.get(), flight);
             }
             flight.clone(message.flight());
             WingsMod.instance().invalidateFlightView(player);
