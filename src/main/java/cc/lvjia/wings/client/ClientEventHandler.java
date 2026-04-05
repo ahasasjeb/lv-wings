@@ -80,13 +80,12 @@ public final class ClientEventHandler {
             float delta = event.getDelta();
             float amt = flight.getFlyingAmount(delta);
             if (amt > 0.0F) {
-                float roll = MathH.lerpDegrees(
-                        player.yBodyRotO - player.yRotO,
-                        player.yBodyRot - player.getYRot(),
-                        delta);
-                float pitch = -MathH.lerpDegrees(player.xRotO, player.getXRot(), delta) - 90.0F;
-                matrixStack.mulPose(Axis.ZP.rotationDegrees(MathH.lerpDegrees(0.0F, roll, amt)));
-                matrixStack.mulPose(Axis.XP.rotationDegrees(MathH.lerpDegrees(0.0F, pitch, amt)));
+                float diffO = Mth.wrapDegrees(player.yBodyRotO - player.yRotO);
+                float diff = Mth.wrapDegrees(player.yBodyRot - player.getYRot());
+                float roll = Mth.lerp(delta, diffO, diff);
+                float pitch = -Mth.lerp(delta, player.xRotO, player.getXRot()) - 90.0F;
+                matrixStack.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(amt, 0.0F, roll)));
+                matrixStack.mulPose(Axis.XP.rotationDegrees(Mth.lerp(amt, 0.0F, pitch)));
                 matrixStack.translate(0.0D, -1.2D * MathH.easeInOut(amt), 0.0D);
             }
         });
@@ -112,11 +111,10 @@ public final class ClientEventHandler {
             float delta = (float) event.getPartialTick();
             float amt = flight.getFlyingAmount(delta);
             if (amt > 0.0F) {
-                float roll = MathH.lerpDegrees(
-                        player.yBodyRotO - player.yRotO,
-                        player.yBodyRot - player.getYRot(),
-                        delta);
-                float targetRoll = MathH.lerpDegrees(0.0F, -roll * 0.25F, amt);
+                float diffO = Mth.wrapDegrees(player.yBodyRotO - player.yRotO);
+                float diff = Mth.wrapDegrees(player.yBodyRot - player.getYRot());
+                float roll = Mth.lerp(delta, diffO, diff);
+                float targetRoll = Mth.lerp(amt, 0.0F, -roll * 0.25F);
                 // Failsafe: guard against sporadic extreme values that flip the camera sideways
                 if (!Float.isFinite(targetRoll) || Math.abs(targetRoll) > 75.0F) {
                     targetRoll = 0.0F;
