@@ -1,7 +1,6 @@
 package cc.lvjia.wings;
 
 import cc.lvjia.wings.server.flight.Flight;
-import cc.lvjia.wings.server.flight.Flights;
 import cc.lvjia.wings.server.item.WingsItems;
 import cc.lvjia.wings.server.net.Network;
 import cc.lvjia.wings.server.net.Message;
@@ -28,8 +27,6 @@ public class Proxy {
     public void init(IEventBus modBus) {
         this.network.register(modBus);
         NeoForge.EVENT_BUS.addListener(this::registerBrewingRecipes);
-        NeoForge.EVENT_BUS.addListener(Flights::onPlayerLoggedIn);
-        NeoForge.EVENT_BUS.addListener(Flights::onPlayerStartTracking);
     }
 
     private void registerBrewingRecipes(RegisterBrewingRecipesEvent event) {
