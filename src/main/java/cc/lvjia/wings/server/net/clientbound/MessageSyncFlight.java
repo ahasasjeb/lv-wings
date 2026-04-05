@@ -56,7 +56,6 @@ public record MessageSyncFlight(int playerId, Flight flight) implements Message 
                 LOGGER.debug("Creating new flight attachment for player {}", player.getName().getString());
             }
             flight.clone(message.flight());
-            WingsMod.instance().invalidateFlightView(player);
             LOGGER.debug("Synced flight data for player {} (flying={}, wing={})",
                     player.getName().getString(), flight.isFlying(), flight.getWing());
         });
