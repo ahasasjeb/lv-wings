@@ -46,6 +46,8 @@ public final class FlightDefault implements Flight {
 
     private final WingState voidState = new WingState(FlightApparatus.NONE, FlightApparatus.FlightState.NONE);
 
+    private final FlightAnimationTracker animationTracker = new FlightAnimationTracker();
+
     private int prevTimeFlying = INITIAL_TIME_FLYING;
 
     private int timeFlying = INITIAL_TIME_FLYING;
@@ -53,6 +55,8 @@ public final class FlightDefault implements Flight {
     private boolean isFlying;
 
     private FlightApparatus flightApparatus = FlightApparatus.NONE;
+
+    private FlightAnimationState animationState = FlightAnimationState.IDLE;
 
     private WingState state = this.voidState;
 
@@ -105,6 +109,16 @@ public final class FlightDefault implements Flight {
     @Override
     public FlightApparatus getWing() {
         return this.flightApparatus;
+    }
+
+    @Override
+    public FlightAnimationState getAnimationState() {
+        return this.animationState;
+    }
+
+    @Override
+    public void setAnimationState(FlightAnimationState animationState) {
+        this.loadAnimationState(animationState);
     }
 
     @Override
@@ -223,6 +237,13 @@ public final class FlightDefault implements Flight {
                 this.setTimeFlying(this.getTimeFlying() - 1);
             }
         }
+        if (!player.level().isClientSide()) {
+            boolean shouldSyncAnimation = this.animationTracker.tick(this, player);
+            this.animationState = this.animationTracker.getState();
+            if (shouldSyncAnimation) {
+                this.sync(PlayerSet.ofOthers());
+            }
+        }
     }
 
     @Override
@@ -239,6 +260,7 @@ public final class FlightDefault implements Flight {
         this.setIsFlying(other.isFlying());
         this.setTimeFlying(other.getTimeFlying());
         this.setWing(other.getWing());
+        this.loadAnimationState(other.getAnimationState());
     }
 
     @Override
@@ -251,6 +273,7 @@ public final class FlightDefault implements Flight {
         buf.writeBoolean(this.isFlying());
         buf.writeVarInt(this.getTimeFlying());
         buf.writeIdentifier(wingIdFor(this.getWing()));
+        buf.writeByte(this.getAnimationState().id());
     }
 
     @Override
@@ -264,6 +287,12 @@ public final class FlightDefault implements Flight {
             wingId = DEFAULT_WING_ID;
         }
         this.setWing(wingFrom(wingId));
+        this.loadAnimationState(FlightAnimationState.byId(buf.readUnsignedByte()));
+    }
+
+    private void loadAnimationState(FlightAnimationState animationState) {
+        this.animationState = Objects.requireNonNull(animationState);
+        this.animationTracker.load(animationState);
     }
 
     public static final class Serializer implements NBTSerializer<FlightDefault, CompoundTag> {

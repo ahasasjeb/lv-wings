@@ -2,7 +2,12 @@ package cc.lvjia.wings.client.flight;
 
 import cc.lvjia.wings.client.apparatus.WingForm;
 import cc.lvjia.wings.client.flight.state.State;
+import cc.lvjia.wings.client.flight.state.StateFall;
+import cc.lvjia.wings.client.flight.state.StateGlide;
 import cc.lvjia.wings.client.flight.state.StateIdle;
+import cc.lvjia.wings.client.flight.state.StateLand;
+import cc.lvjia.wings.client.flight.state.StateLift;
+import cc.lvjia.wings.server.flight.FlightAnimationState;
 import cc.lvjia.wings.server.flight.Flight;
 import cc.lvjia.wings.util.function.FloatConsumer;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -11,7 +16,6 @@ import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Consumer;
 
@@ -120,13 +124,13 @@ public final class FlightViewDefault implements FlightView {
             }
 
             private static class WingStrategy<T extends Animator> implements Strategy {
-                private static final double REMOTE_VERTICAL_DEAD_ZONE = 0.01D;
-
                 private final WingForm<T> shape;
 
                 private final T animator;
 
                 private State state;
+
+                private FlightAnimationState remoteAnimationState;
 
                 public WingStrategy(WingForm<T> shape) {
                     this.shape = shape;
@@ -137,12 +141,16 @@ public final class FlightViewDefault implements FlightView {
                 @Override
                 public void update(Flight flight, Player player) {
                     this.animator.update();
-                    Vec3 motion = this.getAnimationMotion(player);
+                    if (!player.isLocalPlayer()) {
+                        this.applyRemoteAnimationState(flight.getAnimationState());
+                        return;
+                    }
+                    this.remoteAnimationState = null;
                     State state = this.state.update(
                             flight,
-                            motion.x(),
-                            motion.y(),
-                            motion.z(),
+                            player.getX() - player.xo,
+                            player.getY() - player.yo,
+                            player.getZ() - player.zo,
                             player
                     );
                     if (!this.state.equals(state)) {
@@ -151,19 +159,26 @@ public final class FlightViewDefault implements FlightView {
                     this.state = state;
                 }
 
-                private Vec3 getAnimationMotion(Player player) {
-                    if (player.isLocalPlayer()) {
-                        return new Vec3(
-                                player.getX() - player.xo,
-                                player.getY() - player.yo,
-                                player.getZ() - player.zo
-                        );
+                private void applyRemoteAnimationState(FlightAnimationState animationState) {
+                    if (this.remoteAnimationState == animationState) {
+                        return;
                     }
-                    Vec3 motion = player.getDeltaMovement();
-                    if (Math.abs(motion.y()) < REMOTE_VERTICAL_DEAD_ZONE) {
-                        return new Vec3(motion.x(), 0.0D, motion.z());
+                    this.remoteAnimationState = animationState;
+                    State state = this.createState(animationState);
+                    if (!this.state.getClass().equals(state.getClass())) {
+                        state.beginAnimation(this.animator);
                     }
-                    return motion;
+                    this.state = state;
+                }
+
+                private State createState(FlightAnimationState animationState) {
+                    return switch (animationState) {
+                        case LIFT -> new StateLift();
+                        case GLIDE -> new StateGlide();
+                        case LAND -> new StateLand();
+                        case FALL -> new StateFall();
+                        case IDLE -> new StateIdle();
+                    };
                 }
 
                 @Override
