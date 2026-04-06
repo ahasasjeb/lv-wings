@@ -8,6 +8,7 @@ import cc.lvjia.wings.server.command.WingsCommand;
 import cc.lvjia.wings.server.flight.Flight;
 import cc.lvjia.wings.server.flight.Flights;
 import cc.lvjia.wings.server.item.WingsItems;
+import cc.lvjia.wings.server.net.serverbound.MessageControlFlying;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -23,6 +24,7 @@ import net.neoforged.neoforge.event.EventHooks;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.EntityMountEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
@@ -84,6 +86,11 @@ public final class ServerEventHandler {
         Flights.ifPlayer(event.getEntity(), (player, flight) ->
                 flight.setIsFlying(false, Flight.PlayerSet.ofAll())
         );
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
+        MessageControlFlying.clearRateLimit(event.getEntity());
     }
 
     @SubscribeEvent

@@ -13,6 +13,10 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * 客户端 -> 服务端：请求切换飞行状态。
  * <p>
@@ -20,6 +24,8 @@ import org.apache.logging.log4j.Logger;
  */
 public record MessageControlFlying(boolean isFlying) implements Message {
     private static final Logger LOGGER = LogManager.getLogger("WingsNetwork");
+    private static final int MIN_CONTROL_INTERVAL_TICKS = 2;
+    private static final Map<UUID, Integer> LAST_CONTROL_TICKS = new ConcurrentHashMap<>();
 
     public static final CustomPacketPayload.Type<MessageControlFlying> TYPE = new CustomPacketPayload.Type<>(WingsMod.locate("control_flying"));
     public static final StreamCodec<FriendlyByteBuf, MessageControlFlying> STREAM_CODEC =
@@ -33,6 +39,11 @@ public record MessageControlFlying(boolean isFlying) implements Message {
                 LOGGER.warn("Received control_flying from null player");
                 return;
             }
+            Integer lastControlTick = LAST_CONTROL_TICKS.get(player.getUUID());
+            if (lastControlTick != null && player.tickCount - lastControlTick < MIN_CONTROL_INTERVAL_TICKS) {
+                return;
+            }
+            LAST_CONTROL_TICKS.put(player.getUUID(), player.tickCount);
             Flight flight = player.getData(WingsAttachments.FLIGHT.get());
             if (!flight.canFly(player)) {
                 LOGGER.debug("Player {} failed canFly check, ignoring control_flying", player.getName().getString());
@@ -44,6 +55,10 @@ public record MessageControlFlying(boolean isFlying) implements Message {
             // Always send the authoritative state back to the initiator to resolve client prediction drift.
             context.reply(new MessageSyncFlight(player, flight));
         });
+    }
+
+    public static void clearRateLimit(Player player) {
+        LAST_CONTROL_TICKS.remove(player.getUUID());
     }
 
     @Override

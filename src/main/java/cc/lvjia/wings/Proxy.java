@@ -51,7 +51,13 @@ public class Proxy {
     @SuppressWarnings("deprecation")
     public void addFlightListeners(Player player, Flight instance) {
         if (player instanceof ServerPlayer serverPlayer) {
-            instance.registerFlyingListener(isFlying -> player.getAbilities().mayfly = isFlying);
+            instance.registerFlyingListener(isFlying -> {
+                player.getAbilities().mayfly = isFlying;
+                if (!isFlying) {
+                    player.getAbilities().flying = false;
+                }
+                serverPlayer.onUpdateAbilities();
+            });
             instance.registerFlyingListener(isFlying -> {
                 if (isFlying) {
                     player.removeVehicle();
