@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Consumer;
 
@@ -119,6 +120,8 @@ public final class FlightViewDefault implements FlightView {
             }
 
             private static class WingStrategy<T extends Animator> implements Strategy {
+                private static final double REMOTE_VERTICAL_DEAD_ZONE = 0.01D;
+
                 private final WingForm<T> shape;
 
                 private final T animator;
@@ -134,17 +137,33 @@ public final class FlightViewDefault implements FlightView {
                 @Override
                 public void update(Flight flight, Player player) {
                     this.animator.update();
+                    Vec3 motion = this.getAnimationMotion(player);
                     State state = this.state.update(
                             flight,
-                            player.getX() - player.xo,
-                            player.getY() - player.yo,
-                            player.getZ() - player.zo,
+                            motion.x(),
+                            motion.y(),
+                            motion.z(),
                             player
                     );
                     if (!this.state.equals(state)) {
                         state.beginAnimation(this.animator);
                     }
                     this.state = state;
+                }
+
+                private Vec3 getAnimationMotion(Player player) {
+                    if (player.isLocalPlayer()) {
+                        return new Vec3(
+                                player.getX() - player.xo,
+                                player.getY() - player.yo,
+                                player.getZ() - player.zo
+                        );
+                    }
+                    Vec3 motion = player.getDeltaMovement();
+                    if (Math.abs(motion.y()) < REMOTE_VERTICAL_DEAD_ZONE) {
+                        return new Vec3(motion.x(), 0.0D, motion.z());
+                    }
+                    return motion;
                 }
 
                 @Override
