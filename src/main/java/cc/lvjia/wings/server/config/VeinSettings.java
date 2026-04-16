@@ -46,25 +46,27 @@ public final class VeinSettings {
         builder.pop();
     }
 
-    public void getSize() {
-        this.readInt(this.size, "size", MIN_SIZE, MAX_SIZE, this.defaultSize);
+    public int getSize() {
+        return this.readInt(this.size, "size", MIN_SIZE, MAX_SIZE, this.defaultSize);
     }
 
-    public void getCount() {
-        this.readInt(this.count, "count", MIN_COUNT, MAX_COUNT, this.defaultCount);
+    public int getCount() {
+        return this.readInt(this.count, "count", MIN_COUNT, MAX_COUNT, this.defaultCount);
     }
 
     public int getMinHeight() {
         return this.readInt(this.minHeight, "minHeight", MIN_WORLD_HEIGHT, MAX_WORLD_HEIGHT, this.defaultMinHeight);
     }
 
-    public void getMaxHeight() {
+    public int getMaxHeight() {
         int min = this.getMinHeight();
         int max = this.readInt(this.maxHeight, "maxHeight", MIN_WORLD_HEIGHT, MAX_WORLD_HEIGHT, this.defaultMaxHeight);
         if (max < min) {
             LOGGER.warn("Max height {} is below min height {} for ore '{}'. Reverting to {}.", max, min, this.name, min);
             this.maxHeight.set(min);
+            return min;
         }
+        return max;
     }
 
     public void validate() {
