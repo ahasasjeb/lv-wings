@@ -10,7 +10,6 @@ import cc.lvjia.wings.server.flight.FlightSpeedAntiCheat;
 import cc.lvjia.wings.server.flight.Flights;
 import cc.lvjia.wings.server.item.WingsItems;
 import cc.lvjia.wings.server.net.serverbound.MessageControlFlying;
-import cc.lvjia.wings.server.worldgen.OreGenerationHandler;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.server.level.ServerPlayer;
@@ -29,9 +28,7 @@ import net.neoforged.neoforge.event.entity.EntityMountEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import net.neoforged.neoforge.event.level.ChunkEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
-import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 @EventBusSubscriber(modid = WingsMod.ID)
 public final class ServerEventHandler {
@@ -133,15 +130,5 @@ public final class ServerEventHandler {
     @SubscribeEvent
     public static void onRegisterCommands(RegisterCommandsEvent event) {
         WingsCommand.register(event.getDispatcher());
-    }
-
-    @SubscribeEvent
-    public static void onChunkLoad(ChunkEvent.Load event) {
-        OreGenerationHandler.onChunkLoad(event);
-    }
-
-    @SubscribeEvent
-    public static void onServerTick(ServerTickEvent.Post event) {
-        OreGenerationHandler.onServerTick(event.getServer());
     }
 }
