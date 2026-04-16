@@ -31,6 +31,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.ChunkEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 @EventBusSubscriber(modid = WingsMod.ID)
 public final class ServerEventHandler {
@@ -137,5 +138,10 @@ public final class ServerEventHandler {
     @SubscribeEvent
     public static void onChunkLoad(ChunkEvent.Load event) {
         OreGenerationHandler.onChunkLoad(event);
+    }
+
+    @SubscribeEvent
+    public static void onServerTick(ServerTickEvent.Post event) {
+        OreGenerationHandler.onServerTick(event.getServer());
     }
 }
