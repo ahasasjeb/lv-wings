@@ -6,11 +6,13 @@ import cc.lvjia.wings.server.asm.PlayerFlightCheckEvent;
 import cc.lvjia.wings.server.asm.PlayerFlownEvent;
 import cc.lvjia.wings.server.command.WingsCommand;
 import cc.lvjia.wings.server.flight.Flight;
+import cc.lvjia.wings.server.flight.FlightSpeedAntiCheat;
 import cc.lvjia.wings.server.flight.Flights;
 import cc.lvjia.wings.server.item.WingsItems;
 import cc.lvjia.wings.server.net.serverbound.MessageControlFlying;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -76,21 +78,26 @@ public final class ServerEventHandler {
 
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
-        Flights.get(event.getEntity()).ifPresent(flight ->
-                flight.tick(event.getEntity())
-        );
+        Flights.get(event.getEntity()).ifPresent(flight -> {
+            flight.tick(event.getEntity());
+            if (event.getEntity() instanceof ServerPlayer serverPlayer) {
+                FlightSpeedAntiCheat.tick(serverPlayer, flight);
+            }
+        });
     }
 
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent event) {
-        Flights.ifPlayer(event.getEntity(), (player, flight) ->
-                flight.setIsFlying(false, Flight.PlayerSet.ofAll())
-        );
+        Flights.ifPlayer(event.getEntity(), (player, flight) -> {
+            flight.setIsFlying(false, Flight.PlayerSet.ofAll());
+            FlightSpeedAntiCheat.clear(player);
+        });
     }
 
     @SubscribeEvent
     public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
         MessageControlFlying.clearRateLimit(event.getEntity());
+        FlightSpeedAntiCheat.clear(event.getEntity());
     }
 
     @SubscribeEvent
@@ -104,6 +111,9 @@ public final class ServerEventHandler {
         Player player = event.getEntity();
         Flights.get(player).ifPresent(flight -> {
             flight.onFlown(player, event.getDirection());
+            if (player instanceof ServerPlayer serverPlayer) {
+                FlightSpeedAntiCheat.recordMovement(serverPlayer, flight, event.getDirection());
+            }
         });
     }
 
