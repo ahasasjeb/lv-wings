@@ -33,8 +33,6 @@ public final class WingsConfigEvents {
             WingsConfig.validate();
         } else if (spec == WingsItemsConfig.SPEC) {
             WingsItemsConfig.validate();
-        } else if (spec == WingsOreConfig.SPEC) {
-            WingsOreConfig.validate();
         }
     }
 }
