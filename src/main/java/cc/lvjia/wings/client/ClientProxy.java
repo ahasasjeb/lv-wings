@@ -96,7 +96,10 @@ public final class ClientProxy extends Proxy {
                 .key("key.wings.fly", KeyConflictContext.IN_GAME, KeyModifier.NONE, GLFW.GLFW_KEY_R)
                 .onPress(() -> {
                     Player player = Minecraft.getInstance().player;
-                    Flights.get(player).filter(flight -> flight.canFly(player)).ifPresent(flight ->
+                    if (player == null || player.isSpectator()) {
+                        return;
+                    }
+                    Flights.get(player).ifPresent(flight ->
                             flight.toggleIsFlying(Flight.PlayerSet.ofOthers())
                     );
                     Flights.ifPlayer(player, (p, flight) -> {

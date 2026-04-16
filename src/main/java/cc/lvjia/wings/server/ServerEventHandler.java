@@ -6,6 +6,7 @@ import cc.lvjia.wings.server.asm.PlayerFlightCheckEvent;
 import cc.lvjia.wings.server.asm.PlayerFlownEvent;
 import cc.lvjia.wings.server.command.WingsCommand;
 import cc.lvjia.wings.server.flight.Flight;
+import cc.lvjia.wings.server.flight.FlightAnimationState;
 import cc.lvjia.wings.server.flight.FlightSpeedAntiCheat;
 import cc.lvjia.wings.server.flight.Flights;
 import cc.lvjia.wings.server.item.WingsItems;
@@ -78,9 +79,17 @@ public final class ServerEventHandler {
 
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
-        Flights.get(event.getEntity()).ifPresent(flight -> {
-            flight.tick(event.getEntity());
-            if (event.getEntity() instanceof ServerPlayer serverPlayer) {
+        Player player = event.getEntity();
+        Flights.get(player).ifPresent(flight -> {
+            if (clearSpectatorFlightState(player, flight)) {
+                return;
+            }
+            flight.tick(player);
+            if (player instanceof ServerPlayer serverPlayer && !serverPlayer.level().isClientSide()) {
+                if (flight.isFlying() && player.getAbilities().flying) {
+                    player.getAbilities().flying = false;
+                    serverPlayer.onUpdateAbilities();
+                }
                 FlightSpeedAntiCheat.tick(serverPlayer, flight);
             }
         });
@@ -102,6 +111,9 @@ public final class ServerEventHandler {
 
     @SubscribeEvent
     public static void onPlayerFlightCheck(PlayerFlightCheckEvent event) {
+        if (event.getEntity().isSpectator()) {
+            return;
+        }
         Flights.get(event.getEntity()).filter(Flight::isFlying)
                 .ifPresent(flight -> event.setFlying());
     }
@@ -110,8 +122,11 @@ public final class ServerEventHandler {
     public static void onPlayerFlown(PlayerFlownEvent event) {
         Player player = event.getEntity();
         Flights.get(player).ifPresent(flight -> {
+            if (clearSpectatorFlightState(player, flight)) {
+                return;
+            }
             flight.onFlown(player, event.getDirection());
-            if (player instanceof ServerPlayer serverPlayer) {
+            if (player instanceof ServerPlayer serverPlayer && !serverPlayer.level().isClientSide()) {
                 FlightSpeedAntiCheat.recordMovement(serverPlayer, flight, event.getDirection());
             }
         });
@@ -120,6 +135,9 @@ public final class ServerEventHandler {
     @SubscribeEvent
     public static void onGetLivingHeadLimit(GetLivingHeadLimitEvent event) {
         Flights.ifPlayer(event.getEntity(), (player, flight) -> {
+            if (player.isSpectator()) {
+                return;
+            }
             if (flight.isFlying()) {
                 event.setHardLimit(50.0F);
                 event.disableSoftLimit();
@@ -130,5 +148,30 @@ public final class ServerEventHandler {
     @SubscribeEvent
     public static void onRegisterCommands(RegisterCommandsEvent event) {
         WingsCommand.register(event.getDispatcher());
+    }
+
+    private static boolean clearSpectatorFlightState(Player player, Flight flight) {
+        if (!player.isSpectator()) {
+            return false;
+        }
+        boolean wasFlying = flight.isFlying();
+        boolean changed = false;
+        if (wasFlying) {
+            flight.setIsFlying(false, Flight.PlayerSet.ofAll());
+            changed = true;
+        }
+        if (flight.getTimeFlying() != 0) {
+            flight.setTimeFlying(0);
+            changed = true;
+        }
+        if (flight.getAnimationState() != FlightAnimationState.IDLE) {
+            flight.setAnimationState(FlightAnimationState.IDLE);
+            changed = true;
+        }
+        if (changed && !wasFlying) {
+            flight.sync(Flight.PlayerSet.ofAll());
+        }
+        FlightSpeedAntiCheat.clear(player);
+        return true;
     }
 }

@@ -1,5 +1,6 @@
 package cc.lvjia.wings.server.flight;
 
+import cc.lvjia.wings.server.config.WingsConfig;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -18,25 +19,18 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class FlightSpeedAntiCheat {
     private static final Logger LOGGER = LogManager.getLogger("WingsFlightAntiCheat");
 
-    private static final int TAKEOFF_GRACE_TICKS = 8;
-    private static final int SOFT_VIOLATION_LIMIT = 4;
-    private static final int HARD_VIOLATION_LIMIT = 2;
-    private static final int CORRECTION_COOLDOWN_TICKS = 10;
-
-    private static final double SOFT_HORIZONTAL_LIMIT = 1.6D;
-    private static final double SOFT_VERTICAL_LIMIT = 1.2D;
-    private static final double SOFT_TOTAL_LIMIT = 1.85D;
-
-    private static final double HARD_HORIZONTAL_LIMIT = 2.4D;
-    private static final double HARD_VERTICAL_LIMIT = 1.8D;
-    private static final double HARD_TOTAL_LIMIT = 2.75D;
-
     private static final Map<UUID, TrackingState> STATES = new ConcurrentHashMap<>();
 
     private FlightSpeedAntiCheat() {
     }
 
     public static void tick(ServerPlayer player, Flight flight) {
+        WingsConfig.FlightAntiCheatSettings settings = WingsConfig.getFlightAntiCheatSettings();
+        if (!settings.enabled()) {
+            clear(player);
+            return;
+        }
+
         TrackingState state = STATES.get(player.getUUID());
         if (state == null && !shouldMonitor(player, flight)) {
             return;
@@ -57,7 +51,7 @@ public final class FlightSpeedAntiCheat {
         }
 
         if (correction == null) {
-            if (flight.getTimeFlying() <= TAKEOFF_GRACE_TICKS || player.onGround()) {
+            if (flight.getTimeFlying() <= settings.takeoffGraceTicks() || player.onGround()) {
                 state.captureSafePosition(player);
                 state.relax();
             }
@@ -66,7 +60,7 @@ public final class FlightSpeedAntiCheat {
 
         Vec3 safePosition = state.safePosition != null ? state.safePosition : player.position();
         state.pendingCorrection = null;
-        state.cooldownUntilTick = player.tickCount + CORRECTION_COOLDOWN_TICKS;
+        state.cooldownUntilTick = player.tickCount + settings.correctionCooldownTicks();
         state.relax();
         state.safePosition = safePosition;
 
@@ -85,6 +79,12 @@ public final class FlightSpeedAntiCheat {
     }
 
     public static void recordMovement(ServerPlayer player, Flight flight, Vec3 movement) {
+        WingsConfig.FlightAntiCheatSettings settings = WingsConfig.getFlightAntiCheatSettings();
+        if (!settings.enabled()) {
+            clear(player);
+            return;
+        }
+
         if (!shouldMonitor(player, flight)) {
             clear(player);
             return;
@@ -96,20 +96,29 @@ public final class FlightSpeedAntiCheat {
         }
 
         double horizontal = Math.hypot(movement.x(), movement.z());
-        double vertical = Math.abs(movement.y());
-        double total = movement.length();
+        // 俯冲会天然放大负Y位移；这里只统计上升分量，避免把正常俯冲误判为超速。
+        double vertical = Math.max(0.0D, movement.y());
+        double total = Math.hypot(horizontal, vertical);
+        double verticalBonus = computeUpwardVerticalBonus(horizontal, settings);
+        double totalBonus = verticalBonus * 0.4D;
+        double softVerticalLimit = settings.softVerticalLimit() + verticalBonus;
+        double hardVerticalLimit = settings.hardVerticalLimit() + verticalBonus;
+        double softTotalLimit = settings.softTotalLimit() + totalBonus;
+        double hardTotalLimit = settings.hardTotalLimit() + totalBonus;
 
-        if (flight.getTimeFlying() <= TAKEOFF_GRACE_TICKS || player.isInWater() || player.isInLava()) {
+        if (flight.getTimeFlying() <= settings.takeoffGraceTicks() || player.isInWater() || player.isInLava()) {
             state.captureSafePosition(player);
             state.relax();
             return;
         }
 
-        boolean hardViolation = horizontal > HARD_HORIZONTAL_LIMIT || vertical > HARD_VERTICAL_LIMIT || total > HARD_TOTAL_LIMIT;
+        boolean hardViolation = horizontal > settings.hardHorizontalLimit()
+            || vertical > hardVerticalLimit
+            || total > hardTotalLimit;
         boolean softViolation = hardViolation
-                || horizontal > SOFT_HORIZONTAL_LIMIT
-                || vertical > SOFT_VERTICAL_LIMIT
-                || total > SOFT_TOTAL_LIMIT;
+            || horizontal > settings.softHorizontalLimit()
+            || vertical > softVerticalLimit
+            || total > softTotalLimit;
 
         if (!softViolation) {
             state.captureSafePosition(player);
@@ -119,7 +128,7 @@ public final class FlightSpeedAntiCheat {
 
         state.softViolations++;
         state.hardViolations = hardViolation ? state.hardViolations + 1 : 0;
-        if (state.softViolations >= SOFT_VIOLATION_LIMIT || state.hardViolations >= HARD_VIOLATION_LIMIT) {
+        if (state.softViolations >= settings.softViolationLimit() || state.hardViolations >= settings.hardViolationLimit()) {
             state.pendingCorrection = new PendingCorrection(horizontal, vertical, total);
         }
     }
@@ -135,6 +144,16 @@ public final class FlightSpeedAntiCheat {
                 && !player.isPassenger()
                 && !player.isSleeping()
                 && !player.isChangingDimension();
+    }
+
+    private static double computeUpwardVerticalBonus(double horizontal, WingsConfig.FlightAntiCheatSettings settings) {
+        double threshold = settings.upwardAssistHorizontalThreshold();
+        double maxBonus = settings.upwardAssistMaxBonus();
+        if (threshold <= 0.0D || maxBonus <= 0.0D) {
+            return 0.0D;
+        }
+        double ratio = 1.0D - Math.min(1.0D, horizontal / threshold);
+        return maxBonus * ratio;
     }
 
     private record PendingCorrection(double horizontal, double vertical, double total) {

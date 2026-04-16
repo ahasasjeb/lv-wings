@@ -12,6 +12,7 @@ import cc.lvjia.wings.server.flight.Flights;
 import cc.lvjia.wings.util.MathH;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -32,6 +33,8 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 @EventBusSubscriber(value = Dist.CLIENT, modid = WingsMod.ID)
 public final class ClientEventHandler {
     private static ResourceKey<Level> lastPlayerDimension;
+    private static CameraType lastCameraType = CameraType.FIRST_PERSON;
+    private static float smoothedCameraRoll;
 
     private ClientEventHandler() {
     }
@@ -42,7 +45,7 @@ public final class ClientEventHandler {
         Flights.get(player).ifPresent(flight -> {
             float delta = event.getTicksExisted() - player.tickCount;
             float amt = flight.getFlyingAmount(delta);
-            if (amt == 0.0F) {
+            if (!shouldApplyFlightPose(player, amt)) {
                 return;
             }
             PlayerModel model = event.getModel();
@@ -79,10 +82,8 @@ public final class ClientEventHandler {
             PoseStack matrixStack = event.getMatrixStack();
             float delta = event.getDelta();
             float amt = flight.getFlyingAmount(delta);
-            if (amt > 0.0F) {
-                float diffO = Mth.wrapDegrees(player.yBodyRotO - player.yRotO);
-                float diff = Mth.wrapDegrees(player.yBodyRot - player.getYRot());
-                float roll = Mth.lerp(delta, diffO, diff);
+            if (shouldApplyFlightPose(player, amt)) {
+                float roll = getBodyYawRoll(player, delta);
                 float pitch = -Mth.lerp(delta, player.xRotO, player.getXRot()) - 90.0F;
                 matrixStack.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(amt, 0.0F, roll)));
                 matrixStack.mulPose(Axis.XP.rotationDegrees(Mth.lerp(amt, 0.0F, pitch)));
@@ -102,7 +103,18 @@ public final class ClientEventHandler {
 
     @SubscribeEvent
     public static void onCameraSetup(ViewportEvent.ComputeCameraAngles event) {
-        Entity cameraEntity = Minecraft.getInstance().getCameraEntity();
+        Minecraft mc = Minecraft.getInstance();
+        CameraType cameraType = mc.options.getCameraType();
+        if (cameraType != lastCameraType) {
+            lastCameraType = cameraType;
+            smoothedCameraRoll = 0.0F;
+        }
+        if (!cameraType.isFirstPerson()) {
+            event.setRoll(0.0F);
+            return;
+        }
+
+        Entity cameraEntity = mc.getCameraEntity();
         if (cameraEntity == null) {
             return;
         }
@@ -110,19 +122,20 @@ public final class ClientEventHandler {
         Flights.ifPlayer(cameraEntity, (player, flight) -> {
             float delta = (float) event.getPartialTick();
             float amt = flight.getFlyingAmount(delta);
-            if (amt > 0.0F) {
-                float diffO = Mth.wrapDegrees(player.yBodyRotO - player.yRotO);
-                float diff = Mth.wrapDegrees(player.yBodyRot - player.getYRot());
-                float roll = Mth.lerp(delta, diffO, diff);
-                float targetRoll = Mth.lerp(amt, 0.0F, -roll * 0.25F);
-                // Failsafe: guard against sporadic extreme values that flip the camera sideways
-                if (!Float.isFinite(targetRoll) || Math.abs(targetRoll) > 75.0F) {
-                    targetRoll = 0.0F;
-                } else {
-                    targetRoll = Mth.clamp(targetRoll, -60.0F, 60.0F);
-                }
-                event.setRoll(targetRoll);
+            if (!flight.isFlying() || player.isSpectator() || amt <= 0.0F) {
+                smoothedCameraRoll = 0.0F;
+                event.setRoll(0.0F);
+                return;
             }
+
+            float roll = getBodyYawRoll(player, delta);
+            float targetRoll = Mth.lerp(amt, 0.0F, -roll * 0.25F);
+            if (!Float.isFinite(targetRoll)) {
+                targetRoll = 0.0F;
+            }
+            targetRoll = Mth.clamp(targetRoll, -35.0F, 35.0F);
+            smoothedCameraRoll = Mth.approachDegrees(smoothedCameraRoll, targetRoll, 8.0F);
+            event.setRoll(smoothedCameraRoll);
         });
     }
 
@@ -155,6 +168,7 @@ public final class ClientEventHandler {
         LocalPlayer player = mc.player;
         if (player == null) {
             lastPlayerDimension = null;
+            smoothedCameraRoll = 0.0F;
             return;
         }
         ResourceKey<Level> current = player.level().dimension();
@@ -162,5 +176,15 @@ public final class ClientEventHandler {
             lastPlayerDimension = current;
             FlightViews.invalidate(player);
         }
+    }
+
+    private static boolean shouldApplyFlightPose(Player player, float amount) {
+        return amount > 0.0F && !player.isSpectator();
+    }
+
+    private static float getBodyYawRoll(Player player, float delta) {
+        float diffO = Mth.wrapDegrees(player.yBodyRotO - player.yRotO);
+        float diff = Mth.wrapDegrees(player.yBodyRot - player.getYRot());
+        return Mth.rotLerp(delta, diffO, diff);
     }
 }

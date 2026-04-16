@@ -52,8 +52,9 @@ public class Proxy {
     public void addFlightListeners(Player player, Flight instance) {
         if (player instanceof ServerPlayer serverPlayer) {
             instance.registerFlyingListener(isFlying -> {
-                player.getAbilities().mayfly = isFlying;
-                if (!isFlying) {
+                boolean hasVanillaFlight = player.getAbilities().instabuild || player.isSpectator();
+                player.getAbilities().mayfly = isFlying || hasVanillaFlight;
+                if (isFlying || !hasVanillaFlight) {
                     player.getAbilities().flying = false;
                 }
                 serverPlayer.onUpdateAbilities();
