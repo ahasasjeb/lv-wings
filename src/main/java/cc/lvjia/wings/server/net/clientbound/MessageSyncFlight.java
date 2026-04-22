@@ -55,6 +55,7 @@ public record MessageSyncFlight(int playerId, Flight flight) implements Message 
             if (!hadFlight) {
                 LOGGER.debug("Creating new flight attachment for player {}", player.getName().getString());
             }
+            // 客户端直接用整份快照覆盖本地状态，不做增量合并，避免残留旧字段。
             flight.clone(message.flight());
             LOGGER.debug("Synced flight data for player {} (flying={}, wing={})",
                     player.getName().getString(), flight.isFlying(), flight.getWing());

@@ -5,6 +5,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 
+/**
+ * 把飞行动画状态变化节流成可同步的节奏。
+ * <p>
+ * 状态切换会尽量快速同步；周期同步则用于补偿丢包和新追踪者加入后的收敛。
+ */
 public final class FlightAnimationTracker {
     private static final int DEFAULT_STATE_DELAY = 2;
     private static final int GLIDE_EXIT_LIFT_DELAY = 6;

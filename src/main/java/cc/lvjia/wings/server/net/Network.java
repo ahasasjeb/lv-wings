@@ -30,6 +30,7 @@ public final class Network {
     private void onRegisterPayloadHandlers(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar(VERSION);
 
+        // 控制指令走客户端 -> 服务端，飞行快照走服务端 -> 客户端。
         registrar.optional()
                 .playToServer(MessageControlFlying.TYPE, MessageControlFlying.STREAM_CODEC, MessageControlFlying::handle);
 

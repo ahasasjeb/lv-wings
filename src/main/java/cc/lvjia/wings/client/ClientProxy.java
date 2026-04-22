@@ -118,6 +118,7 @@ public final class ClientProxy extends Proxy {
     public void addFlightListeners(Player player, Flight flight) {
         super.addFlightListeners(player, flight);
         if (player.isLocalPlayer()) {
+            // 本地玩家先更新客户端预测态，再把最终意图发回服务端做校验和纠正
             Flight.Notifier notifier = Flight.Notifier.of(
                     () -> {
                     },

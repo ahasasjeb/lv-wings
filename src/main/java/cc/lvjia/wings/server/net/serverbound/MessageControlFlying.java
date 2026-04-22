@@ -76,8 +76,8 @@ public record MessageControlFlying(boolean isFlying) implements Message {
                 return;
             }
             LOGGER.debug("Player {} {} flying", player.getName().getString(), message.isFlying() ? "started" : "stopped");
+            // 服务端先写入权威状态，再把同一份快照回发给操作者，修正客户端预测偏差。
             flight.setIsFlying(message.isFlying(), Flight.PlayerSet.ofOthers());
-            // Always send the authoritative state back to the initiator to resolve client prediction drift.
             context.reply(new MessageSyncFlight(player, flight));
         });
     }

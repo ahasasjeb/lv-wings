@@ -70,6 +70,7 @@ public class Proxy {
                     () -> this.network.sendToAllTracking(new MessageSyncFlight(player, instance), serverPlayer)
             );
             instance.registerSyncListener(players -> players.notify(notifier));
+            // 先把当前权威状态同步给追踪者，避免新加入视角时看到旧值
             instance.sync(Flight.PlayerSet.ofOthers());
         }
     }

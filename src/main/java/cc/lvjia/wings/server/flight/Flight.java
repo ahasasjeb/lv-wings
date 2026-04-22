@@ -69,6 +69,9 @@ public interface Flight {
         void onChange(boolean isFlying);
     }
 
+    /**
+     * 同步回调只描述“把当前状态推给谁”，不关心具体怎么发包。
+     */
     interface SyncListener {
         static Consumer<SyncListener> onSyncUsing(PlayerSet players) {
             return l -> l.onSync(players);
@@ -77,6 +80,12 @@ public interface Flight {
         void onSync(PlayerSet players);
     }
 
+    /**
+     * 一次同步要发送到的目标集合。
+     * <p>
+     * 这样上层只需要表达“自己 / 某个玩家 / 追踪者 / 全部”，
+     * 具体的网络发送细节由监听器统一处理。
+     */
     interface PlayerSet {
         static PlayerSet empty() {
             return n -> {

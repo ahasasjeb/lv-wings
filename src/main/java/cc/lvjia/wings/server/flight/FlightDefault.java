@@ -265,6 +265,7 @@ public final class FlightDefault implements Flight {
 
     @Override
     public void sync(PlayerSet players) {
+        // 这里只分发“状态变了”，不直接耦合网络层，这样客户端视图和服务端广播都能复用同一条链路。
         this.syncListeners.forEach(SyncListener.onSyncUsing(players));
     }
 
