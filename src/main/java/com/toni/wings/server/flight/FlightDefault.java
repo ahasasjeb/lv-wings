@@ -218,18 +218,14 @@ public final class FlightDefault implements Flight {
     public void serialize(FriendlyByteBuf buf) {
         buf.writeBoolean(this.isFlying());
         buf.writeVarInt(this.getTimeFlying());
-        buf.writeUtf(Objects.requireNonNull(WingsMod.WINGS.getKey(this.getWing())).toString());
+        buf.writeId(WingsMod.WINGS, this.getWing());
     }
 
     @Override
     public void deserialize(FriendlyByteBuf buf) {
         this.setIsFlying(buf.readBoolean());
         this.setTimeFlying(buf.readVarInt());
-        ResourceLocation wingId = ResourceLocation.tryParse(buf.readUtf(64));
-        FlightApparatus wing = wingId != null
-                ? WingsMod.WINGS.getOptional(wingId).orElse(FlightApparatus.NONE)
-                : FlightApparatus.NONE;
-        this.setWing(wing);
+        this.setWing(buf.readById(WingsMod.WINGS));
     }
 
     public static final class Serializer implements NBTSerializer<FlightDefault, CompoundTag> {
