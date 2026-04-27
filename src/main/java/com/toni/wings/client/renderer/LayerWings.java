@@ -21,7 +21,9 @@ import javax.annotation.Nonnull;
 public final class LayerWings extends RenderLayer<LivingEntity, HumanoidModel<LivingEntity>> {
     private final TransformFunction transform;
 
+    @Nonnull
     public static final ModelLayerLocation INSECTOID_WINGS = layer("insectoid_wings");
+    @Nonnull
     public static final ModelLayerLocation AVIAN_WINGS = layer("avian_wings");
 
     public static void init(IEventBus modBus)

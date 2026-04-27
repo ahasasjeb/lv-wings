@@ -31,6 +31,7 @@ import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public final class ClientProxy extends Proxy {
@@ -108,8 +109,9 @@ public final class ClientProxy extends Proxy {
     }
 
     private static  <A extends Animator> WingForm<A> createWings(ResourceLocation name, Supplier<A> animator, ModelWings<A> model, Supplier<RenderType> renderType) {
-        String texturePath = String.format("textures/entity/%s.png", name.getPath());
-        ResourceLocation texture = ResourceLocation.tryBuild(name.getNamespace(), texturePath);
+        String namespace = Objects.requireNonNull(name.getNamespace());
+        String texturePath = Objects.requireNonNull(String.format("textures/entity/%s.png", name.getPath()));
+        ResourceLocation texture = ResourceLocation.tryBuild(namespace, texturePath);
         if (texture == null) {
             throw new IllegalArgumentException("Invalid texture path: " + texturePath);
         }
