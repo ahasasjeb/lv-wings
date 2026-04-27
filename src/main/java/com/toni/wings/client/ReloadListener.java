@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 @OnlyIn(Dist.CLIENT)
@@ -39,17 +40,29 @@ public class ReloadListener implements ResourceManagerReloadListener {
     public void onResourceManagerReload(@Nonnull ResourceManager rm) {
 
         if(WingForm.isEmpty()){
-            WingForm.register(WingsMod.ANGEL_WINGS, ClientProxy.createAvianWings(WingsMod.WINGS.getKey(WingsMod.ANGEL_WINGS)));
-            WingForm.register(WingsMod.PARROT_WINGS, ClientProxy.createAvianWings(WingsMod.WINGS.getKey(WingsMod.PARROT_WINGS)));
-            WingForm.register(WingsMod.BAT_WINGS, ClientProxy.createAvianWings(WingsMod.WINGS.getKey(WingsMod.BAT_WINGS)));
-            WingForm.register(WingsMod.BLUE_BUTTERFLY_WINGS, ClientProxy.createInsectoidWings(WingsMod.WINGS.getKey(WingsMod.BLUE_BUTTERFLY_WINGS)));
-            WingForm.register(WingsMod.DRAGON_WINGS, ClientProxy.createAvianWings(WingsMod.WINGS.getKey(WingsMod.DRAGON_WINGS)));
-            WingForm.register(WingsMod.EVIL_WINGS, ClientProxy.createAvianWings(WingsMod.WINGS.getKey(WingsMod.EVIL_WINGS)));
-            WingForm.register(WingsMod.FAIRY_WINGS, ClientProxy.createInsectoidWings(WingsMod.WINGS.getKey(WingsMod.FAIRY_WINGS)));
-            WingForm.register(WingsMod.FIRE_WINGS, ClientProxy.createAvianWings(WingsMod.WINGS.getKey(WingsMod.FIRE_WINGS)));
-            WingForm.register(WingsMod.MONARCH_BUTTERFLY_WINGS, ClientProxy.createInsectoidWings(WingsMod.WINGS.getKey(WingsMod.MONARCH_BUTTERFLY_WINGS)));
-            WingForm.register(WingsMod.SLIME_WINGS, ClientProxy.createInsectoidWings(WingsMod.WINGS.getKey(WingsMod.SLIME_WINGS)));
-            WingForm.register(WingsMod.LVJIA_SUPER_WINGS, ClientProxy.createEndPortalWings(WingsMod.WINGS.getKey(WingsMod.LVJIA_SUPER_WINGS)));
+            var angelWings = Objects.requireNonNull(WingsMod.ANGEL_WINGS);
+            var parrotWings = Objects.requireNonNull(WingsMod.PARROT_WINGS);
+            var batWings = Objects.requireNonNull(WingsMod.BAT_WINGS);
+            var blueButterflyWings = Objects.requireNonNull(WingsMod.BLUE_BUTTERFLY_WINGS);
+            var dragonWings = Objects.requireNonNull(WingsMod.DRAGON_WINGS);
+            var evilWings = Objects.requireNonNull(WingsMod.EVIL_WINGS);
+            var fairyWings = Objects.requireNonNull(WingsMod.FAIRY_WINGS);
+            var fireWings = Objects.requireNonNull(WingsMod.FIRE_WINGS);
+            var monarchButterflyWings = Objects.requireNonNull(WingsMod.MONARCH_BUTTERFLY_WINGS);
+            var slimeWings = Objects.requireNonNull(WingsMod.SLIME_WINGS);
+            var lvjiaSuperWings = Objects.requireNonNull(WingsMod.LVJIA_SUPER_WINGS);
+
+            WingForm.register(angelWings, ClientProxy.createAvianWings(WingsMod.WINGS.getKey(angelWings)));
+            WingForm.register(parrotWings, ClientProxy.createAvianWings(WingsMod.WINGS.getKey(parrotWings)));
+            WingForm.register(batWings, ClientProxy.createAvianWings(WingsMod.WINGS.getKey(batWings)));
+            WingForm.register(blueButterflyWings, ClientProxy.createInsectoidWings(WingsMod.WINGS.getKey(blueButterflyWings)));
+            WingForm.register(dragonWings, ClientProxy.createAvianWings(WingsMod.WINGS.getKey(dragonWings)));
+            WingForm.register(evilWings, ClientProxy.createAvianWings(WingsMod.WINGS.getKey(evilWings)));
+            WingForm.register(fairyWings, ClientProxy.createInsectoidWings(WingsMod.WINGS.getKey(fairyWings)));
+            WingForm.register(fireWings, ClientProxy.createAvianWings(WingsMod.WINGS.getKey(fireWings)));
+            WingForm.register(monarchButterflyWings, ClientProxy.createInsectoidWings(WingsMod.WINGS.getKey(monarchButterflyWings)));
+            WingForm.register(slimeWings, ClientProxy.createInsectoidWings(WingsMod.WINGS.getKey(slimeWings)));
+            WingForm.register(lvjiaSuperWings, ClientProxy.createEndPortalWings(WingsMod.WINGS.getKey(lvjiaSuperWings)));
             //WingForm.register(WingsMod.METALLIC_WINGS, ClientProxy.createAvianWings(WingsMod.WINGS.getKey(WingsMod.METALLIC_WINGS)));
         }
 

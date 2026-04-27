@@ -28,40 +28,50 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Objects;
+
 @Mod(WingsMod.ID)
 public final class WingsMod {
     public static final String ID = "wings";
 
     private static WingsMod INSTANCE;
 
-    public static final Registry<FlightApparatus> WINGS = new DefaultedMappedRegistry<>(Names.NONE.toString(), ResourceKey.createRegistryKey(locate("wings")), Lifecycle.experimental(), false);
+    public static final Registry<FlightApparatus> WINGS = new DefaultedMappedRegistry<>(
+        Objects.requireNonNull(Names.NONE.toString(), "Default key cannot be null"),
+        Objects.requireNonNull(ResourceKey.createRegistryKey(locate("wings")), "Registry key cannot be null"),
+        Objects.requireNonNull(Lifecycle.experimental(), "Lifecycle cannot be null"),
+        false
+    );
 
     // Deferred register for command argument types
     private static final DeferredRegister<net.minecraft.commands.synchronization.ArgumentTypeInfo<?, ?>> COMMAND_ARGUMENT_TYPES = 
-        DeferredRegister.create(net.minecraft.core.registries.Registries.COMMAND_ARGUMENT_TYPE, ID);
+        DeferredRegister.create(net.minecraft.core.registries.Registries.COMMAND_ARGUMENT_TYPE, Objects.requireNonNull(ID, "Mod id cannot be null"));
 
     // Register the wings argument type
     public static final RegistryObject<net.minecraft.commands.synchronization.SingletonArgumentInfo<com.toni.wings.server.command.WingsArgument>> WINGS_ARGUMENT_TYPE = 
         COMMAND_ARGUMENT_TYPES.register("wings", () -> 
-            net.minecraft.commands.synchronization.ArgumentTypeInfos.registerByClass(
+            Objects.requireNonNull(net.minecraft.commands.synchronization.ArgumentTypeInfos.registerByClass(
                 com.toni.wings.server.command.WingsArgument.class, 
-                net.minecraft.commands.synchronization.SingletonArgumentInfo.contextFree(com.toni.wings.server.command.WingsArgument::wings)
-            )
+                Objects.requireNonNull(
+                    net.minecraft.commands.synchronization.SingletonArgumentInfo.contextFree(com.toni.wings.server.command.WingsArgument::wings),
+                    "Wings argument info cannot be null"
+                )
+            ), "Wings argument type cannot be null")
         );
 
-    public static final FlightApparatus NONE = Registry.register(WINGS, Names.NONE, FlightApparatus.NONE);
-    public static final FlightApparatus WINGLESS = Registry.register(WINGS, Names.WINGLESS, FlightApparatus.NONE);
-    public static final FlightApparatus ANGEL_WINGS = Registry.register(WINGS, Names.ANGEL, new SimpleFlightApparatus(WingsItemsConfig.ANGEL));
-	public static final FlightApparatus PARROT_WINGS = Registry.register(WINGS, Names.PARROT, new SimpleFlightApparatus(WingsItemsConfig.PARROT));
-    public static final FlightApparatus BAT_WINGS = Registry.register(WINGS, Names.BAT, new SimpleFlightApparatus(WingsItemsConfig.BAT));
-    public static final FlightApparatus BLUE_BUTTERFLY_WINGS = Registry.register(WINGS, Names.BLUE_BUTTERFLY, new SimpleFlightApparatus(WingsItemsConfig.BLUE_BUTTERFLY));
-    public static final FlightApparatus DRAGON_WINGS = Registry.register(WINGS, Names.DRAGON, new SimpleFlightApparatus(WingsItemsConfig.DRAGON));
-    public static final FlightApparatus EVIL_WINGS = Registry.register(WINGS, Names.EVIL, new SimpleFlightApparatus(WingsItemsConfig.EVIL));
-    public static final FlightApparatus FAIRY_WINGS = Registry.register(WINGS, Names.FAIRY, new SimpleFlightApparatus(WingsItemsConfig.FAIRY));
-    public static final FlightApparatus MONARCH_BUTTERFLY_WINGS = Registry.register(WINGS, Names.MONARCH_BUTTERFLY, new SimpleFlightApparatus(WingsItemsConfig.MONARCH_BUTTERFLY));
-    public static final FlightApparatus SLIME_WINGS = Registry.register(WINGS, Names.SLIME, new SimpleFlightApparatus(WingsItemsConfig.SLIME));
-    public static final FlightApparatus FIRE_WINGS = Registry.register(WINGS, Names.FIRE, new SimpleFlightApparatus(WingsItemsConfig.FIRE));
-    public static final FlightApparatus LVJIA_SUPER_WINGS = Registry.register(WINGS, Names.LVJIA_SUPER,
+    public static final FlightApparatus NONE = registerWing(Names.NONE, FlightApparatus.NONE);
+    public static final FlightApparatus WINGLESS = registerWing(Names.WINGLESS, FlightApparatus.NONE);
+    public static final FlightApparatus ANGEL_WINGS = registerWing(Names.ANGEL, new SimpleFlightApparatus(WingsItemsConfig.ANGEL));
+	public static final FlightApparatus PARROT_WINGS = registerWing(Names.PARROT, new SimpleFlightApparatus(WingsItemsConfig.PARROT));
+    public static final FlightApparatus BAT_WINGS = registerWing(Names.BAT, new SimpleFlightApparatus(WingsItemsConfig.BAT));
+    public static final FlightApparatus BLUE_BUTTERFLY_WINGS = registerWing(Names.BLUE_BUTTERFLY, new SimpleFlightApparatus(WingsItemsConfig.BLUE_BUTTERFLY));
+    public static final FlightApparatus DRAGON_WINGS = registerWing(Names.DRAGON, new SimpleFlightApparatus(WingsItemsConfig.DRAGON));
+    public static final FlightApparatus EVIL_WINGS = registerWing(Names.EVIL, new SimpleFlightApparatus(WingsItemsConfig.EVIL));
+    public static final FlightApparatus FAIRY_WINGS = registerWing(Names.FAIRY, new SimpleFlightApparatus(WingsItemsConfig.FAIRY));
+    public static final FlightApparatus MONARCH_BUTTERFLY_WINGS = registerWing(Names.MONARCH_BUTTERFLY, new SimpleFlightApparatus(WingsItemsConfig.MONARCH_BUTTERFLY));
+    public static final FlightApparatus SLIME_WINGS = registerWing(Names.SLIME, new SimpleFlightApparatus(WingsItemsConfig.SLIME));
+    public static final FlightApparatus FIRE_WINGS = registerWing(Names.FIRE, new SimpleFlightApparatus(WingsItemsConfig.FIRE));
+    public static final FlightApparatus LVJIA_SUPER_WINGS = registerWing(Names.LVJIA_SUPER,
         new BuffedFlightApparatus(WingsItemsConfig.LVJIA_SUPER,
             BuffedFlightApparatus.EffectSettings.of(MobEffects.DAMAGE_RESISTANCE, 2, 40, 40),
             BuffedFlightApparatus.EffectSettings.of(MobEffects.JUMP, 1, 40, 40)));
@@ -70,14 +80,22 @@ public final class WingsMod {
 
     private Proxy proxy;
 
+    private static FlightApparatus registerWing(ResourceLocation name, FlightApparatus apparatus) {
+        return Registry.register(
+            Objects.requireNonNull(WINGS, "Wing registry cannot be null"),
+            Objects.requireNonNull(name, "Wing id cannot be null"),
+            Objects.requireNonNull(apparatus, "Wing apparatus cannot be null")
+        );
+    }
+
     public WingsMod() {
         if (INSTANCE != null) throw new IllegalStateException("Already constructed!");
         INSTANCE = this;
         IEventBus bus = getModEventBus();
     ModLoadingContext context = getModLoadingContext();
-    context.registerConfig(ModConfig.Type.COMMON, WingsConfig.SPEC, ID + "-common.toml");
-    context.registerConfig(ModConfig.Type.COMMON, WingsItemsConfig.SPEC, ID + "-items.toml");
-    context.registerConfig(ModConfig.Type.COMMON, WingsOreConfig.SPEC, ID + "-ores.toml");
+    context.registerConfig(ModConfig.Type.COMMON, WingsConfig.SPEC, Objects.requireNonNull(ID + "-common.toml", "Config name cannot be null"));
+    context.registerConfig(ModConfig.Type.COMMON, WingsItemsConfig.SPEC, Objects.requireNonNull(ID + "-items.toml", "Config name cannot be null"));
+    context.registerConfig(ModConfig.Type.COMMON, WingsOreConfig.SPEC, Objects.requireNonNull(ID + "-ores.toml", "Config name cannot be null"));
     WingsItems.REG.register(bus);
     bus.addListener(WingsItems::buildCreativeTabContents);
         WingsSounds.REG.register(bus);
@@ -114,7 +132,10 @@ public final class WingsMod {
 
     public static ResourceLocation locate(String name)
     {
-        ResourceLocation location = ResourceLocation.tryBuild(WingsMod.ID, name);
+        ResourceLocation location = ResourceLocation.tryBuild(
+            Objects.requireNonNull(WingsMod.ID, "Mod id cannot be null"),
+            Objects.requireNonNull(name, "Resource path cannot be null")
+        );
         if (location == null) {
             throw new IllegalArgumentException("Invalid resource path: " + name);
         }
@@ -142,7 +163,10 @@ public final class WingsMod {
             LVJIA_SUPER = create("lvjia_super_wing");
 
         private static ResourceLocation create(String path) {
-            ResourceLocation location = ResourceLocation.tryBuild(ID, path);
+            ResourceLocation location = ResourceLocation.tryBuild(
+                Objects.requireNonNull(ID, "Mod id cannot be null"),
+                Objects.requireNonNull(path, "Resource path cannot be null")
+            );
             if (location == null) {
                 throw new IllegalArgumentException("Invalid resource path: " + path);
             }

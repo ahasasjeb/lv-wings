@@ -69,6 +69,6 @@ public final class LayerWings extends RenderLayer<LivingEntity, HumanoidModel<Li
 
     @FunctionalInterface
     public interface TransformFunction {
-        void apply(LivingEntity player, PoseStack stack);
+        void apply(LivingEntity player, @Nonnull PoseStack stack);
     }
 }

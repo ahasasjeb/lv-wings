@@ -6,6 +6,7 @@ import com.toni.wings.util.function.FloatConsumer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 
+import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
 public interface FlightView {
@@ -23,6 +24,6 @@ public interface FlightView {
 
         RenderType getRenderType();
 
-        void render(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha, float delta);
+        void render(@Nonnull PoseStack matrixStack, @Nonnull VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha, float delta);
     }
 }
