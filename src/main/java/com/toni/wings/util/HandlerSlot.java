@@ -3,12 +3,15 @@ package com.toni.wings.util;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
+import javax.annotation.Nonnull;
+import java.util.Objects;
+
 public final class HandlerSlot {
     private final IItemHandler handler;
 
     private final int slot;
 
-    private HandlerSlot(IItemHandler handler, int slot) {
+    private HandlerSlot(@Nonnull IItemHandler handler, int slot) {
         this.handler = handler;
         this.slot = slot;
     }
@@ -29,7 +32,8 @@ public final class HandlerSlot {
         return this.handler.getSlotLimit(this.slot);
     }
 
-    public static HandlerSlot create(IItemHandler handler, int slot) {
-        return new HandlerSlot(handler, slot);
+    @Nonnull
+    public static HandlerSlot create(@Nonnull IItemHandler handler, int slot) {
+        return new HandlerSlot(Objects.requireNonNull(handler, "Item handler cannot be null"), slot);
     }
 }

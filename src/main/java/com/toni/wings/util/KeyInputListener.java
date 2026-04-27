@@ -9,6 +9,9 @@ import net.minecraftforge.client.settings.IKeyConflictContext;
 import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+import javax.annotation.Nonnull;
+import java.util.Objects;
+
 public final class KeyInputListener {
     private static final java.util.List<KeyMapping> KEY_MAPPINGS = new java.util.ArrayList<>();
 
@@ -37,7 +40,7 @@ public final class KeyInputListener {
     }
 
     public interface CategoryBuilder extends Builder {
-        BindingBuilder key(String desc, IKeyConflictContext context, KeyModifier modifier, int keyCode);
+        BindingBuilder key(@Nonnull String desc, @Nonnull IKeyConflictContext context, @Nonnull KeyModifier modifier, int keyCode);
     }
 
     public static final class BuilderRoot implements Builder {
@@ -89,8 +92,15 @@ public final class KeyInputListener {
         }
 
         @Override
-        public BindingBuilder key(String desc, IKeyConflictContext context, KeyModifier modifier, int keyCode) {
-            KeyMapping binding = new KeyMapping(desc, context, modifier, InputConstants.Type.KEYSYM, keyCode, this.category);
+        public BindingBuilder key(@Nonnull String desc, @Nonnull IKeyConflictContext context, @Nonnull KeyModifier modifier, int keyCode) {
+            KeyMapping binding = new KeyMapping(
+                Objects.requireNonNull(desc, "Key description cannot be null"),
+                Objects.requireNonNull(context, "Key conflict context cannot be null"),
+                Objects.requireNonNull(modifier, "Key modifier cannot be null"),
+                InputConstants.Type.KEYSYM,
+                keyCode,
+                Objects.requireNonNull(this.category, "Key category cannot be null")
+            );
             KEY_MAPPINGS.add(binding);
             return new BindingBuilder(this, binding);
         }
@@ -99,18 +109,21 @@ public final class KeyInputListener {
     public static final class BindingBuilder extends ChildBuilder<CategoryBuilderRoot> implements CategoryBuilder {
         private final KeyMapping binding;
 
-        private BindingBuilder(CategoryBuilderRoot delegate, KeyMapping binding) {
+        private BindingBuilder(CategoryBuilderRoot delegate, @Nonnull KeyMapping binding) {
             super(delegate);
             this.binding = binding;
         }
 
-        public BindingBuilder onPress(Runnable runnable) {
-            this.parent.parent.bindings.put(this.binding, runnable);
+        public BindingBuilder onPress(@Nonnull Runnable runnable) {
+            this.parent.parent.bindings.put(
+                Objects.requireNonNull(this.binding, "Key mapping cannot be null"),
+                Objects.requireNonNull(runnable, "Key callback cannot be null")
+            );
             return this;
         }
 
         @Override
-        public BindingBuilder key(String desc, IKeyConflictContext context, KeyModifier modifier, int keyCode) {
+        public BindingBuilder key(@Nonnull String desc, @Nonnull IKeyConflictContext context, @Nonnull KeyModifier modifier, int keyCode) {
             return this.parent.key(desc, context, modifier, keyCode);
         }
     }

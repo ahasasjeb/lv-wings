@@ -34,25 +34,25 @@ public class WingsArgument implements ArgumentType<FlightApparatus> {
 
     @Nonnull
     public static FlightApparatus getWings(@Nonnull CommandContext<CommandSourceStack> ctx, @Nonnull String value) throws CommandSyntaxException {
-        return ctx.getArgument(value, FlightApparatus.class);
+        return Objects.requireNonNull(ctx.getArgument(value, FlightApparatus.class));
     }
 
     @Override
     @Nonnull
-    public FlightApparatus parse(@Nonnull StringReader reader) throws CommandSyntaxException {
-        ResourceLocation key = ResourceLocation.read(reader);
-        return WingsMod.WINGS.getOptional(key).orElseThrow(() -> ERROR_UNKNOWN_WING.create(key));
+    public FlightApparatus parse(StringReader reader) throws CommandSyntaxException {
+        ResourceLocation key = ResourceLocation.read(Objects.requireNonNull(reader));
+        return Objects.requireNonNull(WingsMod.WINGS.getOptional(key).orElseThrow(() -> ERROR_UNKNOWN_WING.create(key)));
     }
 
     @Override
     @Nonnull
-    public <S> CompletableFuture<Suggestions> listSuggestions(@Nonnull CommandContext<S> ctx, @Nonnull SuggestionsBuilder builder) {
-        return SharedSuggestionProvider.suggestResource(Objects.requireNonNull(WingsMod.WINGS.keySet()), builder);
+    public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> ctx, SuggestionsBuilder builder) {
+        return Objects.requireNonNull(SharedSuggestionProvider.suggestResource(Objects.requireNonNull(WingsMod.WINGS.keySet()), Objects.requireNonNull(builder)));
     }
 
     @Override
     @Nonnull
     public Collection<String> getExamples() {
-        return EXAMPLES;
+        return Objects.requireNonNull(EXAMPLES);
     }
 }

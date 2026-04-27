@@ -3,6 +3,9 @@ package com.toni.wings.util;
 import com.google.common.collect.ImmutableList;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
+import javax.annotation.Nonnull;
+import java.util.Objects;
+
 public final class ItemAccessor<T extends ICapabilityProvider> {
     private final ImmutableList<ItemPlacing<T>> placings;
 
@@ -37,8 +40,8 @@ public final class ItemAccessor<T extends ICapabilityProvider> {
             this.placings = placings;
         }
 
-        public Builder<T> addPlacing(ItemPlacing<T> placing) {
-            this.placings.add(placing);
+        public Builder<T> addPlacing(@Nonnull ItemPlacing<T> placing) {
+            this.placings.add(Objects.requireNonNull(placing, "Item placing cannot be null"));
             return this;
         }
 

@@ -13,6 +13,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(modid = WingsMod.ID)
@@ -24,7 +25,7 @@ public final class WingsItems {
 
     public static final RegistryObject<Item> BAT_BLOOD_BOTTLE = REG.register("bat_blood_bottle",
         () -> new BatBloodBottleItem(new Item.Properties()
-            .craftRemainder(Items.GLASS_BOTTLE)
+            .craftRemainder(Objects.requireNonNull(Items.GLASS_BOTTLE))
             .stacksTo(16)));
 
     public static final RegistryObject<Item> ANGEL_WINGS_BOTTLE = REG.register("angel_wings_bottle", bottle(() -> WingsMod.ANGEL_WINGS));
@@ -43,25 +44,25 @@ public final class WingsItems {
 
     private static Supplier<Item> bottle(Supplier<FlightApparatus> wings) {
         return () -> new WingsBottleItem(new Item.Properties()
-            .craftRemainder(Items.GLASS_BOTTLE)
-            .stacksTo(16), wings.get());
+            .craftRemainder(Objects.requireNonNull(Items.GLASS_BOTTLE))
+            .stacksTo(16), Objects.requireNonNull(wings.get()));
     }
 
     public static void buildCreativeTabContents(BuildCreativeModeTabContentsEvent event) {
         ResourceKey<CreativeModeTab> tabKey = event.getTabKey();
         if (tabKey == CreativeModeTabs.FOOD_AND_DRINKS) {
-            event.accept(BAT_BLOOD_BOTTLE.get());
-            event.accept(ANGEL_WINGS_BOTTLE.get());
-            event.accept(PARROT_WINGS_BOTTLE.get());
-            event.accept(SLIME_WINGS_BOTTLE.get());
-            event.accept(BLUE_BUTTERFLY_WINGS_BOTTLE.get());
-            event.accept(MONARCH_BUTTERFLY_WINGS_BOTTLE.get());
-            event.accept(FIRE_WINGS_BOTTLE.get());
-            event.accept(BAT_WINGS_BOTTLE.get());
-            event.accept(FAIRY_WINGS_BOTTLE.get());
-            event.accept(EVIL_WINGS_BOTTLE.get());
-            event.accept(DRAGON_WINGS_BOTTLE.get());
-            event.accept(LVJIA_SUPER_WINGS_BOTTLE.get());
+            event.accept(Objects.requireNonNull(BAT_BLOOD_BOTTLE.get()));
+            event.accept(Objects.requireNonNull(ANGEL_WINGS_BOTTLE.get()));
+            event.accept(Objects.requireNonNull(PARROT_WINGS_BOTTLE.get()));
+            event.accept(Objects.requireNonNull(SLIME_WINGS_BOTTLE.get()));
+            event.accept(Objects.requireNonNull(BLUE_BUTTERFLY_WINGS_BOTTLE.get()));
+            event.accept(Objects.requireNonNull(MONARCH_BUTTERFLY_WINGS_BOTTLE.get()));
+            event.accept(Objects.requireNonNull(FIRE_WINGS_BOTTLE.get()));
+            event.accept(Objects.requireNonNull(BAT_WINGS_BOTTLE.get()));
+            event.accept(Objects.requireNonNull(FAIRY_WINGS_BOTTLE.get()));
+            event.accept(Objects.requireNonNull(EVIL_WINGS_BOTTLE.get()));
+            event.accept(Objects.requireNonNull(DRAGON_WINGS_BOTTLE.get()));
+            event.accept(Objects.requireNonNull(LVJIA_SUPER_WINGS_BOTTLE.get()));
         }
     }
 

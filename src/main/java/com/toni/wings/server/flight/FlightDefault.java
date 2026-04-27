@@ -120,7 +120,7 @@ public final class FlightDefault implements Flight {
 
     @Override
     public boolean hasEffect(Player player) {
-        return WingsEffects.WINGS.filter(effect -> player.getEffect(effect) != null).isPresent();
+        return WingsEffects.WINGS.filter(effect -> player.getEffect(Objects.requireNonNull(effect)) != null).isPresent();
     }
 
     @Override
@@ -142,15 +142,16 @@ public final class FlightDefault implements Flight {
                 float vy = Mth.sin(pitch);
                 float vz = Mth.cos(yaw);
                 float vx = Mth.sin(yaw);
-                player.setDeltaMovement(player.getDeltaMovement().add(
+                Vec3 movement = Objects.requireNonNull(player.getDeltaMovement().add(
                         vx * vxz * speed,
                         vy * speed + Y_BOOST * (player.getXRot() > 0.0F ? elevationBoost : 1.0D),
                         vz * vxz * speed));
+                player.setDeltaMovement(movement);
             }
             if (this.canLand(player)) {
                 Vec3 mot = player.getDeltaMovement();
                 if (mot.y() < 0.0D) {
-                    player.setDeltaMovement(mot.multiply(1.0D, FALL_REDUCTION, 1.0D));
+                    player.setDeltaMovement(Objects.requireNonNull(mot.multiply(1.0D, FALL_REDUCTION, 1.0D)));
                 }
                 player.fallDistance = 0.0F;
             }
@@ -218,14 +219,14 @@ public final class FlightDefault implements Flight {
     public void serialize(FriendlyByteBuf buf) {
         buf.writeBoolean(this.isFlying());
         buf.writeVarInt(this.getTimeFlying());
-        buf.writeId(WingsMod.WINGS, this.getWing());
+        buf.writeId(Objects.requireNonNull(WingsMod.WINGS), Objects.requireNonNull(this.getWing()));
     }
 
     @Override
     public void deserialize(FriendlyByteBuf buf) {
         this.setIsFlying(buf.readBoolean());
         this.setTimeFlying(buf.readVarInt());
-        this.setWing(buf.readById(WingsMod.WINGS));
+        this.setWing(Objects.requireNonNull(buf.readById(Objects.requireNonNull(WingsMod.WINGS))));
     }
 
     public static final class Serializer implements NBTSerializer<FlightDefault, CompoundTag> {
@@ -246,7 +247,8 @@ public final class FlightDefault implements Flight {
             CompoundTag compound = new CompoundTag();
             compound.putBoolean(IS_FLYING, instance.isFlying());
             compound.putInt(TIME_FLYING, instance.getTimeFlying());
-            compound.putString(WING, Objects.requireNonNull(WingsMod.WINGS.getKey(instance.getWing())).toString());
+            ResourceLocation wingKey = Objects.requireNonNull(WingsMod.WINGS.getKey(Objects.requireNonNull(instance.getWing())));
+            compound.putString(WING, Objects.requireNonNull(wingKey.toString()));
             return compound;
         }
 
@@ -255,10 +257,10 @@ public final class FlightDefault implements Flight {
             FlightDefault f = this.factory.get();
             f.setIsFlying(compound.getBoolean(IS_FLYING));
             f.setTimeFlying(compound.getInt(TIME_FLYING));
-            ResourceLocation wingId = ResourceLocation.tryParse(compound.getString(WING));
-            FlightApparatus wing = wingId != null
+            ResourceLocation wingId = ResourceLocation.tryParse(Objects.requireNonNull(compound.getString(WING)));
+            FlightApparatus wing = Objects.requireNonNull(wingId != null
                     ? WingsMod.WINGS.getOptional(wingId).orElse(FlightApparatus.NONE)
-                    : FlightApparatus.NONE;
+                    : FlightApparatus.NONE);
             f.setWing(wing);
             return f;
         }

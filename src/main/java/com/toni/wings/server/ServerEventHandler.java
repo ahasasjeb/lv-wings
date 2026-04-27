@@ -29,6 +29,8 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.Objects;
+
 @Mod.EventBusSubscriber(modid = WingsMod.ID)
 public final class ServerEventHandler {
     private ServerEventHandler() {
@@ -37,13 +39,13 @@ public final class ServerEventHandler {
     @SubscribeEvent
     public static void onPlayerEntityInteract(PlayerInteractEvent.EntityInteract event) {
         Player player = event.getEntity();
-        InteractionHand hand = event.getHand();
+        InteractionHand hand = Objects.requireNonNull(event.getHand(), "Interaction hand cannot be null");
         ItemStack stack = player.getItemInHand(hand);
         if (event.getTarget() instanceof Bat && stack.getItem() == Items.GLASS_BOTTLE) {
             player.level().playSound(
                 player,
                 player.getX(), player.getY(), player.getZ(),
-                SoundEvents.BOTTLE_FILL,
+                Objects.requireNonNull(SoundEvents.BOTTLE_FILL, "Bottle fill sound cannot be null"),
                 SoundSource.NEUTRAL,
                 1.0F,
                 1.0F
@@ -52,8 +54,11 @@ public final class ServerEventHandler {
             if (!player.getAbilities().instabuild) {
                 stack.shrink(1);
             }
-            player.awardStat(Stats.ITEM_USED.get(Items.GLASS_BOTTLE));
-            ItemStack batBlood = new ItemStack(WingsItems.BAT_BLOOD_BOTTLE.get());
+            player.awardStat(Objects.requireNonNull(
+                Stats.ITEM_USED.get(Objects.requireNonNull(Items.GLASS_BOTTLE, "Glass bottle item cannot be null")),
+                "Glass bottle use stat cannot be null"
+            ));
+            ItemStack batBlood = new ItemStack(Objects.requireNonNull(WingsItems.BAT_BLOOD_BOTTLE.get(), "Bat blood bottle item cannot be null"));
             if (stack.isEmpty()) {
                 ForgeEventFactory.onPlayerDestroyItem(player, destroyed, hand);
                 player.setItemInHand(hand, batBlood);
@@ -115,9 +120,9 @@ public final class ServerEventHandler {
             return;
         }
         Player original = event.getOriginal();
-        MobEffectInstance wings = original.getEffect(WingsEffects.WINGS.get());
+        MobEffectInstance wings = original.getEffect(Objects.requireNonNull(WingsEffects.WINGS.get(), "Wings effect cannot be null"));
         if (wings != null) {
-            cloned.addEffect(new MobEffectInstance(wings));
+            cloned.addEffect(new MobEffectInstance(Objects.requireNonNull(wings, "Wings effect instance cannot be null")));
         }
     }
 

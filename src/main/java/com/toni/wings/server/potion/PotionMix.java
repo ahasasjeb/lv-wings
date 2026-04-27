@@ -8,15 +8,16 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.brewing.BrewingRecipe;
 
 import javax.annotation.Nonnull;
+import java.util.Objects;
 
 public class PotionMix extends BrewingRecipe {
     private final Potion from;
 
-    public PotionMix(Potion from, Ingredient ingredient, Potion to) {
+    public PotionMix(@Nonnull Potion from, @Nonnull Ingredient ingredient, @Nonnull Potion to) {
         this(from, ingredient, createPotionStack(to));
     }
 
-    public PotionMix(Potion from, Ingredient ingredient, ItemStack result) {
+    public PotionMix(@Nonnull Potion from, @Nonnull Ingredient ingredient, @Nonnull ItemStack result) {
         super(Ingredient.of(createPotionStack(from)), ingredient, result);
         this.from = from;
     }
@@ -26,7 +27,11 @@ public class PotionMix extends BrewingRecipe {
         return !stack.isEmpty() && PotionUtils.getPotion(stack) == this.from;
     }
 
-    private static ItemStack createPotionStack(Potion potion) {
-        return PotionUtils.setPotion(new ItemStack(Items.POTION), potion);
+    @Nonnull
+    private static ItemStack createPotionStack(@Nonnull Potion potion) {
+        return PotionUtils.setPotion(
+            new ItemStack(Objects.requireNonNull(Items.POTION, "Potion item cannot be null")),
+            potion
+        );
     }
 }

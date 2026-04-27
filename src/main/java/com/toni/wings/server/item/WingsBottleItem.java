@@ -19,6 +19,8 @@ import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 
+import java.util.Objects;
+
 public class WingsBottleItem extends Item {
     private final FlightApparatus wings;
 
@@ -38,20 +40,20 @@ public class WingsBottleItem extends Item {
             ServerPlayer player = (ServerPlayer) living;
             CriteriaTriggers.CONSUME_ITEM.trigger(player, stack);
             giveWing(player, this.wings);
-            world.playSound(null, player.getX(), player.getY(), player.getZ(), WingsSounds.ITEM_ARMOR_EQUIP_WINGS.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+            world.playSound(null, player.getX(), player.getY(), player.getZ(), Objects.requireNonNull(WingsSounds.ITEM_ARMOR_EQUIP_WINGS.get()), SoundSource.PLAYERS, 1.0F, 1.0F);
         }
         if (living instanceof Player) {
             Player player = (Player) living;
-            player.awardStat(Stats.ITEM_USED.get(this));
+            player.awardStat(Objects.requireNonNull(Stats.ITEM_USED.get(this)));
             if (!player.getAbilities().instabuild) {
                 stack.shrink(1);
             }
         }
         if (stack.isEmpty()) {
-            return new ItemStack(Items.GLASS_BOTTLE);
+            return new ItemStack(Objects.requireNonNull(Items.GLASS_BOTTLE));
         }
         if (living instanceof Player && !((Player) living).getAbilities().instabuild) {
-            ItemStack emptyBottle = new ItemStack(Items.GLASS_BOTTLE);
+            ItemStack emptyBottle = new ItemStack(Objects.requireNonNull(Items.GLASS_BOTTLE));
             Player player = (Player) living;
             if (!player.getInventory().add(emptyBottle)) {
                 player.drop(emptyBottle, false);
@@ -68,7 +70,7 @@ public class WingsBottleItem extends Item {
             }
             return false;
         }).isPresent();
-        player.addEffect(new MobEffectInstance(WingsEffects.WINGS.get(), Integer.MAX_VALUE, 0, true, false));
+        player.addEffect(new MobEffectInstance(Objects.requireNonNull(WingsEffects.WINGS.get()), Integer.MAX_VALUE, 0, true, false));
         return changed;
     }
 
