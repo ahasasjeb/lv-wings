@@ -14,6 +14,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings({"null", "nullness"})
 public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
         private static final Field CUBES_FIELD = findCubesField();
 

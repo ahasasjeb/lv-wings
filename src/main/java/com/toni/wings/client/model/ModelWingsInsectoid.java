@@ -9,6 +9,7 @@ import net.minecraft.client.model.geom.builders.*;
 
 import javax.annotation.Nonnull;
 
+@SuppressWarnings({"null", "nullness"})
 public final class ModelWingsInsectoid extends ModelWings<AnimatorInsectoid> {
     //private final ModelPart root;
 

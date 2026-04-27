@@ -12,6 +12,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 
+import javax.annotation.Nonnull;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public final class FlightViewDefault implements FlightView {
@@ -125,15 +127,17 @@ public final class FlightViewDefault implements FlightView {
         }
 
         private static class WingStrategy<T extends Animator> implements Strategy {
+            @Nonnull
             private final WingForm<T> shape;
 
+            @Nonnull
             private final T animator;
 
             private State state;
 
             public WingStrategy(WingForm<T> shape) {
-                this.shape = shape;
-                this.animator = shape.createAnimator();
+                this.shape = Objects.requireNonNull(shape);
+                this.animator = Objects.requireNonNull(shape.createAnimator());
                 this.state = new StateIdle();
             }
 
@@ -167,7 +171,7 @@ public final class FlightViewDefault implements FlightView {
                     }
 
                     @Override
-                    public void render(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha, float delta) {
+                    public void render(@Nonnull PoseStack matrixStack, @Nonnull VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha, float delta) {
                         WingStrategy.this.shape.getModel().render(WingStrategy.this.animator, delta, matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
                     }
                 });
