@@ -9,6 +9,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 
+import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
 public final class CapabilityProviders {
@@ -34,7 +35,7 @@ public final class CapabilityProviders {
     }
 
     public interface CompositeBuilder {
-        CompositeBuilder add(ICapabilityProvider provider);
+        CompositeBuilder add(@Nonnull ICapabilityProvider provider);
 
         ICapabilityProvider build();
     }
@@ -51,8 +52,8 @@ public final class CapabilityProviders {
         }
 
         @Override
-        public CompositeBuilder add(ICapabilityProvider provider) {
-            this.providers.add(provider);
+        public CompositeBuilder add(@Nonnull ICapabilityProvider provider) {
+            this.providers.add(Util.requireNonnull(provider, "Capability provider cannot be null"));
             return this;
         }
 

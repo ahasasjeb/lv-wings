@@ -7,6 +7,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import javax.annotation.Nonnull;
 import java.util.Objects;
 
 @Mod.EventBusSubscriber(modid = WingsMod.ID)
@@ -20,7 +21,7 @@ public final class WingsSounds {
 
     public static final RegistryObject<SoundEvent> ITEM_WINGS_FLYING = create("item.wings.flying");
 
-    private static RegistryObject<SoundEvent> create(String name) {
+    private static RegistryObject<SoundEvent> create(@Nonnull String name) {
         return REG.register(name, () -> SoundEvent.createVariableRangeEvent(
             Objects.requireNonNull(WingsMod.locate(name), "Sound id cannot be null")
         ));

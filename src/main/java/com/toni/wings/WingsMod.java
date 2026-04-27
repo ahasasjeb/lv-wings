@@ -29,6 +29,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
+import javax.annotation.Nonnull;
 import java.util.Objects;
 
 @Mod(WingsMod.ID)
@@ -131,7 +132,8 @@ public final class WingsMod {
         return this.proxy;
     }
 
-    public static ResourceLocation locate(String name)
+    @Nonnull
+    public static ResourceLocation locate(@Nonnull String name)
     {
         ResourceLocation location = ResourceLocation.tryBuild(
             Objects.requireNonNull(WingsMod.ID, "Mod id cannot be null"),
