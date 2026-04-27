@@ -9,7 +9,6 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 
-import java.util.Objects;
 import java.util.function.Consumer;
 
 public final class CapabilityProviders {
@@ -64,7 +63,7 @@ public final class CapabilityProviders {
                 case 0:
                     return empty();
                 case 1:
-                    return Objects.requireNonNull(Iterables.getOnlyElement(providers), "Capability provider cannot be null");
+                    return Util.requireNonnull(Iterables.getOnlyElement(providers), "Capability provider cannot be null");
                 default:
                     return new CompositeProvider(providers);
             }

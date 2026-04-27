@@ -13,6 +13,7 @@ import com.toni.wings.server.effect.WingsEffects;
 import com.toni.wings.server.flight.Flight;
 import com.toni.wings.server.item.WingsItems;
 import com.toni.wings.server.sound.WingsSounds;
+import com.toni.wings.util.Util;
 import net.minecraft.core.DefaultedMappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -37,7 +38,7 @@ public final class WingsMod {
     private static WingsMod INSTANCE;
 
     public static final Registry<FlightApparatus> WINGS = new DefaultedMappedRegistry<>(
-        Objects.requireNonNull(Names.NONE.toString(), "Default key cannot be null"),
+        Util.requireNonnull(Names.NONE.toString(), "Default key cannot be null"),
         Objects.requireNonNull(ResourceKey.createRegistryKey(locate("wings")), "Registry key cannot be null"),
         Objects.requireNonNull(Lifecycle.experimental(), "Lifecycle cannot be null"),
         false
