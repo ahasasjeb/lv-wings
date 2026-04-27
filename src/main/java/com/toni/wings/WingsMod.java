@@ -97,16 +97,6 @@ public final class WingsMod {
         return ModLoadingContext.get();
     }
 
-    static class ProxyInit {
-        static Proxy createClient() {
-            return new ClientProxy();
-        }
-
-        static Proxy createServer() {
-            return new ServerProxy();
-        }
-    }
-
     public void addFlightListeners(Player player, Flight instance) {
         this.requireProxy().addFlightListeners(player, instance);
     }
