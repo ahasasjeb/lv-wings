@@ -12,6 +12,7 @@ import com.toni.wings.client.model.ModelWingsAvian;
 import com.toni.wings.client.model.ModelWingsInsectoid;
 import com.toni.wings.client.renderer.LayerWings;
 import com.toni.wings.server.flight.Flight;
+import com.toni.wings.server.flight.FlightAbilities;
 import com.toni.wings.server.flight.Flights;
 import com.toni.wings.server.item.BatBloodBottleItem;
 import com.toni.wings.server.item.WingsItems;
@@ -50,9 +51,15 @@ public final class ClientProxy extends Proxy {
             .key("key.wings.fly", KeyConflictContext.IN_GAME, KeyModifier.NONE, GLFW.GLFW_KEY_R)
             .onPress(() -> {
                 Player player = Minecraft.getInstance().player;
-                Flights.get(player).filter(flight -> flight.canFly(player)).ifPresent(flight ->
-                    flight.toggleIsFlying(Flight.PlayerSet.ofOthers())
-                );
+                if (player == null) {
+                    return;
+                }
+                Flights.get(player).filter(flight -> flight.canFly(player)).ifPresent(flight -> {
+                    if (!flight.isFlying()) {
+                        FlightAbilities.stopVanillaFlying(player);
+                    }
+                    flight.toggleIsFlying(Flight.PlayerSet.ofOthers());
+                });
                 Flights.ifPlayer(player, (p, flight) -> {
                     if (flight.getWing().equals(WingsMod.WINGLESS) && !flight.isFlying()) {
                         BatBloodBottleItem.removeWings(player);

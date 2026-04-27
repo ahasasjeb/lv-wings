@@ -19,6 +19,7 @@ import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.GameType;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
@@ -98,13 +99,17 @@ public final class ServerEventHandler {
 
     @SubscribeEvent
     public static void onPlayerFlightCheck(PlayerFlightCheckEvent event) {
-        Flights.get(event.getEntity()).filter(Flight::isFlying)
+        Player player = event.getEntity();
+        Flights.get(player).filter(flight -> flight.isFlying() && !player.isSpectator() && !player.getAbilities().flying)
             .ifPresent(flight -> event.setFlying());
     }
 
     @SubscribeEvent
     public static void onPlayerFlown(PlayerFlownEvent event) {
         Player player = event.getEntity();
+        if (player.isSpectator() || player.getAbilities().flying) {
+            return;
+        }
         Flights.get(player).ifPresent(flight -> {
             flight.onFlown(player, event.getDirection());
         });
@@ -127,9 +132,17 @@ public final class ServerEventHandler {
     }
 
     @SubscribeEvent
+    public static void onPlayerChangeGameMode(PlayerEvent.PlayerChangeGameModeEvent event) {
+        if (event.getNewGameMode() == GameType.SPECTATOR) {
+            Flights.get(event.getEntity()).filter(Flight::isFlying)
+                .ifPresent(flight -> flight.setIsFlying(false, Flight.PlayerSet.ofAll()));
+        }
+    }
+
+    @SubscribeEvent
     public static void onGetLivingHeadLimit(GetLivingHeadLimitEvent event) {
         Flights.ifPlayer(event.getEntity(), (player, flight) -> {
-            if (flight.isFlying()) {
+            if (flight.isFlying() && !player.isSpectator() && !player.getAbilities().flying) {
                 event.setHardLimit(50.0F);
                 event.disableSoftLimit();
             }

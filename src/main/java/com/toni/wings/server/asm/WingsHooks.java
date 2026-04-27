@@ -1,5 +1,8 @@
 package com.toni.wings.server.asm;
 
+import com.toni.wings.server.flight.Flight;
+import com.toni.wings.server.flight.Flights;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -52,6 +55,13 @@ public final class WingsHooks {
 
     public static void onAddFlown(Player player, double x, double y, double z) {
         MinecraftForge.EVENT_BUS.post(new PlayerFlownEvent(player, new Vec3(x, y, z)));
+    }
+
+    public static void onPlayerAbilities(ServerPlayer player, boolean vanillaFlying) {
+        if (vanillaFlying) {
+            Flights.get(player).filter(Flight::isFlying)
+                .ifPresent(flight -> flight.setIsFlying(false, Flight.PlayerSet.ofAll()));
+        }
     }
 
     public static boolean onReplaceItemSlotCheck(Item item, ItemStack stack) {

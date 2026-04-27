@@ -1,6 +1,7 @@
 package com.toni.wings.server.net.serverbound;
 
 import com.toni.wings.server.flight.Flight;
+import com.toni.wings.server.flight.FlightAbilities;
 import com.toni.wings.server.flight.Flights;
 import com.toni.wings.server.net.Message;
 import com.toni.wings.server.net.ServerMessageContext;
@@ -29,7 +30,18 @@ public final class MessageControlFlying implements Message {
 
     public static void handle(MessageControlFlying message, ServerMessageContext context) {
         Player player = context.getPlayer();
-        Flights.get(player).filter(f -> f.canFly(player))
-            .ifPresent(flight -> flight.setIsFlying(message.isFlying, Flight.PlayerSet.ofOthers()));
+        Flights.get(player).ifPresent(flight -> {
+            if (message.isFlying) {
+                if (FlightAbilities.canUseModFlight(player) && flight.canFly(player)) {
+                    flight.setIsFlying(true, Flight.PlayerSet.ofOthers());
+                } else if (flight.isFlying()) {
+                    flight.setIsFlying(false, Flight.PlayerSet.ofAll());
+                } else {
+                    flight.sync(Flight.PlayerSet.ofSelf());
+                }
+            } else if (flight.isFlying()) {
+                flight.setIsFlying(false, Flight.PlayerSet.ofOthers());
+            }
+        });
     }
 }

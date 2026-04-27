@@ -5,6 +5,7 @@ import com.toni.wings.server.config.WingsItemsConfig;
 import com.toni.wings.server.config.WingsOreConfig;
 import com.toni.wings.server.dreamcatcher.InSomniable;
 import com.toni.wings.server.flight.Flight;
+import com.toni.wings.server.flight.FlightAbilities;
 import com.toni.wings.server.item.WingsItems;
 import com.toni.wings.server.net.Network;
 import com.toni.wings.server.net.clientbound.MessageSyncFlight;
@@ -81,7 +82,7 @@ public abstract class Proxy {
 
     public void addFlightListeners(Player player, Flight instance) {
         if (player instanceof ServerPlayer) {
-            instance.registerFlyingListener(isFlying -> player.getAbilities().mayfly = isFlying);
+            instance.registerFlyingListener(isFlying -> FlightAbilities.updateForModFlight(player, isFlying));
             instance.registerFlyingListener(isFlying -> {
                 if (isFlying) {
                     player.removeVehicle();

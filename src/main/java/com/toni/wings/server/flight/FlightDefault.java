@@ -115,7 +115,7 @@ public final class FlightDefault implements Flight {
 
     @Override
     public boolean canFly(Player player) {
-        return (this.hasEffect(player) && this.flightApparatus.isUsable(player));
+        return FlightAbilities.canUseModFlight(player) && this.hasEffect(player) && this.flightApparatus.isUsable(player);
     }
 
     @Override
@@ -130,7 +130,7 @@ public final class FlightDefault implements Flight {
 
     private void onWornUpdate(Player player) {
         if (player.isEffectiveAi()) {
-            if (this.isFlying()) {
+            if (this.isFlying() && !player.getAbilities().flying && !player.isSpectator()) {
                 float speed = (float) Mth.clampedLerp(MIN_SPEED, MAX_SPEED, player.zza);
                 float elevationBoost = MathH.transform(
                         Math.abs(player.getXRot()),
@@ -168,6 +168,15 @@ public final class FlightDefault implements Flight {
 
     @Override
     public void tick(Player player) {
+        if (player.isSpectator()) {
+            if (this.isFlying()) {
+                this.setIsFlying(false, player.level().isClientSide ? PlayerSet.ofOthers() : PlayerSet.ofAll());
+            }
+            this.state = this.state.notFlying();
+            this.tickFlyingAmount(player);
+            return;
+        }
+
         boolean hasEffect = this.hasEffect(player);
         if (hasEffect || !player.isEffectiveAi()) {
             if (!hasEffect && !player.level().isClientSide) {
@@ -180,6 +189,10 @@ public final class FlightDefault implements Flight {
                 this.setIsFlying(false, PlayerSet.ofAll());
             }
         }
+        this.tickFlyingAmount(player);
+    }
+
+    private void tickFlyingAmount(Player player) {
         this.setPrevTimeFlying(this.getTimeFlying());
         if (this.isFlying()) {
             if (this.getTimeFlying() < MAX_TIME_FLYING) {
@@ -196,9 +209,9 @@ public final class FlightDefault implements Flight {
 
     @Override
     public void onFlown(Player player, Vec3 direction) {
-        if (this.isFlying()) {
+        if (this.isFlying() && !player.getAbilities().flying && !player.isSpectator()) {
             this.flightApparatus.onFlight(player, direction);
-        } else if (player.getDeltaMovement().y() < -0.5D) {
+        } else if (!player.isSpectator() && !player.getAbilities().flying && player.getDeltaMovement().y() < -0.5D) {
             this.flightApparatus.onLanding(player, direction);
         }
     }
