@@ -16,7 +16,9 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import javax.annotation.Nonnull;
 
 public class WingsArgument implements ArgumentType<FlightApparatus> {
     private static final Collection<String> EXAMPLES = Arrays.asList("magical", "wings");
@@ -25,26 +27,31 @@ public class WingsArgument implements ArgumentType<FlightApparatus> {
     public WingsArgument() {
     }
 
+    @Nonnull
     public static WingsArgument wings() {
         return new WingsArgument();
     }
 
-    public static FlightApparatus getWings(CommandContext<CommandSourceStack> ctx, String value) throws CommandSyntaxException {
+    @Nonnull
+    public static FlightApparatus getWings(@Nonnull CommandContext<CommandSourceStack> ctx, @Nonnull String value) throws CommandSyntaxException {
         return ctx.getArgument(value, FlightApparatus.class);
     }
 
     @Override
-    public FlightApparatus parse(StringReader reader) throws CommandSyntaxException {
+    @Nonnull
+    public FlightApparatus parse(@Nonnull StringReader reader) throws CommandSyntaxException {
         ResourceLocation key = ResourceLocation.read(reader);
         return WingsMod.WINGS.getOptional(key).orElseThrow(() -> ERROR_UNKNOWN_WING.create(key));
     }
 
     @Override
-    public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> ctx, SuggestionsBuilder builder) {
-        return SharedSuggestionProvider.suggestResource(WingsMod.WINGS.keySet(), builder);
+    @Nonnull
+    public <S> CompletableFuture<Suggestions> listSuggestions(@Nonnull CommandContext<S> ctx, @Nonnull SuggestionsBuilder builder) {
+        return SharedSuggestionProvider.suggestResource(Objects.requireNonNull(WingsMod.WINGS.keySet()), builder);
     }
 
     @Override
+    @Nonnull
     public Collection<String> getExamples() {
         return EXAMPLES;
     }

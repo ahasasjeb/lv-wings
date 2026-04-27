@@ -14,6 +14,8 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.Objects;
+
 @Mod.EventBusSubscriber(modid = WingsMod.ID)
 public final class InSomniableEventHandler {
     private InSomniableEventHandler() {
@@ -24,15 +26,16 @@ public final class InSomniableEventHandler {
         Player player = event.getEntity();
         if (player instanceof ServerPlayer && !player.isCreative()) {
             Level world = event.getLevel();
-            BlockPos pos = event.getPos();
+            BlockPos pos = Objects.requireNonNull(event.getPos());
+            BlockPos above = Objects.requireNonNull(pos.above());
             BlockState state = world.getBlockState(pos);
             Block block = state.getBlock();
-            if (block == Blocks.NOTE_BLOCK && world.isEmptyBlock(pos.above()) &&
+            if (block == Blocks.NOTE_BLOCK && world.isEmptyBlock(above) &&
                 world.mayInteract(player, pos) &&
-                !player.blockActionRestricted(world, pos, ((ServerPlayer) player).gameMode.getGameModeForPlayer())
+                !player.blockActionRestricted(world, pos, Objects.requireNonNull(((ServerPlayer) player).gameMode.getGameModeForPlayer()))
             ) {
                 InSomniableCapability.getInSomniable(player).ifPresent(inSomniable ->
-                    inSomniable.onPlay(world, player, pos, state.getValue(NoteBlock.NOTE))
+                    inSomniable.onPlay(world, player, pos, state.getValue(Objects.requireNonNull(NoteBlock.NOTE)))
                 );
             }
         }
