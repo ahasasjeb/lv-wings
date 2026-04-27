@@ -23,6 +23,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Objects;
 import java.util.function.BiConsumer;
 
 public abstract class Proxy {
@@ -43,11 +44,13 @@ public abstract class Proxy {
         //CapabilityManager.INSTANCE.register(InSomniable.class, SimpleStorage.ofVoid(), InSomniable::new);
         event.enqueueWork(() -> {
             BiConsumer<ItemLike, RegistryObject<Item>> reg = (item, obj) -> {
+                ItemLike recipeItem = Objects.requireNonNull(item, "酿造材料不能为空");
+                ItemStack potionResult = Objects.requireNonNull(obj.get(), "翅膀药剂物品不能为空").getDefaultInstance();
                 BrewingRecipeRegistry.addRecipe(
-                    new PotionMix(Potions.SLOW_FALLING, Ingredient.of(item), new ItemStack(obj.get()))
+                    new PotionMix(Potions.SLOW_FALLING, Ingredient.of(recipeItem), potionResult.copy())
                 );
                 BrewingRecipeRegistry.addRecipe(
-                    new PotionMix(Potions.LONG_SLOW_FALLING, Ingredient.of(item), new ItemStack(obj.get()))
+                    new PotionMix(Potions.LONG_SLOW_FALLING, Ingredient.of(recipeItem), potionResult.copy())
                 );
             };
             reg.accept(Items.FEATHER, WingsItems.ANGEL_WINGS_BOTTLE);

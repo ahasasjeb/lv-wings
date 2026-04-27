@@ -9,14 +9,17 @@ import com.toni.wings.client.model.ModelWingsInsectoid;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 
 import javax.annotation.Nonnull;
+import java.util.Objects;
 
 public final class LayerWings extends RenderLayer<LivingEntity, HumanoidModel<LivingEntity>> {
     private final TransformFunction transform;
@@ -41,7 +44,8 @@ public final class LayerWings extends RenderLayer<LivingEntity, HumanoidModel<Li
         if (!player.isInvisible()) {
             FlightViews.get(player).ifPresent(flight -> {
                 flight.ifFormPresent(form -> {
-                    VertexConsumer builder = buffer.getBuffer(form.getRenderType());
+                    RenderType renderType = Objects.requireNonNull(form.getRenderType(), "翅膀渲染类型不能为空");
+                    VertexConsumer builder = Objects.requireNonNull(buffer.getBuffer(renderType), "翅膀顶点缓冲不能为空");
                     matrixStack.pushPose();
                     this.transform.apply(player, matrixStack);
                     form.render(matrixStack, builder, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F, delta);
@@ -57,14 +61,17 @@ public final class LayerWings extends RenderLayer<LivingEntity, HumanoidModel<Li
         event.registerLayerDefinition(AVIAN_WINGS, ModelWingsAvian::createBodyLayer);
     }
 
-    private static ModelLayerLocation layer(String name)
+    @Nonnull
+    private static ModelLayerLocation layer(@Nonnull String name)
     {
         return layer(name, "main");
     }
 
-    private static ModelLayerLocation layer(String name, String layer)
+    @Nonnull
+    private static ModelLayerLocation layer(@Nonnull String name, @Nonnull String layer)
     {
-        return new ModelLayerLocation(WingsMod.locate(name), layer);
+        ResourceLocation location = Objects.requireNonNull(WingsMod.locate(name), "模型层资源路径不能为空: " + name);
+        return new ModelLayerLocation(location, Objects.requireNonNull(layer, "模型层名称不能为空"));
     }
 
     @FunctionalInterface
