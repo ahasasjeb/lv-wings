@@ -17,14 +17,14 @@ This is a community-maintained fork of the Wings mod.
 - **1.18.2 Port**: Ported and maintained by [jt789](https://github.com/jt789/WingsPort).
 
 这是一个由pau101发起，并由jt789移植到1.18.2后，再次开发的一个版本。
-通过喝下药水，你可以获得不同的翅膀，相比之前的版本，这个模组还添加了一个超级翅膀，但在生存模式下无法获取，可以获得更强力的药水效果，以及驱逐14格内的敌对生物。
+通过喝下药水，你可以获得不同的翅膀，相比之前的版本，这个模组还添加了一个超级翅膀，但在生存模式下无法获取，可以获得更强力的药水效果，以及驱逐半径14格内的敌对生物。
 每个翅膀都会在飞行期间、着陆、起飞时消耗你的饱食度。
 
 ## Introduction
 
 This version of Wings is a community-developed continuation project, originally started by pau101 and later ported to Minecraft 1.18.2 by jt789. When you drink a wings potion, you receive different types of wings with unique attributes.
 
-Compared to earlier versions, this branch adds a "Super Wings" item (obtainable only in Creative mode), stronger potion effects, and an effect that repels hostile mobs within a 14-block diameter. While wearing wings, press R to enter flight. Each type of wing consumes your hunger while flying, taking off, and landing.
+Compared to earlier versions, this branch adds a "Super Wings" item (obtainable only in Creative mode), stronger potion effects, and an effect that repels hostile mobs within a 14-block radius. While wearing wings, press R to enter flight. Each type of wing consumes your hunger while flying, taking off, and landing.
 
 There are plans to continue maintaining the project in the future.
 
@@ -61,7 +61,7 @@ Brewing steps:
 
 这个版本的 Wings 是一个由社区开发的延续项目，最初由 pau101 启动，后来由 jt789 移植到 Minecraft 1.18.2。当你饮用翅膀药水时，会获得具有独特属性的不同类型翅膀。
 
-与早期版本相比，此分支新增了一个“超级翅膀”物品（仅能在创造模式中获得）、更强的药水效果，以及一个在直径 14 格的范围内驱逐敌对生物的效果。佩戴翅膀时，按 R 进入飞行。每种翅膀在飞行、起飞和降落时都会消耗你的饱食度。
+与早期版本相比，此分支新增了一个“超级翅膀”物品（仅能在创造模式中获得）、更强的药水效果，以及一个在半径 14 格的范围内驱逐敌对生物的效果。佩戴翅膀时，按 R 进入飞行。每种翅膀在飞行、起飞和降落时都会消耗你的饱食度。
 
 未来计划将继续维护该项目。
 
