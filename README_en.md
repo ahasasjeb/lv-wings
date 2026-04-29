@@ -11,7 +11,7 @@ This is a community-maintained fork of the Wings mod.
 
 This version of Wings is a community-developed continuation project, originally started by pau101 and later ported to Minecraft 1.18.2 by jt789. When you drink a wings potion, you receive different types of wings with unique attributes.
 
-Compared to earlier versions, this branch adds a "Super Wings" item (obtainable only in Creative mode), stronger potion effects, and an effect that repels hostile mobs within a 14-block diameter. While wearing wings, press R to enter flight. Each type of wing consumes your hunger while flying, taking off, and landing.
+Compared to earlier versions, this branch adds a "Super Wings" item (obtainable only in Creative mode), stronger potion effects, and an effect that repels hostile mobs within a 14-block radius. While wearing wings, press R to enter flight. Each type of wing consumes your hunger while flying, taking off, and landing.
 
 There are plans to continue maintaining the project in the future.
 
