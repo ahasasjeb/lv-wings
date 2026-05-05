@@ -1,7 +1,6 @@
 package cc.lvjia.wings.client.renderer;
 
 import cc.lvjia.wings.WingsMod;
-import cc.lvjia.wings.client.flight.FlightViews;
 import cc.lvjia.wings.server.flight.Flights;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -20,8 +19,6 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.ClientAsset;
 import net.minecraft.world.entity.player.PlayerSkin;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class LayerCapeWings extends RenderLayer<AvatarRenderState, PlayerModel> {
 
@@ -73,16 +70,8 @@ public final class LayerCapeWings extends RenderLayer<AvatarRenderState, PlayerM
     }
 
     private boolean hasVisibleWings(AbstractClientPlayer player) {
-        AtomicBoolean hasWings = new AtomicBoolean(false);
-        FlightViews.get(player).ifPresent(flight -> flight.ifFormPresent(form -> hasWings.set(true)));
-        if (hasWings.get()) {
-            return true;
-        }
-        Flights.get(player).ifPresent(flight -> {
-            if (flight.getWing() != WingsMod.NONE && flight.getWing() != WingsMod.WINGLESS) {
-                hasWings.set(true);
-            }
-        });
-        return hasWings.get();
+        return Flights.get(player)
+                .map(flight -> flight.getWing() != WingsMod.NONE && flight.getWing() != WingsMod.WINGLESS)
+                .orElse(false);
     }
 }

@@ -1,7 +1,6 @@
 package cc.lvjia.wings.client.flight;
 
 import cc.lvjia.wings.util.MathH;
-import net.minecraft.world.phys.Vec3;
 
 public final class AnimatorInsectoid implements Animator {
     private static final float IDLE_FLAP_RATE = 0.05F;
@@ -41,8 +40,8 @@ public final class AnimatorInsectoid implements Animator {
         this.beginIdle();
     }
 
-    public Vec3 getRotation(float delta) {
-        return new Vec3(0.0D, Math.sin(MathH.lerp(this.prevFlapCycle, this.flapCycle, delta)) * 35.0D - 42.0D, 0.0D);
+    public void getRotation(float delta, RotationAngles rotation) {
+        rotation.set(0.0F, (float) (Math.sin(MathH.lerp(this.prevFlapCycle, this.flapCycle, delta)) * 35.0D - 42.0D), 0.0F);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package cc.lvjia.wings.client.model;
 
 import cc.lvjia.wings.client.flight.AnimatorAvian;
+import cc.lvjia.wings.client.flight.RotationAngles;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -42,6 +43,7 @@ public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
     private final ModelPart feathersPrimaryRight;
     private final ModelPart feathersSecondaryRight;
     private final ModelPart feathersTertiaryRight;
+    private final RotationAngles rotation = new RotationAngles();
 
 
     public ModelWingsAvian(ModelPart root) {
@@ -203,12 +205,14 @@ public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
         for (int i = 0; i < this.bonesLeft.size(); i++) {
             ModelPart left = this.bonesLeft.get(i);
             ModelPart right = this.bonesRight.get(i);
-            setAngles(left, right, animator.getWingRotation(i, delta));
+            animator.getWingRotation(i, delta, this.rotation);
+            setAngles(left, right, this.rotation);
         }
         for (int i = 0; i < this.feathersLeft.size(); i++) {
             ModelPart left = this.feathersLeft.get(i);
             ModelPart right = this.feathersRight.get(i);
-            setAngles(left, right, animator.getFeatherRotation(i, delta));
+            animator.getFeatherRotation(i, delta, this.rotation);
+            setAngles(left, right, this.rotation);
         }
 
         this.coracoidLeft.render(matrixStack, buffer, packedLight, packedOverlay, color);

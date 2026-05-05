@@ -1,6 +1,7 @@
 package cc.lvjia.wings.client.model;
 
 import cc.lvjia.wings.client.flight.AnimatorInsectoid;
+import cc.lvjia.wings.client.flight.RotationAngles;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.geom.ModelPart;
@@ -15,6 +16,7 @@ import net.minecraft.util.ARGB;
 public final class ModelWingsInsectoid extends ModelWings<AnimatorInsectoid> {
     private final ModelPart wingLeft;
     private final ModelPart wingRight;
+    private final RotationAngles rotation = new RotationAngles();
 
     public ModelWingsInsectoid(ModelPart root) {
         super(root);
@@ -35,7 +37,8 @@ public final class ModelWingsInsectoid extends ModelWings<AnimatorInsectoid> {
 
     @Override
     public void render(AnimatorInsectoid animator, float delta, PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        setAngles(this.wingLeft, this.wingRight, animator.getRotation(delta));
+        animator.getRotation(delta, this.rotation);
+        setAngles(this.wingLeft, this.wingRight, this.rotation);
         int color = ARGB.colorFromFloat(alpha, red, green, blue);
         this.wingLeft.render(matrixStack, buffer, packedLight, packedOverlay, color);
         this.wingRight.render(matrixStack, buffer, packedLight, packedOverlay, color);
