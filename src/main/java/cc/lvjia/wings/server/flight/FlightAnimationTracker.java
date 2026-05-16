@@ -105,6 +105,10 @@ public final class FlightAnimationTracker {
             return FlightAnimationState.LIFT;
         }
 
+        if (player.onGround()) {
+            return FlightAnimationState.IDLE;
+        }
+
         if (motionY < 0.0D) {
             if (this.state == FlightAnimationState.IDLE && this.isNearGround(player)) {
                 return FlightAnimationState.IDLE;

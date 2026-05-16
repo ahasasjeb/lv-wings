@@ -7,6 +7,7 @@ import cc.lvjia.wings.server.asm.AnimatePlayerModelEvent;
 import cc.lvjia.wings.server.asm.ApplyPlayerRotationsEvent;
 import cc.lvjia.wings.server.asm.EmptyOffHandPresentEvent;
 import cc.lvjia.wings.server.asm.GetCameraEyeHeightEvent;
+import cc.lvjia.wings.server.flight.Flight;
 import cc.lvjia.wings.server.flight.Flights;
 import cc.lvjia.wings.util.MathH;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -51,7 +52,7 @@ public final class ClientEventHandler {
         Flights.get(player).ifPresent(flight -> {
             float delta = event.getTicksExisted() - player.tickCount;
             float amt = flight.getFlyingAmount(delta);
-            if (!shouldApplyFlightPose(player, amt)) {
+            if (!shouldApplyFlightPose(player, flight, amt)) {
                 return;
             }
             PlayerModel model = event.getModel();
@@ -87,7 +88,7 @@ public final class ClientEventHandler {
             PoseStack matrixStack = event.getMatrixStack();
             float delta = event.getDelta();
             float amt = flight.getFlyingAmount(delta);
-            if (shouldApplyFlightPose(player, amt)) {
+            if (shouldApplyFlightPose(player, flight, amt)) {
                 float roll = getBodyYawRoll(player, delta);
                 float pitch = -Mth.lerp(delta, player.xRotO, player.getXRot()) - 90.0F;
                 matrixStack.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(amt, 0.0F, roll)));
@@ -133,8 +134,8 @@ public final class ClientEventHandler {
         }
     }
 
-    private static boolean shouldApplyFlightPose(Player player, float amount) {
-        return amount > 0.0F && !player.isSpectator();
+    private static boolean shouldApplyFlightPose(Player player, Flight flight, float amount) {
+        return amount > 0.0F && !player.isSpectator() && (flight.isFlying() || !player.onGround());
     }
 
     private static float getBodyYawRoll(Player player, float delta) {

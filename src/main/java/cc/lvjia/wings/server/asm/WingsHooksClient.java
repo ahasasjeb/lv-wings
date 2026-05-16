@@ -10,6 +10,7 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MapItem;
@@ -66,8 +67,16 @@ public final class WingsHooksClient {
         return null;
     }
 
-    public static boolean onCheckRenderEmptyHand(boolean isMainHand, ItemStack itemStackMainHand) {
-        return isMainHand || !Holder.OPTIFINE_PRESENT && !isMap(itemStackMainHand);
+    public static boolean onCheckRenderEmptyHand(boolean isMainHand, AbstractClientPlayer player, InteractionHand hand, ItemStack itemStack, ItemStack itemStackMainHand) {
+        if (isMainHand) {
+            return true;
+        }
+        if (!(player instanceof LocalPlayer localPlayer) || hand != InteractionHand.OFF_HAND || !itemStack.isEmpty() || Holder.OPTIFINE_PRESENT || isMap(itemStackMainHand)) {
+            return false;
+        }
+        EmptyOffHandPresentEvent event = new EmptyOffHandPresentEvent(localPlayer);
+        ClientEventHandler.onEmptyOffHandPresentEvent(event);
+        return event.isAllowed();
     }
 
     public static boolean onCheckDoReequipAnimation(ItemStack from, ItemStack to, int slot) {

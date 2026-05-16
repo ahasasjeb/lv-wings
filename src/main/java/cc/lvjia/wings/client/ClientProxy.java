@@ -95,7 +95,7 @@ public final class ClientProxy extends Proxy {
                     if (player == null || player.isSpectator()) {
                         return;
                     }
-                    Flights.get(player).ifPresent(flight ->
+                    Flights.get(player).filter(flight -> flight.canFly(player)).ifPresent(flight ->
                             flight.toggleIsFlying(Flight.PlayerSet.ofOthers())
                     );
                     Flights.ifPlayer(player, (p, flight) -> {
@@ -112,6 +112,13 @@ public final class ClientProxy extends Proxy {
     public void addFlightListeners(Player player, Flight flight) {
         super.addFlightListeners(player, flight);
         if (player.isLocalPlayer()) {
+            flight.registerFlyingListener(isFlying -> {
+                boolean hasVanillaFlight = player.getAbilities().instabuild || player.isSpectator();
+                player.getAbilities().mayfly = isFlying || hasVanillaFlight;
+                if (isFlying || !hasVanillaFlight) {
+                    player.getAbilities().flying = false;
+                }
+            });
             // 本地玩家先更新客户端预测态，再把最终意图发回服务端做校验和纠正
             Flight.Notifier notifier = Flight.Notifier.of(
                     () -> {

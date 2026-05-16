@@ -46,6 +46,9 @@ public abstract class State {
             }
             return this.createLift();
         }
+        if (player.onGround()) {
+            return this.createIdle();
+        }
         if (y < 0) {
             return this.getDescent(flight, player);
         }
