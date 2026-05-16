@@ -83,6 +83,7 @@ public final class WingsMod implements ModInitializer {
         WingsItems.register();
         WingsSounds.register();
         WingsEffects.register();
+        WingsAttachments.register();
         ArgumentTypeRegistry.registerArgumentType(
                 locate("wings"),
                 WingsArgument.class,

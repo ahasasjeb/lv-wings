@@ -87,13 +87,15 @@ public final class ServerEventHandler {
             if (clearSpectatorFlightState(player, flight)) {
                 return;
             }
-            flight.tick(player);
             if (player instanceof ServerPlayer serverPlayer && !serverPlayer.level().isClientSide()) {
                 if (flight.isFlying() && player.getAbilities().flying) {
-                    player.getAbilities().flying = false;
-                    serverPlayer.onUpdateAbilities();
+                    flight.setIsFlying(false, Flight.PlayerSet.ofAll());
+                    FlightSpeedAntiCheat.clear(serverPlayer);
                 }
+                flight.tick(player);
                 FlightSpeedAntiCheat.tick(serverPlayer, flight);
+            } else {
+                flight.tick(player);
             }
         });
     }

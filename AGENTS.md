@@ -1,5 +1,5 @@
-Project type: Minecraft NeoForge Mod
-Target version: 26.1
+Project type: Minecraft Fabric Mod
+Target version: 26.1.2
 Java 25
 Build: ./gradlew build
 No ./gradlew prepareRunClientCompile

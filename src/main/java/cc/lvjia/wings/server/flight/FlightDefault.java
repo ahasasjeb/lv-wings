@@ -7,6 +7,8 @@ import cc.lvjia.wings.server.effect.WingsEffects;
 import cc.lvjia.wings.util.CubicBezier;
 import cc.lvjia.wings.util.MathH;
 import cc.lvjia.wings.util.NBTSerializer;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.google.common.collect.Lists;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -43,6 +45,12 @@ public final class FlightDefault implements Flight {
 
     private static final Identifier DEFAULT_WING_ID = WingsMod.Names.NONE;
 
+    public static final Codec<FlightDefault> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Codec.BOOL.optionalFieldOf(Serializer.IS_FLYING, false).forGetter(FlightDefault::isFlying),
+            Codec.INT.optionalFieldOf(Serializer.TIME_FLYING, INITIAL_TIME_FLYING).forGetter(FlightDefault::getTimeFlying),
+            Codec.STRING.optionalFieldOf(Serializer.WING, DEFAULT_WING_ID.toString()).forGetter(FlightDefault::getWingId)
+    ).apply(instance, FlightDefault::fromPersistentData));
+
     private final List<FlyingListener> flyingListeners = Lists.newArrayList();
 
     private final List<SyncListener> syncListeners = Lists.newArrayList();
@@ -74,6 +82,18 @@ public final class FlightDefault implements Flight {
 
     private static FlightApparatus wingFrom(String rawId) {
         return wingFrom(Identifier.tryParse(rawId));
+    }
+
+    private static FlightDefault fromPersistentData(boolean isFlying, int timeFlying, String wingId) {
+        FlightDefault flight = new FlightDefault();
+        flight.setIsFlying(isFlying);
+        flight.setTimeFlying(timeFlying);
+        flight.setWing(wingFrom(wingId));
+        return flight;
+    }
+
+    private String getWingId() {
+        return wingIdFor(this.getWing()).toString();
     }
 
     @Override
