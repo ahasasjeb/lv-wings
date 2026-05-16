@@ -45,6 +45,7 @@ public final class WingsItems {
             bottle("dragon_wings_bottle", () -> WingsMod.DRAGON_WINGS));
     public static final Supplier<Item> LVJIA_SUPER_WINGS_BOTTLE = register("lvjia_super_wings_bottle",
             bottle("lvjia_super_wings_bottle", () -> WingsMod.LVJIA_SUPER_WINGS));
+
     private WingsItems() {
     }
 

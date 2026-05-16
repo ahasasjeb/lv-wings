@@ -190,7 +190,7 @@ public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
             CUBES_FIELD.set(part, mutable);
             return mutable;
         } catch (IllegalAccessException e) {
-                        throw new RuntimeException("Failed to access ModelPart cubes list via reflection", e);
+            throw new RuntimeException("Failed to access ModelPart cubes list via reflection", e);
         }
     }
 

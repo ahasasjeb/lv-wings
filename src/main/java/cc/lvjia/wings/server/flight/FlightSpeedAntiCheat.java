@@ -113,12 +113,12 @@ public final class FlightSpeedAntiCheat {
         }
 
         boolean hardViolation = horizontal > settings.hardHorizontalLimit()
-            || vertical > hardVerticalLimit
-            || total > hardTotalLimit;
+                || vertical > hardVerticalLimit
+                || total > hardTotalLimit;
         boolean softViolation = hardViolation
-            || horizontal > settings.softHorizontalLimit()
-            || vertical > softVerticalLimit
-            || total > softTotalLimit;
+                || horizontal > settings.softHorizontalLimit()
+                || vertical > softVerticalLimit
+                || total > softTotalLimit;
 
         if (!softViolation) {
             state.captureSafePosition(player);

@@ -101,51 +101,41 @@ public final class AnimatorAvian implements Animator {
         void get(Movement movement, int index, float delta, RotationAngles rotation);
     }
 
-    private static final class WingPose {
-        private static final int POSE_SIZE = 4;
+    private record WingPose(float[] x, float[] y, float[] z) {
+            private static final int POSE_SIZE = 4;
 
         private static Builder builder() {
-            return new Builder();
-        }
-
-        private final float[] x;
-        private final float[] y;
-        private final float[] z;
-
-        private WingPose(float[] x, float[] y, float[] z) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-        }
-
-        public void get(int index, RotationAngles rotation) {
-            if (index < 0 || index >= POSE_SIZE) {
-                rotation.set(0.0F, 0.0F, 0.0F);
-                return;
-            }
-            rotation.set(this.x[index], this.y[index], this.z[index]);
-        }
-
-        private static final class Builder {
-            private final float[] x = new float[POSE_SIZE];
-            private final float[] y = new float[POSE_SIZE];
-            private final float[] z = new float[POSE_SIZE];
-
-            private Builder() {
+                return new Builder();
             }
 
-            private Builder with(int index, double x, double y, double z) {
-                this.x[index] = (float) x;
-                this.y[index] = (float) y;
-                this.z[index] = (float) z;
-                return this;
+            public void get(int index, RotationAngles rotation) {
+                if (index < 0 || index >= POSE_SIZE) {
+                    rotation.set(0.0F, 0.0F, 0.0F);
+                    return;
+                }
+                rotation.set(this.x[index], this.y[index], this.z[index]);
             }
 
-            private WingPose build() {
-                return new WingPose(this.x, this.y, this.z);
+            private static final class Builder {
+                private final float[] x = new float[POSE_SIZE];
+                private final float[] y = new float[POSE_SIZE];
+                private final float[] z = new float[POSE_SIZE];
+
+                private Builder() {
+                }
+
+                private Builder with(int index, double x, double y, double z) {
+                    this.x[index] = (float) x;
+                    this.y[index] = (float) y;
+                    this.z[index] = (float) z;
+                    return this;
+                }
+
+                private WingPose build() {
+                    return new WingPose(this.x, this.y, this.z);
+                }
             }
         }
-    }
 
     private final class RestPosition implements Movement {
         private final WingPose wing = WingPose.builder()
@@ -334,14 +324,10 @@ public final class AnimatorAvian implements Animator {
         private final Movement end;
 
         private final int duration;
-
-        private int lastTime, time;
-
-        private boolean isActive = true;
-
         private final RotationAngles startRotation = new RotationAngles();
-
         private final RotationAngles endRotation = new RotationAngles();
+        private int lastTime, time;
+        private boolean isActive = true;
 
         private Transition(Movement start, Movement end, int duration) {
             this.start = start;

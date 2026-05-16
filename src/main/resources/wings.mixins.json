@@ -12,9 +12,9 @@
   "client": [
     "CameraMixin",
     "ItemInHandRendererMixin",
-    "client.LivingEntityRendererAccessor",
     "PlayerModelMixin",
-    "PlayerRendererMixin"
+    "PlayerRendererMixin",
+    "client.LivingEntityRendererAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

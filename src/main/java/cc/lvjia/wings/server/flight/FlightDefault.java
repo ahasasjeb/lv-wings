@@ -7,12 +7,12 @@ import cc.lvjia.wings.server.effect.WingsEffects;
 import cc.lvjia.wings.util.CubicBezier;
 import cc.lvjia.wings.util.MathH;
 import cc.lvjia.wings.util.NBTSerializer;
+import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.google.common.collect.Lists;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
@@ -322,6 +322,10 @@ public final class FlightDefault implements Flight {
         this.animationTracker.load(animationState);
     }
 
+    private boolean isUnderwaterFlightBlocked(Player player) {
+        return player.isUnderWater() && !WingsConfig.isUnderwaterFlightAllowed();
+    }
+
     public static final class Serializer implements NBTSerializer<FlightDefault, CompoundTag> {
         private static final String IS_FLYING = "isFlying";
 
@@ -396,9 +400,5 @@ public final class FlightDefault implements Flight {
         private void onUpdate(Player player) {
             this.activity.onUpdate(player);
         }
-    }
-
-    private boolean isUnderwaterFlightBlocked(Player player) {
-        return player.isUnderWater() && !WingsConfig.isUnderwaterFlightAllowed();
     }
 }

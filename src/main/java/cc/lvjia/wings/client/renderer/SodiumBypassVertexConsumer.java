@@ -1,6 +1,7 @@
 package cc.lvjia.wings.client.renderer;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
+
 import java.util.Collections;
 import java.util.Map;
 import java.util.WeakHashMap;

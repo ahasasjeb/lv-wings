@@ -25,7 +25,7 @@ public final class WingsMod implements ModInitializer {
     public static final String ID = "wings";
     private static final ResourceKey<Registry<FlightApparatus>> WINGS_KEY = ResourceKey.createRegistryKey(locate("wings"));
     public static final Registry<FlightApparatus> WINGS = FabricRegistryBuilder
-            .<FlightApparatus>createDefaulted(WINGS_KEY, Names.NONE)
+            .createDefaulted(WINGS_KEY, Names.NONE)
             .buildAndRegister();
     public static final FlightApparatus NONE = Registry.register(WINGS, Names.NONE, FlightApparatus.NONE);
     public static final FlightApparatus WINGLESS = Registry.register(WINGS, Names.WINGLESS, new FlightApparatus() {
@@ -76,6 +76,18 @@ public final class WingsMod implements ModInitializer {
         INSTANCE = this;
     }
 
+    public static WingsMod instance() {
+        return INSTANCE;
+    }
+
+    public static Identifier locate(String name) {
+        Identifier location = Identifier.tryBuild(WingsMod.ID, name);
+        if (location == null) {
+            throw new IllegalArgumentException("Invalid resource path: " + name);
+        }
+        return location;
+    }
+
     @Override
     public void onInitialize() {
         WingsConfig.validate();
@@ -93,20 +105,8 @@ public final class WingsMod implements ModInitializer {
         this.proxy.init();
     }
 
-    public static WingsMod instance() {
-        return INSTANCE;
-    }
-
     public void setProxy(Proxy proxy) {
         this.proxy = proxy;
-    }
-
-    public static Identifier locate(String name) {
-        Identifier location = Identifier.tryBuild(WingsMod.ID, name);
-        if (location == null) {
-            throw new IllegalArgumentException("Invalid resource path: " + name);
-        }
-        return location;
     }
 
     public void addFlightListeners(Player player, Flight instance) {

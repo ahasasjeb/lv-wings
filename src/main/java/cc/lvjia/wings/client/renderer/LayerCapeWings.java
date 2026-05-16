@@ -60,7 +60,7 @@ public final class LayerCapeWings extends RenderLayer<AvatarRenderState, PlayerM
                 this.model,
                 state,
                 poseStack,
-            RenderTypes.entitySolid(capeTexture.texturePath()),
+                RenderTypes.entitySolid(capeTexture.texturePath()),
                 packedLight,
                 OverlayTexture.NO_OVERLAY,
                 state.outlineColor,

@@ -24,6 +24,17 @@ public final class ConfigWingSettings implements WingSettings {
         this.current = this.defaults.copy();
     }
 
+    private static int clamp(int value, int min, int max) {
+        return Math.max(min, Math.min(max, value));
+    }
+
+    private static double clamp(double value, double min, double max) {
+        if (!Double.isFinite(value)) {
+            return min;
+        }
+        return Math.max(min, Math.min(max, value));
+    }
+
     public Identifier getKey() {
         return this.key;
     }
@@ -90,16 +101,5 @@ public final class ConfigWingSettings implements WingSettings {
             this.landingExertion = clamp(this.landingExertion, MIN_EXERTION, MAX_EXERTION);
             return this;
         }
-    }
-
-    private static int clamp(int value, int min, int max) {
-        return Math.max(min, Math.min(max, value));
-    }
-
-    private static double clamp(double value, double min, double max) {
-        if (!Double.isFinite(value)) {
-            return min;
-        }
-        return Math.max(min, Math.min(max, value));
     }
 }

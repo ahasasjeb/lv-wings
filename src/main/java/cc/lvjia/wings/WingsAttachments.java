@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import net.minecraft.world.entity.player.Player;
 
 public final class WingsAttachments {
+    public static final AttachmentType<InSomniable> INSOMNIABLE = AttachmentRegistry.createDefaulted(WingsMod.locate("insomniable"), InSomniable::new);
     private static final Codec<Flight> FLIGHT_CODEC = FlightDefault.CODEC.xmap(
             flight -> flight,
             flight -> {
@@ -20,7 +21,6 @@ public final class WingsAttachments {
                 return flightDefault;
             }
     );
-
     public static final AttachmentType<Flight> FLIGHT = AttachmentRegistry.create(
             WingsMod.locate("flight"),
             builder -> builder
@@ -28,7 +28,6 @@ public final class WingsAttachments {
                     .persistent(FLIGHT_CODEC)
     );
     private static final AttachmentType<Boolean> FLIGHT_LISTENERS = AttachmentRegistry.create(WingsMod.locate("flight_listeners"));
-    public static final AttachmentType<InSomniable> INSOMNIABLE = AttachmentRegistry.createDefaulted(WingsMod.locate("insomniable"), InSomniable::new);
 
     private WingsAttachments() {
     }

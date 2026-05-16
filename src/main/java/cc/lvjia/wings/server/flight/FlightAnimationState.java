@@ -16,14 +16,6 @@ public enum FlightAnimationState {
         this.periodicallySynced = periodicallySynced;
     }
 
-    public int id() {
-        return this.id;
-    }
-
-    public boolean shouldSyncPeriodically() {
-        return this.periodicallySynced;
-    }
-
     public static FlightAnimationState byId(int id) {
         for (FlightAnimationState state : values()) {
             if (state.id == id) {
@@ -31,5 +23,13 @@ public enum FlightAnimationState {
             }
         }
         return IDLE;
+    }
+
+    public int id() {
+        return this.id;
+    }
+
+    public boolean shouldSyncPeriodically() {
+        return this.periodicallySynced;
     }
 }

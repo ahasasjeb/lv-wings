@@ -12,15 +12,15 @@ public final class GetLivingHeadLimitEvent {
         this.living = living;
     }
 
-    public LivingEntity getEntity() {
-        return this.living;
-    }
-
     public static GetLivingHeadLimitEvent create(LivingEntity living) {
         GetLivingHeadLimitEvent ev = new GetLivingHeadLimitEvent(living);
         ev.setHardLimit(75.0F);
         ev.setSoftLimit(50.0F);
         return ev;
+    }
+
+    public LivingEntity getEntity() {
+        return this.living;
     }
 
     public float getHardLimit() {

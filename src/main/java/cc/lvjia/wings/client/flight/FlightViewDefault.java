@@ -92,112 +92,112 @@ public final class FlightViewDefault implements FlightView {
     private record PresentWingState(WingForm<?> wing, Strategy behavior) implements WingState {
 
         public static <T extends Animator> WingState newState(WingForm<T> shape) {
-                return new PresentWingState(shape, new WingStrategy<>(shape));
-            }
+            return new PresentWingState(shape, new WingStrategy<>(shape));
+        }
 
-            @Override
-            public WingState nextAbsent() {
-                return ABSENT_ANIMATOR;
-            }
+        @Override
+        public WingState nextAbsent() {
+            return ABSENT_ANIMATOR;
+        }
 
-            @Override
-            public WingState next(WingForm<?> form) {
-                if (this.wing.equals(form)) {
-                    return this;
-                }
-                return PresentWingState.newState(form);
+        @Override
+        public WingState next(WingForm<?> form) {
+            if (this.wing.equals(form)) {
+                return this;
+            }
+            return PresentWingState.newState(form);
+        }
+
+        @Override
+        public void update(Flight flight, Player player) {
+            this.behavior.update(flight, player);
+        }
+
+        @Override
+        public void ifFormPresent(Consumer<FormRenderer> consumer) {
+            this.behavior.ifFormPresent(consumer);
+        }
+
+        private static class WingStrategy<T extends Animator> implements Strategy {
+            private final WingForm<T> shape;
+
+            private final T animator;
+
+            private final FormRenderer renderer;
+
+            private State state;
+
+            private FlightAnimationState remoteAnimationState;
+
+            public WingStrategy(WingForm<T> shape) {
+                this.shape = shape;
+                this.animator = shape.createAnimator();
+                this.state = new StateIdle();
+                this.renderer = new FormRenderer() {
+                    @Override
+                    public Identifier getTexture() {
+                        return WingStrategy.this.shape.getTexture();
+                    }
+
+                    @Override
+                    public RenderType getRenderType() {
+                        return WingStrategy.this.shape.getRenderType();
+                    }
+
+                    @Override
+                    public void render(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha, float delta) {
+                        WingStrategy.this.shape.getModel().render(WingStrategy.this.animator, delta, matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+                    }
+                };
             }
 
             @Override
             public void update(Flight flight, Player player) {
-                this.behavior.update(flight, player);
+                this.animator.update();
+                if (!player.isLocalPlayer()) {
+                    this.applyRemoteAnimationState(flight.getAnimationState());
+                    return;
+                }
+                this.remoteAnimationState = null;
+                State state = this.state.update(
+                        flight,
+                        player.getX() - player.xo,
+                        player.getY() - player.yo,
+                        player.getZ() - player.zo,
+                        player
+                );
+                if (!this.state.equals(state)) {
+                    state.beginAnimation(this.animator);
+                }
+                this.state = state;
+            }
+
+            private void applyRemoteAnimationState(FlightAnimationState animationState) {
+                if (this.remoteAnimationState == animationState) {
+                    return;
+                }
+                this.remoteAnimationState = animationState;
+                State state = this.createState(animationState);
+                if (!this.state.getClass().equals(state.getClass())) {
+                    state.beginAnimation(this.animator);
+                }
+                this.state = state;
+            }
+
+            private State createState(FlightAnimationState animationState) {
+                return switch (animationState) {
+                    case LIFT -> new StateLift();
+                    case GLIDE -> new StateGlide();
+                    case LAND -> new StateLand();
+                    case FALL -> new StateFall();
+                    case IDLE -> new StateIdle();
+                };
             }
 
             @Override
             public void ifFormPresent(Consumer<FormRenderer> consumer) {
-                this.behavior.ifFormPresent(consumer);
-            }
-
-            private static class WingStrategy<T extends Animator> implements Strategy {
-                private final WingForm<T> shape;
-
-                private final T animator;
-
-                private final FormRenderer renderer;
-
-                private State state;
-
-                private FlightAnimationState remoteAnimationState;
-
-                public WingStrategy(WingForm<T> shape) {
-                    this.shape = shape;
-                    this.animator = shape.createAnimator();
-                    this.state = new StateIdle();
-                    this.renderer = new FormRenderer() {
-                        @Override
-                        public Identifier getTexture() {
-                            return WingStrategy.this.shape.getTexture();
-                        }
-
-                        @Override
-                        public RenderType getRenderType() {
-                            return WingStrategy.this.shape.getRenderType();
-                        }
-
-                        @Override
-                        public void render(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha, float delta) {
-                            WingStrategy.this.shape.getModel().render(WingStrategy.this.animator, delta, matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
-                        }
-                    };
-                }
-
-                @Override
-                public void update(Flight flight, Player player) {
-                    this.animator.update();
-                    if (!player.isLocalPlayer()) {
-                        this.applyRemoteAnimationState(flight.getAnimationState());
-                        return;
-                    }
-                    this.remoteAnimationState = null;
-                    State state = this.state.update(
-                            flight,
-                            player.getX() - player.xo,
-                            player.getY() - player.yo,
-                            player.getZ() - player.zo,
-                            player
-                    );
-                    if (!this.state.equals(state)) {
-                        state.beginAnimation(this.animator);
-                    }
-                    this.state = state;
-                }
-
-                private void applyRemoteAnimationState(FlightAnimationState animationState) {
-                    if (this.remoteAnimationState == animationState) {
-                        return;
-                    }
-                    this.remoteAnimationState = animationState;
-                    State state = this.createState(animationState);
-                    if (!this.state.getClass().equals(state.getClass())) {
-                        state.beginAnimation(this.animator);
-                    }
-                    this.state = state;
-                }
-
-                private State createState(FlightAnimationState animationState) {
-                    return switch (animationState) {
-                        case LIFT -> new StateLift();
-                        case GLIDE -> new StateGlide();
-                        case LAND -> new StateLand();
-                        case FALL -> new StateFall();
-                        case IDLE -> new StateIdle();
-                    };
-                }
-
-                @Override
-                public void ifFormPresent(Consumer<FormRenderer> consumer) {
-                    consumer.accept(this.renderer);
-                }
+                consumer.accept(this.renderer);
             }
         }
+    }
 }

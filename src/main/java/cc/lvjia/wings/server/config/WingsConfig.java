@@ -47,6 +47,17 @@ public final class WingsConfig {
         FLIGHT_ANTI_CHEAT_SETTINGS = DATA.flightAntiCheat.toSettings();
     }
 
+    private static int clamp(int value, int min, int max) {
+        return Math.max(min, Math.min(max, value));
+    }
+
+    private static double clamp(double value, double min, double max) {
+        if (!Double.isFinite(value)) {
+            return min;
+        }
+        return Math.max(min, Math.min(max, value));
+    }
+
     public record FlightAntiCheatSettings(
             boolean enabled,
             int takeoffGraceTicks,
@@ -132,16 +143,5 @@ public final class WingsConfig {
                     this.upwardAssistMaxBonus
             );
         }
-    }
-
-    private static int clamp(int value, int min, int max) {
-        return Math.max(min, Math.min(max, value));
-    }
-
-    private static double clamp(double value, double min, double max) {
-        if (!Double.isFinite(value)) {
-            return min;
-        }
-        return Math.max(min, Math.min(max, value));
     }
 }
