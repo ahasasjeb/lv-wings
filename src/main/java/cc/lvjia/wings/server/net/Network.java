@@ -2,12 +2,12 @@ package cc.lvjia.wings.server.net;
 
 import cc.lvjia.wings.server.net.clientbound.MessageSyncFlight;
 import cc.lvjia.wings.server.net.serverbound.MessageControlFlying;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.network.PacketDistributor;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
-import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,34 +18,27 @@ import org.apache.logging.log4j.Logger;
  */
 public final class Network {
     private static final Logger LOGGER = LogManager.getLogger("WingsNetwork");
-    /**
-     * payload 注册版本号：用于网络协议变更时进行兼容控制。
-     */
-    private static final String VERSION = "1";
 
-    public void register(IEventBus modBus) {
-        modBus.addListener(this::onRegisterPayloadHandlers);
+    public void register() {
+        PayloadTypeRegistry.serverboundPlay().register(MessageControlFlying.TYPE, MessageControlFlying.STREAM_CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(MessageSyncFlight.TYPE, MessageSyncFlight.STREAM_CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(MessageControlFlying.TYPE, MessageControlFlying::handle);
+        LOGGER.info("Network payloads registered");
     }
 
-    private void onRegisterPayloadHandlers(RegisterPayloadHandlersEvent event) {
-        PayloadRegistrar registrar = event.registrar(VERSION);
-
-        // 控制指令走客户端 -> 服务端，飞行快照走服务端 -> 客户端。
-        registrar.optional()
-                .playToServer(MessageControlFlying.TYPE, MessageControlFlying.STREAM_CODEC, MessageControlFlying::handle);
-
-        registrar.playToClient(MessageSyncFlight.TYPE, MessageSyncFlight.STREAM_CODEC, MessageSyncFlight::handle);
-
-        LOGGER.info("Network payloads registered (version={})", VERSION);
+    public void registerClient() {
+        ClientPlayNetworking.registerGlobalReceiver(MessageSyncFlight.TYPE, MessageSyncFlight::handle);
     }
 
     public void sendToPlayer(Message message, ServerPlayer player) {
         LOGGER.debug("Sending {} to player {}", message.type().id(), player.getName().getString());
-        PacketDistributor.sendToPlayer(player, message);
+        ServerPlayNetworking.send(player, message);
     }
 
     public void sendToAllTracking(Message message, Entity entity) {
         LOGGER.debug("Sending {} tracking entity={}", message.type().id(), entity.getName().getString());
-        PacketDistributor.sendToPlayersTrackingEntity(entity, message);
+        for (ServerPlayer player : PlayerLookup.tracking(entity)) {
+            ServerPlayNetworking.send(player, message);
+        }
     }
 }

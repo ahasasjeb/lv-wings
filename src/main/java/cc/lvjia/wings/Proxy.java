@@ -2,21 +2,16 @@ package cc.lvjia.wings;
 
 import cc.lvjia.wings.server.flight.Flight;
 import cc.lvjia.wings.server.item.WingsItems;
-import cc.lvjia.wings.server.net.Network;
 import cc.lvjia.wings.server.net.Message;
+import cc.lvjia.wings.server.net.Network;
 import cc.lvjia.wings.server.net.clientbound.MessageSyncFlight;
-import cc.lvjia.wings.server.potion.PotionMix;
+import net.fabricmc.fabric.api.registry.FabricPotionBrewingBuilder;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
@@ -24,16 +19,14 @@ import java.util.function.Supplier;
 public class Proxy {
     protected final Network network = new Network();
 
-    public void init(IEventBus modBus) {
-        this.network.register(modBus);
-        NeoForge.EVENT_BUS.addListener(this::registerBrewingRecipes);
+    public void init() {
+        this.network.register();
+        FabricPotionBrewingBuilder.BUILD.register(this::registerBrewingRecipes);
     }
 
-    private void registerBrewingRecipes(RegisterBrewingRecipesEvent event) {
-        var builder = event.getBuilder();
+    private void registerBrewingRecipes(net.minecraft.world.item.alchemy.PotionBrewing.Builder builder) {
         BiConsumer<ItemLike, Supplier<? extends Item>> reg = (item, supplier) -> {
-            builder.addRecipe(new PotionMix(Potions.SLOW_FALLING, Ingredient.of(item), new ItemStack(supplier.get())));
-            builder.addRecipe(new PotionMix(Potions.LONG_SLOW_FALLING, Ingredient.of(item), new ItemStack(supplier.get())));
+            ((FabricPotionBrewingBuilder) builder).registerItemRecipe(Items.POTION, Ingredient.of(item), supplier.get());
         };
 
         reg.accept(Items.FEATHER, WingsItems.ANGEL_WINGS_BOTTLE);

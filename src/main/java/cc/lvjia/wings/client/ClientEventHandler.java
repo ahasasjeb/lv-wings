@@ -1,6 +1,5 @@
 package cc.lvjia.wings.client;
 
-import cc.lvjia.wings.WingsMod;
 import cc.lvjia.wings.client.audio.WingsSound;
 import cc.lvjia.wings.client.flight.FlightView;
 import cc.lvjia.wings.client.flight.FlightViews;
@@ -12,6 +11,8 @@ import cc.lvjia.wings.server.flight.Flights;
 import cc.lvjia.wings.util.MathH;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.player.PlayerModel;
@@ -22,15 +23,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.ClientTickEvent;
-import net.neoforged.neoforge.client.event.ViewportEvent;
-import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
-import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
-@EventBusSubscriber(value = Dist.CLIENT, modid = WingsMod.ID)
 public final class ClientEventHandler {
     private static ResourceKey<Level> lastPlayerDimension;
     private static CameraType lastCameraType = CameraType.FIRST_PERSON;
@@ -39,7 +32,20 @@ public final class ClientEventHandler {
     private ClientEventHandler() {
     }
 
-    @SubscribeEvent
+    public static void register() {
+        ClientEntityEvents.ENTITY_LOAD.register((entity, level) -> onEntityJoinWorld(entity));
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            if (client.level != null) {
+                for (Player player : client.level.players()) {
+                    if (player instanceof AbstractClientPlayer clientPlayer) {
+                        FlightViews.get(clientPlayer).ifPresent(FlightView::tick);
+                    }
+                }
+            }
+            onClientTick();
+        });
+    }
+
     public static void onAnimatePlayerModel(AnimatePlayerModelEvent event) {
         Player player = event.getEntity();
         Flights.get(player).ifPresent(flight -> {
@@ -76,7 +82,6 @@ public final class ClientEventHandler {
         });
     }
 
-    @SubscribeEvent
     public static void onApplyRotations(ApplyPlayerRotationsEvent event) {
         Flights.ifPlayer(event.getEntity(), (player, flight) -> {
             PoseStack matrixStack = event.getMatrixStack();
@@ -92,7 +97,6 @@ public final class ClientEventHandler {
         });
     }
 
-    @SubscribeEvent
     public static void onGetCameraEyeHeight(GetCameraEyeHeightEvent event) {
         Entity entity = event.getEntity();
         if (entity instanceof LocalPlayer) {
@@ -101,45 +105,6 @@ public final class ClientEventHandler {
         }
     }
 
-    @SubscribeEvent
-    public static void onCameraSetup(ViewportEvent.ComputeCameraAngles event) {
-        Minecraft mc = Minecraft.getInstance();
-        CameraType cameraType = mc.options.getCameraType();
-        if (cameraType != lastCameraType) {
-            lastCameraType = cameraType;
-            smoothedCameraRoll = 0.0F;
-        }
-        if (!cameraType.isFirstPerson()) {
-            event.setRoll(0.0F);
-            return;
-        }
-
-        Entity cameraEntity = mc.getCameraEntity();
-        if (cameraEntity == null) {
-            return;
-        }
-
-        Flights.ifPlayer(cameraEntity, (player, flight) -> {
-            float delta = (float) event.getPartialTick();
-            float amt = flight.getFlyingAmount(delta);
-            if (!flight.isFlying() || player.isSpectator() || amt <= 0.0F) {
-                smoothedCameraRoll = 0.0F;
-                event.setRoll(0.0F);
-                return;
-            }
-
-            float roll = getBodyYawRoll(player, delta);
-            float targetRoll = Mth.lerp(amt, 0.0F, -roll * 0.25F);
-            if (!Float.isFinite(targetRoll)) {
-                targetRoll = 0.0F;
-            }
-            targetRoll = Mth.clamp(targetRoll, -35.0F, 35.0F);
-            smoothedCameraRoll = Mth.approachDegrees(smoothedCameraRoll, targetRoll, 8.0F);
-            event.setRoll(smoothedCameraRoll);
-        });
-    }
-
-    @SubscribeEvent
     public static void onEmptyOffHandPresentEvent(EmptyOffHandPresentEvent event) {
         Flights.get(event.getPlayer()).ifPresent(flight -> {
             if (flight.isFlying()) {
@@ -148,22 +113,12 @@ public final class ClientEventHandler {
         });
     }
 
-    @SubscribeEvent
-    public static void onEntityJoinWorld(EntityJoinLevelEvent event) {
-        Flights.ifPlayer(event.getEntity(), Player::isLocalPlayer,
+    public static void onEntityJoinWorld(Entity entity) {
+        Flights.ifPlayer(entity, Player::isLocalPlayer,
                 (player, flight) -> Minecraft.getInstance().getSoundManager().play(new WingsSound(player, flight)));
     }
 
-    @SubscribeEvent
-    public static void onPlayerTick(PlayerTickEvent.Post event) {
-        Player entity = event.getEntity();
-        if (entity instanceof AbstractClientPlayer player) {
-            FlightViews.get(player).ifPresent(FlightView::tick);
-        }
-    }
-
-    @SubscribeEvent
-    public static void onClientTick(ClientTickEvent.Post event) {
+    public static void onClientTick() {
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
         if (player == null) {

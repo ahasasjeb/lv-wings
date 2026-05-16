@@ -7,11 +7,12 @@ import cc.lvjia.wings.server.flight.FlightAnimationState;
 import cc.lvjia.wings.server.flight.FlightSpeedAntiCheat;
 import cc.lvjia.wings.server.net.Message;
 import cc.lvjia.wings.server.net.clientbound.MessageSyncFlight;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,19 +35,15 @@ public record MessageControlFlying(boolean isFlying) implements Message {
             StreamCodec.of((buf, message) -> buf.writeBoolean(message.isFlying()),
                     buf -> new MessageControlFlying(buf.readBoolean()));
 
-    public static void handle(MessageControlFlying message, IPayloadContext context) {
-        context.enqueueWork(() -> {
-            Player player = context.player();
-            if (player == null) {
-                LOGGER.warn("Received control_flying from null player");
-                return;
-            }
+    public static void handle(MessageControlFlying message, ServerPlayNetworking.Context context) {
+        context.server().execute(() -> {
+            ServerPlayer player = context.player();
             Integer lastControlTick = LAST_CONTROL_TICKS.get(player.getUUID());
             if (lastControlTick != null && player.tickCount - lastControlTick < MIN_CONTROL_INTERVAL_TICKS) {
                 return;
             }
             LAST_CONTROL_TICKS.put(player.getUUID(), player.tickCount);
-            Flight flight = player.getData(WingsAttachments.FLIGHT.get());
+            Flight flight = WingsAttachments.getFlight(player);
             if (player.isSpectator()) {
                 boolean wasFlying = flight.isFlying();
                 boolean changed = false;
@@ -67,18 +64,18 @@ public record MessageControlFlying(boolean isFlying) implements Message {
                     flight.sync(Flight.PlayerSet.ofAll());
                 }
                 FlightSpeedAntiCheat.clear(player);
-                context.reply(new MessageSyncFlight(player, flight));
+                ServerPlayNetworking.send(player, new MessageSyncFlight(player, flight));
                 return;
             }
             if (!flight.canFly(player)) {
                 LOGGER.debug("Player {} failed canFly check, ignoring control_flying", player.getName().getString());
-                context.reply(new MessageSyncFlight(player, flight));
+                ServerPlayNetworking.send(player, new MessageSyncFlight(player, flight));
                 return;
             }
             LOGGER.debug("Player {} {} flying", player.getName().getString(), message.isFlying() ? "started" : "stopped");
             // 服务端先写入权威状态，再把同一份快照回发给操作者，修正客户端预测偏差。
             flight.setIsFlying(message.isFlying(), Flight.PlayerSet.ofOthers());
-            context.reply(new MessageSyncFlight(player, flight));
+            ServerPlayNetworking.send(player, new MessageSyncFlight(player, flight));
         });
     }
 

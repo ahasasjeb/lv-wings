@@ -38,19 +38,19 @@ Wing Potion Brewing:
 
 All wing potions are brewed in a Brewing Stand using a Slow Falling potion or a Long Slow Falling potion as the base.
 
-| Wing Name | Brewing Ingredient |
-|---------|---------|
-| Angel Wings | Feather |
-| Parrot Wings | Red Dye |
-| Bat Wings | Bat Blood Bottle |
-| Blue Butterfly Wings | Blue Dye |
-| Dragon Wings | Leather |
-| Evil Wings | Bone |
-| Fairy Wings | Oxeye Daisy |
-| Fire Wings | Blaze Powder |
-| Monarch Butterfly Wings | Orange Dye |
-| Slime Wings | Slime Ball |
-| Lvjia Super Wings | Creative mode only |
+| Wing Name               | Brewing Ingredient |
+|-------------------------|--------------------|
+| Angel Wings             | Feather            |
+| Parrot Wings            | Red Dye            |
+| Bat Wings               | Bat Blood Bottle   |
+| Blue Butterfly Wings    | Blue Dye           |
+| Dragon Wings            | Leather            |
+| Evil Wings              | Bone               |
+| Fairy Wings             | Oxeye Daisy        |
+| Fire Wings              | Blaze Powder       |
+| Monarch Butterfly Wings | Orange Dye         |
+| Slime Wings             | Slime Ball         |
+| Lvjia Super Wings       | Creative mode only |
 
 Brewing steps:
 1. Place a Slow Falling potion into the Brewing Stand as the base.
@@ -76,19 +76,19 @@ Brewing steps:
 
 所有翅膀药水都通过药水酿造台酿造，使用**缓慢坠落药水**或**长效缓慢坠落药水**作为基础药水：
 
-| 翅膀名称 | 中文名称 | 酿造材料 |
-|---------|---------|---------|
-| Angel Wings | 天使翅膀 | 羽毛|
-| Parrot Wings | 鹦鹉翅膀 | 红色染料|
-| Bat Wings | 蝙蝠翅膀 | 蝙蝠血瓶|
-| Blue Butterfly Wings | 蓝蝴蝶翅膀 | 蓝色染料 |
-| Dragon Wings | 龙翅膀 | 皮革  |
-| Evil Wings | 邪恶翅膀 | 骨头 |
-| Fairy Wings | 精灵翅膀 | 滨菊  |
-| Fire Wings | 火焰翅膀 | 烈焰粉  |
-| Monarch Butterfly Wings | 帝王蝶翅膀 | 橙色染料  |
-| Slime Wings | 史莱姆翅膀 | 粘液球  |
-| Lvjia Super Wings | LVJIA超级翅膀 | 仅限创造模式 |
+| 翅膀名称                    | 中文名称      | 酿造材料   |
+|-------------------------|-----------|--------|
+| Angel Wings             | 天使翅膀      | 羽毛     |
+| Parrot Wings            | 鹦鹉翅膀      | 红色染料   |
+| Bat Wings               | 蝙蝠翅膀      | 蝙蝠血瓶   |
+| Blue Butterfly Wings    | 蓝蝴蝶翅膀     | 蓝色染料   |
+| Dragon Wings            | 龙翅膀       | 皮革     |
+| Evil Wings              | 邪恶翅膀      | 骨头     |
+| Fairy Wings             | 精灵翅膀      | 滨菊     |
+| Fire Wings              | 火焰翅膀      | 烈焰粉    |
+| Monarch Butterfly Wings | 帝王蝶翅膀     | 橙色染料   |
+| Slime Wings             | 史莱姆翅膀     | 粘液球    |
+| Lvjia Super Wings       | LVJIA超级翅膀 | 仅限创造模式 |
 
 **酿造步骤**:
 1. 在药水酿造台中放入**缓降药水**

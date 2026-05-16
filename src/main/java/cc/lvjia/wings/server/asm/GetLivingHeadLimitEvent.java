@@ -1,15 +1,19 @@
 package cc.lvjia.wings.server.asm;
 
 import net.minecraft.world.entity.LivingEntity;
-import net.neoforged.neoforge.event.entity.living.LivingEvent;
 
-public final class GetLivingHeadLimitEvent extends LivingEvent {
+public final class GetLivingHeadLimitEvent {
+    private final LivingEntity living;
     private float hardLimit;
 
     private float softLimit;
 
     private GetLivingHeadLimitEvent(LivingEntity living) {
-        super(living);
+        this.living = living;
+    }
+
+    public LivingEntity getEntity() {
+        return this.living;
     }
 
     public static GetLivingHeadLimitEvent create(LivingEntity living) {

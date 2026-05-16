@@ -1,38 +1,32 @@
 package cc.lvjia.wings;
 
-import cc.lvjia.wings.client.ClientProxy;
+import cc.lvjia.wings.server.ServerEventHandler;
 import cc.lvjia.wings.server.apparatus.BuffedFlightApparatus;
 import cc.lvjia.wings.server.apparatus.FlightApparatus;
 import cc.lvjia.wings.server.apparatus.SimpleFlightApparatus;
 import cc.lvjia.wings.server.command.WingsArgument;
 import cc.lvjia.wings.server.config.WingsConfig;
 import cc.lvjia.wings.server.config.WingsItemsConfig;
-import cc.lvjia.wings.server.dreamcatcher.InSomniableCapability;
 import cc.lvjia.wings.server.effect.WingsEffects;
 import cc.lvjia.wings.server.flight.Flight;
-import cc.lvjia.wings.server.flight.Flights;
 import cc.lvjia.wings.server.item.WingsItems;
 import cc.lvjia.wings.server.sound.WingsSounds;
-import com.mojang.serialization.Lifecycle;
-import net.minecraft.core.DefaultedMappedRegistry;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
+import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
 
-@Mod(WingsMod.ID)
-public final class WingsMod {
+public final class WingsMod implements ModInitializer {
     public static final String ID = "wings";
-    public static final Registry<FlightApparatus> WINGS = new DefaultedMappedRegistry<>(Names.NONE.toString(), ResourceKey.createRegistryKey(locate("wings")), Lifecycle.experimental(), false);
+    private static final ResourceKey<Registry<FlightApparatus>> WINGS_KEY = ResourceKey.createRegistryKey(locate("wings"));
+    public static final Registry<FlightApparatus> WINGS = FabricRegistryBuilder
+            .<FlightApparatus>createDefaulted(WINGS_KEY, Names.NONE)
+            .buildAndRegister();
     public static final FlightApparatus NONE = Registry.register(WINGS, Names.NONE, FlightApparatus.NONE);
     public static final FlightApparatus WINGLESS = Registry.register(WINGS, Names.WINGLESS, new FlightApparatus() {
         @Override
@@ -74,41 +68,36 @@ public final class WingsMod {
             (FlightApparatus) new BuffedFlightApparatus(WingsItemsConfig.LVJIA_SUPER,
                     BuffedFlightApparatus.EffectSettings.of(MobEffects.RESISTANCE, 2, 40, 40),
                     BuffedFlightApparatus.EffectSettings.of(MobEffects.JUMP_BOOST, 1, 40, 40)));
-    private static final DeferredRegister<net.minecraft.commands.synchronization.ArgumentTypeInfo<?, ?>> COMMAND_ARGUMENT_TYPES =
-            DeferredRegister.create(net.minecraft.core.registries.Registries.COMMAND_ARGUMENT_TYPE, ID);
-    public static final DeferredHolder<net.minecraft.commands.synchronization.ArgumentTypeInfo<?, ?>, net.minecraft.commands.synchronization.SingletonArgumentInfo<WingsArgument>> WINGS_ARGUMENT_TYPE =
-            COMMAND_ARGUMENT_TYPES.register("wings", () ->
-                    net.minecraft.commands.synchronization.ArgumentTypeInfos.registerByClass(
-                            WingsArgument.class,
-                            net.minecraft.commands.synchronization.SingletonArgumentInfo.contextFree(WingsArgument::wings)
-                    )
-            );
     private static WingsMod INSTANCE;
-    private final Proxy proxy;
+    private Proxy proxy = new Proxy();
 
-    public WingsMod(IEventBus modEventBus, ModContainer modContainer) {
+    public WingsMod() {
         if (INSTANCE != null) throw new IllegalStateException("Already constructed!");
         INSTANCE = this;
+    }
 
-        WingsAttachments.register(modEventBus);
-        modEventBus.addListener(Flights::registerCapabilities);
-        modEventBus.addListener(InSomniableCapability::registerCapabilities);
-
-        modContainer.registerConfig(ModConfig.Type.COMMON, WingsConfig.SPEC, ID + "-common.toml");
-        modContainer.registerConfig(ModConfig.Type.COMMON, WingsItemsConfig.SPEC, ID + "-items.toml");
-
-        WingsItems.REG.register(modEventBus);
-        modEventBus.addListener(WingsItems::buildCreativeTabContents);
-        WingsSounds.REG.register(modEventBus);
-        WingsEffects.REG.register(modEventBus);
-        COMMAND_ARGUMENT_TYPES.register(modEventBus);
-
-        this.proxy = FMLEnvironment.getDist().isClient() ? new ClientProxy() : new Proxy();
-        this.proxy.init(modEventBus);
+    @Override
+    public void onInitialize() {
+        WingsConfig.validate();
+        WingsItemsConfig.validate();
+        WingsItems.register();
+        WingsSounds.register();
+        WingsEffects.register();
+        ArgumentTypeRegistry.registerArgumentType(
+                locate("wings"),
+                WingsArgument.class,
+                net.minecraft.commands.synchronization.SingletonArgumentInfo.contextFree(WingsArgument::wings)
+        );
+        ServerEventHandler.register();
+        this.proxy.init();
     }
 
     public static WingsMod instance() {
         return INSTANCE;
+    }
+
+    public void setProxy(Proxy proxy) {
+        this.proxy = proxy;
     }
 
     public static Identifier locate(String name) {

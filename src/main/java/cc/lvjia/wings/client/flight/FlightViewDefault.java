@@ -1,14 +1,9 @@
 package cc.lvjia.wings.client.flight;
 
 import cc.lvjia.wings.client.apparatus.WingForm;
-import cc.lvjia.wings.client.flight.state.State;
-import cc.lvjia.wings.client.flight.state.StateFall;
-import cc.lvjia.wings.client.flight.state.StateGlide;
-import cc.lvjia.wings.client.flight.state.StateIdle;
-import cc.lvjia.wings.client.flight.state.StateLand;
-import cc.lvjia.wings.client.flight.state.StateLift;
-import cc.lvjia.wings.server.flight.FlightAnimationState;
+import cc.lvjia.wings.client.flight.state.*;
 import cc.lvjia.wings.server.flight.Flight;
+import cc.lvjia.wings.server.flight.FlightAnimationState;
 import cc.lvjia.wings.util.function.FloatConsumer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

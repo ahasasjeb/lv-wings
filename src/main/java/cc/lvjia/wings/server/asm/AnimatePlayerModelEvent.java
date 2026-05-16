@@ -2,9 +2,9 @@ package cc.lvjia.wings.server.asm;
 
 import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
-public class AnimatePlayerModelEvent extends PlayerEvent {
+public class AnimatePlayerModelEvent {
+    private final Player player;
     private final PlayerModel model;
 
     private final float ticksExisted;
@@ -12,10 +12,14 @@ public class AnimatePlayerModelEvent extends PlayerEvent {
     private final float pitch;
 
     public AnimatePlayerModelEvent(Player player, PlayerModel model, float ticksExisted, float pitch) {
-        super(player);
+        this.player = player;
         this.model = model;
         this.ticksExisted = ticksExisted;
         this.pitch = pitch;
+    }
+
+    public Player getEntity() {
+        return this.player;
     }
 
     public PlayerModel getModel() {

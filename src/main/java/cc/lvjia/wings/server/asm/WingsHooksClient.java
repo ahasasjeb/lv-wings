@@ -1,5 +1,6 @@
 package cc.lvjia.wings.server.asm;
 
+import cc.lvjia.wings.client.ClientEventHandler;
 import cc.lvjia.wings.util.Access;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -12,7 +13,6 @@ import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MapItem;
-import net.neoforged.neoforge.common.NeoForge;
 
 import java.lang.invoke.MethodHandle;
 
@@ -27,7 +27,7 @@ public final class WingsHooksClient {
         AbstractClientPlayer player = resolvePlayer(state);
         if (player != null) {
             try {
-                NeoForge.EVENT_BUS.post(new AnimatePlayerModelEvent(player, model, state.ageInTicks, state.xRot));
+                ClientEventHandler.onAnimatePlayerModel(new AnimatePlayerModelEvent(player, model, state.ageInTicks, state.xRot));
             } finally {
                 RENDERING_PLAYER.remove();
             }
@@ -44,7 +44,7 @@ public final class WingsHooksClient {
         AbstractClientPlayer player = resolvePlayer(state);
         if (player != null) {
             float delta = state.ageInTicks - player.tickCount;
-            NeoForge.EVENT_BUS.post(new ApplyPlayerRotationsEvent(player, matrixStack, delta));
+            ClientEventHandler.onApplyRotations(new ApplyPlayerRotationsEvent(player, matrixStack, delta));
         }
     }
 
@@ -87,7 +87,7 @@ public final class WingsHooksClient {
             }
             if (fromEmpty) {
                 EmptyOffHandPresentEvent ev = new EmptyOffHandPresentEvent(player);
-                NeoForge.EVENT_BUS.post(ev);
+                ClientEventHandler.onEmptyOffHandPresentEvent(ev);
                 return !ev.isAllowed();
             }
         }
@@ -95,7 +95,7 @@ public final class WingsHooksClient {
             return fromEmpty != toEmpty;
         }
         boolean hasSlotChange = !isOffHand && selectedItemSlot != (selectedItemSlot = slot);
-        return from.getItem().shouldCauseReequipAnimation(from, to, hasSlotChange);
+        return hasSlotChange || !ItemStack.matches(from, to);
     }
 
     private static boolean isMap(ItemStack stack) {

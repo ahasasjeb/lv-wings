@@ -3,28 +3,28 @@ package cc.lvjia.wings.client.renderer;
 import cc.lvjia.wings.WingsMod;
 import cc.lvjia.wings.client.ClientProxy;
 import cc.lvjia.wings.client.flight.FlightViews;
-import cc.lvjia.wings.mixin.client.LivingEntityRendererAccessor;
 import cc.lvjia.wings.client.model.ModelWingsAvian;
 import cc.lvjia.wings.client.model.ModelWingsInsectoid;
+import cc.lvjia.wings.mixin.client.LivingEntityRendererAccessor;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityRenderLayerRegistrationCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.EntityModelSet;
-import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.layers.CapeLayer;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
 import java.util.List;
 import java.util.Objects;
@@ -38,36 +38,24 @@ public final class LayerWings extends RenderLayer<AvatarRenderState, PlayerModel
         super(parent);
     }
 
-    public static void init(IEventBus modBus) {
-        modBus.addListener(LayerWings::initLayers);
-        modBus.addListener(LayerWings::addLayers);
-    }
-
-    public static void initLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        event.registerLayerDefinition(INSECTOID_WINGS, ModelWingsInsectoid::createBodyLayer);
-        event.registerLayerDefinition(AVIAN_WINGS, ModelWingsAvian::createBodyLayer);
-    }
-
-    public static void addLayers(EntityRenderersEvent.AddLayers event) {
-        ClientProxy.registerWingForms(event.getEntityModels());
-        for (var skin : event.getSkins()) {
-            AvatarRenderer<?> playerRenderer = event.getPlayerRenderer(skin);
-            if (playerRenderer != null) {
-                augmentPlayerRenderer(playerRenderer, event.getEntityModels());
+    public static void init() {
+        ModelLayerRegistry.registerModelLayer(INSECTOID_WINGS, ModelWingsInsectoid::createBodyLayer);
+        ModelLayerRegistry.registerModelLayer(AVIAN_WINGS, ModelWingsAvian::createBodyLayer);
+        LivingEntityRenderLayerRegistrationCallback.EVENT.register((entityType, entityRenderer, registrationHelper, context) -> {
+            if (entityRenderer instanceof AvatarRenderer<?> renderer) {
+                EntityModelSet modelSet = context.getModelSet();
+                ClientProxy.registerWingForms(modelSet);
+                registerPlayerLayers(renderer, modelSet, registrationHelper);
             }
-            AvatarRenderer<?> mannequinRenderer = event.getMannequinRenderer(skin);
-            if (mannequinRenderer != null) {
-                augmentPlayerRenderer(mannequinRenderer, event.getEntityModels());
-            }
-        }
+        });
     }
 
-    private static void augmentPlayerRenderer(AvatarRenderer<?> renderer, EntityModelSet modelSet) {
+    private static void registerPlayerLayers(AvatarRenderer<?> renderer, EntityModelSet modelSet, LivingEntityRenderLayerRegistrationCallback.RegistrationHelper registrationHelper) {
         List<?> layers = ((LivingEntityRendererAccessor<?, ?, ?>) renderer).wings$getLayers();
         layers.removeIf(layer -> layer instanceof LayerCapeWings || layer instanceof CapeLayer);
-        renderer.addLayer(new LayerCapeWings(renderer, modelSet));
+        registrationHelper.register(new LayerCapeWings(renderer, modelSet));
         if (layers.stream().noneMatch(LayerWings.class::isInstance)) {
-            renderer.addLayer(new LayerWings(renderer));
+            registrationHelper.register(new LayerWings(renderer));
         }
     }
 
