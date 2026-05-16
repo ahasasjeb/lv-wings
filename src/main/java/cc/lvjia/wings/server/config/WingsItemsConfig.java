@@ -5,6 +5,8 @@ import cc.lvjia.wings.server.item.WingSettings;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.resources.Identifier;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 
 public final class WingsItemsConfig {
@@ -28,10 +30,33 @@ public final class WingsItemsConfig {
     }
 
     public static void validate() {
-        all().forEach(ConfigWingSettings::validate);
+        Data data = ConfigFiles.load("wings-items.json", Data.class, WingsItemsConfig::defaultData).normalize();
+        ConfigFiles.save("wings-items.json", data);
+        all().forEach(settings -> settings.apply(data.wings.get(settings.getKey().getPath())));
+    }
+
+    private static Data defaultData() {
+        Data data = new Data();
+        all().forEach(settings -> data.wings.put(settings.getKey().getPath(), settings.defaultData()));
+        return data;
     }
 
     private static Stream<ConfigWingSettings> all() {
         return Stream.of(ANGEL, PARROT, SLIME, BLUE_BUTTERFLY, MONARCH_BUTTERFLY, FIRE, BAT, FAIRY, EVIL, DRAGON, LVJIA_SUPER);
+    }
+
+    public static final class Data {
+        public Map<String, ConfigWingSettings.Data> wings = new LinkedHashMap<>();
+
+        Data normalize() {
+            if (this.wings == null) {
+                this.wings = new LinkedHashMap<>();
+            }
+            all().forEach(settings -> this.wings.compute(settings.getKey().getPath(), (key, value) -> {
+                ConfigWingSettings.Data normalized = value != null ? value : settings.defaultData();
+                return normalized.normalize();
+            }));
+            return this;
+        }
     }
 }

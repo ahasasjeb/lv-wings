@@ -1,44 +1,17 @@
 package cc.lvjia.wings;
 
 import cc.lvjia.wings.server.flight.Flight;
-import cc.lvjia.wings.server.item.WingsItems;
 import cc.lvjia.wings.server.net.Message;
 import cc.lvjia.wings.server.net.Network;
 import cc.lvjia.wings.server.net.clientbound.MessageSyncFlight;
-import net.fabricmc.fabric.api.registry.FabricPotionBrewingBuilder;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.ItemLike;
-
-import java.util.function.BiConsumer;
-import java.util.function.Supplier;
 
 public class Proxy {
     protected final Network network = new Network();
 
     public void init() {
         this.network.register();
-        FabricPotionBrewingBuilder.BUILD.register(this::registerBrewingRecipes);
-    }
-
-    private void registerBrewingRecipes(net.minecraft.world.item.alchemy.PotionBrewing.Builder builder) {
-        BiConsumer<ItemLike, Supplier<? extends Item>> reg = (item, supplier) -> {
-            ((FabricPotionBrewingBuilder) builder).registerItemRecipe(Items.POTION, Ingredient.of(item), supplier.get());
-        };
-
-        reg.accept(Items.FEATHER, WingsItems.ANGEL_WINGS_BOTTLE);
-        reg.accept(Items.RED_DYE, WingsItems.PARROT_WINGS_BOTTLE);
-        reg.accept(WingsItems.BAT_BLOOD_BOTTLE.get(), WingsItems.BAT_WINGS_BOTTLE);
-        reg.accept(Items.BLUE_DYE, WingsItems.BLUE_BUTTERFLY_WINGS_BOTTLE);
-        reg.accept(Items.LEATHER, WingsItems.DRAGON_WINGS_BOTTLE);
-        reg.accept(Items.BONE, WingsItems.EVIL_WINGS_BOTTLE);
-        reg.accept(Items.OXEYE_DAISY, WingsItems.FAIRY_WINGS_BOTTLE);
-        reg.accept(Items.BLAZE_POWDER, WingsItems.FIRE_WINGS_BOTTLE);
-        reg.accept(Items.ORANGE_DYE, WingsItems.MONARCH_BUTTERFLY_WINGS_BOTTLE);
-        reg.accept(Items.SLIME_BALL, WingsItems.SLIME_WINGS_BOTTLE);
     }
 
     @SuppressWarnings("deprecation")
