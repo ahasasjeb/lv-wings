@@ -80,7 +80,5 @@
   "config.wings.items.settings.landingExertion.tooltip": "着陸の疲労値",
   "config.wings.items.settings.durability": "アイテムの耐久度",
   "config.wings.items.settings.durability.tooltip": "0は無限耐久度を指定",
-  "wings.tooltip": "一般オプション",
-  "config.wings.wearObstructions": "装備の妨げ",
-  "config.wings.wearObstructions.tooltip": "胸甲スロットで使用する場合、身体装飾スロットの翼を妨げるアイテムをカスタマイズします。"
+  "wings.tooltip": "一般オプション"
 }

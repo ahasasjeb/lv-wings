@@ -1,13 +1,17 @@
 package cc.lvjia.wings.server.asm;
 
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
-public class PlayerFlightCheckEvent extends PlayerEvent {
+public class PlayerFlightCheckEvent {
+    private final Player player;
     private boolean flying;
 
     public PlayerFlightCheckEvent(Player player) {
-        super(player);
+        this.player = player;
+    }
+
+    public Player getEntity() {
+        return this.player;
     }
 
     public boolean isFlying() {

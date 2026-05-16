@@ -3,85 +3,62 @@ package cc.lvjia.wings;
 import cc.lvjia.wings.server.dreamcatcher.InSomniable;
 import cc.lvjia.wings.server.flight.Flight;
 import cc.lvjia.wings.server.flight.FlightDefault;
+import com.mojang.serialization.Codec;
+import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry;
+import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.attachment.AttachmentType;
-import net.neoforged.neoforge.attachment.IAttachmentHolder;
-import net.neoforged.neoforge.attachment.IAttachmentSerializer;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 public final class WingsAttachments {
-    public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES =
-            DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, WingsMod.ID);
-
-    public static final DeferredHolder<AttachmentType<?>, AttachmentType<Flight>> FLIGHT = ATTACHMENT_TYPES.register("flight", () ->
-            AttachmentType.builder(WingsAttachments::createFlight)
-                    .serialize(new FlightAttachmentSerializer())
-                    .copyOnDeath()
-                    .build()
+    public static final AttachmentType<InSomniable> INSOMNIABLE = AttachmentRegistry.createDefaulted(WingsMod.locate("insomniable"), InSomniable::new);
+    private static final Codec<Flight> FLIGHT_CODEC = FlightDefault.CODEC.xmap(
+            flight -> flight,
+            flight -> {
+                if (flight instanceof FlightDefault flightDefault) {
+                    return flightDefault;
+                }
+                FlightDefault flightDefault = new FlightDefault();
+                flightDefault.clone(flight);
+                return flightDefault;
+            }
     );
-
-    public static final DeferredHolder<AttachmentType<?>, AttachmentType<InSomniable>> INSOMNIABLE = ATTACHMENT_TYPES.register("insomniable", () ->
-            AttachmentType.builder(holder -> new InSomniable())
-                    .serialize(new InSomniableAttachmentSerializer())
-                    .copyOnDeath()
-                    .build()
+    public static final AttachmentType<Flight> FLIGHT = AttachmentRegistry.create(
+            WingsMod.locate("flight"),
+            builder -> builder
+                    .initializer(FlightDefault::new)
+                    .persistent(FLIGHT_CODEC)
     );
+    private static final AttachmentType<Boolean> FLIGHT_LISTENERS = AttachmentRegistry.create(WingsMod.locate("flight_listeners"));
 
     private WingsAttachments() {
     }
 
-    static void register(IEventBus modEventBus) {
-        ATTACHMENT_TYPES.register(modEventBus);
+    public static void register() {
+        // 触发本类静态初始化，确保持久化 attachment 在玩家存档读取前已注册。
     }
 
-    private static Flight createFlight(IAttachmentHolder holder) {
-        if (holder instanceof Player player) {
-            FlightDefault flight = new FlightDefault();
-            WingsMod.instance().addFlightListeners(player, flight);
-            return flight;
+    public static Flight getFlight(Player player) {
+        Flight flight = player.getAttached(FLIGHT);
+        if (flight == null) {
+            flight = new FlightDefault();
+            player.setAttached(FLIGHT, flight);
         }
-        throw new IllegalStateException("Flight attachment can only be applied to players");
+        ensureFlightListeners(player, flight);
+        return flight;
     }
 
-    private static final class FlightAttachmentSerializer implements IAttachmentSerializer<Flight> {
-        private static final FlightDefault.Serializer SERIALIZER = new FlightDefault.Serializer(FlightDefault::new);
-
-        @Override
-        public Flight read(IAttachmentHolder holder, ValueInput input) {
-            FlightDefault flight = SERIALIZER.deserialize(input);
-            if (holder instanceof Player player) {
-                WingsMod.instance().addFlightListeners(player, flight);
-            }
-            return flight;
-        }
-
-        @Override
-        public boolean write(Flight attachment, ValueOutput output) {
-            if (attachment instanceof FlightDefault flightDefault) {
-                SERIALIZER.serialize(flightDefault, output);
-                return true;
-            }
-            throw new IllegalStateException("Unsupported flight implementation: " + attachment.getClass());
-        }
+    public static boolean hasFlight(Player player) {
+        return player.hasAttached(FLIGHT);
     }
 
-    private static final class InSomniableAttachmentSerializer implements IAttachmentSerializer<InSomniable> {
-        private static final InSomniable.Serializer SERIALIZER = new InSomniable.Serializer();
+    public static InSomniable getInSomniable(Player player) {
+        return player.getAttachedOrCreate(INSOMNIABLE);
+    }
 
-        @Override
-        public InSomniable read(IAttachmentHolder holder, ValueInput input) {
-            return SERIALIZER.deserialize(input);
+    private static void ensureFlightListeners(Player player, Flight flight) {
+        if (Boolean.TRUE.equals(player.getAttached(FLIGHT_LISTENERS))) {
+            return;
         }
-
-        @Override
-        public boolean write(InSomniable attachment, ValueOutput output) {
-            SERIALIZER.serialize(attachment, output);
-            return true;
-        }
+        WingsMod.instance().addFlightListeners(player, flight);
+        player.setAttached(FLIGHT_LISTENERS, true);
     }
 }

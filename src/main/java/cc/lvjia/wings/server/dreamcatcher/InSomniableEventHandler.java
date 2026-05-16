@@ -1,30 +1,29 @@
 package cc.lvjia.wings.server.dreamcatcher;
 
-import cc.lvjia.wings.WingsMod;
+import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.NoteBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.bus.api.EventPriority;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
-@EventBusSubscriber(modid = WingsMod.ID)
 public final class InSomniableEventHandler {
     private InSomniableEventHandler() {
     }
 
-    @SubscribeEvent(priority = EventPriority.LOW)
-    public static void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
-        Player player = event.getEntity();
+    public static void register() {
+        AttackBlockCallback.EVENT.register((player, level, hand, pos, side) -> {
+            onLeftClickBlock(player, level, pos);
+            return InteractionResult.PASS;
+        });
+    }
+
+    public static void onLeftClickBlock(Player player, Level world, BlockPos pos) {
         if (player instanceof ServerPlayer && !player.isCreative()) {
-            Level world = event.getLevel();
-            BlockPos pos = event.getPos();
             BlockState state = world.getBlockState(pos);
             Block block = state.getBlock();
             if (block == Blocks.NOTE_BLOCK && world.isEmptyBlock(pos.above()) &&

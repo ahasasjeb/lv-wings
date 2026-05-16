@@ -7,11 +7,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.ARGB;
 
 import java.lang.reflect.Field;
@@ -194,7 +190,7 @@ public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
             CUBES_FIELD.set(part, mutable);
             return mutable;
         } catch (IllegalAccessException e) {
-                        throw new RuntimeException("Failed to access ModelPart cubes list via reflection", e);
+            throw new RuntimeException("Failed to access ModelPart cubes list via reflection", e);
         }
     }
 

@@ -3,54 +3,36 @@ package cc.lvjia.wings.server.config;
 import cc.lvjia.wings.server.item.ImmutableWingSettings;
 import cc.lvjia.wings.server.item.WingSettings;
 import net.minecraft.resources.Identifier;
-import net.neoforged.neoforge.common.ModConfigSpec;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public final class ConfigWingSettings implements WingSettings {
-    private static final Logger LOGGER = LogManager.getLogger("WingsConfig");
     private static final int MIN_SATIATION = 0;
     private static final int MAX_SATIATION = 20;
     private static final double MIN_EXERTION = 0.0D;
     private static final double MAX_EXERTION = 10.0D;
 
     private final Identifier key;
-    private final ModConfigSpec.IntValue requiredFlightSatiation;
-    private final ModConfigSpec.DoubleValue flyingExertion;
-    private final ModConfigSpec.IntValue requiredLandSatiation;
-    private final ModConfigSpec.DoubleValue landingExertion;
-    private final int defaultFlightSatiation;
-    private final double defaultFlyingExertion;
-    private final int defaultLandSatiation;
-    private final double defaultLandingExertion;
+    private final Data defaults;
+    private Data current;
 
-    ConfigWingSettings(Identifier key, ModConfigSpec.Builder builder) {
-        this(key, builder, 5, 0.0001D, 2, 0.005D);
+    ConfigWingSettings(Identifier key) {
+        this(key, new Data());
     }
 
-    ConfigWingSettings(Identifier key, ModConfigSpec.Builder builder, int defaultFlightSatiation, double defaultFlyingExertion, int defaultLandSatiation, double defaultLandingExertion) {
+    ConfigWingSettings(Identifier key, Data defaults) {
         this.key = key;
-        this.defaultFlightSatiation = defaultFlightSatiation;
-        this.defaultFlyingExertion = defaultFlyingExertion;
-        this.defaultLandSatiation = defaultLandSatiation;
-        this.defaultLandingExertion = defaultLandingExertion;
+        this.defaults = defaults.copy().normalize();
+        this.current = this.defaults.copy();
+    }
 
-        builder.push(key.getPath());
+    private static int clamp(int value, int min, int max) {
+        return Math.max(min, Math.min(max, value));
+    }
 
-        this.requiredFlightSatiation = builder
-                .comment("使用 " + key + " 开始飞行所需的最低饱食度")
-                .defineInRange("requiredFlightSatiation", defaultFlightSatiation, MIN_SATIATION, MAX_SATIATION);
-        this.flyingExertion = builder
-                .comment("使用 " + key + " 飞行时每刻消耗的饱食度")
-                .defineInRange("flyingExertion", defaultFlyingExertion, MIN_EXERTION, MAX_EXERTION);
-        this.requiredLandSatiation = builder
-                .comment("使用 " + key + " 安全着陆所需的最低饱食度")
-                .defineInRange("requiredLandSatiation", defaultLandSatiation, MIN_SATIATION, MAX_SATIATION);
-        this.landingExertion = builder
-                .comment("使用 " + key + " 着陆时消耗的饱食度")
-                .defineInRange("landingExertion", defaultLandingExertion, MIN_EXERTION, MAX_EXERTION);
-
-        builder.pop();
+    private static double clamp(double value, double min, double max) {
+        if (!Double.isFinite(value)) {
+            return min;
+        }
+        return Math.max(min, Math.min(max, value));
     }
 
     public Identifier getKey() {
@@ -59,60 +41,65 @@ public final class ConfigWingSettings implements WingSettings {
 
     @Override
     public int getRequiredFlightSatiation() {
-        return this.readInt(this.requiredFlightSatiation, "requiredFlightSatiation", MIN_SATIATION, MAX_SATIATION, this.defaultFlightSatiation);
+        return this.current.requiredFlightSatiation;
     }
 
     @Override
     public float getFlyingExertion() {
-        return this.readFloat(this.flyingExertion, "flyingExertion", MIN_EXERTION, MAX_EXERTION, this.defaultFlyingExertion);
+        return (float) this.current.flyingExertion;
     }
 
     @Override
     public int getRequiredLandSatiation() {
-        return this.readInt(this.requiredLandSatiation, "requiredLandSatiation", MIN_SATIATION, MAX_SATIATION, this.defaultLandSatiation);
+        return this.current.requiredLandSatiation;
     }
 
     @Override
     public float getLandingExertion() {
-        return this.readFloat(this.landingExertion, "landingExertion", MIN_EXERTION, MAX_EXERTION, this.defaultLandingExertion);
+        return (float) this.current.landingExertion;
     }
 
     public WingSettings toImmutable() {
         return ImmutableWingSettings.of(this.getRequiredFlightSatiation(), this.getFlyingExertion(), this.getRequiredLandSatiation(), this.getLandingExertion());
     }
 
+    public Data toData() {
+        return this.current.copy();
+    }
+
+    public Data defaultData() {
+        return this.defaults.copy();
+    }
+
+    public void apply(Data data) {
+        this.current = (data != null ? data : this.defaults).copy().normalize();
+    }
+
     public void validate() {
-        this.getRequiredFlightSatiation();
-        this.getFlyingExertion();
-        this.getRequiredLandSatiation();
-        this.getLandingExertion();
+        this.current.normalize();
     }
 
-    private int readInt(ModConfigSpec.IntValue value, String propertyName, int min, int max, int fallback) {
-        if (value == null) {
-            LOGGER.warn("翅膀 '{}' 属性 '{}' 为空。恢复为默认值 {}。", this.key, propertyName, fallback);
-            return fallback;
-        }
-        int current = value.get();
-        if (current < min || current > max) {
-            LOGGER.warn("翅膀 '{}' 属性 '{}' 超出范围: {} (预期 {}-{})。恢复为默认值 {}。", this.key, propertyName, current, min, max, fallback);
-            value.set(fallback);
-            return fallback;
-        }
-        return current;
-    }
+    public static final class Data {
+        public int requiredFlightSatiation = 5;
+        public double flyingExertion = 0.0001D;
+        public int requiredLandSatiation = 2;
+        public double landingExertion = 0.005D;
 
-    private float readFloat(ModConfigSpec.DoubleValue value, String propertyName, double min, double max, double fallback) {
-        if (value == null) {
-            LOGGER.warn("翅膀 '{}' 属性 '{}' 为空。恢复为默认值 {}。", this.key, propertyName, fallback);
-            return (float) fallback;
+        Data copy() {
+            Data copy = new Data();
+            copy.requiredFlightSatiation = this.requiredFlightSatiation;
+            copy.flyingExertion = this.flyingExertion;
+            copy.requiredLandSatiation = this.requiredLandSatiation;
+            copy.landingExertion = this.landingExertion;
+            return copy;
         }
-        double current = value.get();
-        if (Double.isNaN(current) || Double.isInfinite(current) || current < min || current > max) {
-            LOGGER.warn("翅膀 '{}' 属性 '{}' 无效: {} (预期在 {} 和 {} 之间)。恢复为默认值 {}。", this.key, propertyName, current, min, max, fallback);
-            value.set(fallback);
-            return (float) fallback;
+
+        Data normalize() {
+            this.requiredFlightSatiation = clamp(this.requiredFlightSatiation, MIN_SATIATION, MAX_SATIATION);
+            this.flyingExertion = clamp(this.flyingExertion, MIN_EXERTION, MAX_EXERTION);
+            this.requiredLandSatiation = clamp(this.requiredLandSatiation, MIN_SATIATION, MAX_SATIATION);
+            this.landingExertion = clamp(this.landingExertion, MIN_EXERTION, MAX_EXERTION);
+            return this;
         }
-        return (float) current;
     }
 }

@@ -1,9 +1,8 @@
 package cc.lvjia.wings.server.asm;
 
 import net.minecraft.world.entity.Entity;
-import net.neoforged.bus.api.Event;
 
-public final class GetCameraEyeHeightEvent extends Event {
+public final class GetCameraEyeHeightEvent {
     private final Entity entity;
 
     private float value;

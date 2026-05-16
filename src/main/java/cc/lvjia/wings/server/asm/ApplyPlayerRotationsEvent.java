@@ -2,17 +2,21 @@ package cc.lvjia.wings.server.asm;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
-public class ApplyPlayerRotationsEvent extends PlayerEvent {
+public class ApplyPlayerRotationsEvent {
+    private final Player player;
     private final PoseStack matrixStack;
 
     private final float delta;
 
     public ApplyPlayerRotationsEvent(Player player, PoseStack matrixStack, float delta) {
-        super(player);
+        this.player = player;
         this.matrixStack = matrixStack;
         this.delta = delta;
+    }
+
+    public Player getEntity() {
+        return this.player;
     }
 
     public PoseStack getMatrixStack() {

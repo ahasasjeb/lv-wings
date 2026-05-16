@@ -1,9 +1,8 @@
 package cc.lvjia.wings.server.asm;
 
 import net.minecraft.client.player.LocalPlayer;
-import net.neoforged.bus.api.Event;
 
-public final class EmptyOffHandPresentEvent extends Event {
+public final class EmptyOffHandPresentEvent {
     private final LocalPlayer player;
     private boolean allowed;
 

@@ -51,8 +51,8 @@ public abstract class ItemInHandRendererMixin {
      */
     @ModifyVariable(method = "renderArmWithItem(Lnet/minecraft/client/player/AbstractClientPlayer;FFLnet/minecraft/world/InteractionHand;FLnet/minecraft/world/item/ItemStack;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;I)V",
             at = @At(value = "STORE"), ordinal = 0)
-    private boolean wings$allowEmptyOffhandRender(boolean original) {
-        boolean allowed = WingsHooksClient.onCheckRenderEmptyHand(original, this.mainHandItem);
+    private boolean wings$allowEmptyOffhandRender(boolean original, AbstractClientPlayer player, float f, float f1, InteractionHand hand, float f2, ItemStack stack, float f3, PoseStack poseStack, SubmitNodeCollector collector, int light) {
+        boolean allowed = WingsHooksClient.onCheckRenderEmptyHand(original, player, hand, stack, this.mainHandItem);
         this.wings$forceOppositeArm = !original && allowed && this.wings$currentHand == InteractionHand.OFF_HAND;
         return allowed;
     }

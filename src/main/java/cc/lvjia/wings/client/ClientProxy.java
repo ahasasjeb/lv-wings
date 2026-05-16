@@ -14,9 +14,10 @@ import cc.lvjia.wings.client.renderer.LayerWings;
 import cc.lvjia.wings.server.flight.Flight;
 import cc.lvjia.wings.server.flight.Flights;
 import cc.lvjia.wings.server.item.BatBloodBottleItem;
-import cc.lvjia.wings.server.net.serverbound.MessageControlFlying;
 import cc.lvjia.wings.server.net.Message;
+import cc.lvjia.wings.server.net.serverbound.MessageControlFlying;
 import cc.lvjia.wings.util.KeyInputListener;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.EntityModelSet;
@@ -25,11 +26,6 @@ import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.client.network.ClientPacketDistributor;
-import net.neoforged.neoforge.client.settings.KeyConflictContext;
-import net.neoforged.neoforge.client.settings.KeyModifier;
-import net.neoforged.neoforge.common.NeoForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
@@ -87,19 +83,19 @@ public final class ClientProxy extends Proxy {
         );
     }
 
-    @Override
-    public void init(IEventBus modBus) {
-        super.init(modBus);
-        LayerWings.init(modBus);
-        NeoForge.EVENT_BUS.register(KeyInputListener.builder()
+    public void initClient() {
+        this.network.registerClient();
+        LayerWings.init();
+        ClientEventHandler.register();
+        KeyInputListener.builder()
                 .category(WINGS_KEY_CATEGORY)
-                .key("key.wings.fly", KeyConflictContext.IN_GAME, KeyModifier.NONE, GLFW.GLFW_KEY_R)
+                .key("key.wings.fly", GLFW.GLFW_KEY_R)
                 .onPress(() -> {
                     Player player = Minecraft.getInstance().player;
                     if (player == null || player.isSpectator()) {
                         return;
                     }
-                    Flights.get(player).ifPresent(flight ->
+                    Flights.get(player).filter(flight -> flight.canFly(player)).ifPresent(flight ->
                             flight.toggleIsFlying(Flight.PlayerSet.ofOthers())
                     );
                     Flights.ifPlayer(player, (p, flight) -> {
@@ -109,15 +105,20 @@ public final class ClientProxy extends Proxy {
                     });
                 })
                 .build()
-        );
-
-        modBus.addListener(KeyInputListener::registerKeyMappings);
+                .register();
     }
 
     @Override
     public void addFlightListeners(Player player, Flight flight) {
         super.addFlightListeners(player, flight);
         if (player.isLocalPlayer()) {
+            flight.registerFlyingListener(isFlying -> {
+                boolean hasVanillaFlight = player.getAbilities().instabuild || player.isSpectator();
+                player.getAbilities().mayfly = isFlying || hasVanillaFlight;
+                if (isFlying || !hasVanillaFlight) {
+                    player.getAbilities().flying = false;
+                }
+            });
             // 本地玩家先更新客户端预测态，再把最终意图发回服务端做校验和纠正
             Flight.Notifier notifier = Flight.Notifier.of(
                     () -> {
@@ -133,7 +134,7 @@ public final class ClientProxy extends Proxy {
     @Override
     public void sendToServer(Message message) {
         LOGGER.debug("Sending {} to server", message.type().id());
-        ClientPacketDistributor.sendToServer(message);
+        ClientPlayNetworking.send(message);
     }
 
     @Override

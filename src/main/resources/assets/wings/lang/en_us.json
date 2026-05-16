@@ -80,7 +80,5 @@
   "config.wings.items.settings.landingExertion.tooltip": "The exertion value for landing",
   "config.wings.items.settings.durability": "Item Durability",
   "config.wings.items.settings.durability.tooltip": "Infinite durability specified by 0",
-  "wings.tooltip": "General Options",
-  "config.wings.wearObstructions": "Wear Obstructions",
-  "config.wings.wearObstructions.tooltip": "Customize items, when used in the chestplate slot, obstruct wings in the body bauble slot."
+  "wings.tooltip": "General Options"
 }

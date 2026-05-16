@@ -8,6 +8,9 @@ import cc.lvjia.wings.util.CubicBezier;
 import cc.lvjia.wings.util.MathH;
 import cc.lvjia.wings.util.NBTSerializer;
 import com.google.common.collect.Lists;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.Identifier;
@@ -34,11 +37,19 @@ public final class FlightDefault implements Flight {
 
     private static final float Y_BOOST = 0.05F;
 
+    private static final float TAKEOFF_BOOST = 0.32F;
+
     private static final float FALL_REDUCTION = 0.9F;
 
     private static final float PITCH_OFFSET = 30.0F;
 
     private static final Identifier DEFAULT_WING_ID = WingsMod.Names.NONE;
+
+    public static final Codec<FlightDefault> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Codec.BOOL.optionalFieldOf(Serializer.IS_FLYING, false).forGetter(FlightDefault::isFlying),
+            Codec.INT.optionalFieldOf(Serializer.TIME_FLYING, INITIAL_TIME_FLYING).forGetter(FlightDefault::getTimeFlying),
+            Codec.STRING.optionalFieldOf(Serializer.WING, DEFAULT_WING_ID.toString()).forGetter(FlightDefault::getWingId)
+    ).apply(instance, FlightDefault::fromPersistentData));
 
     private final List<FlyingListener> flyingListeners = Lists.newArrayList();
 
@@ -71,6 +82,18 @@ public final class FlightDefault implements Flight {
 
     private static FlightApparatus wingFrom(String rawId) {
         return wingFrom(Identifier.tryParse(rawId));
+    }
+
+    private static FlightDefault fromPersistentData(boolean isFlying, int timeFlying, String wingId) {
+        FlightDefault flight = new FlightDefault();
+        flight.setIsFlying(isFlying);
+        flight.setTimeFlying(timeFlying);
+        flight.setWing(wingFrom(wingId));
+        return flight;
+    }
+
+    private String getWingId() {
+        return wingIdFor(this.getWing()).toString();
     }
 
     @Override
@@ -171,6 +194,9 @@ public final class FlightDefault implements Flight {
         }
         if (player.isEffectiveAi() && !underwaterFlightBlocked) {
             if (this.isFlying()) {
+                if (player.onGround() && player.getDeltaMovement().y() < TAKEOFF_BOOST) {
+                    player.setDeltaMovement(player.getDeltaMovement().with(Direction.Axis.Y, TAKEOFF_BOOST));
+                }
                 float speed = Mth.clampedLerp(MIN_SPEED, MAX_SPEED, player.zza);
                 float elevationBoost = MathH.transform(
                         Math.abs(player.getXRot()),
@@ -296,6 +322,10 @@ public final class FlightDefault implements Flight {
         this.animationTracker.load(animationState);
     }
 
+    private boolean isUnderwaterFlightBlocked(Player player) {
+        return player.isUnderWater() && !WingsConfig.isUnderwaterFlightAllowed();
+    }
+
     public static final class Serializer implements NBTSerializer<FlightDefault, CompoundTag> {
         private static final String IS_FLYING = "isFlying";
 
@@ -370,9 +400,5 @@ public final class FlightDefault implements Flight {
         private void onUpdate(Player player) {
             this.activity.onUpdate(player);
         }
-    }
-
-    private boolean isUnderwaterFlightBlocked(Player player) {
-        return player.isUnderWater() && !WingsConfig.isUnderwaterFlightAllowed();
     }
 }

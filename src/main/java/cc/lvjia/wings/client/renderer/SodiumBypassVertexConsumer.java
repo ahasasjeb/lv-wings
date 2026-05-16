@@ -2,7 +2,6 @@ package cc.lvjia.wings.client.renderer;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -20,7 +19,7 @@ public final class SodiumBypassVertexConsumer implements VertexConsumer {
         this.delegate = delegate;
     }
 
-    public static VertexConsumer wrap(@Nonnull VertexConsumer delegate) {
+    public static VertexConsumer wrap(VertexConsumer delegate) {
         if (delegate instanceof SodiumBypassVertexConsumer) {
             return delegate;
         }
