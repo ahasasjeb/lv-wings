@@ -14,7 +14,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -27,8 +26,6 @@ import net.minecraft.world.level.Level;
 
 public final class ClientEventHandler {
     private static ResourceKey<Level> lastPlayerDimension;
-    private static CameraType lastCameraType = CameraType.FIRST_PERSON;
-    private static float smoothedCameraRoll;
 
     private ClientEventHandler() {
     }
@@ -125,7 +122,6 @@ public final class ClientEventHandler {
         LocalPlayer player = mc.player;
         if (player == null) {
             lastPlayerDimension = null;
-            smoothedCameraRoll = 0.0F;
             return;
         }
         ResourceKey<Level> current = player.level().dimension();
