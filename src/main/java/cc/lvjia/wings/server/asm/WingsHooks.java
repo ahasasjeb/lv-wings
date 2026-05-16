@@ -1,9 +1,7 @@
 package cc.lvjia.wings.server.asm;
 
-import cc.lvjia.wings.client.ClientEventHandler;
 import cc.lvjia.wings.server.ServerEventHandler;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -26,12 +24,6 @@ public final class WingsHooks {
         PlayerFlightCheckEvent ev = new PlayerFlightCheckEvent(player);
         ServerEventHandler.onPlayerFlightCheck(ev);
         return ev.isFlying();
-    }
-
-    public static float onGetCameraEyeHeight(Entity entity, float eyeHeight) {
-        GetCameraEyeHeightEvent ev = GetCameraEyeHeightEvent.create(entity, eyeHeight);
-        ClientEventHandler.onGetCameraEyeHeight(ev);
-        return ev.getValue();
     }
 
     public static boolean onUpdateBodyRotation(LivingEntity living, float movementYaw) {

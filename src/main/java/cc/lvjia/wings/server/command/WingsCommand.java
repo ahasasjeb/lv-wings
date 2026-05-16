@@ -70,7 +70,8 @@ public class WingsCommand {
         if (targets.size() == 1) {
             ctx.getSource().sendSuccess(() -> Component.translatable("commands.wings.give.success.single", targets.iterator().next().getDisplayName()), true);
         } else {
-            ctx.getSource().sendSuccess(() -> Component.translatable("commands.wings.give.success.multiple", targets.size()), true);
+            int successCount = count;
+            ctx.getSource().sendSuccess(() -> Component.translatable("commands.wings.give.success.multiple", successCount), true);
         }
         return count;
     }
@@ -96,7 +97,8 @@ public class WingsCommand {
         if (targets.size() == 1) {
             ctx.getSource().sendSuccess(() -> Component.translatable("commands.wings.take.success.single", targets.iterator().next().getDisplayName()), true);
         } else {
-            ctx.getSource().sendSuccess(() -> Component.translatable("commands.wings.take.success.multiple", targets.size()), true);
+            int successCount = count;
+            ctx.getSource().sendSuccess(() -> Component.translatable("commands.wings.take.success.multiple", successCount), true);
         }
         return count;
     }
@@ -122,7 +124,8 @@ public class WingsCommand {
         if (targets.size() == 1) {
             ctx.getSource().sendSuccess(() -> Component.translatable("commands.wings.take.success.single", targets.iterator().next().getDisplayName()), true);
         } else {
-            ctx.getSource().sendSuccess(() -> Component.translatable("commands.wings.take.success.multiple", targets.size()), true);
+            int successCount = count;
+            ctx.getSource().sendSuccess(() -> Component.translatable("commands.wings.take.success.multiple", successCount), true);
         }
         return count;
     }

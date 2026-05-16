@@ -22,6 +22,7 @@ public final class FlightSpeedAntiCheat {
 
     private static final long STATE_TTL_NANOS = TimeUnit.MINUTES.toNanos(10);
     private static final long CLEANUP_INTERVAL_NANOS = TimeUnit.SECONDS.toNanos(30);
+    private static final int CLEAN_TICKS_TO_RELAX = 20;
     private static final Map<UUID, TrackingState> STATES = new ConcurrentHashMap<>();
     private static volatile long nextCleanupNanos;
 
@@ -118,7 +119,9 @@ public final class FlightSpeedAntiCheat {
         double softTotalLimit = settings.softTotalLimit() + totalBonus;
         double hardTotalLimit = settings.hardTotalLimit() + totalBonus;
 
-        if (flight.getTimeFlying() <= settings.takeoffGraceTicks() || player.isInWater() || player.isInLava()) {
+        if (flight.getTimeFlying() <= settings.takeoffGraceTicks()
+                || player.isInLava()
+                || (player.isInWater() && !WingsConfig.isUnderwaterFlightAllowed())) {
             state.captureSafePosition(player);
             state.relax();
             return;
@@ -138,8 +141,7 @@ public final class FlightSpeedAntiCheat {
             return;
         }
 
-        state.softViolations++;
-        state.hardViolations = hardViolation ? state.hardViolations + 1 : 0;
+        state.recordViolation(hardViolation);
         if (state.softViolations >= settings.softViolationLimit() || state.hardViolations >= settings.hardViolationLimit()) {
             state.pendingCorrection = new PendingCorrection(horizontal, vertical, total);
         }
@@ -183,6 +185,7 @@ public final class FlightSpeedAntiCheat {
         private Vec3 safePosition;
         private int softViolations;
         private int hardViolations;
+        private int cleanTicks;
         private int cooldownUntilTick;
         private PendingCorrection pendingCorrection;
         private volatile long lastSeenNanos;
@@ -199,9 +202,22 @@ public final class FlightSpeedAntiCheat {
             this.safePosition = player.position();
         }
 
+        private void recordViolation(boolean hardViolation) {
+            this.cleanTicks = 0;
+            this.softViolations++;
+            if (hardViolation) {
+                this.hardViolations++;
+            }
+        }
+
         private void relax() {
+            this.cleanTicks++;
+            if (this.cleanTicks < CLEAN_TICKS_TO_RELAX) {
+                return;
+            }
+            this.cleanTicks = 0;
             this.softViolations = Math.max(0, this.softViolations - 1);
-            this.hardViolations = 0;
+            this.hardViolations = Math.max(0, this.hardViolations - 1);
         }
     }
 }

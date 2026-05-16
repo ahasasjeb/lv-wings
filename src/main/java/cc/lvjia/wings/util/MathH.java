@@ -14,8 +14,8 @@ public final class MathH {
         return degrees * DEG_TO_RAD;
     }
 
-    public static float toDegrees(float degrees) {
-        return degrees * RAD_TO_DEG;
+    public static float toDegrees(float radians) {
+        return radians * RAD_TO_DEG;
     }
 
     public static float lerp(float a, float b, float t) {

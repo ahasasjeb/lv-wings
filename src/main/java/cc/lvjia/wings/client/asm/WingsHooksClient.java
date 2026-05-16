@@ -1,6 +1,10 @@
-package cc.lvjia.wings.server.asm;
+package cc.lvjia.wings.client.asm;
 
 import cc.lvjia.wings.client.ClientEventHandler;
+import cc.lvjia.wings.server.asm.AnimatePlayerModelEvent;
+import cc.lvjia.wings.server.asm.ApplyPlayerRotationsEvent;
+import cc.lvjia.wings.server.asm.EmptyOffHandPresentEvent;
+import cc.lvjia.wings.server.asm.GetCameraEyeHeightEvent;
 import cc.lvjia.wings.util.Access;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -22,6 +26,12 @@ public final class WingsHooksClient {
     private static int selectedItemSlot = 0;
 
     private WingsHooksClient() {
+    }
+
+    public static float onGetCameraEyeHeight(Entity entity, float eyeHeight) {
+        GetCameraEyeHeightEvent event = GetCameraEyeHeightEvent.create(entity, eyeHeight);
+        ClientEventHandler.onGetCameraEyeHeight(event);
+        return event.getValue();
     }
 
     public static void onSetPlayerRotationAngles(AvatarRenderState state, PlayerModel model) {

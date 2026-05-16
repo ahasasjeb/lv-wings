@@ -35,7 +35,11 @@ public class WingsArgument implements ArgumentType<FlightApparatus> {
 
     @Override
     public FlightApparatus parse(StringReader reader) throws CommandSyntaxException {
-        Identifier key = Identifier.read(reader);
+        String rawKey = reader.readUnquotedString();
+        Identifier key = rawKey.indexOf(':') >= 0 ? Identifier.tryParse(rawKey) : Identifier.tryBuild(WingsMod.ID, rawKey);
+        if (key == null) {
+            throw ERROR_UNKNOWN_WING.create(rawKey);
+        }
         return WingsMod.WINGS.getOptional(key).orElseThrow(() -> ERROR_UNKNOWN_WING.create(key));
     }
 

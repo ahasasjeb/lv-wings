@@ -66,7 +66,6 @@ public final class ServerEventHandler {
                     1.0F,
                     1.0F
             );
-            ItemStack destroyed = stack.copy();
             if (!player.getAbilities().instabuild) {
                 stack.shrink(1);
             }
