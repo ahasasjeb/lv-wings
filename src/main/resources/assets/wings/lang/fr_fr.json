@@ -80,7 +80,5 @@
   "config.wings.items.settings.landingExertion.tooltip": "La valeur d'effort pour l'atterrissage",
   "config.wings.items.settings.durability": "Durabilité de l'Objet",
   "config.wings.items.settings.durability.tooltip": "Durabilité infinie spécifiée par 0",
-  "wings.tooltip": "Options Générales",
-  "config.wings.wearObstructions": "Obstructions d'Équipement",
-  "config.wings.wearObstructions.tooltip": "Personnaliser les objets qui, lorsqu'ils sont utilisés dans l'emplacement plastron, obstruent les ailes dans l'emplacement de bijou corporel."
+  "wings.tooltip": "Options Générales"
 }

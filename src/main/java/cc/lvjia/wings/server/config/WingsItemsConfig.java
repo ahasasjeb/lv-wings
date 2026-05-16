@@ -30,8 +30,7 @@ public final class WingsItemsConfig {
     }
 
     public static void validate() {
-        Data data = ConfigFiles.load("wings-items.json", Data.class, WingsItemsConfig::defaultData).normalize();
-        ConfigFiles.save("wings-items.json", data);
+        Data data = ConfigFiles.load("wings-items.json", Data.class, WingsItemsConfig::defaultData, Data::normalize);
         all().forEach(settings -> settings.apply(data.wings.get(settings.getKey().getPath())));
     }
 

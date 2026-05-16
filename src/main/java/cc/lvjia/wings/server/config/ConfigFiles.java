@@ -2,6 +2,8 @@ package cc.lvjia.wings.server.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import net.fabricmc.loader.api.FabricLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,6 +14,7 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 final class ConfigFiles {
     private static final Logger LOGGER = LogManager.getLogger("WingsConfig");
@@ -20,20 +23,34 @@ final class ConfigFiles {
     private ConfigFiles() {
     }
 
-    static <T> T load(String fileName, Class<T> type, Supplier<T> defaults) {
+    static <T> T load(String fileName, Class<T> type, Supplier<T> defaults, UnaryOperator<T> normalizer) {
         Path path = FabricLoader.getInstance().getConfigDir().resolve(fileName);
         T config = defaults.get();
+        JsonElement loadedJson = null;
+        boolean shouldSave = !Files.exists(path);
+
         if (Files.exists(path)) {
             try (Reader reader = Files.newBufferedReader(path)) {
-                T loaded = GSON.fromJson(reader, type);
+                loadedJson = JsonParser.parseReader(reader);
+                T loaded = GSON.fromJson(loadedJson, type);
                 if (loaded != null) {
                     config = loaded;
+                } else {
+                    shouldSave = true;
                 }
             } catch (Exception ex) {
                 LOGGER.warn("Failed to load config '{}'. Rewriting defaults.", path, ex);
+                shouldSave = true;
             }
         }
-        save(path, config);
+
+        config = normalizer.apply(config);
+        if (!shouldSave && loadedJson != null) {
+            shouldSave = !GSON.toJsonTree(config).equals(loadedJson);
+        }
+        if (shouldSave) {
+            save(path, config);
+        }
         return config;
     }
 

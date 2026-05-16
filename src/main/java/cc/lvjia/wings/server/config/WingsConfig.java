@@ -1,36 +1,10 @@
 package cc.lvjia.wings.server.config;
 
-import net.minecraft.resources.Identifier;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public final class WingsConfig {
-    private static final Logger LOGGER = LogManager.getLogger("WingsConfig");
     private static volatile Data DATA = Data.defaults();
     private static volatile FlightAntiCheatSettings FLIGHT_ANTI_CHEAT_SETTINGS = DATA.flightAntiCheat.toSettings();
 
     private WingsConfig() {
-    }
-
-    public static List<String> getWearObstructions() {
-        List<String> sanitized = new ArrayList<>();
-        for (String entry : DATA.wearObstructions) {
-            if (entry != null && Identifier.tryParse(entry.trim()) != null) {
-                sanitized.add(entry.trim());
-            }
-        }
-        if (sanitized.isEmpty()) {
-            LOGGER.warn("No valid wear obstruction entries found. Falling back to minecraft:elytra.");
-            sanitized.add("minecraft:elytra");
-        }
-        return List.copyOf(sanitized);
-    }
-
-    public static String[] getWearObstructionsArray() {
-        return getWearObstructions().toArray(String[]::new);
     }
 
     public static boolean isUnderwaterFlightAllowed() {
@@ -42,8 +16,7 @@ public final class WingsConfig {
     }
 
     public static void validate() {
-        DATA = ConfigFiles.load("wings-common.json", Data.class, Data::defaults).normalize();
-        ConfigFiles.save("wings-common.json", DATA);
+        DATA = ConfigFiles.load("wings-common.json", Data.class, Data::defaults, Data::normalize);
         FLIGHT_ANTI_CHEAT_SETTINGS = DATA.flightAntiCheat.toSettings();
     }
 
@@ -76,7 +49,6 @@ public final class WingsConfig {
     }
 
     public static final class Data {
-        public List<String> wearObstructions = List.of("minecraft:elytra");
         public boolean allowUnderwaterFlight = false;
         public AntiCheatData flightAntiCheat = new AntiCheatData();
 
@@ -85,9 +57,6 @@ public final class WingsConfig {
         }
 
         Data normalize() {
-            if (this.wearObstructions == null || this.wearObstructions.isEmpty()) {
-                this.wearObstructions = List.of("minecraft:elytra");
-            }
             if (this.flightAntiCheat == null) {
                 this.flightAntiCheat = new AntiCheatData();
             }

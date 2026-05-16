@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 保守的翅膀飞行限速器。
@@ -19,12 +20,18 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class FlightSpeedAntiCheat {
     private static final Logger LOGGER = LogManager.getLogger("WingsFlightAntiCheat");
 
+    private static final long STATE_TTL_NANOS = TimeUnit.MINUTES.toNanos(10);
+    private static final long CLEANUP_INTERVAL_NANOS = TimeUnit.SECONDS.toNanos(30);
     private static final Map<UUID, TrackingState> STATES = new ConcurrentHashMap<>();
+    private static volatile long nextCleanupNanos;
 
     private FlightSpeedAntiCheat() {
     }
 
     public static void tick(ServerPlayer player, Flight flight) {
+        long now = System.nanoTime();
+        cleanupExpiredStates(now);
+
         WingsConfig.FlightAntiCheatSettings settings = WingsConfig.getFlightAntiCheatSettings();
         if (!settings.enabled()) {
             clear(player);
@@ -37,8 +44,9 @@ public final class FlightSpeedAntiCheat {
         }
 
         if (state == null) {
-            state = STATES.computeIfAbsent(player.getUUID(), key -> new TrackingState());
+            state = STATES.computeIfAbsent(player.getUUID(), key -> new TrackingState(now));
         }
+        state.markSeen(now);
 
         if (player.tickCount < state.cooldownUntilTick) {
             return;
@@ -79,6 +87,9 @@ public final class FlightSpeedAntiCheat {
     }
 
     public static void recordMovement(ServerPlayer player, Flight flight, Vec3 movement) {
+        long now = System.nanoTime();
+        cleanupExpiredStates(now);
+
         WingsConfig.FlightAntiCheatSettings settings = WingsConfig.getFlightAntiCheatSettings();
         if (!settings.enabled()) {
             clear(player);
@@ -90,7 +101,8 @@ public final class FlightSpeedAntiCheat {
             return;
         }
 
-        TrackingState state = STATES.computeIfAbsent(player.getUUID(), key -> new TrackingState());
+        TrackingState state = STATES.computeIfAbsent(player.getUUID(), key -> new TrackingState(now));
+        state.markSeen(now);
         if (player.tickCount < state.cooldownUntilTick) {
             return;
         }
@@ -137,6 +149,14 @@ public final class FlightSpeedAntiCheat {
         STATES.remove(player.getUUID());
     }
 
+    private static void cleanupExpiredStates(long now) {
+        if (now < nextCleanupNanos) {
+            return;
+        }
+        nextCleanupNanos = now + CLEANUP_INTERVAL_NANOS;
+        STATES.entrySet().removeIf(entry -> now - entry.getValue().lastSeenNanos > STATE_TTL_NANOS);
+    }
+
     private static boolean shouldMonitor(ServerPlayer player, Flight flight) {
         return flight.isFlying()
                 && !player.isCreative()
@@ -165,6 +185,15 @@ public final class FlightSpeedAntiCheat {
         private int hardViolations;
         private int cooldownUntilTick;
         private PendingCorrection pendingCorrection;
+        private volatile long lastSeenNanos;
+
+        private TrackingState(long now) {
+            this.lastSeenNanos = now;
+        }
+
+        private void markSeen(long now) {
+            this.lastSeenNanos = now;
+        }
 
         private void captureSafePosition(ServerPlayer player) {
             this.safePosition = player.position();

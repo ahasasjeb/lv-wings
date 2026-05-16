@@ -67,7 +67,5 @@
   "config.wings.items.settings.landingExertion.tooltip": "O valor do esforço para pousar",
   "config.wings.items.settings.durability": "Durabilidade do Item",
   "config.wings.items.settings.durability.tooltip": "Durabilidade infinita especificada por 0",
-  "wings.tooltip": "Opções Gerais",
-  "config.wings.wearObstructions": "Obstruções de Uso",
-  "config.wings.wearObstructions.tooltip": "Customizar itens, quando usados no slot do peitoral, obstruem as asas no slot das bugigangas do corpo."
+  "wings.tooltip": "Opções Gerais"
 }

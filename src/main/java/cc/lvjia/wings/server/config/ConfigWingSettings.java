@@ -20,7 +20,7 @@ public final class ConfigWingSettings implements WingSettings {
 
     ConfigWingSettings(Identifier key, Data defaults) {
         this.key = key;
-        this.defaults = defaults.normalize();
+        this.defaults = defaults.copy().normalize();
         this.current = this.defaults.copy();
     }
 
@@ -72,7 +72,7 @@ public final class ConfigWingSettings implements WingSettings {
     }
 
     public void apply(Data data) {
-        this.current = (data != null ? data : this.defaults.copy()).normalize();
+        this.current = (data != null ? data : this.defaults).copy().normalize();
     }
 
     public void validate() {
