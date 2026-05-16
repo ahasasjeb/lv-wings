@@ -3,7 +3,7 @@ package cc.lvjia.wings.client.flight;
 import cc.lvjia.wings.util.MathH;
 
 public final class AnimatorInsectoid implements Animator {
-    private static final float IDLE_FLAP_RATE = 0.0F;
+    private static final float IDLE_FLAP_RATE = 0.05F;
 
     private static final float LIFT_FLAP_RATE = 1.2F;
 

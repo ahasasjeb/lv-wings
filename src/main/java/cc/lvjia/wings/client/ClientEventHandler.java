@@ -39,6 +39,7 @@ public final class ClientEventHandler {
             if (client.level != null) {
                 for (Player player : client.level.players()) {
                     if (player instanceof AbstractClientPlayer clientPlayer) {
+                        Flights.get(clientPlayer).ifPresent(flight -> flight.tick(clientPlayer));
                         FlightViews.get(clientPlayer).ifPresent(FlightView::tick);
                     }
                 }

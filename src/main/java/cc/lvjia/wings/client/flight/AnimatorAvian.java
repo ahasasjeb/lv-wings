@@ -260,7 +260,7 @@ public final class AnimatorAvian implements Animator {
 
         @Override
         public float update() {
-            return 0.0F;
+            return 0.035F;
         }
     }
 
