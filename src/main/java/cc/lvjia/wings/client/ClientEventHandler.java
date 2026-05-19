@@ -33,7 +33,7 @@ public final class ClientEventHandler {
     public static void register() {
         ClientEntityEvents.ENTITY_LOAD.register((entity, level) -> onEntityJoinWorld(entity));
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if (client.level != null) {
+            if (!client.isPaused() && client.level != null) {
                 for (Player player : client.level.players()) {
                     if (player instanceof AbstractClientPlayer clientPlayer) {
                         Flights.get(clientPlayer).ifPresent(flight -> flight.tick(clientPlayer));
