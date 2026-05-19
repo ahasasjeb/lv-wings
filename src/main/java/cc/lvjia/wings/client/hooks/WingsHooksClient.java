@@ -1,6 +1,10 @@
-package cc.lvjia.wings.client.asm;
+package cc.lvjia.wings.client.hooks;
 
 import cc.lvjia.wings.client.ClientEventHandler;
+import cc.lvjia.wings.client.asm.AnimatePlayerModelEvent;
+import cc.lvjia.wings.client.asm.ApplyPlayerRotationsEvent;
+import cc.lvjia.wings.client.asm.GetCameraEyeHeightEvent;
+import cc.lvjia.wings.client.event.EmptyOffHandPresentEvent;
 import cc.lvjia.wings.util.Access;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -10,7 +14,6 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MapItem;
@@ -28,6 +31,10 @@ public final class WingsHooksClient {
         GetCameraEyeHeightEvent event = GetCameraEyeHeightEvent.create(entity, eyeHeight);
         ClientEventHandler.onGetCameraEyeHeight(event);
         return event.getValue();
+    }
+
+    public static float onComputeCameraRoll(float delta) {
+        return ClientEventHandler.computeCameraRoll(delta);
     }
 
     public static void onSetPlayerRotationAngles(AvatarRenderState state, PlayerModel model) {
@@ -48,10 +55,14 @@ public final class WingsHooksClient {
     }
 
     public static void onApplyPlayerRotations(AvatarRenderState state, PoseStack matrixStack) {
-        AbstractClientPlayer player = resolvePlayer(state);
-        if (player != null) {
-            float delta = state.ageInTicks - player.tickCount;
-            ClientEventHandler.onApplyRotations(new ApplyPlayerRotationsEvent(player, matrixStack, delta));
+        try {
+            AbstractClientPlayer player = resolvePlayer(state);
+            if (player != null) {
+                float delta = state.ageInTicks - player.tickCount;
+                ClientEventHandler.onApplyRotations(new ApplyPlayerRotationsEvent(player, matrixStack, delta));
+            }
+        } finally {
+            RENDERING_PLAYER.remove();
         }
     }
 
@@ -73,16 +84,8 @@ public final class WingsHooksClient {
         return null;
     }
 
-    public static boolean onCheckRenderEmptyHand(boolean isMainHand, AbstractClientPlayer player, InteractionHand hand, ItemStack itemStack, ItemStack itemStackMainHand) {
-        if (isMainHand) {
-            return true;
-        }
-        if (!(player instanceof LocalPlayer localPlayer) || hand != InteractionHand.OFF_HAND || !itemStack.isEmpty() || Holder.OPTIFINE_PRESENT || isMap(itemStackMainHand)) {
-            return false;
-        }
-        EmptyOffHandPresentEvent event = new EmptyOffHandPresentEvent(localPlayer);
-        ClientEventHandler.onEmptyOffHandPresentEvent(event);
-        return event.isAllowed();
+    public static boolean onCheckRenderEmptyHand(boolean isMainHand, ItemStack itemStackMainHand) {
+        return isMainHand || !Holder.OPTIFINE_PRESENT && !isMap(itemStackMainHand);
     }
 
     public static boolean onCheckDoReequipAnimation(ItemStack from, ItemStack to, int slot) {

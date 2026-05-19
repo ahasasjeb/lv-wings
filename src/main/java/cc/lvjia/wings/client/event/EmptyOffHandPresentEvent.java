@@ -1,4 +1,4 @@
-package cc.lvjia.wings.client.asm;
+package cc.lvjia.wings.client.event;
 
 import net.minecraft.client.player.LocalPlayer;
 

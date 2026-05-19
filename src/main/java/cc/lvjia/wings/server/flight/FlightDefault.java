@@ -10,7 +10,6 @@ import cc.lvjia.wings.util.NBTSerializer;
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.Identifier;
@@ -36,8 +35,6 @@ public final class FlightDefault implements Flight {
     private static final float MAX_SPEED = 0.0715F;
 
     private static final float Y_BOOST = 0.05F;
-
-    private static final float TAKEOFF_BOOST = 0.32F;
 
     private static final float FALL_REDUCTION = 0.9F;
 
@@ -125,6 +122,7 @@ public final class FlightDefault implements Flight {
         Objects.requireNonNull(wing);
         if (this.flightApparatus != wing) {
             this.flightApparatus = wing;
+            this.state = this.state.next(wing);
             this.sync(players);
         }
     }
@@ -194,9 +192,6 @@ public final class FlightDefault implements Flight {
         }
         if (player.isEffectiveAi() && !underwaterFlightBlocked) {
             if (this.isFlying()) {
-                if (player.onGround() && player.getDeltaMovement().y() < TAKEOFF_BOOST) {
-                    player.setDeltaMovement(player.getDeltaMovement().with(Direction.Axis.Y, TAKEOFF_BOOST));
-                }
                 float speed = Mth.clampedLerp(MIN_SPEED, MAX_SPEED, player.zza);
                 float elevationBoost = MathH.transform(
                         Math.abs(player.getXRot()),

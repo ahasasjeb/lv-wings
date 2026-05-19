@@ -1,6 +1,6 @@
 package cc.lvjia.wings.mixin;
 
-import cc.lvjia.wings.client.asm.WingsHooksClient;
+import cc.lvjia.wings.client.hooks.WingsHooksClient;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
@@ -52,7 +52,7 @@ public abstract class ItemInHandRendererMixin {
     @ModifyVariable(method = "renderArmWithItem(Lnet/minecraft/client/player/AbstractClientPlayer;FFLnet/minecraft/world/InteractionHand;FLnet/minecraft/world/item/ItemStack;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;I)V",
             at = @At(value = "STORE"), ordinal = 0)
     private boolean wings$allowEmptyOffhandRender(boolean original, AbstractClientPlayer player, float f, float f1, InteractionHand hand, float f2, ItemStack stack, float f3, PoseStack poseStack, SubmitNodeCollector collector, int light) {
-        boolean allowed = WingsHooksClient.onCheckRenderEmptyHand(original, player, hand, stack, this.mainHandItem);
+        boolean allowed = WingsHooksClient.onCheckRenderEmptyHand(original, this.mainHandItem);
         this.wings$forceOppositeArm = !original && allowed && this.wings$currentHand == InteractionHand.OFF_HAND;
         return allowed;
     }
