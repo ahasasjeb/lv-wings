@@ -6,6 +6,7 @@ import cc.lvjia.wings.server.apparatus.FlightApparatus;
 import cc.lvjia.wings.server.apparatus.SimpleFlightApparatus;
 import cc.lvjia.wings.server.command.WingsArgument;
 import cc.lvjia.wings.server.config.WingsConfig;
+import cc.lvjia.wings.server.config.WingsConfigEvents;
 import cc.lvjia.wings.server.config.WingsItemsConfig;
 import cc.lvjia.wings.server.dreamcatcher.InSomniableCapability;
 import cc.lvjia.wings.server.effect.WingsEffects;
@@ -96,6 +97,8 @@ public final class WingsMod {
 
         modContainer.registerConfig(ModConfig.Type.COMMON, WingsConfig.SPEC, ID + "-common.toml");
         modContainer.registerConfig(ModConfig.Type.COMMON, WingsItemsConfig.SPEC, ID + "-items.toml");
+        modEventBus.addListener(WingsConfigEvents::onLoad);
+        modEventBus.addListener(WingsConfigEvents::onReload);
 
         WingsItems.REG.register(modEventBus);
         modEventBus.addListener(WingsItems::buildCreativeTabContents);

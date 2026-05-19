@@ -122,19 +122,22 @@ public final class ClientEventHandler {
         Flights.ifPlayer(cameraEntity, (player, flight) -> {
             float delta = (float) event.getPartialTick();
             float amt = flight.getFlyingAmount(delta);
-            if (!flight.isFlying() || player.isSpectator() || amt <= 0.0F) {
+            if (player.isSpectator() || amt <= 0.0F) {
                 smoothedCameraRoll = 0.0F;
                 event.setRoll(0.0F);
                 return;
             }
 
-            float roll = getBodyYawRoll(player, delta);
+            float roll = flight.isFlying() ? getBodyYawRoll(player, delta) : 0.0F;
             float targetRoll = Mth.lerp(amt, 0.0F, -roll * 0.25F);
             if (!Float.isFinite(targetRoll)) {
                 targetRoll = 0.0F;
             }
             targetRoll = Mth.clamp(targetRoll, -35.0F, 35.0F);
             smoothedCameraRoll = Mth.approachDegrees(smoothedCameraRoll, targetRoll, 8.0F);
+            if (!flight.isFlying() && Math.abs(smoothedCameraRoll) < 0.01F) {
+                smoothedCameraRoll = 0.0F;
+            }
             event.setRoll(smoothedCameraRoll);
         });
     }

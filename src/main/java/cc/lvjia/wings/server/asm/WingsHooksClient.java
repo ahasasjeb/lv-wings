@@ -41,10 +41,14 @@ public final class WingsHooksClient {
     }
 
     public static void onApplyPlayerRotations(AvatarRenderState state, PoseStack matrixStack) {
-        AbstractClientPlayer player = resolvePlayer(state);
-        if (player != null) {
-            float delta = state.ageInTicks - player.tickCount;
-            NeoForge.EVENT_BUS.post(new ApplyPlayerRotationsEvent(player, matrixStack, delta));
+        try {
+            AbstractClientPlayer player = resolvePlayer(state);
+            if (player != null) {
+                float delta = state.ageInTicks - player.tickCount;
+                NeoForge.EVENT_BUS.post(new ApplyPlayerRotationsEvent(player, matrixStack, delta));
+            }
+        } finally {
+            RENDERING_PLAYER.remove();
         }
     }
 

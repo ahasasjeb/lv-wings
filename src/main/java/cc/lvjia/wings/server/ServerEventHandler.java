@@ -42,6 +42,11 @@ public final class ServerEventHandler {
         InteractionHand hand = event.getHand();
         ItemStack stack = player.getItemInHand(hand);
         if (event.getTarget() instanceof Bat && stack.getItem() == Items.GLASS_BOTTLE) {
+            event.setCancellationResult(InteractionResult.SUCCESS);
+            event.setCanceled(true);
+            if (player.level().isClientSide()) {
+                return;
+            }
             player.level().playSound(
                     player,
                     player.getX(), player.getY(), player.getZ(),
@@ -62,7 +67,6 @@ public final class ServerEventHandler {
             } else if (!player.getInventory().add(batBlood)) {
                 player.drop(batBlood, false);
             }
-            event.setCancellationResult(InteractionResult.SUCCESS);
         }
     }
 
@@ -156,10 +160,6 @@ public final class ServerEventHandler {
         }
         boolean wasFlying = flight.isFlying();
         boolean changed = false;
-        if (wasFlying) {
-            flight.setIsFlying(false, Flight.PlayerSet.ofAll());
-            changed = true;
-        }
         if (flight.getTimeFlying() != 0) {
             flight.setTimeFlying(0);
             changed = true;
@@ -168,7 +168,9 @@ public final class ServerEventHandler {
             flight.setAnimationState(FlightAnimationState.IDLE);
             changed = true;
         }
-        if (changed && !wasFlying) {
+        if (wasFlying) {
+            flight.setIsFlying(false, Flight.PlayerSet.ofAll());
+        } else if (changed) {
             flight.sync(Flight.PlayerSet.ofAll());
         }
         FlightSpeedAntiCheat.clear(player);

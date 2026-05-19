@@ -3,12 +3,8 @@ name: Build
 on:
   push:
     branches: [ main ]
-    paths-ignore:
-      - 'gradle.properties'
   pull_request:
     branches: [ main ]
-    paths-ignore:
-      - 'gradle.properties'
 
 jobs:
   build:

@@ -102,6 +102,7 @@ public final class FlightDefault implements Flight {
         Objects.requireNonNull(wing);
         if (this.flightApparatus != wing) {
             this.flightApparatus = wing;
+            this.state = this.state.next(wing);
             this.sync(players);
         }
     }
