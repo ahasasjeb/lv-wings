@@ -49,14 +49,6 @@ public final class WingForm<A extends Animator> {
         FORMS.clear();
     }
 
-    public static Map<FlightApparatus, WingForm<?>> getFormsMap() {
-        return FORMS;
-    }
-
-    public static boolean isEmpty() {
-        return FORMS.isEmpty();
-    }
-
     public A createAnimator() {
         return this.animator.get();
     }

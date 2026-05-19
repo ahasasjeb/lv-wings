@@ -1,6 +1,5 @@
 package cc.lvjia.wings.server.config;
 
-import cc.lvjia.wings.server.item.ImmutableWingSettings;
 import cc.lvjia.wings.server.item.WingSettings;
 import net.minecraft.resources.Identifier;
 
@@ -59,24 +58,12 @@ public final class ConfigWingSettings implements WingSettings {
         return (float) this.current.landingExertion;
     }
 
-    public WingSettings toImmutable() {
-        return ImmutableWingSettings.of(this.getRequiredFlightSatiation(), this.getFlyingExertion(), this.getRequiredLandSatiation(), this.getLandingExertion());
-    }
-
-    public Data toData() {
-        return this.current.copy();
-    }
-
     public Data defaultData() {
         return this.defaults.copy();
     }
 
     public void apply(Data data) {
         this.current = (data != null ? data : this.defaults).copy().normalize();
-    }
-
-    public void validate() {
-        this.current.normalize();
     }
 
     public static final class Data {

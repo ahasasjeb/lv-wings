@@ -1,9 +1,6 @@
 package cc.lvjia.wings.server.config;
 
 import cc.lvjia.wings.WingsMod;
-import cc.lvjia.wings.server.item.WingSettings;
-import com.google.common.collect.ImmutableMap;
-import net.minecraft.resources.Identifier;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -23,10 +20,6 @@ public final class WingsItemsConfig {
     public static final ConfigWingSettings LVJIA_SUPER = new ConfigWingSettings(WingsMod.Names.LVJIA_SUPER);
 
     private WingsItemsConfig() {
-    }
-
-    public static ImmutableMap<Identifier, WingSettings> createWingAttributes() {
-        return all().collect(ImmutableMap.toImmutableMap(ConfigWingSettings::getKey, ConfigWingSettings::toImmutable));
     }
 
     public static void validate() {

@@ -1,19 +1,13 @@
 package cc.lvjia.wings.server.dreamcatcher;
 
 import cc.lvjia.wings.server.item.WingsItems;
-import cc.lvjia.wings.util.NBTSerializer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
-
-import java.util.function.IntConsumer;
 
 public final class InSomniable {
     private State state;
@@ -38,8 +32,6 @@ public final class InSomniable {
         State onPlay(Level world, Player player, BlockPos pos, int note);
 
         State copy();
-
-        void ifSearching(IntConsumer consumer);
     }
 
     private static final class SearchState implements State {
@@ -92,11 +84,6 @@ public final class InSomniable {
         public State copy() {
             return new SearchState(this.state);
         }
-
-        @Override
-        public void ifSearching(IntConsumer consumer) {
-            consumer.accept(this.state);
-        }
     }
 
     private static final class InSomniacState implements State {
@@ -110,43 +97,6 @@ public final class InSomniable {
         @Override
         public State copy() {
             return this;
-        }
-
-        @Override
-        public void ifSearching(IntConsumer consumer) {
-        }
-    }
-
-    public static final class Serializer implements NBTSerializer<InSomniable, CompoundTag> {
-        private static final String SEARCH_STATE = "SearchState";
-
-        @Override
-        public CompoundTag serialize(InSomniable instance) {
-            CompoundTag compound = new CompoundTag();
-            instance.state.ifSearching(state -> compound.putInt(SEARCH_STATE, state));
-            return compound;
-        }
-
-        @Override
-        public InSomniable deserialize(CompoundTag compound) {
-            State state;
-            if (compound.contains(SEARCH_STATE)) {
-                state = new SearchState(compound.getInt(SEARCH_STATE).orElse(0x1FFFE));
-            } else {
-                state = InSomniacState.INSTANCE;
-            }
-            return new InSomniable(state);
-        }
-
-        public void serialize(InSomniable instance, ValueOutput output) {
-            instance.state.ifSearching(state -> output.putInt(SEARCH_STATE, state));
-        }
-
-        public InSomniable deserialize(ValueInput input) {
-            State state = input.getInt(SEARCH_STATE)
-                    .map(value -> (State) new SearchState(value))
-                    .orElse(InSomniacState.INSTANCE);
-            return new InSomniable(state);
         }
     }
 }
