@@ -19,7 +19,7 @@ public final class WingForm<A extends Animator> {
     private final Supplier<A> animator;
     private final Identifier texture;
     private final Supplier<RenderType> renderType;
-    private ModelWings<A> model;
+    private final ModelWings<A> model;
 
     private WingForm(Supplier<A> animator, ModelWings<A> model, Identifier texture, Supplier<RenderType> renderType) {
         this.animator = Objects.requireNonNull(animator);
@@ -49,24 +49,12 @@ public final class WingForm<A extends Animator> {
         FORMS.clear();
     }
 
-    public static Map<FlightApparatus, WingForm<?>> getFormsMap() {
-        return FORMS;
-    }
-
-    public static boolean isEmpty() {
-        return FORMS.isEmpty();
-    }
-
     public A createAnimator() {
         return this.animator.get();
     }
 
     public ModelWings<A> getModel() {
         return this.model;
-    }
-
-    public void setModel(ModelWings<A> model) {
-        this.model = model;
     }
 
     public Identifier getTexture() {

@@ -1,4 +1,4 @@
-package cc.lvjia.wings.server.asm;
+package cc.lvjia.wings.client.event;
 
 import net.minecraft.client.player.LocalPlayer;
 import net.neoforged.bus.api.Event;

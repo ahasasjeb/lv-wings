@@ -2,11 +2,11 @@ package cc.lvjia.wings.client;
 
 import cc.lvjia.wings.WingsMod;
 import cc.lvjia.wings.client.audio.WingsSound;
+import cc.lvjia.wings.client.event.EmptyOffHandPresentEvent;
 import cc.lvjia.wings.client.flight.FlightView;
 import cc.lvjia.wings.client.flight.FlightViews;
 import cc.lvjia.wings.server.asm.AnimatePlayerModelEvent;
 import cc.lvjia.wings.server.asm.ApplyPlayerRotationsEvent;
-import cc.lvjia.wings.server.asm.EmptyOffHandPresentEvent;
 import cc.lvjia.wings.server.asm.GetCameraEyeHeightEvent;
 import cc.lvjia.wings.server.flight.Flights;
 import cc.lvjia.wings.util.MathH;
