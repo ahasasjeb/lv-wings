@@ -1,4 +1,4 @@
-package cc.lvjia.wings.server.asm;
+package cc.lvjia.wings.client.asm;
 
 import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.world.entity.player.Player;

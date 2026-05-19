@@ -1,10 +1,6 @@
 package cc.lvjia.wings.client.asm;
 
 import cc.lvjia.wings.client.ClientEventHandler;
-import cc.lvjia.wings.server.asm.AnimatePlayerModelEvent;
-import cc.lvjia.wings.server.asm.ApplyPlayerRotationsEvent;
-import cc.lvjia.wings.server.asm.EmptyOffHandPresentEvent;
-import cc.lvjia.wings.server.asm.GetCameraEyeHeightEvent;
 import cc.lvjia.wings.util.Access;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
