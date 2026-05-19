@@ -1,6 +1,6 @@
 package cc.lvjia.wings.mixin;
 
-import cc.lvjia.wings.server.asm.WingsHooksClient;
+import cc.lvjia.wings.client.hooks.WingsHooksClient;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;

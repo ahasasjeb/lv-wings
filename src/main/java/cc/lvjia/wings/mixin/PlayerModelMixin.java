@@ -1,6 +1,6 @@
 package cc.lvjia.wings.mixin;
 
-import cc.lvjia.wings.server.asm.WingsHooksClient;
+import cc.lvjia.wings.client.hooks.WingsHooksClient;
 import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import org.spongepowered.asm.mixin.Mixin;
