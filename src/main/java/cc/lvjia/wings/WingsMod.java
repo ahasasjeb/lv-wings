@@ -4,7 +4,6 @@ import cc.lvjia.wings.server.ServerEventHandler;
 import cc.lvjia.wings.server.apparatus.BuffedFlightApparatus;
 import cc.lvjia.wings.server.apparatus.FlightApparatus;
 import cc.lvjia.wings.server.apparatus.SimpleFlightApparatus;
-import cc.lvjia.wings.server.command.WingsArgument;
 import cc.lvjia.wings.server.config.WingsConfig;
 import cc.lvjia.wings.server.config.WingsItemsConfig;
 import cc.lvjia.wings.server.effect.WingsEffects;
@@ -12,8 +11,8 @@ import cc.lvjia.wings.server.flight.Flight;
 import cc.lvjia.wings.server.item.WingsItems;
 import cc.lvjia.wings.server.sound.WingsSounds;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
+import net.fabricmc.fabric.api.event.registry.RegistryAttribute;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -23,9 +22,10 @@ import net.minecraft.world.phys.Vec3;
 
 public final class WingsMod implements ModInitializer {
     public static final String ID = "wings";
-    private static final ResourceKey<Registry<FlightApparatus>> WINGS_KEY = ResourceKey.createRegistryKey(locate("wings"));
+    public static final ResourceKey<Registry<FlightApparatus>> WINGS_KEY = ResourceKey.createRegistryKey(locate("wings"));
     public static final Registry<FlightApparatus> WINGS = FabricRegistryBuilder
             .createDefaulted(WINGS_KEY, Names.NONE)
+            .attribute(RegistryAttribute.SYNCED)
             .buildAndRegister();
     public static final FlightApparatus NONE = Registry.register(WINGS, Names.NONE, FlightApparatus.NONE);
     public static final FlightApparatus WINGLESS = Registry.register(WINGS, Names.WINGLESS, new FlightApparatus() {
@@ -96,11 +96,6 @@ public final class WingsMod implements ModInitializer {
         WingsSounds.register();
         WingsEffects.register();
         WingsAttachments.register();
-        ArgumentTypeRegistry.registerArgumentType(
-                locate("wings"),
-                WingsArgument.class,
-                net.minecraft.commands.synchronization.SingletonArgumentInfo.contextFree(WingsArgument::wings)
-        );
         ServerEventHandler.register();
         this.proxy.init();
     }

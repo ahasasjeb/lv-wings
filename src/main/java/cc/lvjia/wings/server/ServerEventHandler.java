@@ -51,7 +51,7 @@ public final class ServerEventHandler {
         ServerPlayerEvents.JOIN.register(Flights::onPlayerLoggedIn);
         ServerEntityLevelChangeEvents.AFTER_PLAYER_CHANGE_LEVEL.register((player, origin, destination) -> Flights.onPlayerChangedDimension(player));
         EntityTrackingEvents.START_TRACKING.register(Flights::onPlayerStartTracking);
-        CommandRegistrationCallback.EVENT.register((dispatcher, buildContext, selection) -> WingsCommand.register(dispatcher));
+        CommandRegistrationCallback.EVENT.register((dispatcher, buildContext, selection) -> WingsCommand.register(dispatcher, buildContext));
         InSomniableEventHandler.register();
     }
 
