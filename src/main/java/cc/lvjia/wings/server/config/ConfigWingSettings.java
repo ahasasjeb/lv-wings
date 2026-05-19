@@ -1,6 +1,5 @@
 package cc.lvjia.wings.server.config;
 
-import cc.lvjia.wings.server.item.ImmutableWingSettings;
 import cc.lvjia.wings.server.item.WingSettings;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -53,10 +52,6 @@ public final class ConfigWingSettings implements WingSettings {
         builder.pop();
     }
 
-    public Identifier getKey() {
-        return this.key;
-    }
-
     @Override
     public int getRequiredFlightSatiation() {
         return this.readInt(this.requiredFlightSatiation, "requiredFlightSatiation", MIN_SATIATION, MAX_SATIATION, this.defaultFlightSatiation);
@@ -75,10 +70,6 @@ public final class ConfigWingSettings implements WingSettings {
     @Override
     public float getLandingExertion() {
         return this.readFloat(this.landingExertion, "landingExertion", MIN_EXERTION, MAX_EXERTION, this.defaultLandingExertion);
-    }
-
-    public WingSettings toImmutable() {
-        return ImmutableWingSettings.of(this.getRequiredFlightSatiation(), this.getFlyingExertion(), this.getRequiredLandSatiation(), this.getLandingExertion());
     }
 
     public void validate() {

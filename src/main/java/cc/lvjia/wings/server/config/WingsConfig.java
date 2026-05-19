@@ -162,10 +162,6 @@ public final class WingsConfig {
         return Collections.unmodifiableList(sanitized);
     }
 
-    public static String[] getWearObstructionsArray() {
-        return getWearObstructions().toArray(String[]::new);
-    }
-
     public static boolean isUnderwaterFlightAllowed() {
         Boolean allow = ALLOW_UNDERWATER_FLIGHT.get();
         if (allow == null) {
