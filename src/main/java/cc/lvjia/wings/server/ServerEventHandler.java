@@ -86,15 +86,13 @@ public final class ServerEventHandler {
             if (clearSpectatorFlightState(player, flight)) {
                 return;
             }
+            flight.tick(player);
             if (player instanceof ServerPlayer serverPlayer && !serverPlayer.level().isClientSide()) {
                 if (flight.isFlying() && player.getAbilities().flying) {
-                    flight.setIsFlying(false, Flight.PlayerSet.ofAll());
-                    FlightSpeedAntiCheat.clear(serverPlayer);
+                    player.getAbilities().flying = false;
+                    serverPlayer.onUpdateAbilities();
                 }
-                flight.tick(player);
                 FlightSpeedAntiCheat.tick(serverPlayer, flight);
-            } else {
-                flight.tick(player);
             }
         });
     }
@@ -145,10 +143,6 @@ public final class ServerEventHandler {
         }
         boolean wasFlying = flight.isFlying();
         boolean changed = false;
-        if (wasFlying) {
-            flight.setIsFlying(false, Flight.PlayerSet.ofAll());
-            changed = true;
-        }
         if (flight.getTimeFlying() != 0) {
             flight.setTimeFlying(0);
             changed = true;
@@ -157,7 +151,9 @@ public final class ServerEventHandler {
             flight.setAnimationState(FlightAnimationState.IDLE);
             changed = true;
         }
-        if (changed && !wasFlying) {
+        if (wasFlying) {
+            flight.setIsFlying(false, Flight.PlayerSet.ofAll());
+        } else if (changed) {
             flight.sync(Flight.PlayerSet.ofAll());
         }
         FlightSpeedAntiCheat.clear(player);

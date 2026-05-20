@@ -46,11 +46,6 @@ public record MessageControlFlying(boolean isFlying) implements Message {
             if (player.isSpectator()) {
                 boolean wasFlying = flight.isFlying();
                 boolean changed = false;
-                if (wasFlying) {
-                    LOGGER.debug("Player {} is spectator, forcing wings flight off", player.getName().getString());
-                    flight.setIsFlying(false, Flight.PlayerSet.ofAll());
-                    changed = true;
-                }
                 if (flight.getTimeFlying() != 0) {
                     flight.setTimeFlying(0);
                     changed = true;
@@ -59,7 +54,10 @@ public record MessageControlFlying(boolean isFlying) implements Message {
                     flight.setAnimationState(FlightAnimationState.IDLE);
                     changed = true;
                 }
-                if (changed && !wasFlying) {
+                if (wasFlying) {
+                    LOGGER.debug("Player {} is spectator, forcing wings flight off", player.getName().getString());
+                    flight.setIsFlying(false, Flight.PlayerSet.ofAll());
+                } else if (changed) {
                     flight.sync(Flight.PlayerSet.ofAll());
                 }
                 FlightSpeedAntiCheat.clear(player);
