@@ -14,6 +14,7 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MapItem;
@@ -84,8 +85,27 @@ public final class WingsHooksClient {
         return null;
     }
 
-    public static boolean onCheckRenderEmptyHand(boolean isMainHand, ItemStack itemStackMainHand) {
-        return isMainHand || !Holder.OPTIFINE_PRESENT && !isMap(itemStackMainHand);
+    public static boolean onCheckRenderEmptyHand(boolean isMainHand, AbstractClientPlayer player, InteractionHand hand, ItemStack itemStack, ItemStack itemStackMainHand) {
+        if (isMainHand) {
+            return true;
+        }
+        if (!(player instanceof LocalPlayer localPlayer) || hand != InteractionHand.OFF_HAND) {
+            return false;
+        }
+        return canRenderEmptyOffhand(itemStack, itemStackMainHand);
+    }
+
+    public static boolean shouldRenderEmptyOffhand(LocalPlayer player, ItemStack offHandItem, ItemStack mainHandItem) {
+        if (!canRenderEmptyOffhand(offHandItem, mainHandItem)) {
+            return false;
+        }
+        EmptyOffHandPresentEvent event = new EmptyOffHandPresentEvent(player);
+        ClientEventHandler.onEmptyOffHandPresentEvent(event);
+        return event.isAllowed();
+    }
+
+    public static boolean canRenderEmptyOffhand(ItemStack offHandItem, ItemStack mainHandItem) {
+        return offHandItem.isEmpty() && !Holder.OPTIFINE_PRESENT && !isMap(mainHandItem);
     }
 
     public static boolean onCheckDoReequipAnimation(ItemStack from, ItemStack to, int slot) {

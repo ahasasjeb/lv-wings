@@ -2,9 +2,12 @@ package cc.lvjia.wings.mixin;
 
 import cc.lvjia.wings.client.hooks.WingsHooksClient;
 import net.minecraft.client.Camera;
-import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.world.entity.Entity;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -15,6 +18,31 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  */
 @Mixin(Camera.class)
 public abstract class CameraMixin {
+    @Shadow
+    @Final
+    private Quaternionf rotation;
+
+    @Shadow
+    @Final
+    private Vector3f forwards;
+
+    @Shadow
+    @Final
+    private Vector3f up;
+
+    @Shadow
+    @Final
+    private Vector3f left;
+
+    @Shadow
+    private float xRot;
+
+    @Shadow
+    private float yRot;
+
+    @Shadow
+    private int matrixPropertiesDirty;
+
     /**
      * 重定向实体眼睛高度获取，用于飞行时的视角调整
      */
@@ -24,17 +52,15 @@ public abstract class CameraMixin {
         return WingsHooksClient.onGetCameraEyeHeight(entity, entity.getEyeHeight());
     }
 
-    /**
-     * Fabric 没有 NeoForge 的 ComputeCameraAngles 事件，这里在提取相机渲染状态时应用同样的 roll。
-     */
-    @Inject(method = "extractRenderState(Lnet/minecraft/client/renderer/state/level/CameraRenderState;F)V",
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/client/Camera;getViewRotationMatrix(Lorg/joml/Matrix4f;)Lorg/joml/Matrix4f;",
-                    shift = At.Shift.AFTER))
-    private void wings$applyCameraRoll(CameraRenderState cameraState, float cameraEntityPartialTicks, CallbackInfo ci) {
-        float roll = WingsHooksClient.onComputeCameraRoll(cameraEntityPartialTicks);
+    @Inject(method = "alignWithEntity(F)V", at = @At("TAIL"))
+    private void wings$applyCameraRoll(float partialTicks, CallbackInfo ci) {
+        float roll = WingsHooksClient.onComputeCameraRoll(partialTicks);
         if (roll != 0.0F) {
-            cameraState.viewRotationMatrix.rotateZ(-roll * 0.017453292F);
+            this.rotation.rotationYXZ(3.1415927F - this.yRot * 0.017453292F, -this.xRot * 0.017453292F, -roll * 0.017453292F);
+            new Vector3f(0.0F, 0.0F, -1.0F).rotate(this.rotation, this.forwards);
+            new Vector3f(0.0F, 1.0F, 0.0F).rotate(this.rotation, this.up);
+            new Vector3f(-1.0F, 0.0F, 0.0F).rotate(this.rotation, this.left);
+            this.matrixPropertiesDirty |= 3;
         }
     }
 }

@@ -120,15 +120,16 @@ public final class ClientEventHandler {
 
         Entity cameraEntity = mc.getCameraEntity();
         if (cameraEntity == null) {
-            return smoothedCameraRoll;
+            return approachCameraRollToZero();
         }
 
+        final boolean[] handled = {false};
         final float[] rollOut = {smoothedCameraRoll};
         Flights.ifPlayer(cameraEntity, (player, flight) -> {
+            handled[0] = true;
             float amt = flight.getFlyingAmount(delta);
             if (player.isSpectator() || amt <= 0.0F) {
-                smoothedCameraRoll = 0.0F;
-                rollOut[0] = 0.0F;
+                rollOut[0] = approachCameraRollToZero();
                 return;
             }
 
@@ -144,7 +145,18 @@ public final class ClientEventHandler {
             }
             rollOut[0] = smoothedCameraRoll;
         });
+        if (!handled[0]) {
+            return approachCameraRollToZero();
+        }
         return rollOut[0];
+    }
+
+    private static float approachCameraRollToZero() {
+        smoothedCameraRoll = Mth.approachDegrees(smoothedCameraRoll, 0.0F, 8.0F);
+        if (Math.abs(smoothedCameraRoll) < 0.01F) {
+            smoothedCameraRoll = 0.0F;
+        }
+        return smoothedCameraRoll;
     }
 
     public static void onEmptyOffHandPresentEvent(EmptyOffHandPresentEvent event) {
