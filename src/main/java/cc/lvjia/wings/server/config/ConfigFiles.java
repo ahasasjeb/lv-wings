@@ -13,8 +13,10 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
+import org.jspecify.annotations.Nullable;
 
 final class ConfigFiles {
     private static final Logger LOGGER = LogManager.getLogger("WingsConfig");
@@ -26,13 +28,13 @@ final class ConfigFiles {
     static <T> T load(String fileName, Class<T> type, Supplier<T> defaults, UnaryOperator<T> normalizer) {
         Path path = FabricLoader.getInstance().getConfigDir().resolve(fileName);
         T config = defaults.get();
-        JsonElement loadedJson = null;
+        @Nullable JsonElement loadedJson = null;
         boolean shouldSave = !Files.exists(path);
 
         if (Files.exists(path)) {
             try (Reader reader = Files.newBufferedReader(path)) {
                 loadedJson = JsonParser.parseReader(reader);
-                T loaded = GSON.fromJson(loadedJson, type);
+                @Nullable T loaded = GSON.fromJson(loadedJson, type);
                 if (loaded != null) {
                     config = loaded;
                 } else {
@@ -44,7 +46,7 @@ final class ConfigFiles {
             }
         }
 
-        config = normalizer.apply(config);
+        config = Objects.requireNonNull(normalizer.apply(config), "normalized config");
         if (!shouldSave && loadedJson != null) {
             shouldSave = !GSON.toJsonTree(config).equals(loadedJson);
         }

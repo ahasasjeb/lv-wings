@@ -16,6 +16,7 @@ import net.minecraft.world.item.component.Consumables;
 
 import java.util.function.Supplier;
 
+@SuppressWarnings("null")
 public final class WingsItems {
         public static final Supplier<Item> BAT_BLOOD_BOTTLE = register("bat_blood_bottle",
                         () -> new BatBloodBottleItem(properties("bat_blood_bottle")

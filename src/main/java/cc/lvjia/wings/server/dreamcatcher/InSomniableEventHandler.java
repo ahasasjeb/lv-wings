@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.NoteBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
+@SuppressWarnings("null")
 public final class InSomniableEventHandler {
     private InSomniableEventHandler() {
     }

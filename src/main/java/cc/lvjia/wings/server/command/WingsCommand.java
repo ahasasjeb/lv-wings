@@ -17,13 +17,16 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.permissions.PermissionCheck;
 import net.minecraft.server.permissions.Permissions;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
 
+@SuppressWarnings("null")
 public class WingsCommand {
     private static final SimpleCommandExceptionType ERROR_GIVE_FAILED = new SimpleCommandExceptionType(
             Component.translatable("commands.wings.give.failed"));
@@ -31,10 +34,11 @@ public class WingsCommand {
     private static final SimpleCommandExceptionType ERROR_TAKE_FAILED = new SimpleCommandExceptionType(
             Component.translatable("commands.wings.take.failed"));
 
-    private static final PermissionCheck PERMISSION_CHECK = new PermissionCheck.Require(
+    private static final @NonNull PermissionCheck PERMISSION_CHECK = new PermissionCheck.Require(
             Permissions.COMMANDS_GAMEMASTER);
 
-    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext) {
+    public static void register(@NonNull CommandDispatcher<CommandSourceStack> dispatcher,
+            @NonNull CommandBuildContext buildContext) {
         dispatcher.register(literal("wings").requires(Commands.hasPermission(PERMISSION_CHECK))
                 .then(literal("give")
                         .then(argument("wings", ResourceArgument.resource(buildContext, WingsMod.WINGS_KEY))
@@ -52,12 +56,13 @@ public class WingsCommand {
                                         .executes(WingsCommand::takeSpecificWings)))));
     }
 
-    private static FlightApparatus getWings(CommandContext<CommandSourceStack> ctx, String name)
+    private static @NonNull FlightApparatus getWings(@NonNull CommandContext<CommandSourceStack> ctx, @NonNull String name)
             throws CommandSyntaxException {
-        return ResourceArgument.getResource(ctx, name, WingsMod.WINGS_KEY).value();
+        return Objects.requireNonNull(ResourceArgument.getResource(ctx, name, WingsMod.WINGS_KEY).value(),
+                "wings argument");
     }
 
-    private static Collection<ServerPlayer> getSelf(CommandContext<CommandSourceStack> ctx)
+    private static @NonNull Collection<ServerPlayer> getSelf(@NonNull CommandContext<CommandSourceStack> ctx)
             throws CommandSyntaxException {
         return List.of(ctx.getSource().getPlayerOrException());
     }

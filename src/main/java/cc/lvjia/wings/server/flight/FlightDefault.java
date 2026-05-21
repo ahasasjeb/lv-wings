@@ -18,11 +18,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
 
+@SuppressWarnings("null")
 public final class FlightDefault implements Flight {
     private static final CubicBezier FLY_AMOUNT_CURVE = new CubicBezier(0.37F, 0.13F, 0.3F, 1.12F);
 
@@ -70,16 +72,16 @@ public final class FlightDefault implements Flight {
 
     private WingState state = this.voidState;
 
-    private static Identifier wingIdFor(FlightApparatus wing) {
+    private static Identifier wingIdFor(@Nullable FlightApparatus wing) {
         Identifier key = wing != null ? WingsMod.WINGS.getKey(wing) : null;
         return key != null ? key : DEFAULT_WING_ID;
     }
 
-    private static FlightApparatus wingFrom(Identifier id) {
+    private static FlightApparatus wingFrom(@Nullable Identifier id) {
         return id != null ? WingsMod.WINGS.getOptional(id).orElse(FlightApparatus.NONE) : FlightApparatus.NONE;
     }
 
-    private static FlightApparatus wingFrom(String rawId) {
+    private static FlightApparatus wingFrom(@Nullable String rawId) {
         return wingFrom(Identifier.tryParse(rawId));
     }
 
@@ -347,7 +349,7 @@ public final class FlightDefault implements Flight {
 
         @Override
         public FlightDefault deserialize(CompoundTag compound) {
-            FlightDefault f = this.factory.get();
+            FlightDefault f = Objects.requireNonNull(this.factory.get(), "flight factory");
             f.setIsFlying(compound.getBoolean(IS_FLYING).orElse(false), PlayerSet.ofAll());
             f.setTimeFlying(compound.getInt(TIME_FLYING).orElse(INITIAL_TIME_FLYING));
             String wingIdRaw = compound.contains(WING)
@@ -364,7 +366,7 @@ public final class FlightDefault implements Flight {
         }
 
         public FlightDefault deserialize(ValueInput input) {
-            FlightDefault flight = this.factory.get();
+            FlightDefault flight = Objects.requireNonNull(this.factory.get(), "flight factory");
             flight.setIsFlying(input.getBooleanOr(IS_FLYING, false), PlayerSet.ofAll());
             flight.setTimeFlying(input.getIntOr(TIME_FLYING, INITIAL_TIME_FLYING));
             String wingIdRaw = input.getStringOr(WING, DEFAULT_WING_ID.toString());

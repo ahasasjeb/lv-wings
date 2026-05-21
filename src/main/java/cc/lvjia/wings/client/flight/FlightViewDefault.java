@@ -11,9 +11,13 @@ import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
+@SuppressWarnings("null")
 public final class FlightViewDefault implements FlightView {
     private static final WingState ABSENT_ANIMATOR = new WingState() {
         @Override
@@ -22,7 +26,7 @@ public final class FlightViewDefault implements FlightView {
         }
 
         @Override
-        public WingState next(WingForm<?> form) {
+        public WingState next(@NonNull WingForm<? extends @NonNull Animator> form) {
             return PresentWingState.newState(form);
         }
 
@@ -35,17 +39,17 @@ public final class FlightViewDefault implements FlightView {
         }
     };
 
-    private final Flight flight;
+    private final @NonNull Flight flight;
 
-    private final Player player;
+    private final @NonNull Player player;
 
-    private WingState animator = ABSENT_ANIMATOR;
+    private @NonNull WingState animator = ABSENT_ANIMATOR;
 
     private int lastUpdateTick = Integer.MIN_VALUE;
 
-    public FlightViewDefault(Player player, Flight flight) {
-        this.player = player;
-        this.flight = flight;
+    public FlightViewDefault(@NonNull Player player, @NonNull Flight flight) {
+        this.player = Objects.requireNonNull(player, "player");
+        this.flight = Objects.requireNonNull(flight, "flight");
     }
 
     @Override
@@ -74,24 +78,24 @@ public final class FlightViewDefault implements FlightView {
     }
 
     private interface Strategy {
-        void update(Flight flight, Player player);
+        void update(@NonNull Flight flight, @NonNull Player player);
 
-        void ifFormPresent(Consumer<FormRenderer> consumer);
+        void ifFormPresent(@NonNull Consumer<FormRenderer> consumer);
     }
 
     interface WingState {
-        WingState nextAbsent();
+        @NonNull WingState nextAbsent();
 
-        WingState next(WingForm<?> form);
+        WingState next(@NonNull WingForm<? extends @NonNull Animator> form);
 
-        void update(Flight flight, Player player);
+        void update(@NonNull Flight flight, @NonNull Player player);
 
-        void ifFormPresent(Consumer<FormRenderer> consumer);
+        void ifFormPresent(@NonNull Consumer<FormRenderer> consumer);
     }
 
-    private record PresentWingState(WingForm<?> wing, Strategy behavior) implements WingState {
+    private record PresentWingState(@NonNull WingForm<? extends @NonNull Animator> wing, Strategy behavior) implements WingState {
 
-        public static <T extends Animator> WingState newState(WingForm<T> shape) {
+        public static <T extends @NonNull Animator> WingState newState(@NonNull WingForm<T> shape) {
             return new PresentWingState(shape, new WingStrategy<>(shape));
         }
 
@@ -101,7 +105,7 @@ public final class FlightViewDefault implements FlightView {
         }
 
         @Override
-        public WingState next(WingForm<?> form) {
+        public WingState next(@NonNull WingForm<? extends @NonNull Animator> form) {
             if (this.wing.equals(form)) {
                 return this;
             }
@@ -118,74 +122,76 @@ public final class FlightViewDefault implements FlightView {
             this.behavior.ifFormPresent(consumer);
         }
 
-        private static class WingStrategy<T extends Animator> implements Strategy {
-            private final WingForm<T> shape;
+        private static class WingStrategy<T extends @NonNull Animator> implements Strategy {
+            private final @NonNull WingForm<T> shape;
 
-            private final T animator;
+            private final @NonNull T animator;
 
-            private final FormRenderer renderer;
+            private final @NonNull FormRenderer renderer;
 
-            private State state;
+            private @NonNull State state;
 
-            private FlightAnimationState remoteAnimationState;
+            private @Nullable FlightAnimationState remoteAnimationState;
 
-            public WingStrategy(WingForm<T> shape) {
-                this.shape = shape;
-                this.animator = shape.createAnimator();
+            public WingStrategy(@NonNull WingForm<T> shape) {
+                this.shape = Objects.requireNonNull(shape, "shape");
+                this.animator = Objects.requireNonNull(shape.createAnimator(), "animator");
                 this.state = new StateIdle();
                 this.renderer = new FormRenderer() {
                     @Override
-                    public Identifier getTexture() {
+                    public @NonNull Identifier getTexture() {
                         return WingStrategy.this.shape.getTexture();
                     }
 
                     @Override
-                    public RenderType getRenderType() {
+                    public @NonNull RenderType getRenderType() {
                         return WingStrategy.this.shape.getRenderType();
                     }
 
                     @Override
-                    public void render(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha, float delta) {
+                    public void render(@NonNull PoseStack matrixStack, @NonNull VertexConsumer buffer, int packedLight,
+                            int packedOverlay, float red, float green, float blue, float alpha, float delta) {
                         WingStrategy.this.shape.getModel().render(WingStrategy.this.animator, delta, matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
                     }
                 };
             }
 
             @Override
-            public void update(Flight flight, Player player) {
+            public void update(@NonNull Flight flight, @NonNull Player player) {
                 this.animator.update();
                 if (!player.isLocalPlayer()) {
                     this.applyRemoteAnimationState(flight.getAnimationState());
                     return;
                 }
                 this.remoteAnimationState = null;
-                State state = this.state.update(
+                State state = Objects.requireNonNull(this.state.update(
                         flight,
                         player.getX() - player.xo,
                         player.getY() - player.yo,
                         player.getZ() - player.zo,
                         player
-                );
+                ), "state");
                 if (!this.state.equals(state)) {
                     state.beginAnimation(this.animator);
                 }
                 this.state = state;
             }
 
-            private void applyRemoteAnimationState(FlightAnimationState animationState) {
-                if (this.remoteAnimationState == animationState) {
+            private void applyRemoteAnimationState(@NonNull FlightAnimationState animationState) {
+                FlightAnimationState safeAnimationState = Objects.requireNonNull(animationState, "animation state");
+                if (this.remoteAnimationState == safeAnimationState) {
                     return;
                 }
-                this.remoteAnimationState = animationState;
-                State state = this.createState(animationState);
+                this.remoteAnimationState = safeAnimationState;
+                State state = this.createState(safeAnimationState);
                 if (!this.state.getClass().equals(state.getClass())) {
                     state.beginAnimation(this.animator);
                 }
                 this.state = state;
             }
 
-            private State createState(FlightAnimationState animationState) {
-                return switch (animationState) {
+            private @NonNull State createState(@NonNull FlightAnimationState animationState) {
+                return switch (Objects.requireNonNull(animationState, "animation state")) {
                     case LIFT -> new StateLift();
                     case GLIDE -> new StateGlide();
                     case LAND -> new StateLand();

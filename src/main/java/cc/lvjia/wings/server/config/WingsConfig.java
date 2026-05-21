@@ -1,5 +1,6 @@
 package cc.lvjia.wings.server.config;
 
+@SuppressWarnings("null")
 public final class WingsConfig {
     private static volatile Data DATA = Data.defaults();
     private static volatile FlightAntiCheatSettings FLIGHT_ANTI_CHEAT_SETTINGS = DATA.flightAntiCheat.toSettings();

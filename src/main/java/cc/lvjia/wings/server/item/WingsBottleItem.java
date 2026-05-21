@@ -12,7 +12,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.jspecify.annotations.NonNull;
 
+@SuppressWarnings("null")
 public class WingsBottleItem extends Item {
     private final FlightApparatus wings;
 
@@ -37,12 +39,13 @@ public class WingsBottleItem extends Item {
     }
 
     @Override
-    public boolean isFoil(ItemStack stack) {
+    public boolean isFoil(@NonNull ItemStack stack) {
         return true;
     }
 
     @Override
-    public ItemStack finishUsingItem(ItemStack stack, Level world, LivingEntity living) {
+    public @NonNull ItemStack finishUsingItem(@NonNull ItemStack stack, @NonNull Level world,
+            @NonNull LivingEntity living) {
         ItemStack result = super.finishUsingItem(stack, world, living);
 
         if (!world.isClientSide() && living instanceof ServerPlayer player) {

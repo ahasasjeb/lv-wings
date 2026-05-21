@@ -14,7 +14,6 @@ public class Proxy {
         this.network.register();
     }
 
-    @SuppressWarnings("deprecation")
     public void addFlightListeners(Player player, Flight instance) {
         if (player instanceof ServerPlayer serverPlayer) {
             instance.registerFlyingListener(isFlying -> {

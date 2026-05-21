@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+@SuppressWarnings("null")
 public final class WingsBrewingRecipes {
     private static final List<Mix> MIXES = List.of(
             mix(Items.FEATHER, WingsItems.ANGEL_WINGS_BOTTLE),
@@ -57,7 +58,7 @@ public final class WingsBrewingRecipes {
         }
         Optional<Holder<Potion>> potion = source.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY)
                 .potion();
-        return potion.filter(holder -> holder.is(Potions.SLOW_FALLING) || holder.is(Potions.LONG_SLOW_FALLING))
+        return potion.filter(holder -> holder.is(Potions.SLOW_FALLING.key()) || holder.is(Potions.LONG_SLOW_FALLING.key()))
                 .isPresent();
     }
 

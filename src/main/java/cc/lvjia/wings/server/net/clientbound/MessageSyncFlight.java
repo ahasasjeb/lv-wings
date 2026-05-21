@@ -19,6 +19,7 @@ import org.apache.logging.log4j.Logger;
  * <p>
  * 客户端收到后会把数据写入玩家的 attachment，并刷新相关渲染/视图缓存。
  */
+@SuppressWarnings("null")
 public record MessageSyncFlight(int playerId, Flight flight) implements Message {
     public static final CustomPacketPayload.Type<MessageSyncFlight> TYPE = new CustomPacketPayload.Type<>(
             WingsMod.locate("sync_flight"));

@@ -16,6 +16,7 @@ import org.apache.logging.log4j.Logger;
  * <p>
  * 负责在 {@link RegisterPayloadHandlersEvent} 时注册 payload 处理器，并提供常用的发送方法。
  */
+@SuppressWarnings("null")
 public final class Network {
     private static final Logger LOGGER = LogManager.getLogger("WingsNetwork");
 

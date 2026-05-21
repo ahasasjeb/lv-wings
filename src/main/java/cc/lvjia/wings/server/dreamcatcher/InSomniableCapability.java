@@ -6,6 +6,7 @@ import net.minecraft.world.entity.player.Player;
 
 import java.util.Optional;
 
+@SuppressWarnings("null")
 public final class InSomniableCapability {
     private InSomniableCapability() {
     }

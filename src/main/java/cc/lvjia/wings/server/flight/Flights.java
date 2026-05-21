@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
+@SuppressWarnings("null")
 public final class Flights {
     private Flights() {
     }

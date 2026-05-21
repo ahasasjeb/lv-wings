@@ -5,15 +5,19 @@ import com.mojang.blaze3d.platform.InputConstants;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.minecraft.client.KeyMapping;
+import org.jspecify.annotations.NonNull;
 
+import java.util.Objects;
+
+@SuppressWarnings("null")
 public final class KeyInputListener {
-    private final ImmutableListMultimap<KeyMapping, Runnable> bindings;
+    private final @NonNull ImmutableListMultimap<@NonNull KeyMapping, @NonNull Runnable> bindings;
 
-    private KeyInputListener(ImmutableListMultimap<KeyMapping, Runnable> bindings) {
-        this.bindings = bindings;
+    private KeyInputListener(@NonNull ImmutableListMultimap<@NonNull KeyMapping, @NonNull Runnable> bindings) {
+        this.bindings = Objects.requireNonNull(bindings, "bindings");
     }
 
-    public static Builder builder() {
+    public static @NonNull Builder builder() {
         return new BuilderRoot();
     }
 
@@ -25,43 +29,44 @@ public final class KeyInputListener {
     }
 
     public interface Builder {
-        CategoryBuilder category(KeyMapping.Category category);
+        @NonNull CategoryBuilder category(KeyMapping.Category category);
 
-        KeyInputListener build();
+        @NonNull KeyInputListener build();
     }
 
     public interface CategoryBuilder extends Builder {
-        BindingBuilder key(String desc, int keyCode);
+        @NonNull BindingBuilder key(@NonNull String desc, int keyCode);
     }
 
     public static final class BuilderRoot implements Builder {
-        private final ImmutableListMultimap.Builder<KeyMapping, Runnable> bindings = ImmutableListMultimap.builder();
+        private final ImmutableListMultimap.Builder<@NonNull KeyMapping, @NonNull Runnable> bindings =
+                ImmutableListMultimap.builder();
 
         @Override
-        public CategoryBuilder category(KeyMapping.Category category) {
+        public @NonNull CategoryBuilder category(KeyMapping.Category category) {
             return new CategoryBuilderRoot(this, category);
         }
 
         @Override
-        public KeyInputListener build() {
+        public @NonNull KeyInputListener build() {
             return new KeyInputListener(this.bindings.build());
         }
     }
 
     private static abstract class ChildBuilder<P extends Builder> implements Builder {
-        final P parent;
+        final @NonNull P parent;
 
-        private ChildBuilder(P parent) {
-            this.parent = parent;
+        private ChildBuilder(@NonNull P parent) {
+            this.parent = Objects.requireNonNull(parent, "parent");
         }
 
         @Override
-        public final CategoryBuilder category(KeyMapping.Category category) {
+        public final @NonNull CategoryBuilder category(KeyMapping.Category category) {
             return this.parent.category(category);
         }
 
         @Override
-        public final KeyInputListener build() {
+        public final @NonNull KeyInputListener build() {
             return this.parent.build();
         }
     }
@@ -69,34 +74,35 @@ public final class KeyInputListener {
     private static final class CategoryBuilderRoot extends ChildBuilder<BuilderRoot> implements CategoryBuilder {
         private final KeyMapping.Category category;
 
-        private CategoryBuilderRoot(BuilderRoot delegate, KeyMapping.Category category) {
+        private CategoryBuilderRoot(@NonNull BuilderRoot delegate, KeyMapping.Category category) {
             super(delegate);
-            this.category = category;
+            this.category = Objects.requireNonNull(category, "category");
         }
 
         @Override
-        public BindingBuilder key(String desc, int keyCode) {
+        public @NonNull BindingBuilder key(@NonNull String desc, int keyCode) {
             KeyMapping binding = KeyMappingHelper
-                    .registerKeyMapping(new KeyMapping(desc, InputConstants.Type.KEYSYM, keyCode, this.category));
+                    .registerKeyMapping(new KeyMapping(Objects.requireNonNull(desc, "description"),
+                            InputConstants.Type.KEYSYM, keyCode, this.category));
             return new BindingBuilder(this, binding);
         }
     }
 
     public static final class BindingBuilder extends ChildBuilder<CategoryBuilderRoot> implements CategoryBuilder {
-        private final KeyMapping binding;
+        private final @NonNull KeyMapping binding;
 
-        private BindingBuilder(CategoryBuilderRoot delegate, KeyMapping binding) {
+        private BindingBuilder(@NonNull CategoryBuilderRoot delegate, @NonNull KeyMapping binding) {
             super(delegate);
-            this.binding = binding;
+            this.binding = Objects.requireNonNull(binding, "binding");
         }
 
-        public BindingBuilder onPress(Runnable runnable) {
-            this.parent.parent.bindings.put(this.binding, runnable);
+        public @NonNull BindingBuilder onPress(@NonNull Runnable runnable) {
+            this.parent.parent.bindings.put(this.binding, Objects.requireNonNull(runnable, "runnable"));
             return this;
         }
 
         @Override
-        public BindingBuilder key(String desc, int keyCode) {
+        public @NonNull BindingBuilder key(@NonNull String desc, int keyCode) {
             return this.parent.key(desc, keyCode);
         }
     }

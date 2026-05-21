@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
+@SuppressWarnings("null")
 public final class WingsItemsConfig {
     public static final ConfigWingSettings ANGEL = new ConfigWingSettings(WingsMod.Names.ANGEL);
     public static final ConfigWingSettings PARROT = new ConfigWingSettings(WingsMod.Names.PARROT);

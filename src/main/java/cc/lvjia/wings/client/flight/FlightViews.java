@@ -6,6 +6,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.WeakHashMap;
 
@@ -23,7 +24,10 @@ public final class FlightViews {
     public static Optional<FlightView> get(LivingEntity entity) {
         if (entity instanceof AbstractClientPlayer player) {
             return Flights.get(player)
-                    .map(flight -> VIEWS.computeIfAbsent(player, ignored -> new FlightViewDefault(player, flight)));
+                    .map(flight -> Objects.requireNonNull(
+                            VIEWS.computeIfAbsent(player, ignored -> new FlightViewDefault(player,
+                                    Objects.requireNonNull(flight, "flight"))),
+                            "flight view"));
         }
         return Optional.empty();
     }

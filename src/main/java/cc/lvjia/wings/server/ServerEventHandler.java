@@ -28,9 +28,14 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import org.jspecify.annotations.NonNull;
 
+import java.util.Objects;
+
+@SuppressWarnings("null")
 public final class ServerEventHandler {
     private ServerEventHandler() {
     }
@@ -59,9 +64,11 @@ public final class ServerEventHandler {
         InSomniableEventHandler.register();
     }
 
-    public static InteractionResult onPlayerEntityInteract(Player player, InteractionHand hand, Entity target) {
+    public static @NonNull InteractionResult onPlayerEntityInteract(@NonNull Player player, @NonNull InteractionHand hand,
+            @NonNull Entity target) {
         ItemStack stack = player.getItemInHand(hand);
-        if (target instanceof Bat && stack.getItem() == Items.GLASS_BOTTLE) {
+        Item glassBottle = Objects.requireNonNull(Items.GLASS_BOTTLE, "glass bottle");
+        if (target instanceof Bat && stack.getItem() == glassBottle) {
             player.level().playSound(
                     player,
                     player.getX(), player.getY(), player.getZ(),
@@ -72,8 +79,8 @@ public final class ServerEventHandler {
             if (!player.getAbilities().instabuild) {
                 stack.shrink(1);
             }
-            player.awardStat(Stats.ITEM_USED.get(Items.GLASS_BOTTLE));
-            ItemStack batBlood = new ItemStack(WingsItems.BAT_BLOOD_BOTTLE.get());
+            player.awardStat(Stats.ITEM_USED.get(glassBottle));
+            ItemStack batBlood = new ItemStack(Objects.requireNonNull(WingsItems.BAT_BLOOD_BOTTLE.get(), "bat blood bottle"));
             if (stack.isEmpty()) {
                 player.setItemInHand(hand, batBlood);
             } else if (!player.getInventory().add(batBlood)) {
@@ -84,7 +91,7 @@ public final class ServerEventHandler {
         return InteractionResult.PASS;
     }
 
-    public static void onPlayerTick(Player player) {
+    public static void onPlayerTick(@NonNull Player player) {
         Flights.get(player).ifPresent(flight -> {
             if (clearSpectatorFlightState(player, flight)) {
                 return;
@@ -100,14 +107,14 @@ public final class ServerEventHandler {
         });
     }
 
-    public static void onLivingDeath(LivingEntity entity) {
+    public static void onLivingDeath(@NonNull LivingEntity entity) {
         Flights.ifPlayer(entity, (player, flight) -> {
             flight.setIsFlying(false, Flight.PlayerSet.ofAll());
             FlightSpeedAntiCheat.clear(player);
         });
     }
 
-    public static void onPlayerFlightCheck(PlayerFlightCheckEvent event) {
+    public static void onPlayerFlightCheck(@NonNull PlayerFlightCheckEvent event) {
         if (event.getEntity().isSpectator()) {
             return;
         }
@@ -115,7 +122,7 @@ public final class ServerEventHandler {
                 .ifPresent(flight -> event.setFlying());
     }
 
-    public static void onPlayerFlown(PlayerFlownEvent event) {
+    public static void onPlayerFlown(@NonNull PlayerFlownEvent event) {
         Player player = event.getEntity();
         Flights.get(player).ifPresent(flight -> {
             if (clearSpectatorFlightState(player, flight)) {
@@ -128,7 +135,7 @@ public final class ServerEventHandler {
         });
     }
 
-    public static void onGetLivingHeadLimit(GetLivingHeadLimitEvent event) {
+    public static void onGetLivingHeadLimit(@NonNull GetLivingHeadLimitEvent event) {
         Flights.ifPlayer(event.getEntity(), (player, flight) -> {
             if (player.isSpectator()) {
                 return;
@@ -140,7 +147,7 @@ public final class ServerEventHandler {
         });
     }
 
-    private static boolean clearSpectatorFlightState(Player player, Flight flight) {
+    private static boolean clearSpectatorFlightState(@NonNull Player player, @NonNull Flight flight) {
         if (!player.isSpectator()) {
             return false;
         }

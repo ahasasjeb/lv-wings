@@ -9,6 +9,7 @@ import net.minecraft.world.effect.MobEffect;
 /**
  * 药水效果注册表。
  */
+@SuppressWarnings("null")
 public final class WingsEffects {
     public static final Holder<MobEffect> WINGS = register("wings", new WingedEffect());
 

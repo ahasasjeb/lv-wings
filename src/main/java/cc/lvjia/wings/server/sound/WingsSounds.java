@@ -7,6 +7,7 @@ import net.minecraft.sounds.SoundEvent;
 
 import java.util.function.Supplier;
 
+@SuppressWarnings("null")
 public final class WingsSounds {
     public static final Supplier<SoundEvent> ITEM_ARMOR_EQUIP_WINGS = create("item.armor.equip_wings");
     public static final Supplier<SoundEvent> ITEM_WINGS_FLYING = create("item.wings.flying");

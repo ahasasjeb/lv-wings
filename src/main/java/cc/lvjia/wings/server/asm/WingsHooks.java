@@ -11,6 +11,7 @@ import net.minecraft.world.phys.Vec3;
  * <p>
  * 这些方法通常由注入点触发，负责创建并投递对应事件，或在必要时替换/增强原版逻辑。
  */
+@SuppressWarnings("null")
 public final class WingsHooks {
     private WingsHooks() {
     }

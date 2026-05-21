@@ -2,6 +2,7 @@ package cc.lvjia.wings.server.config;
 
 import cc.lvjia.wings.server.item.WingSettings;
 import net.minecraft.resources.Identifier;
+import org.jspecify.annotations.Nullable;
 
 public final class ConfigWingSettings implements WingSettings {
     private static final int MIN_SATIATION = 0;
@@ -62,7 +63,7 @@ public final class ConfigWingSettings implements WingSettings {
         return this.defaults.copy();
     }
 
-    public void apply(Data data) {
+    public void apply(@Nullable Data data) {
         this.current = (data != null ? data : this.defaults).copy().normalize();
     }
 

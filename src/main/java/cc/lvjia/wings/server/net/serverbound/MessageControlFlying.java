@@ -25,6 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>
  * 服务端会再次校验玩家是否允许飞行（例如是否拥有翅膀/是否满足条件）。
  */
+@SuppressWarnings("null")
 public record MessageControlFlying(boolean isFlying) implements Message {
     public static final CustomPacketPayload.Type<MessageControlFlying> TYPE = new CustomPacketPayload.Type<>(
             WingsMod.locate("control_flying"));

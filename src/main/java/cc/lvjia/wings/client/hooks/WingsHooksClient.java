@@ -18,6 +18,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MapItem;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.invoke.MethodHandle;
 
@@ -68,7 +69,7 @@ public final class WingsHooksClient {
         }
     }
 
-    private static AbstractClientPlayer resolvePlayer(AvatarRenderState state) {
+    private static @Nullable AbstractClientPlayer resolvePlayer(@Nullable AvatarRenderState state) {
         AbstractClientPlayer player = RENDERING_PLAYER.get();
         if (player != null) {
             return player;
@@ -91,7 +92,7 @@ public final class WingsHooksClient {
         if (isMainHand) {
             return true;
         }
-        if (!(player instanceof LocalPlayer localPlayer) || hand != InteractionHand.OFF_HAND) {
+        if (!(player instanceof LocalPlayer) || hand != InteractionHand.OFF_HAND) {
             return false;
         }
         return canRenderEmptyOffhand(itemStack, itemStackMainHand);

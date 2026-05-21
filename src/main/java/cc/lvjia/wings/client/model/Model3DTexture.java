@@ -5,11 +5,13 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.core.Direction;
+import org.jspecify.annotations.NonNull;
 
 import java.lang.reflect.*;
 import java.util.EnumSet;
 import java.util.Objects;
 
+@SuppressWarnings("null")
 public final class Model3DTexture extends ModelPart.Cube {
     private static final Field POLYGONS_FIELD = findPolygonsField();
     private final int width;
@@ -34,10 +36,10 @@ public final class Model3DTexture extends ModelPart.Cube {
         this.v2 = v2;
         int faceCount = 2 + 2 * width + 2 * height;
         Object polygonsOld = Objects.requireNonNull(getPolygons(this));
-        Class<?> polygonClass = polygonsOld.getClass().getComponentType();
+        Class<?> polygonClass = Objects.requireNonNull(polygonsOld.getClass().getComponentType(), "polygon class");
         Field verticesField = findArrayField(polygonClass, "vertices");
         Class<?> vertexArrayClass = verticesField.getType();
-        Class<?> vertexClass = vertexArrayClass.getComponentType();
+        Class<?> vertexClass = Objects.requireNonNull(vertexArrayClass.getComponentType(), "vertex class");
         Constructor<?> vertexCtor;
         try {
             vertexCtor = vertexClass.getDeclaredConstructor(float.class, float.class, float.class, float.class,
@@ -157,7 +159,8 @@ public final class Model3DTexture extends ModelPart.Cube {
     }
 
     @Override
-    public void compile(PoseStack.Pose pose, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+    public void compile(PoseStack.@NonNull Pose pose, @NonNull VertexConsumer buffer, int packedLight,
+            int packedOverlay, int color) {
         // Wrap buffer to bypass Sodium's vertex writer optimization
         VertexConsumer safeBuffer = Objects.requireNonNull(buffer, "vertex consumer");
         super.compile(pose, SodiumBypassVertexConsumer.wrap(safeBuffer), packedLight, packedOverlay, color);

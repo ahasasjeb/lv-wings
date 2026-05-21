@@ -11,6 +11,7 @@ import cc.lvjia.wings.client.model.ModelWings;
 import cc.lvjia.wings.client.model.ModelWingsAvian;
 import cc.lvjia.wings.client.model.ModelWingsInsectoid;
 import cc.lvjia.wings.client.renderer.LayerWings;
+import cc.lvjia.wings.server.apparatus.FlightApparatus;
 import cc.lvjia.wings.server.flight.Flight;
 import cc.lvjia.wings.server.flight.Flights;
 import cc.lvjia.wings.server.item.BatBloodBottleItem;
@@ -28,8 +29,10 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jspecify.annotations.NonNull;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public final class ClientProxy extends Proxy {
@@ -37,63 +40,72 @@ public final class ClientProxy extends Proxy {
 
     private static final KeyMapping.Category WINGS_KEY_CATEGORY = new KeyMapping.Category(WingsMod.locate("wings"));
 
-    public static void registerWingForms(EntityModelSet modelSet) {
+    public static void registerWingForms(@NonNull EntityModelSet modelSet) {
         WingForm.clear();
         WingForm.register(WingsMod.ANGEL_WINGS,
-                createAvianWings(modelSet, WingsMod.WINGS.getKey(WingsMod.ANGEL_WINGS)));
+                createAvianWings(modelSet, wingKey(WingsMod.ANGEL_WINGS)));
         WingForm.register(WingsMod.PARROT_WINGS,
-                createAvianWings(modelSet, WingsMod.WINGS.getKey(WingsMod.PARROT_WINGS)));
-        WingForm.register(WingsMod.BAT_WINGS, createAvianWings(modelSet, WingsMod.WINGS.getKey(WingsMod.BAT_WINGS)));
+                createAvianWings(modelSet, wingKey(WingsMod.PARROT_WINGS)));
+        WingForm.register(WingsMod.BAT_WINGS, createAvianWings(modelSet, wingKey(WingsMod.BAT_WINGS)));
         WingForm.register(WingsMod.BLUE_BUTTERFLY_WINGS,
-                createInsectoidWings(modelSet, WingsMod.WINGS.getKey(WingsMod.BLUE_BUTTERFLY_WINGS)));
+                createInsectoidWings(modelSet, wingKey(WingsMod.BLUE_BUTTERFLY_WINGS)));
         WingForm.register(WingsMod.DRAGON_WINGS,
-                createAvianWings(modelSet, WingsMod.WINGS.getKey(WingsMod.DRAGON_WINGS)));
-        WingForm.register(WingsMod.EVIL_WINGS, createAvianWings(modelSet, WingsMod.WINGS.getKey(WingsMod.EVIL_WINGS)));
+                createAvianWings(modelSet, wingKey(WingsMod.DRAGON_WINGS)));
+        WingForm.register(WingsMod.EVIL_WINGS, createAvianWings(modelSet, wingKey(WingsMod.EVIL_WINGS)));
         WingForm.register(WingsMod.FAIRY_WINGS,
-                createInsectoidWings(modelSet, WingsMod.WINGS.getKey(WingsMod.FAIRY_WINGS)));
-        WingForm.register(WingsMod.FIRE_WINGS, createAvianWings(modelSet, WingsMod.WINGS.getKey(WingsMod.FIRE_WINGS)));
+                createInsectoidWings(modelSet, wingKey(WingsMod.FAIRY_WINGS)));
+        WingForm.register(WingsMod.FIRE_WINGS, createAvianWings(modelSet, wingKey(WingsMod.FIRE_WINGS)));
         WingForm.register(WingsMod.MONARCH_BUTTERFLY_WINGS,
-                createInsectoidWings(modelSet, WingsMod.WINGS.getKey(WingsMod.MONARCH_BUTTERFLY_WINGS)));
+                createInsectoidWings(modelSet, wingKey(WingsMod.MONARCH_BUTTERFLY_WINGS)));
         WingForm.register(WingsMod.SLIME_WINGS,
-                createInsectoidWings(modelSet, WingsMod.WINGS.getKey(WingsMod.SLIME_WINGS)));
+                createInsectoidWings(modelSet, wingKey(WingsMod.SLIME_WINGS)));
         WingForm.register(WingsMod.LVJIA_SUPER_WINGS,
-                createEndPortalWings(modelSet, WingsMod.WINGS.getKey(WingsMod.LVJIA_SUPER_WINGS)));
+                createEndPortalWings(modelSet, wingKey(WingsMod.LVJIA_SUPER_WINGS)));
     }
 
-    static WingForm<AnimatorAvian> createAvianWings(EntityModelSet modelSet, Identifier name) {
+    static @NonNull WingForm<@NonNull AnimatorAvian> createAvianWings(@NonNull EntityModelSet modelSet, @NonNull Identifier name) {
         return ClientProxy.createWings(name, AnimatorAvian::new,
                 new ModelWingsAvian(modelSet.bakeLayer(LayerWings.AVIAN_WINGS)));
     }
 
-    static WingForm<AnimatorAvian> createEndPortalWings(EntityModelSet modelSet, Identifier name) {
+    static @NonNull WingForm<@NonNull AnimatorAvian> createEndPortalWings(@NonNull EntityModelSet modelSet, @NonNull Identifier name) {
         return ClientProxy.createWings(name, AnimatorAvian::new,
                 new ModelWingsAvian(modelSet.bakeLayer(LayerWings.AVIAN_WINGS)), RenderTypes::endPortal);
     }
 
-    static WingForm<AnimatorInsectoid> createInsectoidWings(EntityModelSet modelSet, Identifier name) {
+    static @NonNull WingForm<@NonNull AnimatorInsectoid> createInsectoidWings(@NonNull EntityModelSet modelSet, @NonNull Identifier name) {
         return ClientProxy.createWings(name, AnimatorInsectoid::new,
                 new ModelWingsInsectoid(modelSet.bakeLayer(LayerWings.INSECTOID_WINGS)));
     }
 
-    private static <A extends Animator> WingForm<A> createWings(Identifier name, Supplier<A> animator,
-            ModelWings<A> model) {
-        return createWings(name, animator, model, null);
+    private static <A extends @NonNull Animator> @NonNull WingForm<A> createWings(@NonNull Identifier name,
+            @NonNull Supplier<@NonNull A> animator, @NonNull ModelWings<A> model) {
+        String texturePath = "textures/entity/" + name.getPath() + ".png";
+        Identifier texture = Objects.requireNonNull(
+                Identifier.tryBuild(Objects.requireNonNull(name.getNamespace(), "namespace"), texturePath),
+                "Invalid texture path: " + texturePath);
+        return WingForm.of(
+                animator,
+                model,
+                texture);
     }
 
-    private static <A extends Animator> WingForm<A> createWings(Identifier name, Supplier<A> animator,
-            ModelWings<A> model, Supplier<RenderType> renderType) {
-        String texturePath = String.format("textures/entity/%s.png", name.getPath());
-        Identifier texture = Identifier.tryBuild(name.getNamespace(), texturePath);
-        if (texture == null) {
-            throw new IllegalArgumentException("Invalid texture path: " + texturePath);
-        }
-        Supplier<RenderType> actualRenderType = renderType != null ? renderType
-                : () -> RenderTypes.entityCutout(texture);
+    private static <A extends @NonNull Animator> @NonNull WingForm<A> createWings(@NonNull Identifier name,
+            @NonNull Supplier<@NonNull A> animator, @NonNull ModelWings<A> model,
+            @NonNull Supplier<@NonNull RenderType> renderType) {
+        String texturePath = "textures/entity/" + name.getPath() + ".png";
+        Identifier texture = Objects.requireNonNull(
+                Identifier.tryBuild(Objects.requireNonNull(name.getNamespace(), "namespace"), texturePath),
+                "Invalid texture path: " + texturePath);
         return WingForm.of(
                 animator,
                 model,
                 texture,
-                actualRenderType);
+                renderType);
+    }
+
+    private static @NonNull Identifier wingKey(FlightApparatus wing) {
+        return Objects.requireNonNull(WingsMod.WINGS.getKey(wing), "Wing is not registered: " + wing);
     }
 
     public void initClient() {

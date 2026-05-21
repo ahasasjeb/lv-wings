@@ -9,67 +9,78 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.ARGB;
+import org.jspecify.annotations.NonNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
-        private static final Field CUBES_FIELD = findCubesField();
+@SuppressWarnings("null")
+public final class ModelWingsAvian extends ModelWings<@NonNull AnimatorAvian> {
+        private static final @NonNull Field CUBES_FIELD = findCubesField();
 
-        private final ImmutableList<ModelPart> bonesLeft;
-        private final ImmutableList<ModelPart> bonesRight;
-        private final ImmutableList<ModelPart> feathersLeft;
-        private final ImmutableList<ModelPart> feathersRight;
+        private final ImmutableList<@NonNull ModelPart> bonesLeft;
+        private final ImmutableList<@NonNull ModelPart> bonesRight;
+        private final ImmutableList<@NonNull ModelPart> feathersLeft;
+        private final ImmutableList<@NonNull ModelPart> feathersRight;
 
-        private final ModelPart coracoidLeft;
-        private final ModelPart humerusLeft;
-        private final ModelPart ulnaLeft;
-        private final ModelPart carpalsLeft;
-        private final ModelPart coracoidRight;
-        private final ModelPart humerusRight;
-        private final ModelPart ulnaRight;
-        private final ModelPart carpalsRight;
-        private final ModelPart feathersCoracoidLeft;
-        private final ModelPart feathersPrimaryLeft;
-        private final ModelPart feathersSecondaryLeft;
-        private final ModelPart feathersTertiaryLeft;
-        private final ModelPart feathersCoracoidRight;
-        private final ModelPart feathersPrimaryRight;
-        private final ModelPart feathersSecondaryRight;
-        private final ModelPart feathersTertiaryRight;
-        private final RotationAngles rotation = new RotationAngles();
+        private final @NonNull ModelPart coracoidLeft;
+        private final @NonNull ModelPart humerusLeft;
+        private final @NonNull ModelPart ulnaLeft;
+        private final @NonNull ModelPart carpalsLeft;
+        private final @NonNull ModelPart coracoidRight;
+        private final @NonNull ModelPart humerusRight;
+        private final @NonNull ModelPart ulnaRight;
+        private final @NonNull ModelPart carpalsRight;
+        private final @NonNull ModelPart feathersCoracoidLeft;
+        private final @NonNull ModelPart feathersPrimaryLeft;
+        private final @NonNull ModelPart feathersSecondaryLeft;
+        private final @NonNull ModelPart feathersTertiaryLeft;
+        private final @NonNull ModelPart feathersCoracoidRight;
+        private final @NonNull ModelPart feathersPrimaryRight;
+        private final @NonNull ModelPart feathersSecondaryRight;
+        private final @NonNull ModelPart feathersTertiaryRight;
+        private final @NonNull RotationAngles rotation = new RotationAngles();
 
-        public ModelWingsAvian(ModelPart root) {
+        public ModelWingsAvian(@NonNull ModelPart root) {
                 super(root);
 
-                this.coracoidLeft = root.getChild("coracoidLeft");
-                this.humerusLeft = coracoidLeft.getChild("humerusLeft");
-                this.ulnaLeft = humerusLeft.getChild("ulnaLeft");
-                this.carpalsLeft = ulnaLeft.getChild("carpalsLeft");
+                this.coracoidLeft = Objects.requireNonNull(root.getChild("coracoidLeft"), "coracoidLeft");
+                this.humerusLeft = Objects.requireNonNull(this.coracoidLeft.getChild("humerusLeft"), "humerusLeft");
+                this.ulnaLeft = Objects.requireNonNull(this.humerusLeft.getChild("ulnaLeft"), "ulnaLeft");
+                this.carpalsLeft = Objects.requireNonNull(this.ulnaLeft.getChild("carpalsLeft"), "carpalsLeft");
 
-                this.coracoidRight = root.getChild("coracoidRight");
-                this.humerusRight = coracoidRight.getChild("humerusRight");
-                this.ulnaRight = humerusRight.getChild("ulnaRight");
-                this.carpalsRight = ulnaRight.getChild("carpalsRight");
+                this.coracoidRight = Objects.requireNonNull(root.getChild("coracoidRight"), "coracoidRight");
+                this.humerusRight = Objects.requireNonNull(this.coracoidRight.getChild("humerusRight"), "humerusRight");
+                this.ulnaRight = Objects.requireNonNull(this.humerusRight.getChild("ulnaRight"), "ulnaRight");
+                this.carpalsRight = Objects.requireNonNull(this.ulnaRight.getChild("carpalsRight"), "carpalsRight");
 
-                this.feathersCoracoidLeft = coracoidLeft.getChild("feathersCoracoidLeft");
+                this.feathersCoracoidLeft = Objects.requireNonNull(
+                                this.coracoidLeft.getChild("feathersCoracoidLeft"), "feathersCoracoidLeft");
                 add3DTexture(this.feathersCoracoidLeft, 6, 40, 0, 0, -1, 6, 8);
-                this.feathersTertiaryLeft = humerusLeft.getChild("feathersTertiaryLeft");
+                this.feathersTertiaryLeft = Objects.requireNonNull(
+                                this.humerusLeft.getChild("feathersTertiaryLeft"), "feathersTertiaryLeft");
                 add3DTexture(this.feathersTertiaryLeft, 10, 14, 0, 0, -0.5F, 10, 14);
-                this.feathersSecondaryLeft = ulnaLeft.getChild("feathersSecondaryLeft");
+                this.feathersSecondaryLeft = Objects.requireNonNull(
+                                this.ulnaLeft.getChild("feathersSecondaryLeft"), "feathersSecondaryLeft");
                 add3DTexture(this.feathersSecondaryLeft, 31, 14, -2, 0, -0.5F, 11, 12);
-                this.feathersPrimaryLeft = carpalsLeft.getChild("feathersPrimaryLeft");
+                this.feathersPrimaryLeft = Objects.requireNonNull(
+                                this.carpalsLeft.getChild("feathersPrimaryLeft"), "feathersPrimaryLeft");
                 add3DTexture(this.feathersPrimaryLeft, 53, 14, 0, -2.1F, -0.5F, 11, 11);
 
-                this.feathersCoracoidRight = coracoidRight.getChild("feathersCoracoidRight");
+                this.feathersCoracoidRight = Objects.requireNonNull(
+                                this.coracoidRight.getChild("feathersCoracoidRight"), "feathersCoracoidRight");
                 add3DTexture(this.feathersCoracoidRight, 0, 40, -6, 0, -1, 6, 8);
-                this.feathersTertiaryRight = humerusRight.getChild("feathersTertiaryRight");
+                this.feathersTertiaryRight = Objects.requireNonNull(
+                                this.humerusRight.getChild("feathersTertiaryRight"), "feathersTertiaryRight");
                 add3DTexture(this.feathersTertiaryRight, 0, 14, -10, 0, -0.5F, 10, 14);
-                this.feathersSecondaryRight = ulnaRight.getChild("feathersSecondaryRight");
+                this.feathersSecondaryRight = Objects.requireNonNull(
+                                this.ulnaRight.getChild("feathersSecondaryRight"), "feathersSecondaryRight");
                 add3DTexture(this.feathersSecondaryRight, 20, 14, -9, 0, -0.5F, 11, 12);
-                this.feathersPrimaryRight = carpalsRight.getChild("feathersPrimaryRight");
+                this.feathersPrimaryRight = Objects.requireNonNull(
+                                this.carpalsRight.getChild("feathersPrimaryRight"), "feathersPrimaryRight");
                 add3DTexture(this.feathersPrimaryRight, 42, 14, -11, -2.1F, -0.5F, 11, 11);
 
                 this.bonesLeft = ImmutableList.of(this.coracoidLeft, this.humerusLeft, this.ulnaLeft, this.carpalsLeft);
@@ -86,7 +97,7 @@ public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
 
         }
 
-        public static LayerDefinition createBodyLayer() {
+        public static @NonNull LayerDefinition createBodyLayer() {
                 MeshDefinition meshdefinition = new MeshDefinition();
                 PartDefinition root = meshdefinition.getRoot();
 
@@ -154,11 +165,11 @@ public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
                 carpalsRight.addOrReplaceChild("feathersPrimaryRight", CubeListBuilder.create(),
                                 PartPose.offset(0, 0, 0));
 
-                return LayerDefinition.create(meshdefinition, 64, 64);
+                return Objects.requireNonNull(LayerDefinition.create(meshdefinition, 64, 64), "avian wing layer");
         }
 
         private static void add3DTexture(
-                        ModelPart model,
+                        @NonNull ModelPart model,
                         int u, int v,
                         float offX, float offY, float offZ,
                         int width, int height) {
@@ -166,7 +177,7 @@ public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
 
         }
 
-        private static Field findCubesField() {
+        private static @NonNull Field findCubesField() {
                 for (Field field : ModelPart.class.getDeclaredFields()) {
                         if (Modifier.isStatic(field.getModifiers())) {
                                 continue;
@@ -180,10 +191,11 @@ public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
         }
 
         @SuppressWarnings("unchecked")
-        private static List<ModelPart.Cube> getCubes(ModelPart part) {
+        private static @NonNull List<ModelPart.@NonNull Cube> getCubes(@NonNull ModelPart part) {
                 try {
-                        List<ModelPart.Cube> cubes = (List<ModelPart.Cube>) CUBES_FIELD.get(part);
-                        List<ModelPart.Cube> mutable = new ArrayList<>(cubes);
+                        List<ModelPart.@NonNull Cube> cubes = Objects.requireNonNull(
+                                        (List<ModelPart.Cube>) CUBES_FIELD.get(part), "model part cubes");
+                        List<ModelPart.@NonNull Cube> mutable = new ArrayList<>(cubes);
                         CUBES_FIELD.set(part, mutable);
                         return mutable;
                 } catch (IllegalAccessException e) {
@@ -192,19 +204,20 @@ public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
         }
 
         @Override
-        public void render(AnimatorAvian animator, float delta, PoseStack matrixStack, VertexConsumer buffer,
+        public void render(@NonNull AnimatorAvian animator, float delta, @NonNull PoseStack matrixStack,
+                        @NonNull VertexConsumer buffer,
                         int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
                 int color = ARGB.colorFromFloat(alpha, red, green, blue);
 
                 for (int i = 0; i < this.bonesLeft.size(); i++) {
-                        ModelPart left = this.bonesLeft.get(i);
-                        ModelPart right = this.bonesRight.get(i);
+                        ModelPart left = Objects.requireNonNull(this.bonesLeft.get(i), "left bone");
+                        ModelPart right = Objects.requireNonNull(this.bonesRight.get(i), "right bone");
                         animator.getWingRotation(i, delta, this.rotation);
                         setAngles(left, right, this.rotation);
                 }
                 for (int i = 0; i < this.feathersLeft.size(); i++) {
-                        ModelPart left = this.feathersLeft.get(i);
-                        ModelPart right = this.feathersRight.get(i);
+                        ModelPart left = Objects.requireNonNull(this.feathersLeft.get(i), "left feather");
+                        ModelPart right = Objects.requireNonNull(this.feathersRight.get(i), "right feather");
                         animator.getFeatherRotation(i, delta, this.rotation);
                         setAngles(left, right, this.rotation);
                 }

@@ -25,17 +25,19 @@ import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 import java.util.Objects;
 
+@SuppressWarnings("null")
 public final class LayerWings extends RenderLayer<AvatarRenderState, PlayerModel> {
 
-    public static final ModelLayerLocation INSECTOID_WINGS = layer("insectoid_wings");
-    public static final ModelLayerLocation AVIAN_WINGS = layer("avian_wings");
+    public static final @NonNull ModelLayerLocation INSECTOID_WINGS = layer("insectoid_wings");
+    public static final @NonNull ModelLayerLocation AVIAN_WINGS = layer("avian_wings");
 
     public LayerWings(RenderLayerParent<AvatarRenderState, PlayerModel> parent) {
-        super(parent);
+        super(Objects.requireNonNull(parent, "parent"));
     }
 
     public static void init() {
@@ -44,7 +46,7 @@ public final class LayerWings extends RenderLayer<AvatarRenderState, PlayerModel
         LivingEntityRenderLayerRegistrationCallback.EVENT
                 .register((entityType, entityRenderer, registrationHelper, context) -> {
                     if (entityRenderer instanceof AvatarRenderer<?> renderer) {
-                        EntityModelSet modelSet = context.getModelSet();
+                        EntityModelSet modelSet = Objects.requireNonNull(context.getModelSet(), "model set");
                         ClientProxy.registerWingForms(modelSet);
                         registerPlayerLayers(renderer, modelSet, registrationHelper);
                     }
@@ -53,6 +55,9 @@ public final class LayerWings extends RenderLayer<AvatarRenderState, PlayerModel
 
     private static void registerPlayerLayers(AvatarRenderer<?> renderer, EntityModelSet modelSet,
             LivingEntityRenderLayerRegistrationCallback.RegistrationHelper registrationHelper) {
+        Objects.requireNonNull(renderer, "renderer");
+        Objects.requireNonNull(modelSet, "model set");
+        Objects.requireNonNull(registrationHelper, "registration helper");
         List<?> layers = ((LivingEntityRendererAccessor<?, ?, ?>) renderer).wings$getLayers();
         layers.removeIf(layer -> layer instanceof LayerCapeWings || layer instanceof CapeLayer);
         registrationHelper.register(new LayerCapeWings(renderer, modelSet));
@@ -61,17 +66,17 @@ public final class LayerWings extends RenderLayer<AvatarRenderState, PlayerModel
         }
     }
 
-    private static ModelLayerLocation layer(String name) {
+    private static @NonNull ModelLayerLocation layer(@NonNull String name) {
         return layer(name, "main");
     }
 
-    private static ModelLayerLocation layer(String name, String layer) {
-        return new ModelLayerLocation(WingsMod.locate(name), layer);
+    private static @NonNull ModelLayerLocation layer(@NonNull String name, @NonNull String layer) {
+        return Objects.requireNonNull(new ModelLayerLocation(WingsMod.locate(name), layer), "model layer");
     }
 
     @Override
-    public void submit(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int packedLight,
-            AvatarRenderState state, float limbSwing, float limbSwingAmount) {
+    public void submit(@NonNull PoseStack poseStack, @NonNull SubmitNodeCollector submitNodeCollector, int packedLight,
+            @NonNull AvatarRenderState state, float limbSwing, float limbSwingAmount) {
         Minecraft minecraft = Minecraft.getInstance();
         ClientLevel level = minecraft.level;
         if (level == null) {
@@ -94,14 +99,15 @@ public final class LayerWings extends RenderLayer<AvatarRenderState, PlayerModel
                 if (state.isCrouching) {
                     poseStack.translate(0.0D, 0.2D, 0.0D);
                 }
-                ModelPart body = this.getParentModel().body;
+                ModelPart body = Objects.requireNonNull(this.getParentModel().body, "player body");
                 body.translateAndRotate(poseStack);
                 submitNodeCollector.submitCustomGeometry(poseStack, form.getRenderType(), (pose, buffer) -> {
+                    PoseStack.Pose safePose = Objects.requireNonNull(pose, "pose");
                     VertexConsumer safeBuffer = Objects.requireNonNull(buffer, "vertex consumer");
                     PoseStack renderStack = new PoseStack();
-                    PoseStack.Pose renderPose = renderStack.last();
-                    renderPose.pose().set(pose.pose());
-                    renderPose.normal().set(pose.normal());
+                    PoseStack.Pose renderPose = Objects.requireNonNull(renderStack.last(), "pose");
+                    renderPose.pose().set(safePose.pose());
+                    renderPose.normal().set(safePose.normal());
                     form.render(renderStack, SodiumBypassVertexConsumer.wrap(safeBuffer), packedLight,
                             OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F, delta);
                 });

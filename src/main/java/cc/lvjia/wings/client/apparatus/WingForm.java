@@ -6,6 +6,7 @@ import cc.lvjia.wings.server.apparatus.FlightApparatus;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
+import org.jspecify.annotations.NonNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,15 +14,17 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public final class WingForm<A extends Animator> {
-    private static final Map<FlightApparatus, WingForm<?>> FORMS = new HashMap<>();
+@SuppressWarnings("null")
+public final class WingForm<A extends @NonNull Animator> {
+    private static final Map<@NonNull FlightApparatus, @NonNull WingForm<? extends @NonNull Animator>> FORMS = new HashMap<>();
 
-    private final Supplier<A> animator;
-    private final Identifier texture;
-    private final Supplier<RenderType> renderType;
-    private ModelWings<A> model;
+    private final @NonNull Supplier<@NonNull A> animator;
+    private final @NonNull Identifier texture;
+    private final @NonNull Supplier<@NonNull RenderType> renderType;
+    private @NonNull ModelWings<A> model;
 
-    private WingForm(Supplier<A> animator, ModelWings<A> model, Identifier texture, Supplier<RenderType> renderType) {
+    private WingForm(@NonNull Supplier<@NonNull A> animator, @NonNull ModelWings<A> model,
+            @NonNull Identifier texture, @NonNull Supplier<@NonNull RenderType> renderType) {
         this.animator = Objects.requireNonNull(animator);
 
         this.model = Objects.requireNonNull(model);
@@ -29,19 +32,22 @@ public final class WingForm<A extends Animator> {
         this.renderType = Objects.requireNonNull(renderType);
     }
 
-    public static <A extends Animator> WingForm<A> of(Supplier<A> animator, ModelWings<A> model, Identifier texture) {
+    public static <A extends @NonNull Animator> @NonNull WingForm<A> of(@NonNull Supplier<@NonNull A> animator,
+            @NonNull ModelWings<A> model, @NonNull Identifier texture) {
         return new WingForm<>(animator, model, texture, () -> RenderTypes.entityCutout(texture));
     }
 
-    public static <A extends Animator> WingForm<A> of(Supplier<A> animator, ModelWings<A> model, Identifier texture, Supplier<RenderType> renderType) {
+    public static <A extends @NonNull Animator> @NonNull WingForm<A> of(@NonNull Supplier<@NonNull A> animator,
+            @NonNull ModelWings<A> model, @NonNull Identifier texture,
+            @NonNull Supplier<@NonNull RenderType> renderType) {
         return new WingForm<>(animator, model, texture, renderType);
     }
 
-    public static Optional<WingForm<?>> get(FlightApparatus wings) {
+    public static @NonNull Optional<@NonNull WingForm<? extends @NonNull Animator>> get(@NonNull FlightApparatus wings) {
         return Optional.ofNullable(FORMS.get(wings));
     }
 
-    public static void register(FlightApparatus wings, WingForm<?> form) {
+    public static void register(@NonNull FlightApparatus wings, @NonNull WingForm<? extends @NonNull Animator> form) {
         FORMS.put(wings, form);
     }
 
@@ -49,24 +55,24 @@ public final class WingForm<A extends Animator> {
         FORMS.clear();
     }
 
-    public A createAnimator() {
-        return this.animator.get();
+    public @NonNull A createAnimator() {
+        return Objects.requireNonNull(this.animator.get(), "animator");
     }
 
-    public ModelWings<A> getModel() {
+    public @NonNull ModelWings<A> getModel() {
         return this.model;
     }
 
-    public void setModel(ModelWings<A> model) {
-        this.model = model;
+    public void setModel(@NonNull ModelWings<A> model) {
+        this.model = Objects.requireNonNull(model, "model");
     }
 
-    public Identifier getTexture() {
+    public @NonNull Identifier getTexture() {
         return this.texture;
     }
 
-    public RenderType getRenderType() {
-        return this.renderType.get();
+    public @NonNull RenderType getRenderType() {
+        return Objects.requireNonNull(this.renderType.get(), "render type");
     }
 
 
