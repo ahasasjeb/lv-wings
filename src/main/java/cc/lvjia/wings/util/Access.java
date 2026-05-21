@@ -21,7 +21,7 @@ public final class Access {
 
     @SuppressWarnings("unchecked")
     public static <T extends Throwable> RuntimeException rethrow(Throwable t) throws T {
-        //noinspection unchecked
+        // noinspection unchecked
         throw (T) t;
     }
 
@@ -71,13 +71,14 @@ public final class Access {
         }
 
         private static MethodHandle find(Class<?> refc, ObjectArrayList<String> names, MethodType type) {
-            for (ObjectListIterator<String> it = names.iterator(); ; ) {
+            for (ObjectListIterator<String> it = names.iterator();;) {
                 String name = it.next();
                 try {
                     Field f = refc.getDeclaredField(name);
                     f.setAccessible(true);
                     if (f.getType() != type.returnType()) {
-                        throw new NoSuchFieldException("Field type mismatch: expected " + type.returnType().getName() + ", but found " + f.getType().getName());
+                        throw new NoSuchFieldException("Field type mismatch: expected " + type.returnType().getName()
+                                + ", but found " + f.getType().getName());
                     }
                     return LOOKUP.unreflectGetter(f);
                 } catch (NoSuchFieldException | IllegalAccessException e) {

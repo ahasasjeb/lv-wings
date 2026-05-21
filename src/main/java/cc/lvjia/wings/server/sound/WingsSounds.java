@@ -18,7 +18,8 @@ public final class WingsSounds {
     }
 
     private static Supplier<SoundEvent> create(String name) {
-        SoundEvent sound = Registry.register(BuiltInRegistries.SOUND_EVENT, WingsMod.locate(name), SoundEvent.createVariableRangeEvent(WingsMod.locate(name)));
+        SoundEvent sound = Registry.register(BuiltInRegistries.SOUND_EVENT, WingsMod.locate(name),
+                SoundEvent.createVariableRangeEvent(WingsMod.locate(name)));
         return () -> sound;
     }
 }

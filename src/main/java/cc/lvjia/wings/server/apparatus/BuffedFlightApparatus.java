@@ -33,7 +33,8 @@ public final class BuffedFlightApparatus implements FlightApparatus {
         this(delegate, MobAvoidanceSettings.DEFAULT, effects);
     }
 
-    public BuffedFlightApparatus(FlightApparatus delegate, MobAvoidanceSettings mobAvoidance, EffectSettings... effects) {
+    public BuffedFlightApparatus(FlightApparatus delegate, MobAvoidanceSettings mobAvoidance,
+            EffectSettings... effects) {
         this.delegate = Objects.requireNonNull(delegate, "委托");
         this.mobAvoidance = Objects.requireNonNull(mobAvoidance, "敌对生物回避设置");
         this.effects = Arrays.stream(effects)
@@ -193,14 +194,17 @@ public final class BuffedFlightApparatus implements FlightApparatus {
             }
         }
 
-        public static EffectSettings of(Holder<MobEffect> effect, int amplifier, int durationTicks, int refreshThreshold) {
+        public static EffectSettings of(Holder<MobEffect> effect, int amplifier, int durationTicks,
+                int refreshThreshold) {
             return new EffectSettings(effect, amplifier, durationTicks, refreshThreshold);
         }
 
         private void apply(Player player) {
             MobEffectInstance existing = player.getEffect(this.effect);
-            if (existing == null || existing.getAmplifier() < this.amplifier || existing.getDuration() <= this.refreshThreshold) {
-                player.addEffect(new MobEffectInstance(this.effect, this.durationTicks, this.amplifier, true, false, false));
+            if (existing == null || existing.getAmplifier() < this.amplifier
+                    || existing.getDuration() <= this.refreshThreshold) {
+                player.addEffect(
+                        new MobEffectInstance(this.effect, this.durationTicks, this.amplifier, true, false, false));
             }
         }
     }
@@ -229,7 +233,8 @@ public final class BuffedFlightApparatus implements FlightApparatus {
         }
 
         public boolean isEnabled() {
-            return this.radius > 0.0D && this.intervalTicks > 0 && (this.horizontalPush > 0.0D || this.verticalPush > 0.0D);
+            return this.radius > 0.0D && this.intervalTicks > 0
+                    && (this.horizontalPush > 0.0D || this.verticalPush > 0.0D);
         }
     }
 }

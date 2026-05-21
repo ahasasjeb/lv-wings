@@ -36,8 +36,10 @@ public final class ServerEventHandler {
     }
 
     public static void register() {
-        UseEntityCallback.EVENT.register((player, level, hand, entity, hitResult) -> onPlayerEntityInteract(player, hand, entity));
-        ServerTickEvents.END_SERVER_TICK.register(server -> server.getPlayerList().getPlayers().forEach(ServerEventHandler::onPlayerTick));
+        UseEntityCallback.EVENT
+                .register((player, level, hand, entity, hitResult) -> onPlayerEntityInteract(player, hand, entity));
+        ServerTickEvents.END_SERVER_TICK
+                .register(server -> server.getPlayerList().getPlayers().forEach(ServerEventHandler::onPlayerTick));
         ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> onLivingDeath(entity));
         ServerPlayerEvents.LEAVE.register(player -> {
             MessageControlFlying.clearRateLimit(player);
@@ -49,9 +51,11 @@ public final class ServerEventHandler {
         });
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> Flights.onPlayerRespawn(newPlayer));
         ServerPlayerEvents.JOIN.register(Flights::onPlayerLoggedIn);
-        ServerEntityLevelChangeEvents.AFTER_PLAYER_CHANGE_LEVEL.register((player, origin, destination) -> Flights.onPlayerChangedDimension(player));
+        ServerEntityLevelChangeEvents.AFTER_PLAYER_CHANGE_LEVEL
+                .register((player, origin, destination) -> Flights.onPlayerChangedDimension(player));
         EntityTrackingEvents.START_TRACKING.register(Flights::onPlayerStartTracking);
-        CommandRegistrationCallback.EVENT.register((dispatcher, buildContext, selection) -> WingsCommand.register(dispatcher, buildContext));
+        CommandRegistrationCallback.EVENT
+                .register((dispatcher, buildContext, selection) -> WingsCommand.register(dispatcher, buildContext));
         InSomniableEventHandler.register();
     }
 
@@ -64,8 +68,7 @@ public final class ServerEventHandler {
                     SoundEvents.BOTTLE_FILL,
                     SoundSource.NEUTRAL,
                     1.0F,
-                    1.0F
-            );
+                    1.0F);
             if (!player.getAbilities().instabuild) {
                 stack.shrink(1);
             }

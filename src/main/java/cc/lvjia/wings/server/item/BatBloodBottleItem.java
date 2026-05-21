@@ -39,7 +39,8 @@ public class BatBloodBottleItem extends Item {
 
     private static void clearFlightState(Player player) {
         Flights.get(player).ifPresent(flight -> {
-            Flight.PlayerSet players = player.level().isClientSide() ? Flight.PlayerSet.empty() : Flight.PlayerSet.ofAll();
+            Flight.PlayerSet players = player.level().isClientSide() ? Flight.PlayerSet.empty()
+                    : Flight.PlayerSet.ofAll();
             flight.setIsFlying(false, players);
             flight.setWing(FlightApparatus.NONE, players);
             flight.setTimeFlying(0);
@@ -56,7 +57,8 @@ public class BatBloodBottleItem extends Item {
 
         if (!world.isClientSide() && living instanceof ServerPlayer player) {
             if (removeWings(player)) {
-                world.playSound(null, player.getX(), player.getY(), player.getZ(), WingsSounds.ITEM_ARMOR_EQUIP_WINGS.get(), SoundSource.PLAYERS, 1.0F, 0.8F);
+                world.playSound(null, player.getX(), player.getY(), player.getZ(),
+                        WingsSounds.ITEM_ARMOR_EQUIP_WINGS.get(), SoundSource.PLAYERS, 1.0F, 0.8F);
             }
         }
 

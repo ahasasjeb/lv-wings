@@ -41,16 +41,18 @@ public final class LayerWings extends RenderLayer<AvatarRenderState, PlayerModel
     public static void init() {
         ModelLayerRegistry.registerModelLayer(INSECTOID_WINGS, ModelWingsInsectoid::createBodyLayer);
         ModelLayerRegistry.registerModelLayer(AVIAN_WINGS, ModelWingsAvian::createBodyLayer);
-        LivingEntityRenderLayerRegistrationCallback.EVENT.register((entityType, entityRenderer, registrationHelper, context) -> {
-            if (entityRenderer instanceof AvatarRenderer<?> renderer) {
-                EntityModelSet modelSet = context.getModelSet();
-                ClientProxy.registerWingForms(modelSet);
-                registerPlayerLayers(renderer, modelSet, registrationHelper);
-            }
-        });
+        LivingEntityRenderLayerRegistrationCallback.EVENT
+                .register((entityType, entityRenderer, registrationHelper, context) -> {
+                    if (entityRenderer instanceof AvatarRenderer<?> renderer) {
+                        EntityModelSet modelSet = context.getModelSet();
+                        ClientProxy.registerWingForms(modelSet);
+                        registerPlayerLayers(renderer, modelSet, registrationHelper);
+                    }
+                });
     }
 
-    private static void registerPlayerLayers(AvatarRenderer<?> renderer, EntityModelSet modelSet, LivingEntityRenderLayerRegistrationCallback.RegistrationHelper registrationHelper) {
+    private static void registerPlayerLayers(AvatarRenderer<?> renderer, EntityModelSet modelSet,
+            LivingEntityRenderLayerRegistrationCallback.RegistrationHelper registrationHelper) {
         List<?> layers = ((LivingEntityRendererAccessor<?, ?, ?>) renderer).wings$getLayers();
         layers.removeIf(layer -> layer instanceof LayerCapeWings || layer instanceof CapeLayer);
         registrationHelper.register(new LayerCapeWings(renderer, modelSet));
@@ -68,7 +70,8 @@ public final class LayerWings extends RenderLayer<AvatarRenderState, PlayerModel
     }
 
     @Override
-    public void submit(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int packedLight, AvatarRenderState state, float limbSwing, float limbSwingAmount) {
+    public void submit(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int packedLight,
+            AvatarRenderState state, float limbSwing, float limbSwingAmount) {
         Minecraft minecraft = Minecraft.getInstance();
         ClientLevel level = minecraft.level;
         if (level == null) {
@@ -99,7 +102,8 @@ public final class LayerWings extends RenderLayer<AvatarRenderState, PlayerModel
                     PoseStack.Pose renderPose = renderStack.last();
                     renderPose.pose().set(pose.pose());
                     renderPose.normal().set(pose.normal());
-                    form.render(renderStack, SodiumBypassVertexConsumer.wrap(safeBuffer), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F, delta);
+                    form.render(renderStack, SodiumBypassVertexConsumer.wrap(safeBuffer), packedLight,
+                            OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F, delta);
                 });
                 poseStack.popPose();
             });

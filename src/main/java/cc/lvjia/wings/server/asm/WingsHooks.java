@@ -20,7 +20,8 @@ public final class WingsHooks {
     }
 
     public static boolean onFlightCheck(Player player, boolean defaultValue) {
-        if (defaultValue) return true;
+        if (defaultValue)
+            return true;
         PlayerFlightCheckEvent ev = new PlayerFlightCheckEvent(player);
         ServerEventHandler.onPlayerFlightCheck(ev);
         return ev.isFlying();
@@ -29,7 +30,8 @@ public final class WingsHooks {
     public static boolean onUpdateBodyRotation(LivingEntity living, float movementYaw) {
         GetLivingHeadLimitEvent ev = GetLivingHeadLimitEvent.create(living);
         ServerEventHandler.onGetLivingHeadLimit(ev);
-        if (ev.isVanilla()) return false;
+        if (ev.isVanilla())
+            return false;
 
         // 参考原版身体旋转逻辑，但允许通过事件动态调整软/硬限制。
         living.yBodyRot += Mth.wrapDegrees(movementYaw - living.yBodyRot) * 0.3F;
@@ -38,8 +40,7 @@ public final class WingsHooks {
         float theta = Mth.clamp(
                 Mth.wrapDegrees(living.getYRot() - living.yBodyRot),
                 -hLimit,
-                hLimit
-        );
+                hLimit);
         living.yBodyRot = living.getYRot() - theta;
         if (theta * theta > sLimit * sLimit) {
             living.yBodyRot += theta * 0.2F;

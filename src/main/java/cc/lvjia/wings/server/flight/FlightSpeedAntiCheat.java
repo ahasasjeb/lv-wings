@@ -76,15 +76,15 @@ public final class FlightSpeedAntiCheat {
         player.setDeltaMovement(Vec3.ZERO);
         player.fallDistance = 0.0F;
         flight.setIsFlying(false, Flight.PlayerSet.ofAll());
-        player.connection.teleport(safePosition.x(), safePosition.y(), safePosition.z(), player.getYRot(), player.getXRot());
+        player.connection.teleport(safePosition.x(), safePosition.y(), safePosition.z(), player.getYRot(),
+                player.getXRot());
 
         LOGGER.info(
                 "Corrected suspicious wings flight speed for {} (horizontal={}, vertical={}, total={})",
                 player.getPlainTextName(),
                 String.format("%.3f", correction.horizontal()),
                 String.format("%.3f", correction.vertical()),
-                String.format("%.3f", correction.total())
-        );
+                String.format("%.3f", correction.total()));
     }
 
     public static void recordMovement(ServerPlayer player, Flight flight, Vec3 movement) {
@@ -142,7 +142,8 @@ public final class FlightSpeedAntiCheat {
         }
 
         state.recordViolation(hardViolation);
-        if (state.softViolations >= settings.softViolationLimit() || state.hardViolations >= settings.hardViolationLimit()) {
+        if (state.softViolations >= settings.softViolationLimit()
+                || state.hardViolations >= settings.hardViolationLimit()) {
             state.pendingCorrection = new PendingCorrection(horizontal, vertical, total);
         }
     }

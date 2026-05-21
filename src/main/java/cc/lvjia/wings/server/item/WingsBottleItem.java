@@ -30,7 +30,8 @@ public class WingsBottleItem extends Item {
             return false;
         }).isPresent();
         if (WingsEffects.WINGS.isBound()) {
-            player.addEffect(new MobEffectInstance(WingsEffects.WINGS, MobEffectInstance.INFINITE_DURATION, 0, true, false));
+            player.addEffect(
+                    new MobEffectInstance(WingsEffects.WINGS, MobEffectInstance.INFINITE_DURATION, 0, true, false));
         }
         return changed;
     }
@@ -46,7 +47,8 @@ public class WingsBottleItem extends Item {
 
         if (!world.isClientSide() && living instanceof ServerPlayer player) {
             giveWing(player, this.wings);
-            world.playSound(null, player.getX(), player.getY(), player.getZ(), WingsSounds.ITEM_ARMOR_EQUIP_WINGS.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+            world.playSound(null, player.getX(), player.getY(), player.getZ(), WingsSounds.ITEM_ARMOR_EQUIP_WINGS.get(),
+                    SoundSource.PLAYERS, 1.0F, 1.0F);
         }
 
         return result;

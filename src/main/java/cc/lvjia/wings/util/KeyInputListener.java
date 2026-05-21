@@ -76,7 +76,8 @@ public final class KeyInputListener {
 
         @Override
         public BindingBuilder key(String desc, int keyCode) {
-            KeyMapping binding = KeyMappingHelper.registerKeyMapping(new KeyMapping(desc, InputConstants.Type.KEYSYM, keyCode, this.category));
+            KeyMapping binding = KeyMappingHelper
+                    .registerKeyMapping(new KeyMapping(desc, InputConstants.Type.KEYSYM, keyCode, this.category));
             return new BindingBuilder(this, binding);
         }
     }

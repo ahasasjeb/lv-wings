@@ -44,9 +44,11 @@ public final class FlightDefault implements Flight {
 
     public static final Codec<FlightDefault> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.BOOL.optionalFieldOf(Serializer.IS_FLYING, false).forGetter(FlightDefault::isFlying),
-            Codec.INT.optionalFieldOf(Serializer.TIME_FLYING, INITIAL_TIME_FLYING).forGetter(FlightDefault::getTimeFlying),
-            Codec.STRING.optionalFieldOf(Serializer.WING, DEFAULT_WING_ID.toString()).forGetter(FlightDefault::getWingId)
-    ).apply(instance, FlightDefault::fromPersistentData));
+            Codec.INT.optionalFieldOf(Serializer.TIME_FLYING, INITIAL_TIME_FLYING)
+                    .forGetter(FlightDefault::getTimeFlying),
+            Codec.STRING.optionalFieldOf(Serializer.WING, DEFAULT_WING_ID.toString())
+                    .forGetter(FlightDefault::getWingId))
+            .apply(instance, FlightDefault::fromPersistentData));
 
     private final List<FlyingListener> flyingListeners = Lists.newArrayList();
 
@@ -144,7 +146,8 @@ public final class FlightDefault implements Flight {
 
     @Override
     public float getFlyingAmount(float delta) {
-        float amount = FLY_AMOUNT_CURVE.eval(MathH.lerp(this.getPrevTimeFlying(), this.getTimeFlying(), delta) / MAX_TIME_FLYING);
+        float amount = FLY_AMOUNT_CURVE
+                .eval(MathH.lerp(this.getPrevTimeFlying(), this.getTimeFlying(), delta) / MAX_TIME_FLYING);
         return Mth.clamp(amount, 0.0F, 1.0F);
     }
 
@@ -168,7 +171,8 @@ public final class FlightDefault implements Flight {
 
     @Override
     public boolean canFly(Player player) {
-        return !this.isUnderwaterFlightBlocked(player) && this.hasEffect(player) && this.flightApparatus.isUsable(player);
+        return !this.isUnderwaterFlightBlocked(player) && this.hasEffect(player)
+                && this.flightApparatus.isUsable(player);
     }
 
     @Override
@@ -196,8 +200,7 @@ public final class FlightDefault implements Flight {
                 float elevationBoost = MathH.transform(
                         Math.abs(player.getXRot()),
                         45.0F, 90.0F,
-                        1.0F, 0.0F
-                );
+                        1.0F, 0.0F);
                 float pitch = -MathH.toRadians(player.getXRot() - PITCH_OFFSET * elevationBoost);
                 float yaw = -MathH.toRadians(player.getYRot()) - MathH.PI;
                 float vxz = -Mth.cos(pitch);
@@ -207,8 +210,7 @@ public final class FlightDefault implements Flight {
                 player.setDeltaMovement(player.getDeltaMovement().add(
                         vx * vxz * speed,
                         vy * speed + Y_BOOST * (player.getXRot() > 0.0F ? elevationBoost : 1.0D),
-                        vz * vxz * speed
-                ));
+                        vz * vxz * speed));
             }
             if (this.canLand(player)) {
                 Vec3 mot = player.getDeltaMovement();

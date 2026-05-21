@@ -11,8 +11,7 @@ import java.util.WeakHashMap;
 
 public final class FlightViews {
 
-    private static final Map<AbstractClientPlayer, FlightView> VIEWS =
-            Collections.synchronizedMap(new WeakHashMap<>());
+    private static final Map<AbstractClientPlayer, FlightView> VIEWS = Collections.synchronizedMap(new WeakHashMap<>());
 
     private FlightViews() {
     }

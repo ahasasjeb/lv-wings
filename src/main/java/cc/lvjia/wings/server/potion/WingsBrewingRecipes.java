@@ -27,8 +27,7 @@ public final class WingsBrewingRecipes {
             mix(Items.OXEYE_DAISY, WingsItems.FAIRY_WINGS_BOTTLE),
             mix(Items.BLAZE_POWDER, WingsItems.FIRE_WINGS_BOTTLE),
             mix(Items.ORANGE_DYE, WingsItems.MONARCH_BUTTERFLY_WINGS_BOTTLE),
-            mix(Items.SLIME_BALL, WingsItems.SLIME_WINGS_BOTTLE)
-    );
+            mix(Items.SLIME_BALL, WingsItems.SLIME_WINGS_BOTTLE));
 
     private WingsBrewingRecipes() {
     }
@@ -56,8 +55,10 @@ public final class WingsBrewingRecipes {
         if (!source.is(Items.POTION)) {
             return false;
         }
-        Optional<Holder<Potion>> potion = source.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY).potion();
-        return potion.filter(holder -> holder.is(Potions.SLOW_FALLING) || holder.is(Potions.LONG_SLOW_FALLING)).isPresent();
+        Optional<Holder<Potion>> potion = source.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY)
+                .potion();
+        return potion.filter(holder -> holder.is(Potions.SLOW_FALLING) || holder.is(Potions.LONG_SLOW_FALLING))
+                .isPresent();
     }
 
     private static Mix mix(ItemLike ingredient, Supplier<? extends Item> result) {

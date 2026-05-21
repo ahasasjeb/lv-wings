@@ -41,7 +41,8 @@ public final class AnimatorInsectoid implements Animator {
     }
 
     public void getRotation(float delta, RotationAngles rotation) {
-        rotation.set(0.0F, (float) (Math.sin(MathH.lerp(this.prevFlapCycle, this.flapCycle, delta)) * 35.0D - 42.0D), 0.0F);
+        rotation.set(0.0F, (float) (Math.sin(MathH.lerp(this.prevFlapCycle, this.flapCycle, delta)) * 35.0D - 42.0D),
+                0.0F);
     }
 
     @Override

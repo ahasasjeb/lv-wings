@@ -34,7 +34,8 @@ public final class WingsItemsConfig {
     }
 
     private static Stream<ConfigWingSettings> all() {
-        return Stream.of(ANGEL, PARROT, SLIME, BLUE_BUTTERFLY, MONARCH_BUTTERFLY, FIRE, BAT, FAIRY, EVIL, DRAGON, LVJIA_SUPER);
+        return Stream.of(ANGEL, PARROT, SLIME, BLUE_BUTTERFLY, MONARCH_BUTTERFLY, FIRE, BAT, FAIRY, EVIL, DRAGON,
+                LVJIA_SUPER);
     }
 
     public static final class Data {

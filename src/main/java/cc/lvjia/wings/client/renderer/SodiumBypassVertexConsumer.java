@@ -7,12 +7,14 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 /**
- * Wraps a {@link VertexConsumer} without implementing Sodium's VertexBufferWriter interface, forcing Sodium to
+ * Wraps a {@link VertexConsumer} without implementing Sodium's
+ * VertexBufferWriter interface, forcing Sodium to
  * fall back to vanilla buffering for custom wing quads.
  */
 public final class SodiumBypassVertexConsumer implements VertexConsumer {
 
-    private static final Map<VertexConsumer, SodiumBypassVertexConsumer> CACHE = Collections.synchronizedMap(new WeakHashMap<>());
+    private static final Map<VertexConsumer, SodiumBypassVertexConsumer> CACHE = Collections
+            .synchronizedMap(new WeakHashMap<>());
     private final VertexConsumer delegate;
 
     private SodiumBypassVertexConsumer(VertexConsumer delegate) {

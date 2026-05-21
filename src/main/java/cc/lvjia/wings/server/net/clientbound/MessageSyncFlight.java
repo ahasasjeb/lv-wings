@@ -20,9 +20,10 @@ import org.apache.logging.log4j.Logger;
  * 客户端收到后会把数据写入玩家的 attachment，并刷新相关渲染/视图缓存。
  */
 public record MessageSyncFlight(int playerId, Flight flight) implements Message {
-    public static final CustomPacketPayload.Type<MessageSyncFlight> TYPE = new CustomPacketPayload.Type<>(WingsMod.locate("sync_flight"));
-    public static final StreamCodec<FriendlyByteBuf, MessageSyncFlight> STREAM_CODEC =
-            StreamCodec.of((buf, message) -> {
+    public static final CustomPacketPayload.Type<MessageSyncFlight> TYPE = new CustomPacketPayload.Type<>(
+            WingsMod.locate("sync_flight"));
+    public static final StreamCodec<FriendlyByteBuf, MessageSyncFlight> STREAM_CODEC = StreamCodec
+            .of((buf, message) -> {
                 buf.writeVarInt(message.playerId());
                 message.flight().serialize(buf);
             }, buf -> {

@@ -26,10 +26,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * 服务端会再次校验玩家是否允许飞行（例如是否拥有翅膀/是否满足条件）。
  */
 public record MessageControlFlying(boolean isFlying) implements Message {
-    public static final CustomPacketPayload.Type<MessageControlFlying> TYPE = new CustomPacketPayload.Type<>(WingsMod.locate("control_flying"));
-    public static final StreamCodec<FriendlyByteBuf, MessageControlFlying> STREAM_CODEC =
-            StreamCodec.of((buf, message) -> buf.writeBoolean(message.isFlying()),
-                    buf -> new MessageControlFlying(buf.readBoolean()));
+    public static final CustomPacketPayload.Type<MessageControlFlying> TYPE = new CustomPacketPayload.Type<>(
+            WingsMod.locate("control_flying"));
+    public static final StreamCodec<FriendlyByteBuf, MessageControlFlying> STREAM_CODEC = StreamCodec.of(
+            (buf, message) -> buf.writeBoolean(message.isFlying()),
+            buf -> new MessageControlFlying(buf.readBoolean()));
     private static final Logger LOGGER = LogManager.getLogger("WingsNetwork");
     private static final int MIN_CONTROL_INTERVAL_TICKS = 2;
     private static final Map<UUID, Integer> LAST_CONTROL_TICKS = new ConcurrentHashMap<>();
@@ -69,7 +70,8 @@ public record MessageControlFlying(boolean isFlying) implements Message {
                 ServerPlayNetworking.send(player, new MessageSyncFlight(player, flight));
                 return;
             }
-            LOGGER.debug("Player {} {} flying", player.getName().getString(), message.isFlying() ? "started" : "stopped");
+            LOGGER.debug("Player {} {} flying", player.getName().getString(),
+                    message.isFlying() ? "started" : "stopped");
             // 服务端先写入权威状态，再把同一份快照回发给操作者，修正客户端预测偏差。
             flight.setIsFlying(message.isFlying(), Flight.PlayerSet.ofOthers());
             ServerPlayNetworking.send(player, new MessageSyncFlight(player, flight));

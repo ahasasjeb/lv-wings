@@ -39,48 +39,61 @@ public final class ClientProxy extends Proxy {
 
     public static void registerWingForms(EntityModelSet modelSet) {
         WingForm.clear();
-        WingForm.register(WingsMod.ANGEL_WINGS, createAvianWings(modelSet, WingsMod.WINGS.getKey(WingsMod.ANGEL_WINGS)));
-        WingForm.register(WingsMod.PARROT_WINGS, createAvianWings(modelSet, WingsMod.WINGS.getKey(WingsMod.PARROT_WINGS)));
+        WingForm.register(WingsMod.ANGEL_WINGS,
+                createAvianWings(modelSet, WingsMod.WINGS.getKey(WingsMod.ANGEL_WINGS)));
+        WingForm.register(WingsMod.PARROT_WINGS,
+                createAvianWings(modelSet, WingsMod.WINGS.getKey(WingsMod.PARROT_WINGS)));
         WingForm.register(WingsMod.BAT_WINGS, createAvianWings(modelSet, WingsMod.WINGS.getKey(WingsMod.BAT_WINGS)));
-        WingForm.register(WingsMod.BLUE_BUTTERFLY_WINGS, createInsectoidWings(modelSet, WingsMod.WINGS.getKey(WingsMod.BLUE_BUTTERFLY_WINGS)));
-        WingForm.register(WingsMod.DRAGON_WINGS, createAvianWings(modelSet, WingsMod.WINGS.getKey(WingsMod.DRAGON_WINGS)));
+        WingForm.register(WingsMod.BLUE_BUTTERFLY_WINGS,
+                createInsectoidWings(modelSet, WingsMod.WINGS.getKey(WingsMod.BLUE_BUTTERFLY_WINGS)));
+        WingForm.register(WingsMod.DRAGON_WINGS,
+                createAvianWings(modelSet, WingsMod.WINGS.getKey(WingsMod.DRAGON_WINGS)));
         WingForm.register(WingsMod.EVIL_WINGS, createAvianWings(modelSet, WingsMod.WINGS.getKey(WingsMod.EVIL_WINGS)));
-        WingForm.register(WingsMod.FAIRY_WINGS, createInsectoidWings(modelSet, WingsMod.WINGS.getKey(WingsMod.FAIRY_WINGS)));
+        WingForm.register(WingsMod.FAIRY_WINGS,
+                createInsectoidWings(modelSet, WingsMod.WINGS.getKey(WingsMod.FAIRY_WINGS)));
         WingForm.register(WingsMod.FIRE_WINGS, createAvianWings(modelSet, WingsMod.WINGS.getKey(WingsMod.FIRE_WINGS)));
-        WingForm.register(WingsMod.MONARCH_BUTTERFLY_WINGS, createInsectoidWings(modelSet, WingsMod.WINGS.getKey(WingsMod.MONARCH_BUTTERFLY_WINGS)));
-        WingForm.register(WingsMod.SLIME_WINGS, createInsectoidWings(modelSet, WingsMod.WINGS.getKey(WingsMod.SLIME_WINGS)));
-        WingForm.register(WingsMod.LVJIA_SUPER_WINGS, createEndPortalWings(modelSet, WingsMod.WINGS.getKey(WingsMod.LVJIA_SUPER_WINGS)));
+        WingForm.register(WingsMod.MONARCH_BUTTERFLY_WINGS,
+                createInsectoidWings(modelSet, WingsMod.WINGS.getKey(WingsMod.MONARCH_BUTTERFLY_WINGS)));
+        WingForm.register(WingsMod.SLIME_WINGS,
+                createInsectoidWings(modelSet, WingsMod.WINGS.getKey(WingsMod.SLIME_WINGS)));
+        WingForm.register(WingsMod.LVJIA_SUPER_WINGS,
+                createEndPortalWings(modelSet, WingsMod.WINGS.getKey(WingsMod.LVJIA_SUPER_WINGS)));
     }
 
     static WingForm<AnimatorAvian> createAvianWings(EntityModelSet modelSet, Identifier name) {
-        return ClientProxy.createWings(name, AnimatorAvian::new, new ModelWingsAvian(modelSet.bakeLayer(LayerWings.AVIAN_WINGS)));
+        return ClientProxy.createWings(name, AnimatorAvian::new,
+                new ModelWingsAvian(modelSet.bakeLayer(LayerWings.AVIAN_WINGS)));
     }
 
     static WingForm<AnimatorAvian> createEndPortalWings(EntityModelSet modelSet, Identifier name) {
-        return ClientProxy.createWings(name, AnimatorAvian::new, new ModelWingsAvian(modelSet.bakeLayer(LayerWings.AVIAN_WINGS)), RenderTypes::endPortal);
+        return ClientProxy.createWings(name, AnimatorAvian::new,
+                new ModelWingsAvian(modelSet.bakeLayer(LayerWings.AVIAN_WINGS)), RenderTypes::endPortal);
     }
 
     static WingForm<AnimatorInsectoid> createInsectoidWings(EntityModelSet modelSet, Identifier name) {
-        return ClientProxy.createWings(name, AnimatorInsectoid::new, new ModelWingsInsectoid(modelSet.bakeLayer(LayerWings.INSECTOID_WINGS)));
+        return ClientProxy.createWings(name, AnimatorInsectoid::new,
+                new ModelWingsInsectoid(modelSet.bakeLayer(LayerWings.INSECTOID_WINGS)));
     }
 
-    private static <A extends Animator> WingForm<A> createWings(Identifier name, Supplier<A> animator, ModelWings<A> model) {
+    private static <A extends Animator> WingForm<A> createWings(Identifier name, Supplier<A> animator,
+            ModelWings<A> model) {
         return createWings(name, animator, model, null);
     }
 
-    private static <A extends Animator> WingForm<A> createWings(Identifier name, Supplier<A> animator, ModelWings<A> model, Supplier<RenderType> renderType) {
+    private static <A extends Animator> WingForm<A> createWings(Identifier name, Supplier<A> animator,
+            ModelWings<A> model, Supplier<RenderType> renderType) {
         String texturePath = String.format("textures/entity/%s.png", name.getPath());
         Identifier texture = Identifier.tryBuild(name.getNamespace(), texturePath);
         if (texture == null) {
             throw new IllegalArgumentException("Invalid texture path: " + texturePath);
         }
-        Supplier<RenderType> actualRenderType = renderType != null ? renderType : () -> RenderTypes.entityCutout(texture);
+        Supplier<RenderType> actualRenderType = renderType != null ? renderType
+                : () -> RenderTypes.entityCutout(texture);
         return WingForm.of(
                 animator,
                 model,
                 texture,
-                actualRenderType
-        );
+                actualRenderType);
     }
 
     public void initClient() {
@@ -95,9 +108,7 @@ public final class ClientProxy extends Proxy {
                     if (player == null || player.isSpectator()) {
                         return;
                     }
-                    Flights.get(player).ifPresent(flight ->
-                            flight.toggleIsFlying(Flight.PlayerSet.ofOthers())
-                    );
+                    Flights.get(player).ifPresent(flight -> flight.toggleIsFlying(Flight.PlayerSet.ofOthers()));
                     Flights.ifPlayer(player, (p, flight) -> {
                         if (flight.getWing().equals(WingsMod.WINGLESS) && !flight.isFlying()) {
                             BatBloodBottleItem.removeWings(player);
@@ -117,8 +128,7 @@ public final class ClientProxy extends Proxy {
                     },
                     p -> {
                     },
-                    () -> this.sendToServer(new MessageControlFlying(flight.isFlying()))
-            );
+                    () -> this.sendToServer(new MessageControlFlying(flight.isFlying())));
             flight.registerSyncListener(players -> players.notify(notifier));
         }
     }

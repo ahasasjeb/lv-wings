@@ -28,11 +28,10 @@ public final class InSomniableEventHandler {
             Block block = state.getBlock();
             if (block == Blocks.NOTE_BLOCK && world.isEmptyBlock(pos.above()) &&
                     world.mayInteract(player, pos) &&
-                    !player.blockActionRestricted(world, pos, ((ServerPlayer) player).gameMode.getGameModeForPlayer())
-            ) {
-                InSomniableCapability.getInSomniable(player).ifPresent(inSomniable ->
-                        inSomniable.onPlay(world, player, pos, state.getValue(NoteBlock.NOTE))
-                );
+                    !player.blockActionRestricted(world, pos,
+                            ((ServerPlayer) player).gameMode.getGameModeForPlayer())) {
+                InSomniableCapability.getInSomniable(player).ifPresent(
+                        inSomniable -> inSomniable.onPlay(world, player, pos, state.getValue(NoteBlock.NOTE)));
             }
         }
     }

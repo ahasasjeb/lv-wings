@@ -33,7 +33,8 @@ public final class Flights {
 
     public static void onPlayerClone(ServerPlayer oldPlayer, ServerPlayer newPlayer, boolean alive) {
         if (alive) {
-            get(oldPlayer).ifPresent(oldInstance -> get(newPlayer).ifPresent(newInstance -> newInstance.clone(oldInstance)));
+            get(oldPlayer)
+                    .ifPresent(oldInstance -> get(newPlayer).ifPresent(newInstance -> newInstance.clone(oldInstance)));
         }
     }
 

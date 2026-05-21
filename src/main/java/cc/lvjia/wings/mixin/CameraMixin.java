@@ -46,8 +46,7 @@ public abstract class CameraMixin {
     /**
      * 重定向实体眼睛高度获取，用于飞行时的视角调整
      */
-    @Redirect(method = "tick()V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;getEyeHeight()F"))
+    @Redirect(method = "tick()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;getEyeHeight()F"))
     private float wings$modifyEyeHeight(Entity entity) {
         return WingsHooksClient.onGetCameraEyeHeight(entity, entity.getEyeHeight());
     }
@@ -56,7 +55,8 @@ public abstract class CameraMixin {
     private void wings$applyCameraRoll(float partialTicks, CallbackInfo ci) {
         float roll = WingsHooksClient.onComputeCameraRoll(partialTicks);
         if (roll != 0.0F) {
-            this.rotation.rotationYXZ(3.1415927F - this.yRot * 0.017453292F, -this.xRot * 0.017453292F, -roll * 0.017453292F);
+            this.rotation.rotationYXZ(3.1415927F - this.yRot * 0.017453292F, -this.xRot * 0.017453292F,
+                    -roll * 0.017453292F);
             new Vector3f(0.0F, 0.0F, -1.0F).rotate(this.rotation, this.forwards);
             new Vector3f(0.0F, 1.0F, 0.0F).rotate(this.rotation, this.up);
             new Vector3f(-1.0F, 0.0F, 0.0F).rotate(this.rotation, this.left);

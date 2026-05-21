@@ -24,15 +24,20 @@ public final class ModelWingsInsectoid extends ModelWings<AnimatorInsectoid> {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        partdefinition.addOrReplaceChild("WingLeft", CubeListBuilder.create().texOffs(0, 0).addBox(0, -8, 0, 19, 24, 0, new CubeDeformation(0.0F)), PartPose.offset(0, 2, 3.5F));
+        partdefinition.addOrReplaceChild("WingLeft",
+                CubeListBuilder.create().texOffs(0, 0).addBox(0, -8, 0, 19, 24, 0, new CubeDeformation(0.0F)),
+                PartPose.offset(0, 2, 3.5F));
 
-        partdefinition.addOrReplaceChild("WingRight", CubeListBuilder.create().texOffs(0, 24).addBox(-19, -8, 0, 19, 24, 0, new CubeDeformation(0.0F)), PartPose.offset(0, 2, 3.5F));
+        partdefinition.addOrReplaceChild("WingRight",
+                CubeListBuilder.create().texOffs(0, 24).addBox(-19, -8, 0, 19, 24, 0, new CubeDeformation(0.0F)),
+                PartPose.offset(0, 2, 3.5F));
 
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
 
     @Override
-    public void render(AnimatorInsectoid animator, float delta, PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void render(AnimatorInsectoid animator, float delta, PoseStack matrixStack, VertexConsumer buffer,
+            int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         animator.getRotation(delta, this.rotation);
         setAngles(this.wingLeft, this.wingRight, this.rotation);
         int color = ARGB.colorFromFloat(alpha, red, green, blue);

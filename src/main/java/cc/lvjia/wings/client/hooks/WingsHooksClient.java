@@ -42,7 +42,8 @@ public final class WingsHooksClient {
         AbstractClientPlayer player = resolvePlayer(state);
         if (player != null) {
             try {
-                ClientEventHandler.onAnimatePlayerModel(new AnimatePlayerModelEvent(player, model, state.ageInTicks, state.xRot));
+                ClientEventHandler
+                        .onAnimatePlayerModel(new AnimatePlayerModelEvent(player, model, state.ageInTicks, state.xRot));
             } finally {
                 RENDERING_PLAYER.remove();
             }
@@ -85,7 +86,8 @@ public final class WingsHooksClient {
         return null;
     }
 
-    public static boolean onCheckRenderEmptyHand(boolean isMainHand, AbstractClientPlayer player, InteractionHand hand, ItemStack itemStack, ItemStack itemStackMainHand) {
+    public static boolean onCheckRenderEmptyHand(boolean isMainHand, AbstractClientPlayer player, InteractionHand hand,
+            ItemStack itemStack, ItemStack itemStackMainHand) {
         if (isMainHand) {
             return true;
         }

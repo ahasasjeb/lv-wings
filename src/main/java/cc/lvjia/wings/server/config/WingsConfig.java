@@ -44,8 +44,7 @@ public final class WingsConfig {
             double hardVerticalLimit,
             double hardTotalLimit,
             double upwardAssistHorizontalThreshold,
-            double upwardAssistMaxBonus
-    ) {
+            double upwardAssistMaxBonus) {
     }
 
     public static final class Data {
@@ -109,8 +108,7 @@ public final class WingsConfig {
                     this.hardVerticalLimit,
                     this.hardTotalLimit,
                     this.upwardAssistHorizontalThreshold,
-                    this.upwardAssistMaxBonus
-            );
+                    this.upwardAssistMaxBonus);
         }
     }
 }

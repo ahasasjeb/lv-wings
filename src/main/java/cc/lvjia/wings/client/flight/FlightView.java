@@ -20,6 +20,7 @@ public interface FlightView {
 
         RenderType getRenderType();
 
-        void render(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha, float delta);
+        void render(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red,
+                float green, float blue, float alpha, float delta);
     }
 }

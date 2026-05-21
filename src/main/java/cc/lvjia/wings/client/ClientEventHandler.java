@@ -127,8 +127,8 @@ public final class ClientEventHandler {
             return 0.0F;
         }
 
-        final boolean[] handled = {false};
-        final float[] rollOut = {0.0F};
+        final boolean[] handled = { false };
+        final float[] rollOut = { 0.0F };
         Flights.ifPlayer(cameraEntity, (player, flight) -> {
             handled[0] = true;
             float amt = flight.getFlyingAmount(delta);

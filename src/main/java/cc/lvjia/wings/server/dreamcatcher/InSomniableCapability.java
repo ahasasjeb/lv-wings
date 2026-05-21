@@ -17,7 +17,6 @@ public final class InSomniableCapability {
     public static void onPlayerClone(ServerPlayer oldPlayer, ServerPlayer newPlayer) {
         getInSomniable(oldPlayer)
                 .ifPresent(oldInstance -> getInSomniable(newPlayer)
-                        .ifPresent(newInstance -> newInstance.clone(oldInstance))
-                );
+                        .ifPresent(newInstance -> newInstance.clone(oldInstance)));
     }
 }

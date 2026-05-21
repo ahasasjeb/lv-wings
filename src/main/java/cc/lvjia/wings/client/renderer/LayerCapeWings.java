@@ -30,7 +30,8 @@ public final class LayerCapeWings extends RenderLayer<AvatarRenderState, PlayerM
     }
 
     @Override
-    public void submit(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int packedLight, AvatarRenderState state, float limbSwing, float limbSwingAmount) {
+    public void submit(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int packedLight,
+            AvatarRenderState state, float limbSwing, float limbSwingAmount) {
         if (state.isInvisible || !state.showCape) {
             return;
         }
@@ -64,8 +65,7 @@ public final class LayerCapeWings extends RenderLayer<AvatarRenderState, PlayerM
                 packedLight,
                 OverlayTexture.NO_OVERLAY,
                 state.outlineColor,
-                null
-        );
+                null);
         poseStack.popPose();
     }
 

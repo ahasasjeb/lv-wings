@@ -9,7 +9,6 @@ import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 
-
 public abstract class ModelWings<A extends Animator> extends Model<A> {
     protected ModelWings(ModelPart root) {
         super(root, RenderTypes::entityCutout);
@@ -21,5 +20,6 @@ public abstract class ModelWings<A extends Animator> extends Model<A> {
         right.zRot = -(left.zRot = MathH.toRadians(angles.z()));
     }
 
-    public abstract void render(A animator, float delta, PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha);
+    public abstract void render(A animator, float delta, PoseStack matrixStack, VertexConsumer buffer, int packedLight,
+            int packedOverlay, float red, float green, float blue, float alpha);
 }
