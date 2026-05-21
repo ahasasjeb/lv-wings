@@ -218,7 +218,7 @@ public final class BuffedFlightApparatus implements FlightApparatus {
      */
     public record MobAvoidanceSettings(double radius, double horizontalPush, double verticalPush, int intervalTicks) {
         public static final @NonNull MobAvoidanceSettings DEFAULT = new MobAvoidanceSettings(14.0D, 0.35D, 0.05D, 10);
-        public static final @NonNull MobAvoidanceSettings DISABLED = new MobAvoidanceSettings(0.0D, 0.0D, 0.0D, 0);
+
 
         public MobAvoidanceSettings {
             if (radius < 0.0D) {

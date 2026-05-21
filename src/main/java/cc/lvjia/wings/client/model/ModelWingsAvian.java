@@ -34,14 +34,6 @@ public final class ModelWingsAvian extends ModelWings<@NonNull AnimatorAvian> {
         private final @NonNull ModelPart humerusRight;
         private final @NonNull ModelPart ulnaRight;
         private final @NonNull ModelPart carpalsRight;
-        private final @NonNull ModelPart feathersCoracoidLeft;
-        private final @NonNull ModelPart feathersPrimaryLeft;
-        private final @NonNull ModelPart feathersSecondaryLeft;
-        private final @NonNull ModelPart feathersTertiaryLeft;
-        private final @NonNull ModelPart feathersCoracoidRight;
-        private final @NonNull ModelPart feathersPrimaryRight;
-        private final @NonNull ModelPart feathersSecondaryRight;
-        private final @NonNull ModelPart feathersTertiaryRight;
         private final @NonNull RotationAngles rotation = new RotationAngles();
 
         public ModelWingsAvian(@NonNull ModelPart root) {
@@ -57,43 +49,43 @@ public final class ModelWingsAvian extends ModelWings<@NonNull AnimatorAvian> {
                 this.ulnaRight = Objects.requireNonNull(this.humerusRight.getChild("ulnaRight"), "ulnaRight");
                 this.carpalsRight = Objects.requireNonNull(this.ulnaRight.getChild("carpalsRight"), "carpalsRight");
 
-                this.feathersCoracoidLeft = Objects.requireNonNull(
+                ModelPart feathersCoracoidLeft = Objects.requireNonNull(
                                 this.coracoidLeft.getChild("feathersCoracoidLeft"), "feathersCoracoidLeft");
-                add3DTexture(this.feathersCoracoidLeft, 6, 40, 0, 0, -1, 6, 8);
-                this.feathersTertiaryLeft = Objects.requireNonNull(
+                add3DTexture(feathersCoracoidLeft, 6, 40, 0, 0, -1, 6, 8);
+                ModelPart feathersTertiaryLeft = Objects.requireNonNull(
                                 this.humerusLeft.getChild("feathersTertiaryLeft"), "feathersTertiaryLeft");
-                add3DTexture(this.feathersTertiaryLeft, 10, 14, 0, 0, -0.5F, 10, 14);
-                this.feathersSecondaryLeft = Objects.requireNonNull(
+                add3DTexture(feathersTertiaryLeft, 10, 14, 0, 0, -0.5F, 10, 14);
+                ModelPart feathersSecondaryLeft = Objects.requireNonNull(
                                 this.ulnaLeft.getChild("feathersSecondaryLeft"), "feathersSecondaryLeft");
-                add3DTexture(this.feathersSecondaryLeft, 31, 14, -2, 0, -0.5F, 11, 12);
-                this.feathersPrimaryLeft = Objects.requireNonNull(
+                add3DTexture(feathersSecondaryLeft, 31, 14, -2, 0, -0.5F, 11, 12);
+                ModelPart feathersPrimaryLeft = Objects.requireNonNull(
                                 this.carpalsLeft.getChild("feathersPrimaryLeft"), "feathersPrimaryLeft");
-                add3DTexture(this.feathersPrimaryLeft, 53, 14, 0, -2.1F, -0.5F, 11, 11);
+                add3DTexture(feathersPrimaryLeft, 53, 14, 0, -2.1F, -0.5F, 11, 11);
 
-                this.feathersCoracoidRight = Objects.requireNonNull(
+                ModelPart feathersCoracoidRight = Objects.requireNonNull(
                                 this.coracoidRight.getChild("feathersCoracoidRight"), "feathersCoracoidRight");
-                add3DTexture(this.feathersCoracoidRight, 0, 40, -6, 0, -1, 6, 8);
-                this.feathersTertiaryRight = Objects.requireNonNull(
+                add3DTexture(feathersCoracoidRight, 0, 40, -6, 0, -1, 6, 8);
+                ModelPart feathersTertiaryRight = Objects.requireNonNull(
                                 this.humerusRight.getChild("feathersTertiaryRight"), "feathersTertiaryRight");
-                add3DTexture(this.feathersTertiaryRight, 0, 14, -10, 0, -0.5F, 10, 14);
-                this.feathersSecondaryRight = Objects.requireNonNull(
+                add3DTexture(feathersTertiaryRight, 0, 14, -10, 0, -0.5F, 10, 14);
+                ModelPart feathersSecondaryRight = Objects.requireNonNull(
                                 this.ulnaRight.getChild("feathersSecondaryRight"), "feathersSecondaryRight");
-                add3DTexture(this.feathersSecondaryRight, 20, 14, -9, 0, -0.5F, 11, 12);
-                this.feathersPrimaryRight = Objects.requireNonNull(
+                add3DTexture(feathersSecondaryRight, 20, 14, -9, 0, -0.5F, 11, 12);
+                ModelPart feathersPrimaryRight = Objects.requireNonNull(
                                 this.carpalsRight.getChild("feathersPrimaryRight"), "feathersPrimaryRight");
-                add3DTexture(this.feathersPrimaryRight, 42, 14, -11, -2.1F, -0.5F, 11, 11);
+                add3DTexture(feathersPrimaryRight, 42, 14, -11, -2.1F, -0.5F, 11, 11);
 
                 this.bonesLeft = ImmutableList.of(this.coracoidLeft, this.humerusLeft, this.ulnaLeft, this.carpalsLeft);
                 this.bonesRight = ImmutableList.of(this.coracoidRight, this.humerusRight, this.ulnaRight,
                                 this.carpalsRight);
 
                 this.feathersLeft = ImmutableList.of(
-                                this.feathersCoracoidLeft, this.feathersTertiaryLeft,
-                                this.feathersSecondaryLeft, this.feathersPrimaryLeft);
+                                feathersCoracoidLeft, feathersTertiaryLeft,
+                                feathersSecondaryLeft, feathersPrimaryLeft);
 
                 this.feathersRight = ImmutableList.of(
-                                this.feathersCoracoidRight, this.feathersTertiaryRight,
-                                this.feathersSecondaryRight, this.feathersPrimaryRight);
+                                feathersCoracoidRight, feathersTertiaryRight,
+                                feathersSecondaryRight, feathersPrimaryRight);
 
         }
 
@@ -173,7 +165,7 @@ public final class ModelWingsAvian extends ModelWings<@NonNull AnimatorAvian> {
                         int u, int v,
                         float offX, float offY, float offZ,
                         int width, int height) {
-                getCubes(model).add(Model3DTexture.create(offX, offY, offZ, width, height, u, v, 64, 64));
+                getCubes(model).add(Model3DTexture.create(offX, offY, offZ, width, height, u, v));
 
         }
 

@@ -1,6 +1,7 @@
 package cc.lvjia.wings.client.renderer;
 
 import cc.lvjia.wings.WingsMod;
+import cc.lvjia.wings.server.apparatus.FlightApparatus;
 import cc.lvjia.wings.server.flight.Flights;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -75,8 +76,7 @@ public final class LayerCapeWings extends RenderLayer<AvatarRenderState, PlayerM
     }
 
     private boolean hasVisibleWings(AbstractClientPlayer player) {
-        return Flights.get(player)
-                .map(flight -> flight.getWing() != WingsMod.NONE && flight.getWing() != WingsMod.WINGLESS)
-                .orElse(false);
+        FlightApparatus wing = Flights.get(player).getWing();
+        return wing != WingsMod.NONE && wing != WingsMod.WINGLESS;
     }
 }

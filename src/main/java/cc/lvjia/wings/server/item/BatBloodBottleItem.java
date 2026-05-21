@@ -31,7 +31,7 @@ public class BatBloodBottleItem extends Item {
     }
 
     public static boolean removeWings(ServerPlayer player, FlightApparatus wings) {
-        boolean changed = Flights.get(player).filter(flight -> flight.getWing() == wings).isPresent();
+        boolean changed = Flights.get(player).getWing() == wings;
         if (!changed || !WingsEffects.WINGS.isBound() || !player.removeEffect(WingsEffects.WINGS)) {
             return false;
         }
@@ -40,14 +40,13 @@ public class BatBloodBottleItem extends Item {
     }
 
     private static void clearFlightState(Player player) {
-        Flights.get(player).ifPresent(flight -> {
-            Flight.PlayerSet players = player.level().isClientSide() ? Flight.PlayerSet.empty()
-                    : Flight.PlayerSet.ofAll();
-            flight.setIsFlying(false, players);
-            flight.setWing(FlightApparatus.NONE, players);
-            flight.setTimeFlying(0);
-            flight.setAnimationState(FlightAnimationState.IDLE);
-        });
+        Flight flight = Flights.get(player);
+        Flight.PlayerSet players = player.level().isClientSide() ? Flight.PlayerSet.empty()
+                : Flight.PlayerSet.ofAll();
+        flight.setIsFlying(false, players);
+        flight.setWing(FlightApparatus.NONE, players);
+        flight.setTimeFlying(0);
+        flight.setAnimationState(FlightAnimationState.IDLE);
         if (player instanceof ServerPlayer serverPlayer) {
             FlightSpeedAntiCheat.clear(serverPlayer);
         }

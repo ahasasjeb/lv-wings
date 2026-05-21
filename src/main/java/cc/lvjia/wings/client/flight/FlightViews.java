@@ -6,7 +6,6 @@ import net.minecraft.world.entity.LivingEntity;
 
 import java.util.Collections;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.WeakHashMap;
 
@@ -17,17 +16,11 @@ public final class FlightViews {
     private FlightViews() {
     }
 
-    public static boolean has(LivingEntity entity) {
-        return get(entity).isPresent();
-    }
-
+    @SuppressWarnings("null")
     public static Optional<FlightView> get(LivingEntity entity) {
         if (entity instanceof AbstractClientPlayer player) {
-            return Flights.get(player)
-                    .map(flight -> Objects.requireNonNull(
-                            VIEWS.computeIfAbsent(player, ignored -> new FlightViewDefault(player,
-                                    Objects.requireNonNull(flight, "flight"))),
-                            "flight view"));
+            return Optional.of(VIEWS.computeIfAbsent(player, ignored -> new FlightViewDefault(player,
+                    Flights.get(player))));
         }
         return Optional.empty();
     }

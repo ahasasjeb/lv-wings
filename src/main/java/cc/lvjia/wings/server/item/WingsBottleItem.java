@@ -24,13 +24,12 @@ public class WingsBottleItem extends Item {
     }
 
     public static boolean giveWing(ServerPlayer player, FlightApparatus wings) {
-        boolean changed = Flights.get(player).filter(flight -> {
-            if (flight.getWing() != wings) {
-                flight.setWing(wings, Flight.PlayerSet.ofAll());
-                return true;
-            }
-            return false;
-        }).isPresent();
+        Flight flight = Flights.get(player);
+        boolean changed = false;
+        if (flight.getWing() != wings) {
+            flight.setWing(wings, Flight.PlayerSet.ofAll());
+            changed = true;
+        }
         if (WingsEffects.WINGS.isBound()) {
             player.addEffect(
                     new MobEffectInstance(WingsEffects.WINGS, MobEffectInstance.INFINITE_DURATION, 0, true, false));

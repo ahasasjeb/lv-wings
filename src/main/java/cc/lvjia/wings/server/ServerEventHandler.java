@@ -92,10 +92,8 @@ public final class ServerEventHandler {
     }
 
     public static void onPlayerTick(@NonNull Player player) {
-        Flights.get(player).ifPresent(flight -> {
-            if (clearSpectatorFlightState(player, flight)) {
-                return;
-            }
+        Flight flight = Flights.get(player);
+        if (!clearSpectatorFlightState(player, flight)) {
             flight.tick(player);
             if (player instanceof ServerPlayer serverPlayer && !serverPlayer.level().isClientSide()) {
                 if (flight.isFlying() && player.getAbilities().flying) {
@@ -104,7 +102,7 @@ public final class ServerEventHandler {
                 }
                 FlightSpeedAntiCheat.tick(serverPlayer, flight);
             }
-        });
+        }
     }
 
     public static void onLivingDeath(@NonNull LivingEntity entity) {
@@ -118,21 +116,21 @@ public final class ServerEventHandler {
         if (event.getEntity().isSpectator()) {
             return;
         }
-        Flights.get(event.getEntity()).filter(Flight::isFlying)
-                .ifPresent(flight -> event.setFlying());
+        Flight flight = Flights.get(event.getEntity());
+        if (flight.isFlying()) {
+            event.setFlying();
+        }
     }
 
     public static void onPlayerFlown(@NonNull PlayerFlownEvent event) {
         Player player = event.getEntity();
-        Flights.get(player).ifPresent(flight -> {
-            if (clearSpectatorFlightState(player, flight)) {
-                return;
-            }
+        Flight flight = Flights.get(player);
+        if (!clearSpectatorFlightState(player, flight)) {
             flight.onFlown(player, event.getDirection());
             if (player instanceof ServerPlayer serverPlayer && !serverPlayer.level().isClientSide()) {
                 FlightSpeedAntiCheat.recordMovement(serverPlayer, flight, event.getDirection());
             }
-        });
+        }
     }
 
     public static void onGetLivingHeadLimit(@NonNull GetLivingHeadLimitEvent event) {

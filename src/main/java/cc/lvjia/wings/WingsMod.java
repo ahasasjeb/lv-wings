@@ -68,7 +68,7 @@ public final class WingsMod implements ModInitializer {
     public static final @NonNull FlightApparatus SLIME_WINGS = registerWing(Names.SLIME, new SimpleFlightApparatus(WingsItemsConfig.SLIME));
     public static final @NonNull FlightApparatus FIRE_WINGS = registerWing(Names.FIRE, new SimpleFlightApparatus(WingsItemsConfig.FIRE));
     public static final @NonNull FlightApparatus LVJIA_SUPER_WINGS = registerWing(Names.LVJIA_SUPER,
-            (FlightApparatus) new BuffedFlightApparatus(WingsItemsConfig.LVJIA_SUPER,
+            new BuffedFlightApparatus(WingsItemsConfig.LVJIA_SUPER,
                     BuffedFlightApparatus.EffectSettings.of(MobEffects.RESISTANCE, 2, 40, 40),
                     BuffedFlightApparatus.EffectSettings.of(MobEffects.JUMP_BOOST, 1, 40, 40)));
     private static @Nullable WingsMod INSTANCE;
@@ -127,9 +127,6 @@ public final class WingsMod implements ModInitializer {
     }
 
     private Proxy requireProxy() {
-        if (this.proxy == null) {
-            throw new IllegalStateException("Proxy not initialized");
-        }
         return this.proxy;
     }
 

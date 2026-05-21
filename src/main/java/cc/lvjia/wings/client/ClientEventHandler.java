@@ -7,6 +7,7 @@ import cc.lvjia.wings.client.asm.GetCameraEyeHeightEvent;
 import cc.lvjia.wings.client.event.EmptyOffHandPresentEvent;
 import cc.lvjia.wings.client.flight.FlightView;
 import cc.lvjia.wings.client.flight.FlightViews;
+import cc.lvjia.wings.server.flight.Flight;
 import cc.lvjia.wings.server.flight.Flights;
 import cc.lvjia.wings.util.MathH;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -42,7 +43,7 @@ public final class ClientEventHandler {
             if (!client.isPaused() && client.level != null) {
                 for (Player player : client.level.players()) {
                     if (player instanceof AbstractClientPlayer clientPlayer) {
-                        Flights.get(clientPlayer).ifPresent(flight -> flight.tick(clientPlayer));
+                        Flights.get(clientPlayer).tick(clientPlayer);
                         FlightViews.get(clientPlayer).ifPresent(FlightView::tick);
                     }
                 }
@@ -53,38 +54,37 @@ public final class ClientEventHandler {
 
     public static void onAnimatePlayerModel(AnimatePlayerModelEvent event) {
         Player player = event.getEntity();
-        Flights.get(player).ifPresent(flight -> {
-            float delta = event.getTicksExisted() - player.tickCount;
-            float amt = flight.getFlyingAmount(delta);
-            if (!shouldApplyFlightPose(player, amt)) {
-                return;
-            }
-            PlayerModel model = event.getModel();
-            float pitch = event.getPitch();
-            model.head.xRot = MathH.toRadians(MathH.lerp(pitch, pitch / 4.0F - 90.0F, amt));
-            model.leftArm.xRot = MathH.lerp(model.leftArm.xRot, -3.2F, amt);
-            model.rightArm.xRot = MathH.lerp(model.rightArm.xRot, -3.2F, amt);
-            model.leftLeg.xRot = MathH.lerp(model.leftLeg.xRot, 0.0F, amt);
-            model.rightLeg.xRot = MathH.lerp(model.rightLeg.xRot, 0.0F, amt);
-            model.hat.xRot = 0;
-            model.hat.yRot = 0;
-            model.hat.zRot = 0;
-            model.leftSleeve.xRot = 0;
-            model.leftSleeve.yRot = 0;
-            model.leftSleeve.zRot = 0;
-            model.rightSleeve.xRot = 0;
-            model.rightSleeve.yRot = 0;
-            model.rightSleeve.zRot = 0;
-            model.leftPants.xRot = 0;
-            model.leftPants.yRot = 0;
-            model.leftPants.zRot = 0;
-            model.rightPants.xRot = 0;
-            model.rightPants.yRot = 0;
-            model.rightPants.zRot = 0;
-            model.jacket.xRot = 0;
-            model.jacket.yRot = 0;
-            model.jacket.zRot = 0;
-        });
+        Flight flight = Flights.get(player);
+        float delta = event.getTicksExisted() - player.tickCount;
+        float amt = flight.getFlyingAmount(delta);
+        if (!shouldApplyFlightPose(player, amt)) {
+            return;
+        }
+        PlayerModel model = event.getModel();
+        float pitch = event.getPitch();
+        model.head.xRot = MathH.toRadians(MathH.lerp(pitch, pitch / 4.0F - 90.0F, amt));
+        model.leftArm.xRot = MathH.lerp(model.leftArm.xRot, -3.2F, amt);
+        model.rightArm.xRot = MathH.lerp(model.rightArm.xRot, -3.2F, amt);
+        model.leftLeg.xRot = MathH.lerp(model.leftLeg.xRot, 0.0F, amt);
+        model.rightLeg.xRot = MathH.lerp(model.rightLeg.xRot, 0.0F, amt);
+        model.hat.xRot = 0;
+        model.hat.yRot = 0;
+        model.hat.zRot = 0;
+        model.leftSleeve.xRot = 0;
+        model.leftSleeve.yRot = 0;
+        model.leftSleeve.zRot = 0;
+        model.rightSleeve.xRot = 0;
+        model.rightSleeve.yRot = 0;
+        model.rightSleeve.zRot = 0;
+        model.leftPants.xRot = 0;
+        model.leftPants.yRot = 0;
+        model.leftPants.zRot = 0;
+        model.rightPants.xRot = 0;
+        model.rightPants.yRot = 0;
+        model.rightPants.zRot = 0;
+        model.jacket.xRot = 0;
+        model.jacket.yRot = 0;
+        model.jacket.zRot = 0;
     }
 
     public static void onApplyRotations(ApplyPlayerRotationsEvent event) {
@@ -105,7 +105,7 @@ public final class ClientEventHandler {
         Entity entity = event.getEntity();
         if (entity instanceof LocalPlayer) {
             FlightViews.get((LocalPlayer) entity)
-                    .ifPresent(flight -> flight.tickEyeHeight(event.getValue(), event::setValue));
+                    .ifPresent(flight -> flight.tickEyeHeight(event::setValue));
         }
     }
 
@@ -158,11 +158,10 @@ public final class ClientEventHandler {
     }
 
     public static void onEmptyOffHandPresentEvent(EmptyOffHandPresentEvent event) {
-        Flights.get(event.getPlayer()).ifPresent(flight -> {
-            if (flight.isFlying()) {
-                event.allow();
-            }
-        });
+        Flight flight = Flights.get(event.getPlayer());
+        if (flight.isFlying()) {
+            event.allow();
+        }
     }
 
     public static void onEntityJoinWorld(Entity entity) {

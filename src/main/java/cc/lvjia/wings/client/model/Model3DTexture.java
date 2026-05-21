@@ -109,14 +109,12 @@ public final class Model3DTexture extends ModelPart.Cube {
     public static ModelPart.Cube create(
             float posX, float posY, float posZ,
             int width, int height,
-            int u, int v,
-            int textureWidth, int textureHeight) {
-        ModelPart.Cube cube = new Model3DTexture(
+            int u, int v) {
+        return new Model3DTexture(
                 posX, posY, posZ,
                 width, height,
                 (float) u, (float) v,
                 (float) (u + width), (float) (v + height));
-        return cube;
     }
 
     private static Field findPolygonsField() {

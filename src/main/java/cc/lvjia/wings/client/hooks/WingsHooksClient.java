@@ -98,15 +98,6 @@ public final class WingsHooksClient {
         return canRenderEmptyOffhand(itemStack, itemStackMainHand);
     }
 
-    public static boolean shouldRenderEmptyOffhand(LocalPlayer player, ItemStack offHandItem, ItemStack mainHandItem) {
-        if (!canRenderEmptyOffhand(offHandItem, mainHandItem)) {
-            return false;
-        }
-        EmptyOffHandPresentEvent event = new EmptyOffHandPresentEvent(player);
-        ClientEventHandler.onEmptyOffHandPresentEvent(event);
-        return event.isAllowed();
-    }
-
     public static boolean canRenderEmptyOffhand(ItemStack offHandItem, ItemStack mainHandItem) {
         return offHandItem.isEmpty() && !Holder.OPTIFINE_PRESENT && !isMap(mainHandItem);
     }

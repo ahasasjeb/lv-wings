@@ -63,10 +63,6 @@ public final class WingForm<A extends @NonNull Animator> {
         return this.model;
     }
 
-    public void setModel(@NonNull ModelWings<A> model) {
-        this.model = Objects.requireNonNull(model, "model");
-    }
-
     public @NonNull Identifier getTexture() {
         return this.texture;
     }
