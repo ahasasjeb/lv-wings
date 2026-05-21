@@ -57,9 +57,9 @@ public abstract class CameraMixin {
         if (roll != 0.0F) {
             this.rotation.rotationYXZ(3.1415927F - this.yRot * 0.017453292F, -this.xRot * 0.017453292F,
                     -roll * 0.017453292F);
-            new Vector3f(0.0F, 0.0F, -1.0F).rotate(this.rotation, this.forwards);
-            new Vector3f(0.0F, 1.0F, 0.0F).rotate(this.rotation, this.up);
-            new Vector3f(-1.0F, 0.0F, 0.0F).rotate(this.rotation, this.left);
+            this.forwards.set(0.0F, 0.0F, -1.0F).rotate(this.rotation);
+            this.up.set(0.0F, 1.0F, 0.0F).rotate(this.rotation);
+            this.left.set(-1.0F, 0.0F, 0.0F).rotate(this.rotation);
             this.matrixPropertiesDirty |= 3;
         }
     }
