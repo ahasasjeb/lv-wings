@@ -1,10 +1,8 @@
 package cc.lvjia.wings.server.dreamcatcher;
 
 import cc.lvjia.wings.server.item.WingsItems;
-import cc.lvjia.wings.util.NBTSerializer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -117,26 +115,8 @@ public final class InSomniable {
         }
     }
 
-    public static final class Serializer implements NBTSerializer<InSomniable, CompoundTag> {
+    public static final class Serializer {
         private static final String SEARCH_STATE = "SearchState";
-
-        @Override
-        public CompoundTag serialize(InSomniable instance) {
-            CompoundTag compound = new CompoundTag();
-            instance.state.ifSearching(state -> compound.putInt(SEARCH_STATE, state));
-            return compound;
-        }
-
-        @Override
-        public InSomniable deserialize(CompoundTag compound) {
-            State state;
-            if (compound.contains(SEARCH_STATE)) {
-                state = new SearchState(compound.getInt(SEARCH_STATE).orElse(0x1FFFE));
-            } else {
-                state = InSomniacState.INSTANCE;
-            }
-            return new InSomniable(state);
-        }
 
         public void serialize(InSomniable instance, ValueOutput output) {
             instance.state.ifSearching(state -> output.putInt(SEARCH_STATE, state));

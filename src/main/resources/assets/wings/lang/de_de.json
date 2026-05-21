@@ -58,7 +58,5 @@
   "config.wings.items.settings.landingExertion.tooltip": "Der Anstrengungswert für die Landung",
   "config.wings.items.settings.durability": "Gegenstandshaltbarkeit",
   "config.wings.items.settings.durability.tooltip": "Unendliche Haltbarkeit wird mit 0 angegeben",
-  "wings.tooltip": "Allgemeine Optionen",
-  "config.wings.wearObstructions": "Trage-Hindernisse",
-  "config.wings.wearObstructions.tooltip": "Gegenstände anpassen, die, wenn sie im Brustplatten-Slot verwendet werden, Flügel im Körper-Schmuck-Slot behindern."
+  "wings.tooltip": "Allgemeine Optionen"
 }

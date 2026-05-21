@@ -58,7 +58,5 @@
   "config.wings.items.settings.landingExertion.tooltip": "قيمة الجهد للهبوط",
   "config.wings.items.settings.durability": "متانة العنصر",
   "config.wings.items.settings.durability.tooltip": "متانة لا نهائية محددة بـ 0",
-  "wings.tooltip": "الخيارات العامة",
-  "config.wings.wearObstructions": "عوائق الارتداء",
-  "config.wings.wearObstructions.tooltip": "تخصيص العناصر، عند استخدامها في فتحة الصدر، تعيق الأجنحة في فتحة الزينة للجسم."
+  "wings.tooltip": "الخيارات العامة"
 }

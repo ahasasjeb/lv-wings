@@ -58,7 +58,5 @@
   "config.wings.items.settings.landingExertion.tooltip": "İniş için çaba değeri",
   "config.wings.items.settings.durability": "Eşya Dayanıklılığı",
   "config.wings.items.settings.durability.tooltip": "0 ile belirtilen sonsuz dayanıklılık",
-  "wings.tooltip": "Genel Seçenekler",
-  "config.wings.wearObstructions": "Giyme Engelleri",
-  "config.wings.wearObstructions.tooltip": "Göğüslük yuvasında kullanıldığında, vücut süslemesi yuvasındaki kanatları engelleyen eşyaları özelleştir."
+  "wings.tooltip": "Genel Seçenekler"
 }

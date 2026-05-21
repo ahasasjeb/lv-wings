@@ -58,7 +58,5 @@
   "config.wings.items.settings.landingExertion.tooltip": "Il valore di sforzo per l'atterraggio",
   "config.wings.items.settings.durability": "Durabilità dell'Oggetto",
   "config.wings.items.settings.durability.tooltip": "Durabilità infinita specificata da 0",
-  "wings.tooltip": "Opzioni Generali",
-  "config.wings.wearObstructions": "Ostruzioni di Indossamento",
-  "config.wings.wearObstructions.tooltip": "Personalizza oggetti, quando usati nello slot corazza, ostruiscono le ali nello slot bauble del corpo."
+  "wings.tooltip": "Opzioni Generali"
 }

@@ -6,9 +6,7 @@ import cc.lvjia.wings.server.config.WingsConfig;
 import cc.lvjia.wings.server.effect.WingsEffects;
 import cc.lvjia.wings.util.CubicBezier;
 import cc.lvjia.wings.util.MathH;
-import cc.lvjia.wings.util.NBTSerializer;
 import com.google.common.collect.Lists;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
@@ -297,7 +295,7 @@ public final class FlightDefault implements Flight {
         this.animationTracker.load(animationState);
     }
 
-    public static final class Serializer implements NBTSerializer<FlightDefault, CompoundTag> {
+    public static final class Serializer {
         private static final String IS_FLYING = "isFlying";
 
         private static final String TIME_FLYING = "timeFlying";
@@ -308,27 +306,6 @@ public final class FlightDefault implements Flight {
 
         public Serializer(Supplier<FlightDefault> factory) {
             this.factory = factory;
-        }
-
-        @Override
-        public CompoundTag serialize(FlightDefault instance) {
-            CompoundTag compound = new CompoundTag();
-            compound.putBoolean(IS_FLYING, instance.isFlying());
-            compound.putInt(TIME_FLYING, instance.getTimeFlying());
-            compound.putString(WING, wingIdFor(instance.getWing()).toString());
-            return compound;
-        }
-
-        @Override
-        public FlightDefault deserialize(CompoundTag compound) {
-            FlightDefault f = this.factory.get();
-            f.setIsFlying(compound.getBoolean(IS_FLYING).orElse(false), PlayerSet.ofAll());
-            f.setTimeFlying(compound.getInt(TIME_FLYING).orElse(INITIAL_TIME_FLYING));
-            String wingIdRaw = compound.contains(WING)
-                    ? compound.getString(WING).orElse(DEFAULT_WING_ID.toString())
-                    : DEFAULT_WING_ID.toString();
-            f.setWing(wingFrom(wingIdRaw));
-            return f;
         }
 
         public void serialize(FlightDefault instance, ValueOutput output) {

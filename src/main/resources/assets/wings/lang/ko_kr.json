@@ -58,7 +58,5 @@
   "config.wings.items.settings.landingExertion.tooltip": "착지를 위한 노력 값",
   "config.wings.items.settings.durability": "아이템 내구성",
   "config.wings.items.settings.durability.tooltip": "0으로 무한 내구성 지정",
-  "wings.tooltip": "일반 옵션",
-  "config.wings.wearObstructions": "착용 방해물",
-  "config.wings.wearObstructions.tooltip": "가슴 보호대 슬롯에서 사용할 때 몸 장식 슬롯의 날개를 방해하는 아이템을 사용자 정의합니다."
+  "wings.tooltip": "일반 옵션"
 }

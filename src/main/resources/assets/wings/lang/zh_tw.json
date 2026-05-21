@@ -58,7 +58,5 @@
   "config.wings.items.settings.landingExertion.tooltip": "著陸的消耗值",
   "config.wings.items.settings.durability": "物品耐久度",
   "config.wings.items.settings.durability.tooltip": "0表示無限耐久度",
-  "wings.tooltip": "常規選項",
-  "config.wings.wearObstructions": "穿戴阻礙",
-  "config.wings.wearObstructions.tooltip": "自定義物品，當在胸甲槽位使用時，會阻礙身體飾品槽位的翅膀。"
+  "wings.tooltip": "常規選項"
 }

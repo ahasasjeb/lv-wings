@@ -58,7 +58,5 @@
   "config.wings.items.settings.landingExertion.tooltip": "El valor de esfuerzo para aterrizar",
   "config.wings.items.settings.durability": "Durabilidad del Ítem",
   "config.wings.items.settings.durability.tooltip": "Durabilidad infinita especificada por 0",
-  "wings.tooltip": "Opciones Generales",
-  "config.wings.wearObstructions": "Obstrucciones de Uso",
-  "config.wings.wearObstructions.tooltip": "Personalizar ítems, cuando se usan en la ranura de peto, obstruyen las alas en la ranura de adorno corporal."
+  "wings.tooltip": "Opciones Generales"
 }

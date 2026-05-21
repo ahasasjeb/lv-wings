@@ -2,11 +2,7 @@ package cc.lvjia.wings.client.flight;
 
 import cc.lvjia.wings.client.apparatus.WingForm;
 import cc.lvjia.wings.client.flight.state.State;
-import cc.lvjia.wings.client.flight.state.StateFall;
-import cc.lvjia.wings.client.flight.state.StateGlide;
 import cc.lvjia.wings.client.flight.state.StateIdle;
-import cc.lvjia.wings.client.flight.state.StateLand;
-import cc.lvjia.wings.client.flight.state.StateLift;
 import cc.lvjia.wings.server.flight.FlightAnimationState;
 import cc.lvjia.wings.server.flight.Flight;
 import cc.lvjia.wings.util.function.FloatConsumer;
@@ -182,21 +178,11 @@ public final class FlightViewDefault implements FlightView {
                         return;
                     }
                     this.remoteAnimationState = animationState;
-                    State state = this.createState(animationState);
+                    State state = State.create(animationState);
                     if (!this.state.getClass().equals(state.getClass())) {
                         state.beginAnimation(this.animator);
                     }
                     this.state = state;
-                }
-
-                private State createState(FlightAnimationState animationState) {
-                    return switch (animationState) {
-                        case LIFT -> new StateLift();
-                        case GLIDE -> new StateGlide();
-                        case LAND -> new StateLand();
-                        case FALL -> new StateFall();
-                        case IDLE -> new StateIdle();
-                    };
                 }
 
                 @Override

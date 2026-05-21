@@ -25,6 +25,10 @@ public final class AnimatorAvian implements Animator {
 
     private float flapCycle;
 
+    private static SimplexNoise createNoise() {
+        return new SimplexNoise(new LegacyRandomSource(new Random().nextLong()));
+    }
+
     private void beginMovement(Movement movement, int transitionDuration) {
         this.setMovement(new Transition(this.movement, movement, transitionDuration));
     }
@@ -200,7 +204,7 @@ public final class AnimatorAvian implements Animator {
     }
 
     private final class GlideMovement implements Movement {
-        private final SimplexNoise noise = new SimplexNoise(new LegacyRandomSource(new Random().nextLong()));
+        private final SimplexNoise noise = createNoise();
 
         private int time;
 
@@ -297,7 +301,7 @@ public final class AnimatorAvian implements Animator {
     }
 
     private final class FallMovement implements Movement {
-        private final SimplexNoise noise = new SimplexNoise(new LegacyRandomSource(new Random().nextLong()));
+        private final SimplexNoise noise = createNoise();
 
         private final WingPose wing = WingPose.builder()
                 .with(0, 30.0D, -23.0D, -50.0D)

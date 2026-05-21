@@ -2,8 +2,8 @@ package cc.lvjia.wings.client.flight.state;
 
 import cc.lvjia.wings.client.flight.Animator;
 import cc.lvjia.wings.server.flight.Flight;
-import cc.lvjia.wings.util.MathH;
-import net.minecraft.util.Mth;
+import cc.lvjia.wings.server.flight.FlightAnimationRules;
+import cc.lvjia.wings.server.flight.FlightAnimationState;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.function.Consumer;
@@ -31,6 +31,16 @@ public abstract class State {
         this.animation = animation;
     }
 
+    public static State create(FlightAnimationState animationState) {
+        return switch (animationState) {
+            case LIFT -> new StateLift();
+            case GLIDE -> new StateGlide();
+            case LAND -> new StateLand();
+            case FALL -> new StateFall();
+            case IDLE -> new StateIdle();
+        };
+    }
+
     public final State update(Flight flight, double x, double y, double z, Player player) {
         // 增加一点延迟，避免速度抖动导致状态频繁切换。
         if (this.time++ > this.stateDelay) {
@@ -41,7 +51,7 @@ public abstract class State {
 
     private State getNext(Flight flight, double x, double y, double z, Player player) {
         if (flight.isFlying()) {
-            if (y < 0 && player.getXRot() >= this.getPitch(x, y, z)) {
+            if (y < 0 && player.getXRot() >= FlightAnimationRules.getPitch(x, y, z)) {
                 return this.createGlide();
             }
             return this.createLift();
@@ -50,11 +60,6 @@ public abstract class State {
             return this.getDescent(flight, player);
         }
         return this.getDefault(y);
-    }
-
-    private float getPitch(double x, double y, double z) {
-        // 根据速度向量计算“俯仰角阈值”，用于判断何时进入滑翔。
-        return MathH.toDegrees((float) -Math.atan2(y, Mth.sqrt((float) (x * x + z * z))));
     }
 
     public final void beginAnimation(Animator animator) {

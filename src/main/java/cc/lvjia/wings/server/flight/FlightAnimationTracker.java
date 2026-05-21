@@ -1,8 +1,5 @@
 package cc.lvjia.wings.server.flight;
 
-import cc.lvjia.wings.util.MathH;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 
 /**
@@ -99,14 +96,14 @@ public final class FlightAnimationTracker {
         double motionZ = player.getZ() - player.zo;
 
         if (flight.isFlying()) {
-            if (motionY < 0.0D && player.getXRot() >= this.getPitch(motionX, motionY, motionZ)) {
+            if (motionY < 0.0D && player.getXRot() >= FlightAnimationRules.getPitch(motionX, motionY, motionZ)) {
                 return FlightAnimationState.GLIDE;
             }
             return FlightAnimationState.LIFT;
         }
 
         if (motionY < 0.0D) {
-            if (this.state == FlightAnimationState.IDLE && this.isNearGround(player)) {
+            if (this.state == FlightAnimationState.IDLE && FlightAnimationRules.isNearGround(player)) {
                 return FlightAnimationState.IDLE;
             }
             return flight.canLand(player) ? FlightAnimationState.LAND : FlightAnimationState.FALL;
@@ -125,12 +122,4 @@ public final class FlightAnimationTracker {
         return DEFAULT_STATE_DELAY;
     }
 
-    private float getPitch(double x, double y, double z) {
-        return MathH.toDegrees((float) -Math.atan2(y, Mth.sqrt((float) (x * x + z * z))));
-    }
-
-    private boolean isNearGround(Player player) {
-        BlockPos below = BlockPos.containing(player.getX(), player.getY() - 0.25D, player.getZ());
-        return !player.level().isEmptyBlock(below) || !player.level().isEmptyBlock(below.below());
-    }
 }

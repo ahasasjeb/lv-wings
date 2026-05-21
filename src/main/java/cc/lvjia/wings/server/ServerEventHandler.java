@@ -6,8 +6,8 @@ import cc.lvjia.wings.server.asm.PlayerFlightCheckEvent;
 import cc.lvjia.wings.server.asm.PlayerFlownEvent;
 import cc.lvjia.wings.server.command.WingsCommand;
 import cc.lvjia.wings.server.flight.Flight;
-import cc.lvjia.wings.server.flight.FlightAnimationState;
 import cc.lvjia.wings.server.flight.FlightSpeedAntiCheat;
+import cc.lvjia.wings.server.flight.FlightStateReset;
 import cc.lvjia.wings.server.flight.Flights;
 import cc.lvjia.wings.server.item.WingsItems;
 import cc.lvjia.wings.server.net.serverbound.MessageControlFlying;
@@ -85,7 +85,7 @@ public final class ServerEventHandler {
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
         Flights.get(player).ifPresent(flight -> {
-            if (clearSpectatorFlightState(player, flight)) {
+            if (FlightStateReset.clearSpectator(player, flight)) {
                 return;
             }
             flight.tick(player);
@@ -126,7 +126,7 @@ public final class ServerEventHandler {
     public static void onPlayerFlown(PlayerFlownEvent event) {
         Player player = event.getEntity();
         Flights.get(player).ifPresent(flight -> {
-            if (clearSpectatorFlightState(player, flight)) {
+            if (FlightStateReset.clearSpectator(player, flight)) {
                 return;
             }
             flight.onFlown(player, event.getDirection());
@@ -154,26 +154,4 @@ public final class ServerEventHandler {
         WingsCommand.register(event.getDispatcher());
     }
 
-    private static boolean clearSpectatorFlightState(Player player, Flight flight) {
-        if (!player.isSpectator()) {
-            return false;
-        }
-        boolean wasFlying = flight.isFlying();
-        boolean changed = false;
-        if (flight.getTimeFlying() != 0) {
-            flight.setTimeFlying(0);
-            changed = true;
-        }
-        if (flight.getAnimationState() != FlightAnimationState.IDLE) {
-            flight.setAnimationState(FlightAnimationState.IDLE);
-            changed = true;
-        }
-        if (wasFlying) {
-            flight.setIsFlying(false, Flight.PlayerSet.ofAll());
-        } else if (changed) {
-            flight.sync(Flight.PlayerSet.ofAll());
-        }
-        FlightSpeedAntiCheat.clear(player);
-        return true;
-    }
 }

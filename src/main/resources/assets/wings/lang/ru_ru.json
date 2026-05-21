@@ -58,7 +58,5 @@
   "config.wings.items.settings.landingExertion.tooltip": "Значение усилия для посадки",
   "config.wings.items.settings.durability": "Прочность предмета",
   "config.wings.items.settings.durability.tooltip": "Бесконечная прочность указывается как 0",
-  "wings.tooltip": "Общие параметры",
-  "config.wings.wearObstructions": "Препятствия ношения",
-  "config.wings.wearObstructions.tooltip": "Настроить предметы, которые при использовании в слоте нагрудника мешают крыльям в слоте украшения тела."
+  "wings.tooltip": "Общие параметры"
 }
