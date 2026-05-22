@@ -1,11 +1,15 @@
 package com.toni.wings.util;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
+
+import javax.annotation.Nonnull;
 
 public final class CapabilityProviders {
     private CapabilityProviders() {
@@ -23,6 +27,66 @@ public final class CapabilityProviders {
 
     public static <T> NonSerializingSingleBuilder<T> builder(Capability<? super T> capability, T instance) {
         return new NonSerializingSingleBuilderImpl<>(capability, instance);
+    }
+
+    public static CompositeBuilder builder() {
+        return new CompositeBuilderImpl();
+    }
+
+    public interface CompositeBuilder {
+        CompositeBuilder add(@Nonnull ICapabilityProvider provider);
+
+        ICapabilityProvider build();
+    }
+
+    private static final class CompositeBuilderImpl implements CompositeBuilder {
+        private final ImmutableList.Builder<ICapabilityProvider> providers;
+
+        private CompositeBuilderImpl() {
+            this(ImmutableList.builder());
+        }
+
+        private CompositeBuilderImpl(ImmutableList.Builder<ICapabilityProvider> providers) {
+            this.providers = providers;
+        }
+
+        @Override
+        public CompositeBuilder add(@Nonnull ICapabilityProvider provider) {
+            this.providers.add(Util.requireNonnull(provider, "Capability provider cannot be null"));
+            return this;
+        }
+
+        @Override
+        public ICapabilityProvider build() {
+            ImmutableList<ICapabilityProvider> providers = this.providers.build();
+            switch (providers.size()) {
+                case 0:
+                    return empty();
+                case 1:
+                    return Util.requireNonnull(Iterables.getOnlyElement(providers), "Capability provider cannot be null");
+                default:
+                    return new CompositeProvider(providers);
+            }
+        }
+    }
+
+    private static final class CompositeProvider implements ICapabilityProvider {
+        private final ImmutableList<ICapabilityProvider> providers;
+
+        private CompositeProvider(ImmutableList<ICapabilityProvider> providers) {
+            this.providers = providers;
+        }
+
+        @Override
+        public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
+            for (ICapabilityProvider provider : this.providers) {
+                LazyOptional<T> instance = provider.getCapability(capability, facing);
+                if (instance.isPresent()) {
+                    return instance;
+                }
+            }
+            return LazyOptional.empty();
+        }
     }
 
     private static final class EmptySingleBuilder<T> implements NonSerializingSingleBuilder<T> {

@@ -1,8 +1,7 @@
 简体中文优先
 
-1.20.1反编译 
-MinecraftForge-1.21.1
-embeddium-20.1-forge
+`remapped_client_1.20.1`里面是Minecraft反编译代码
+`MinecraftForge-1.20.1` 则是Forge的
 
 位于项目根目录
 文件夹里是代码，务必参考，防止幻觉

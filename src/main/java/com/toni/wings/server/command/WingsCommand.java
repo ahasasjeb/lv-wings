@@ -13,6 +13,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Collection;
+import java.util.Objects;
+import javax.annotation.Nonnull;
 
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
@@ -25,16 +27,16 @@ public class WingsCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(literal("wings").requires(cs -> cs.hasPermission(2))
             .then(literal("give")
-                .then(argument("targets", EntityArgument.players())
+                .then(argument("targets", Objects.requireNonNull(EntityArgument.players()))
                     .then(argument("wings", WingsArgument.wings())
                         .executes(WingsCommand::giveWing))))
             .then(literal("take")
-                .then(argument("targets", EntityArgument.players())
+                .then(argument("targets", Objects.requireNonNull(EntityArgument.players()))
                     .then(argument("wings", WingsArgument.wings()).executes(WingsCommand::takeSpecificWings))
                     .executes(WingsCommand::takeWings))));
     }
 
-    private static int giveWing(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+    private static int giveWing(@Nonnull CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         Collection<ServerPlayer> targets = EntityArgument.getPlayers(ctx, "targets");
         FlightApparatus wings = WingsArgument.getWings(ctx, "wings");
         int count = 0;
@@ -56,7 +58,7 @@ public class WingsCommand {
         return count;
     }
 
-    private static int takeWings(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+    private static int takeWings(@Nonnull CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         Collection<ServerPlayer> targets = EntityArgument.getPlayers(ctx, "targets");
         int count = 0;
         for (ServerPlayer player : targets) {
@@ -77,7 +79,7 @@ public class WingsCommand {
         return count;
     }
 
-    private static int takeSpecificWings(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+    private static int takeSpecificWings(@Nonnull CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         Collection<ServerPlayer> targets = EntityArgument.getPlayers(ctx, "targets");
         FlightApparatus wings = WingsArgument.getWings(ctx, "wings");
         int count = 0;

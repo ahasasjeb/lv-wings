@@ -4,6 +4,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 
@@ -80,12 +81,14 @@ public final class NetBuilder {
     }
 
     public <T extends Message> MessageBuilder<T, ServerMessageContext> serverbound(Supplier<T> factory) {
-        return new MessageBuilder<>(factory, new HandlerConsumerFactory<>(LogicalSide.SERVER, ServerMessageContext::new));
+        return new MessageBuilder<>(factory, NetworkDirection.PLAY_TO_SERVER,
+            new HandlerConsumerFactory<>(LogicalSide.SERVER, ServerMessageContext::new));
     }
 
     @SuppressWarnings("Convert2MethodRef")
     public <T extends Message> MessageBuilder<T, ClientMessageContext> clientbound(Supplier<T> factory) {
-        return new MessageBuilder<>(factory, DistExecutor.unsafeRunForDist(() -> () -> createClientConsumerFactory(), () -> () -> createServerConsumerFactory()));
+        return new MessageBuilder<>(factory, NetworkDirection.PLAY_TO_CLIENT,
+            DistExecutor.unsafeRunForDist(() -> () -> createClientConsumerFactory(), () -> () -> createServerConsumerFactory()));
     }
 
     public SimpleChannel build() {
@@ -137,17 +140,19 @@ public final class NetBuilder {
 
     public class MessageBuilder<T extends Message, S extends MessageContext> {
         private final Supplier<T> factory;
+        private final NetworkDirection direction;
         private final ConsumerFactory<T, S> consumerFactory;
 
-        protected MessageBuilder(Supplier<T> factory, ConsumerFactory<T, S> consumerFactory) {
+        protected MessageBuilder(Supplier<T> factory, NetworkDirection direction, ConsumerFactory<T, S> consumerFactory) {
             this.factory = factory;
+            this.direction = direction;
             this.consumerFactory = consumerFactory;
         }
 
         public NetBuilder consumer(Supplier<BiConsumer<? super T, S>> consumer) {
             Supplier<T> factory = this.factory;
             @SuppressWarnings("unchecked") Class<T> type = (Class<T>) factory.get().getClass();
-            NetBuilder.this.channel().messageBuilder(type, NetBuilder.this.id++)
+            NetBuilder.this.channel().messageBuilder(type, NetBuilder.this.id++, this.direction)
                 .encoder(Message::encode)
                 .decoder(buf -> {
                     T msg = factory.get();

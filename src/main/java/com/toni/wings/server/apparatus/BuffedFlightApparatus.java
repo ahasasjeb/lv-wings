@@ -98,7 +98,7 @@ public final class BuffedFlightApparatus implements FlightApparatus {
             return;
         }
         double radiusSquared = radius * radius;
-        AABB searchBox = player.getBoundingBox().inflate(radius);
+        AABB searchBox = Objects.requireNonNull(player.getBoundingBox().inflate(radius), "敌对生物搜索区域不能为空");
         List<Mob> hostiles = player.level().getEntitiesOfClass(Mob.class, searchBox,
             mob -> isRepellableHostile(mob, player, radiusSquared));
         if (hostiles.isEmpty()) {
@@ -111,6 +111,7 @@ public final class BuffedFlightApparatus implements FlightApparatus {
     }
 
     private static boolean isRepellableHostile(Mob mob, Player player, double radiusSquared) {
+        Player targetPlayer = Objects.requireNonNull(player, "玩家不能为空");
         if (!(mob instanceof Enemy)) {
             return false;
         }
@@ -120,10 +121,10 @@ public final class BuffedFlightApparatus implements FlightApparatus {
         if (!mob.isEffectiveAi() || mob.isNoAi()) {
             return false;
         }
-        if (mob.isAlliedTo(player)) {
+        if (mob.isAlliedTo(targetPlayer)) {
             return false;
         }
-        if (mob.distanceToSqr(player) > radiusSquared) {
+        if (mob.distanceToSqr(targetPlayer) > radiusSquared) {
             return false;
         }
         return true;
@@ -142,7 +143,11 @@ public final class BuffedFlightApparatus implements FlightApparatus {
 
     private static void pushAwayFromPlayer(Mob mob, Player player, MobAvoidanceSettings settings) {
         double radius = settings.radius();
-        Vec3 offset = mob.position().subtract(player.position());
+        if (radius <= 0.0D) {
+            return;
+        }
+        Vec3 playerPosition = Objects.requireNonNull(player.position(), "玩家位置不能为空");
+        Vec3 offset = mob.position().subtract(playerPosition);
         double distanceSquared = offset.lengthSqr();
         if (distanceSquared < 1.0E-6D) {
             offset = new Vec3(1.0D, 0.0D, 0.0D);
@@ -197,9 +202,10 @@ public final class BuffedFlightApparatus implements FlightApparatus {
         }
 
         private void apply(Player player) {
-            MobEffectInstance existing = player.getEffect(this.effect);
+            MobEffect effect = Objects.requireNonNull(this.effect, "效果不能为空");
+            MobEffectInstance existing = player.getEffect(effect);
             if (existing == null || existing.getAmplifier() < this.amplifier || existing.getDuration() <= this.refreshThreshold) {
-                player.addEffect(new MobEffectInstance(this.effect, this.durationTicks, this.amplifier, true, false, false));
+                player.addEffect(new MobEffectInstance(effect, this.durationTicks, this.amplifier, true, false, false));
             }
         }
     }

@@ -29,6 +29,8 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.Objects;
+
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = WingsMod.ID)
 public final class ClientEventHandler {
     private static ResourceKey<Level> lastPlayerDimension;
@@ -67,7 +69,7 @@ public final class ClientEventHandler {
             model.rightArm.xRot = MathH.lerp(model.rightArm.xRot, -3.2F, amt);
             model.leftLeg.xRot = MathH.lerp(model.leftLeg.xRot, 0.0F, amt);
             model.rightLeg.xRot = MathH.lerp(model.rightLeg.xRot, 0.0F, amt);
-            model.hat.copyFrom(model.head);
+            model.hat.copyFrom(Objects.requireNonNull(model.head));
         });
     }
 
@@ -84,8 +86,8 @@ public final class ClientEventHandler {
                     delta
                 );
                 float pitch = -MathH.lerpDegrees(player.xRotO, player.getXRot(), delta) - 90.0F;
-                matrixStack.mulPose(Axis.ZP.rotationDegrees(MathH.lerpDegrees(0.0F, roll, amt)));
-                matrixStack.mulPose(Axis.XP.rotationDegrees(MathH.lerpDegrees(0.0F, pitch, amt)));
+                matrixStack.mulPose(Objects.requireNonNull(Axis.ZP.rotationDegrees(MathH.lerpDegrees(0.0F, roll, amt))));
+                matrixStack.mulPose(Objects.requireNonNull(Axis.XP.rotationDegrees(MathH.lerpDegrees(0.0F, pitch, amt))));
                 matrixStack.translate(0.0D, -1.2D * MathH.easeInOut(amt), 0.0D);
             }
         });

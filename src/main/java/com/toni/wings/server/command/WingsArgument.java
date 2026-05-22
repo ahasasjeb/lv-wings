@@ -16,7 +16,9 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import javax.annotation.Nonnull;
 
 public class WingsArgument implements ArgumentType<FlightApparatus> {
     private static final Collection<String> EXAMPLES = Arrays.asList("magical", "wings");
@@ -25,27 +27,32 @@ public class WingsArgument implements ArgumentType<FlightApparatus> {
     public WingsArgument() {
     }
 
+    @Nonnull
     public static WingsArgument wings() {
         return new WingsArgument();
     }
 
-    public static FlightApparatus getWings(CommandContext<CommandSourceStack> ctx, String value) throws CommandSyntaxException {
-        return ctx.getArgument(value, FlightApparatus.class);
+    @Nonnull
+    public static FlightApparatus getWings(@Nonnull CommandContext<CommandSourceStack> ctx, @Nonnull String value) throws CommandSyntaxException {
+        return Objects.requireNonNull(ctx.getArgument(value, FlightApparatus.class));
     }
 
     @Override
+    @Nonnull
     public FlightApparatus parse(StringReader reader) throws CommandSyntaxException {
-        ResourceLocation key = ResourceLocation.read(reader);
-        return WingsMod.WINGS.getOptional(key).orElseThrow(() -> ERROR_UNKNOWN_WING.create(key));
+        ResourceLocation key = ResourceLocation.read(Objects.requireNonNull(reader));
+        return Objects.requireNonNull(WingsMod.WINGS.getOptional(key).orElseThrow(() -> ERROR_UNKNOWN_WING.create(key)));
     }
 
     @Override
+    @Nonnull
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> ctx, SuggestionsBuilder builder) {
-        return SharedSuggestionProvider.suggestResource(WingsMod.WINGS.keySet(), builder);
+        return Objects.requireNonNull(SharedSuggestionProvider.suggestResource(Objects.requireNonNull(WingsMod.WINGS.keySet()), Objects.requireNonNull(builder)));
     }
 
     @Override
+    @Nonnull
     public Collection<String> getExamples() {
-        return EXAMPLES;
+        return Objects.requireNonNull(EXAMPLES);
     }
 }

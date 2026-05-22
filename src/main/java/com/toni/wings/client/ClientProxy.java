@@ -12,6 +12,7 @@ import com.toni.wings.client.model.ModelWingsAvian;
 import com.toni.wings.client.model.ModelWingsInsectoid;
 import com.toni.wings.client.renderer.LayerWings;
 import com.toni.wings.server.flight.Flight;
+import com.toni.wings.server.flight.FlightAbilities;
 import com.toni.wings.server.flight.Flights;
 import com.toni.wings.server.item.BatBloodBottleItem;
 import com.toni.wings.server.item.WingsItems;
@@ -31,6 +32,7 @@ import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public final class ClientProxy extends Proxy {
@@ -48,9 +50,15 @@ public final class ClientProxy extends Proxy {
             .key("key.wings.fly", KeyConflictContext.IN_GAME, KeyModifier.NONE, GLFW.GLFW_KEY_R)
             .onPress(() -> {
                 Player player = Minecraft.getInstance().player;
-                Flights.get(player).filter(flight -> flight.canFly(player)).ifPresent(flight ->
-                    flight.toggleIsFlying(Flight.PlayerSet.ofOthers())
-                );
+                if (player == null) {
+                    return;
+                }
+                Flights.get(player).filter(flight -> flight.canFly(player)).ifPresent(flight -> {
+                    if (!flight.isFlying()) {
+                        FlightAbilities.stopVanillaFlying(player);
+                    }
+                    flight.toggleIsFlying(Flight.PlayerSet.ofOthers());
+                });
                 Flights.ifPlayer(player, (p, flight) -> {
                     if (flight.getWing().equals(WingsMod.WINGLESS) && !flight.isFlying()) {
                         BatBloodBottleItem.removeWings(player);
@@ -107,8 +115,9 @@ public final class ClientProxy extends Proxy {
     }
 
     private static  <A extends Animator> WingForm<A> createWings(ResourceLocation name, Supplier<A> animator, ModelWings<A> model, Supplier<RenderType> renderType) {
-        String texturePath = String.format("textures/entity/%s.png", name.getPath());
-        ResourceLocation texture = ResourceLocation.tryBuild(name.getNamespace(), texturePath);
+        String namespace = Objects.requireNonNull(name.getNamespace());
+        String texturePath = Objects.requireNonNull(String.format("textures/entity/%s.png", name.getPath()));
+        ResourceLocation texture = ResourceLocation.tryBuild(namespace, texturePath);
         if (texture == null) {
             throw new IllegalArgumentException("Invalid texture path: " + texturePath);
         }

@@ -115,12 +115,12 @@ public final class FlightDefault implements Flight {
 
     @Override
     public boolean canFly(Player player) {
-        return !player.isSpectator() && this.hasEffect(player) && this.flightApparatus.isUsable(player);
+        return FlightAbilities.canUseModFlight(player) && this.hasEffect(player) && this.flightApparatus.isUsable(player);
     }
 
     @Override
     public boolean hasEffect(Player player) {
-        return WingsEffects.WINGS.filter(effect -> player.getEffect(effect) != null).isPresent();
+        return WingsEffects.WINGS.filter(effect -> player.getEffect(Objects.requireNonNull(effect)) != null).isPresent();
     }
 
     @Override
@@ -130,7 +130,7 @@ public final class FlightDefault implements Flight {
 
     private void onWornUpdate(Player player) {
         if (player.isEffectiveAi()) {
-            if (this.isFlying()) {
+            if (this.isFlying() && !player.getAbilities().flying && !player.isSpectator()) {
                 float speed = (float) Mth.clampedLerp(MIN_SPEED, MAX_SPEED, player.zza);
                 float elevationBoost = MathH.transform(
                         Math.abs(player.getXRot()),
@@ -142,15 +142,16 @@ public final class FlightDefault implements Flight {
                 float vy = Mth.sin(pitch);
                 float vz = Mth.cos(yaw);
                 float vx = Mth.sin(yaw);
-                player.setDeltaMovement(player.getDeltaMovement().add(
+                Vec3 movement = Objects.requireNonNull(player.getDeltaMovement().add(
                         vx * vxz * speed,
                         vy * speed + Y_BOOST * (player.getXRot() > 0.0F ? elevationBoost : 1.0D),
                         vz * vxz * speed));
+                player.setDeltaMovement(movement);
             }
             if (this.canLand(player)) {
                 Vec3 mot = player.getDeltaMovement();
                 if (mot.y() < 0.0D) {
-                    player.setDeltaMovement(mot.multiply(1.0D, FALL_REDUCTION, 1.0D));
+                    player.setDeltaMovement(Objects.requireNonNull(mot.multiply(1.0D, FALL_REDUCTION, 1.0D)));
                 }
                 player.fallDistance = 0.0F;
             }
@@ -169,10 +170,10 @@ public final class FlightDefault implements Flight {
     public void tick(Player player) {
         if (player.isSpectator()) {
             if (this.isFlying()) {
-                this.setIsFlying(false, player.level().isClientSide ? PlayerSet.empty() : PlayerSet.ofAll());
+                this.setIsFlying(false, player.level().isClientSide ? PlayerSet.ofOthers() : PlayerSet.ofAll());
             }
             this.state = this.state.notFlying();
-            this.tickFlyingAmount();
+            this.tickFlyingAmount(player);
             return;
         }
 
@@ -188,16 +189,16 @@ public final class FlightDefault implements Flight {
                 this.setIsFlying(false, PlayerSet.ofAll());
             }
         }
-        this.tickFlyingAmount();
-        if (this.isFlying() && this.getTimeFlying() >= MAX_TIME_FLYING && player.isLocalPlayer() && player.onGround()) {
-            this.setIsFlying(false, PlayerSet.ofOthers());
-        }
+        this.tickFlyingAmount(player);
     }
 
-    private void tickFlyingAmount() {
+    private void tickFlyingAmount(Player player) {
         this.setPrevTimeFlying(this.getTimeFlying());
         if (this.isFlying() && this.getTimeFlying() < MAX_TIME_FLYING) {
             this.setTimeFlying(this.getTimeFlying() + 1);
+        }
+        if (this.isFlying() && this.getTimeFlying() >= MAX_TIME_FLYING && player.isLocalPlayer() && player.onGround()) {
+            this.setIsFlying(false, PlayerSet.ofOthers());
         } else if (!this.isFlying() && this.getTimeFlying() > INITIAL_TIME_FLYING) {
             this.setTimeFlying(this.getTimeFlying() - 1);
         }
@@ -205,9 +206,9 @@ public final class FlightDefault implements Flight {
 
     @Override
     public void onFlown(Player player, Vec3 direction) {
-        if (this.isFlying()) {
+        if (this.isFlying() && !player.getAbilities().flying && !player.isSpectator()) {
             this.flightApparatus.onFlight(player, direction);
-        } else if (player.getDeltaMovement().y() < -0.5D) {
+        } else if (!player.isSpectator() && !player.getAbilities().flying && player.getDeltaMovement().y() < -0.5D) {
             this.flightApparatus.onLanding(player, direction);
         }
     }
@@ -228,7 +229,7 @@ public final class FlightDefault implements Flight {
     public void serialize(FriendlyByteBuf buf) {
         buf.writeBoolean(this.isFlying());
         buf.writeVarInt(this.getTimeFlying());
-        buf.writeVarInt(WingsMod.WINGS.getId(this.getWing()));
+        buf.writeId(Objects.requireNonNull(WingsMod.WINGS), Objects.requireNonNull(this.getWing()));
     }
 
     @Override
@@ -257,7 +258,8 @@ public final class FlightDefault implements Flight {
             CompoundTag compound = new CompoundTag();
             compound.putBoolean(IS_FLYING, instance.isFlying());
             compound.putInt(TIME_FLYING, instance.getTimeFlying());
-            compound.putString(WING, Objects.requireNonNull(WingsMod.WINGS.getKey(instance.getWing())).toString());
+            ResourceLocation wingKey = Objects.requireNonNull(WingsMod.WINGS.getKey(Objects.requireNonNull(instance.getWing())));
+            compound.putString(WING, Objects.requireNonNull(wingKey.toString()));
             return compound;
         }
 

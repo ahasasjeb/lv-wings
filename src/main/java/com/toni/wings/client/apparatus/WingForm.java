@@ -42,6 +42,11 @@ public final class WingForm<A extends Animator> {
         return this.texture;
     }
 
+    public static <A extends Animator> WingForm<A> of(Supplier<A> animator, ModelWings<A> model, ResourceLocation texture) {
+        ResourceLocation safeTexture = Objects.requireNonNull(texture);
+        return new WingForm<>(animator, model, safeTexture, () -> RenderType.entityCutout(safeTexture));
+    }
+
     public static <A extends Animator> WingForm<A> of(Supplier<A> animator, ModelWings<A> model, ResourceLocation texture, Supplier<RenderType> renderType) {
         return new WingForm<>(animator, model, texture, renderType);
     }
