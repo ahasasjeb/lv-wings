@@ -17,7 +17,6 @@ public interface Flight {
     boolean isFlying();
     default void toggleIsFlying(PlayerSet players) {
         this.setIsFlying(!this.isFlying(), players);
-        //System.out.println("Flight set to " + this.isFlying());
     }
 
     void setTimeFlying(int timeFlying);

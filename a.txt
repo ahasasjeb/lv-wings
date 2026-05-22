@@ -1,0 +1,362 @@
+================================================================================
+  lv-wings 项目死代码 / 逻辑重复 / 优化点分析报告
+  生成时间: 2026-05-22
+================================================================================
+
+目录
+  一、完全废弃的类/文件（8个）
+  二、注释掉的代码块
+  三、空方法 / 空事件处理器
+  四、未使用的方法/字段/内部类
+  五、未使用的 import
+  六、逻辑重复
+  七、潜在优化点
+  八、总结统计
+
+================================================================================
+  一、完全废弃的类/文件（8个——整个文件无任何活跃引用）
+================================================================================
+
+1. SimpleStorage.java（全部被/* */注释包裹）
+   路径: util/SimpleStorage.java
+   行: 1-31（全部内容）
+   原因: 整个类位于块注释中，唯一外部引用(Proxy.java:42-43)同样被注释。
+
+2. Util.java（唯二方法从未被调用）
+   路径: util/Util.java
+   行: 1-17
+   原因: underScoreToCamel(String) 全局搜索结果为0。
+
+3. SmoothingFunction.java（全局0引用）
+   路径: util/SmoothingFunction.java
+   行: 1-57
+   原因: 无任何文件导入或引用此类。
+
+4. FloatUnaryOperator.java（仅被死代码SmoothingFunction引用）
+   路径: util/function/FloatUnaryOperator.java
+   行: 1-10
+   原因: 唯一引用者是已废弃的SmoothingFunction。
+
+5. HarvestLevel.java（全局0引用）
+   路径: util/HarvestLevel.java
+   行: 1-20
+   原因: 无任何文件导入或引用此枚举。
+
+6. HandlerSlot.java（仅被死代码ItemPlacing引用）
+   路径: util/HandlerSlot.java
+   行: 1-35
+   原因: 无活跃代码引用。
+
+7. ItemPlacing.java（仅被死代码ItemAccessor引用）
+   路径: util/ItemPlacing.java
+   行: 1-17
+   原因: 无活跃代码引用。
+
+8. ItemAccessor.java（全局0引用）
+   路径: util/ItemAccessor.java
+   行: 1-49
+   原因: 无任何文件导入或引用此类。
+
+================================================================================
+  二、注释掉的代码块
+================================================================================
+
+2.1 METALLIC_WINGS 整项功能（4处注释）
+    - WingsMod.java:68    //public static final FlightApparatus METALLIC_WINGS
+    - WingsMod.java:142   //METALLIC = create("metallic_wings"),
+    - Proxy.java:63       //reg.accept(Items.IRON_INGOT, WingsItems.METALLIC_WINGS_BOTTLE);
+    - WingsItems.java:41  //public static final RegistryObject<Item> METALLIC_WINGS_BOTTLE
+    - ReloadListener.java:53  //WingForm.register(WingsMod.METALLIC_WINGS, ...)
+   说明: 整条metallic wings功能链已被放弃，另有孤立资源文件
+         src/main/resources/assets/wings/models/item/metallic_wings_bottle.json
+
+2.2 Proxy.java — 旧 CapabilityManager 注册
+   行: 42-43
+   //CapabilityManager.INSTANCE.register(Flight.class, SimpleStorage.ofVoid(), FlightDefault::new);
+   //CapabilityManager.INSTANCE.register(InSomniable.class, SimpleStorage.ofVoid(), InSomniable::new);
+   原因: 已被新的 RegisterCapabilitiesEvent (行67-71) 取代。
+
+2.3 FlightViews.java — 旧 @CapabilityInject 注解
+   行: 37-40
+   /*@CapabilityInject(FlightView.class)
+   static void inject(Capability<FlightView> capability) { ... }*/
+   原因: 已被 CapabilityToken 方法 (行42) 取代。
+
+2.4 ModelWingsInsectoid.java — 旧手动模型构建
+   行: 13, 21, 25-34
+   //private final ModelPart root;
+   //this.root = root;
+   /*this.texWidth = this.texHeight = 64; ...*/
+   原因: 已被 LayerDefinition.createBodyLayer() 取代。
+
+2.5 ModelWingsAvian.java
+   行: 44  //this.root = root;  旧的根模型部件引用
+   行: 57  //this.feathersCoracoidLeft = new ModelPart(...)  旧替代构造
+
+2.6 ClientProxy.java — 引用不存在的类
+   行: 46  //modBus.register(BakeModels.class);
+   说明: BakeModels 类在项目中不存在。
+
+2.7 ReloadListener.java — 未完成的事件订阅者
+   行: 33-36
+   /*@SubscribeEvent
+   public static void onModelBakeEvent(RenderLivingEvent.Pre event) {
+       if(event.getEntity().hasEffect(WingsEffects.WINGS))
+   }*/
+   说明: 代码不完整且从未完成。
+
+2.8 Flight.java — 被注释的调试打印
+   行: 20  //System.out.println("Flight set to " + this.isFlying());
+
+================================================================================
+  三、空方法 / 空事件处理器
+================================================================================
+
+3.1 WingsModels.onRegister() — 空的 @SubscribeEvent 方法
+   路径: client/WingsModels.java
+   行: 15-16
+   @SubscribeEvent
+   public static void onRegister(ModelEvent.RegisterAdditional event) { }
+   说明: 整个类无任何外部引用，可安全删除。
+
+3.2 EventListener.renderLiving() — 空的 @SubscribeEvent 方法
+   路径: util/EventListener.java
+   行: 18-21
+   @SubscribeEvent
+   public static void renderLiving(EntityRenderersEvent.RegisterRenderers event) { }
+
+3.3 ModelWingsAvian.renderToBuffer() — 空覆写
+   行: 190-192
+
+3.4 ModelWingsInsectoid.renderToBuffer() — 空覆写
+   行: 58-60
+
+3.5 FlightView.invalidate() — 空的默认接口方法
+   行: 18-19
+   default void invalidate() { }
+
+================================================================================
+  四、未使用的方法/字段/内部类
+================================================================================
+
+4.1 WingsMod.ProxyInit 内部类 — 完全未使用
+   路径: WingsMod.java
+   行: 100-108
+   static class ProxyInit {
+       static Proxy createClient() { return new ClientProxy(); }
+       static Proxy createServer() { return new ServerProxy(); }
+   }
+   原因: 构造函数直接用 DistExecutor.unsafeRunForDist()，无需这个类。
+
+4.2 WingForm.of() 3参数重载 — 从未调用
+   路径: client/apparatus/WingForm.java
+   行: 49-51
+
+4.3 WingForm.setModel() — 从未调用
+   行: 41-43
+
+4.4 WingForm.getFormsMap() — 从未调用
+   行: 69-71
+
+4.5 WingsHooks.onReplaceItemSlotCheck() — 从未调用
+   路径: server/asm/WingsHooks.java
+   行: 57-59
+   说明: ASM hook 方法，但未被任何 mixin 或补丁引用。
+
+4.6 MobAvoidanceSettings.disabled() + DISABLED 字段
+   路径: server/apparatus/BuffedFlightApparatus.java
+   行: 216 (DISABLED), 233-235 (disabled())
+   说明: 静态工厂方法和方法引用的常量均未被外部使用。
+
+4.7 GetLivingHeadLimitEvent 未使用的方法 (3个)
+   行: 31-33 disableHardLimit()
+   行: 39-41 hasHardLimit()
+   行: 43-45 hasSoftLimit()
+
+4.8 WingsConfig.getWearObstructionsArray() — 从未调用
+   行: 61-63
+
+4.9 ClientMessageContext.getMinecraft() — 从未调用
+   行: 21-23
+
+4.10 ClientMessageContext.getPlayer() — 从未调用
+   行: 29-31
+
+4.11 ServerMessageContext.getServer() — 从未调用
+   行: 21-23
+
+4.12 ServerMessageContext.getWorld() — 从未调用
+   行: 25-27
+
+4.13 Flights.has() — 从未调用
+   路径: server/flight/Flights.java
+   行: 29-31
+
+4.14 WingsOreConfig.FAIRY_DUST 和 AMETHYST 字段 — 从未被读取
+   路径: server/config/WingsOreConfig.java
+   行: 7-8
+   说明: 完整的矿石生成配置框架（含VeinSettings.java 88行），但没有任何
+         worldgen 代码实际读取这些配置值。~116行死配置代码。
+   关联文件: VeinSettings.java (整个类仅服务于 WingsOreConfig)
+
+4.15 MathH.java 未使用的常量和方法
+   行: 11  TAU 常量
+   行: 33-35 lerpDegrees(double, double, double)
+   行: 41-43 getDifference(double, double, double)
+   行: 45-47 mod(int, int)
+   行: 53-55 mod(double, double)
+   行: 61-63 easeOutCirc(float)
+
+4.16 Access.java 未使用的虚拟方法构建器
+   行: 20-22 virtual(Class<T> refc)
+   行: 57-66 NamingVirtualHandleBuilder<T> 内部类
+   行: 68-127 VirtualHandleBuilder<T> 内部类
+   说明: virtual() 方法从未被调用，整套 VirtualHandleBuilder 体系是死代码。
+
+4.17 CapabilityProviders.java 未使用的组合构建器
+   行: 32-34 builder() 无参工厂方法
+   行: 36-40 CompositeBuilder 接口
+   行: 42-71 CompositeBuilderImpl 内部类
+   行: 73-90 CompositeProvider 内部类
+   行: 100-103 EmptySingleBuilder.peek(Consumer<T>)
+   行: 194-198 NonSerializingSingleBuilderImpl.peek(Consumer<T>)
+   行: 214-218 SerializingSingleBuilderImpl.peek(Consumer<T>)
+
+================================================================================
+  五、未使用的 import
+================================================================================
+
+5.1 WingsHooks.java — 来自死方法的孤立 import
+   行: 7  import net.minecraft.world.item.ElytraItem;
+   行: 8  import net.minecraft.world.item.Item;
+   行: 9  import net.minecraft.world.item.ItemStack;
+   说明: 仅被死方法 onReplaceItemSlotCheck() 使用。
+
+5.2 EventListener.java
+   行: 5  import net.minecraftforge.client.event.EntityRenderersEvent;
+   说明: 仅被空的 renderLiving() 方法使用。
+
+================================================================================
+  六、逻辑重复
+================================================================================
+
+6.1 AnimatorAvian.LiftMovement vs LandMovement — ~90% 代码重复
+   路径: client/flight/AnimatorAvian.java
+   行: 129-242 (LiftMovement 213-242, LandMovement 129-150)
+   说明: 两个内部类的 getWingRotation 公式结构完全一致，仅魔法数字不同。
+         可提取为单一参数化 FlappingMovement 类，减少约45行。
+
+6.2 SimplexNoise 创建逻辑重复（2处）
+   行: 153 (GlideMovement), 245 (FallMovement)
+   均使用: new SimplexNoise(new LegacyRandomSource(new Random().nextLong()))
+   建议: 提取为共享静态工厂方法。
+
+6.3 3处 getFeatherRotation 委托方法完全相同
+   行: 142 (LandMovement), 230 (LiftMovement), IdleMovement
+   均委托给: AnimatorAvian.this.restPosition.getFeatherRotation(index, delta)
+
+6.4 ModelWingsAvian / ModelWingsInsectoid 同时空覆写 renderToBuffer()
+   均可移至父类 ModelWings abstract class。
+
+6.5 ModelWingsAvian.createBodyLayer() 大量 Left/Right 镜像代码
+   行: 90-158 (~70行)
+   建议: 提取带 side 标记的 helper 方法，减少约30行。
+
+6.6 WingsMod.Names.create() 与 WingsMod.locate() 功能重复
+   行: 125-132 vs 154-159
+   两者均做: ResourceLocation.tryBuild(ID, path) + null检查。
+   Names.create() 可直接调用 WingsMod.locate()。
+
+6.7 NetBuilder.optionalVersion() / requiredVersion() 重复 null 检查
+   行: 59-73
+   建议: 提取 private requireVersion() 方法。
+
+6.8 Proxy.setup() potion 配方注册模式重复（10次）
+   行: 44-64
+   建议: 使用列表循环，减少约15行。
+
+================================================================================
+  七、潜在优化点
+================================================================================
+
+7.1 【高】LayerCapeWings.hasVisibleWings() 每帧创建 AtomicBoolean
+   路径: client/renderer/LayerCapeWings.java
+   行: 30-42
+   问题: 渲染方法每帧调用，创建 AtomicBoolean 产生不必要的 GC 压力。
+   建议: 用 map/orElse 链简化。
+
+7.2 【高】FlightDefault.WingState.next() 每 tick 创建新对象
+   路径: server/flight/FlightDefault.java
+   行: 160, 292-297
+   问题: 每个 tick 都 new WingState()，即使状态未变。
+
+7.3 【中】BuffedFlightApparatus.createState() 每 tick 创建匿名类
+   行: 71-89
+   建议: 复用状态实例或使用 lambda。
+
+7.4 【中】BuffedFlightApparatus.pushAwayFromPlayer() 冗余检查
+   行: 144-147
+   radius <= 0.0D 检查在 applyHostileMobAvoidance() 行97已做一次。
+
+7.5 【中】FlightDefault.hasEffect() 每次调用创建 Stream
+   行: 179
+   建议: 缓存布尔结果或使用局部变量。
+
+7.6 【中】FlightDefault.onWornUpdate() 重复计算 absXRot
+   行: 136 和 147
+   建议: 缓存 Math.abs(player.getXRot())。
+
+7.7 【低】SimpleFlightApparatus.createState() 返回 no-op lambda
+   每次调用返回新 (player) -> {}，可返回共享常量。
+
+7.8 【低】WingsConfig.validate() 调用 getWearObstructions() 后丢弃结果
+   行: 65-67
+   仅用于验证——返回的 List 被丢弃。
+
+7.9 【低】WingsMod constructor 中缩进不一致
+   行: 77-87 (bus变量后无换行，context声明对齐错误)
+
+7.10【低】Model3DTexture 重度反射
+   路径: client/model/Model3DTexture.java
+   全文(167行)
+   文件头注释: "replace reflection with mixin 实际：改不了一点，贼TM麻烦"
+   通过反射访问 Mojang 混淆名称中的内部字段，Minecraft 更新时极易出错。
+
+7.11 WingsSounds 和 WingsItems 上多余的 @Mod.EventBusSubscriber
+   路径: server/sound/WingsSounds.java:10, server/item/WingsItems.java:18
+   原因: 这两个类没有 @SubscribeEvent 方法。
+         WingsItems.buildCreativeTabContents() 是通过 bus.addListener()
+         手动注册的（WingsMod.java:82），注解是多余的。
+
+7.12 DebugFlightAnimation.java — 整个空骨架
+   路径: client/debug/DebugFlightAnimation.java
+   行: 1-31
+   说明: 调试功能的空骨架，State 接口只有 DisabledState 一个实现且无操作。
+
+================================================================================
+  八、总结统计
+================================================================================
+
+  死代码类别                  数量
+  ─────────────────────────────────────
+  完全废弃的类/文件             8 个 (SimpleStorage, Util, SmoothingFunction,
+                                      FloatUnaryOperator, HarvestLevel,
+                                      HandlerSlot, ItemPlacing, ItemAccessor)
+  注释掉的代码块               8 处 (Metallic Wings 5处, CapabilityManager 1处 等)
+  空方法/空事件处理器           5 个
+  未使用的内部类                1 个 (ProxyInit)
+  未使用的方法/字段            20+ 个
+  未使用的 import              4 个
+  ─────────────────────────────────────
+  废弃代码总行数估算          ~400+ 行
+
+  逻辑重复                    数量
+  ─────────────────────────────────────
+  高度相似代码块               6 处 (Animator, ModelWings, Names/locate 等)
+  可合并减少行数估算          ~130 行
+
+  潜在优化点                  数量
+  ─────────────────────────────────────
+  高优先级 (性能)              2 个 (每帧 AtomicBoolean, 每 tick 创建对象)
+  中优先级 (性能/可读性)       4 个
+  低优先级 (清理/可读性)       6 个

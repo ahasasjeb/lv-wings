@@ -26,10 +26,6 @@ public final class Flights {
 
     private static final CapabilityHolder<Player, Flight, CapabilityHolder.State<Player, Flight>> HOLDER = CapabilityHolder.create();
 
-    public static boolean has(Player player) {
-        return HOLDER.state().has(player, null);
-    }
-
     public static LazyOptional<Flight> get(Player player) {
         return HOLDER.state().get(player, null);
     }

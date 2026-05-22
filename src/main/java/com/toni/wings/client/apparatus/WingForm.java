@@ -17,7 +17,7 @@ public final class WingForm<A extends Animator> {
 
     private final Supplier<A> animator;
 
-    private ModelWings<A> model;
+    private final ModelWings<A> model;
 
     private final ResourceLocation texture;
     private final Supplier<RenderType> renderType;
@@ -38,16 +38,8 @@ public final class WingForm<A extends Animator> {
         return this.model;
     }
 
-    public void setModel(ModelWings<A> model){
-        this.model = model;
-    }
-
     public ResourceLocation getTexture() {
         return this.texture;
-    }
-
-    public static <A extends Animator> WingForm<A> of(Supplier<A> animator, ModelWings<A> model, ResourceLocation texture) {
-        return new WingForm<>(animator, model, texture, () -> RenderType.entityCutout(texture));
     }
 
     public static <A extends Animator> WingForm<A> of(Supplier<A> animator, ModelWings<A> model, ResourceLocation texture, Supplier<RenderType> renderType) {
@@ -64,10 +56,6 @@ public final class WingForm<A extends Animator> {
 
     public static void register(FlightApparatus wings, WingForm<?> form) {
         FORMS.put(wings, form);
-    }
-
-    public static Map<FlightApparatus, WingForm<?>> getFormsMap(){
-        return FORMS;
     }
 
     public static boolean isEmpty(){

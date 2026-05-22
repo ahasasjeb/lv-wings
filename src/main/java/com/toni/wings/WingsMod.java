@@ -8,7 +8,6 @@ import com.toni.wings.server.apparatus.FlightApparatus;
 import com.toni.wings.server.apparatus.SimpleFlightApparatus;
 import com.toni.wings.server.config.WingsConfig;
 import com.toni.wings.server.config.WingsItemsConfig;
-import com.toni.wings.server.config.WingsOreConfig;
 import com.toni.wings.server.effect.WingsEffects;
 import com.toni.wings.server.flight.Flight;
 import com.toni.wings.server.item.WingsItems;
@@ -65,8 +64,6 @@ public final class WingsMod {
         new BuffedFlightApparatus(WingsItemsConfig.LVJIA_SUPER,
             BuffedFlightApparatus.EffectSettings.of(MobEffects.DAMAGE_RESISTANCE, 2, 40, 40),
             BuffedFlightApparatus.EffectSettings.of(MobEffects.JUMP, 1, 40, 40)));
-    //public static final FlightApparatus METALLIC_WINGS = Registry.register(WINGS, Names.METALLIC, new SimpleFlightApparatus(WingsItemsConfig.METALLIC));
-
 
     private Proxy proxy;
 
@@ -74,12 +71,11 @@ public final class WingsMod {
         if (INSTANCE != null) throw new IllegalStateException("Already constructed!");
         INSTANCE = this;
         IEventBus bus = getModEventBus();
-    ModLoadingContext context = getModLoadingContext();
-    context.registerConfig(ModConfig.Type.COMMON, WingsConfig.SPEC, ID + "-common.toml");
-    context.registerConfig(ModConfig.Type.COMMON, WingsItemsConfig.SPEC, ID + "-items.toml");
-    context.registerConfig(ModConfig.Type.COMMON, WingsOreConfig.SPEC, ID + "-ores.toml");
-    WingsItems.REG.register(bus);
-    bus.addListener(WingsItems::buildCreativeTabContents);
+        ModLoadingContext context = getModLoadingContext();
+        context.registerConfig(ModConfig.Type.COMMON, WingsConfig.SPEC, ID + "-common.toml");
+        context.registerConfig(ModConfig.Type.COMMON, WingsItemsConfig.SPEC, ID + "-items.toml");
+        WingsItems.REG.register(bus);
+        bus.addListener(WingsItems::buildCreativeTabContents);
         WingsSounds.REG.register(bus);
         WingsEffects.REG.register(bus);
         COMMAND_ARGUMENT_TYPES.register(bus);
@@ -95,16 +91,6 @@ public final class WingsMod {
     @SuppressWarnings("removal")
     private static ModLoadingContext getModLoadingContext() {
         return ModLoadingContext.get();
-    }
-
-    static class ProxyInit {
-        static Proxy createClient() {
-            return new ClientProxy();
-        }
-
-        static Proxy createServer() {
-            return new ServerProxy();
-        }
     }
 
     public void addFlightListeners(Player player, Flight instance) {
@@ -139,7 +125,6 @@ public final class WingsMod {
             NONE = create("none"),
             WINGLESS = create("wingless"),
             ANGEL = create("angel_wings"),
-            //METALLIC = create("metallic_wings"),
             PARROT = create("parrot_wings"),
             SLIME = create("slime_wings"),
             BLUE_BUTTERFLY = create("blue_butterfly_wings"),
@@ -152,11 +137,7 @@ public final class WingsMod {
             LVJIA_SUPER = create("lvjia_super_wing");
 
         private static ResourceLocation create(String path) {
-            ResourceLocation location = ResourceLocation.tryBuild(ID, path);
-            if (location == null) {
-                throw new IllegalArgumentException("Invalid resource path: " + path);
-            }
-            return location;
+            return locate(path);
         }
     }
 }

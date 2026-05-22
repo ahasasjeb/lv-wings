@@ -20,6 +20,10 @@ public abstract class ModelWings<A extends Animator> extends Model {
 
     public abstract void render(A animator, float delta, PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha);
 
+    @Override
+    public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    }
+
     static void setAngles(ModelPart left, ModelPart right, Vec3 angles) {
         right.xRot = (left.xRot = MathH.toRadians((float) angles.x));
         right.yRot = -(left.yRot = MathH.toRadians((float) angles.y));

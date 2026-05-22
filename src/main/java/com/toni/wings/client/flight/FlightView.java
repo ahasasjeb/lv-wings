@@ -9,6 +9,8 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.function.Consumer;
 
 public interface FlightView {
+    boolean hasForm();
+
     void ifFormPresent(Consumer<FormRenderer> consumer);
 
     void tick();

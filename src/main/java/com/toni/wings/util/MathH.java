@@ -8,8 +8,6 @@ public final class MathH {
 
     public static final float PI = (float) Math.PI;
 
-    public static final float TAU = (float) (2.0D * Math.PI);
-
     private static final float DEG_TO_RAD = (float) (Math.PI / 180.0D);
 
     private static final float RAD_TO_DEG = (float) (180.0D / Math.PI);
@@ -42,10 +40,6 @@ public final class MathH {
         return mod(b - a + rot / 2.0D, rot) - rot / 2.0D;
     }
 
-    public static int mod(int a, int b) {
-        return (a % b + b) % b;
-    }
-
     public static float mod(float a, float b) {
         return (a % b + b) % b;
     }
@@ -56,10 +50,6 @@ public final class MathH {
 
     public static float easeInOut(float t) {
         return -(Mth.cos(PI * t) - 1.0F) / 2.0F;
-    }
-
-    public static float easeOutCirc(float t) {
-        return Mth.sqrt(1.0F - (t - 1.0F) * (t - 1.0F));
     }
 
     public static float transform(float x, float domainMin, float domainMax, float rangeMin, float rangeMax) {

@@ -58,10 +58,6 @@ public final class WingsConfig {
         return Collections.unmodifiableList(sanitized);
     }
 
-    public static String[] getWearObstructionsArray() {
-        return getWearObstructions().toArray(String[]::new);
-    }
-
     public static void validate() {
         getWearObstructions();
     }

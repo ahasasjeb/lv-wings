@@ -39,7 +39,6 @@ public final class SimpleFlightApparatus implements FlightApparatus {
 
     @Override
     public FlightState createState(Flight flight) {
-        return (player) -> {
-        };
+        return FlightState.NONE;
     }
 }

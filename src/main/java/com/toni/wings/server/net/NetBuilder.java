@@ -57,19 +57,19 @@ public final class NetBuilder {
     }
 
     private Predicate<String> optionalVersion() {
-        String v = this.version;
-        if (v == null) {
-            throw new IllegalStateException("version not specified");
-        }
-    return NetworkRegistry.acceptMissingOr(v);
+        return NetworkRegistry.acceptMissingOr(this.requireVersion());
     }
 
     private Predicate<String> requiredVersion() {
-        String v = this.version;
-        if (v == null) {
+        String version = this.requireVersion();
+        return version::equals;
+    }
+
+    private String requireVersion() {
+        if (this.version == null) {
             throw new IllegalStateException("version not specified");
         }
-        return v::equals;
+        return this.version;
     }
 
     private SimpleChannel channel() {

@@ -34,11 +34,6 @@ public final class FlightViews {
         get(player).ifPresent(FlightView::invalidate);
     }
 
-    /*@CapabilityInject(FlightView.class)
-    static void inject(Capability<FlightView> capability) {
-        HOLDER.inject(capability);
-    }*/
-
     public static final Capability<FlightView> FLIGHT_VIEW_CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});
     static void injectFlightView(Capability<FlightView> capability) {
         HOLDER.inject(capability);

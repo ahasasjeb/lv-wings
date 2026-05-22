@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
-        private static final Field CUBES_FIELD = findCubesField();
+    private static final Field CUBES_FIELD = findCubesField();
 
     private ImmutableList<ModelPart> bonesLeft, bonesRight;
     private ImmutableList<ModelPart> feathersLeft, feathersRight;
@@ -36,13 +36,7 @@ public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
     private ModelPart feathersPrimaryRight;
     private ModelPart feathersSecondaryRight;
     private ModelPart feathersTertiaryRight;
-
-
-
-
     public ModelWingsAvian(ModelPart root) {
-        //this.root = root;
-
         this.coracoidLeft = root.getChild("coracoidLeft");
         this.humerusLeft = coracoidLeft.getChild("humerusLeft");
         this.ulnaLeft = humerusLeft.getChild("ulnaLeft");
@@ -54,7 +48,6 @@ public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
         this.carpalsRight = ulnaRight.getChild("carpalsRight");
 
         this.feathersCoracoidLeft = coracoidLeft.getChild("feathersCoracoidLeft");
-        //this.feathersCoracoidLeft = new ModelPart(new ArrayList<>(ModelPart.Cube()))
         add3DTexture(this.feathersCoracoidLeft, 6, 40, 0, 0, -1, 6, 8);
         this.feathersTertiaryLeft = humerusLeft.getChild("feathersTertiaryLeft");
         add3DTexture(this.feathersTertiaryLeft, 10, 14, 0, 0, -0.5F, 10, 14);
@@ -186,35 +179,30 @@ public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
 
     }
 
-    @Override
-    public void renderToBuffer(@Nonnull PoseStack p_103111_, @Nonnull VertexConsumer p_103112_, int p_103113_, int p_103114_, float p_103115_, float p_103116_, float p_103117_, float p_103118_) {
-
+    private static Field findCubesField() {
+        for (Field field : ModelPart.class.getDeclaredFields()) {
+            if (Modifier.isStatic(field.getModifiers())) {
+                continue;
+            }
+            if (List.class.isAssignableFrom(field.getType())) {
+                field.setAccessible(true);
+                return field;
+            }
+        }
+        throw new IllegalStateException("Unable to locate ModelPart cubes field");
     }
 
-        private static Field findCubesField() {
-                for (Field field : ModelPart.class.getDeclaredFields()) {
-                        if (Modifier.isStatic(field.getModifiers())) {
-                                continue;
-                        }
-                        if (List.class.isAssignableFrom(field.getType())) {
-                                field.setAccessible(true);
-                                return field;
-                        }
-                }
-                throw new IllegalStateException("Unable to locate ModelPart cubes field");
+    @SuppressWarnings("unchecked")
+    private static List<ModelPart.Cube> getCubes(ModelPart part) {
+        try {
+            List<ModelPart.Cube> cubes = (List<ModelPart.Cube>) CUBES_FIELD.get(part);
+            if (cubes instanceof ImmutableList) {
+                cubes = new ArrayList<>(cubes);
+                CUBES_FIELD.set(part, cubes);
+            }
+            return cubes;
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
-
-        @SuppressWarnings("unchecked")
-        private static List<ModelPart.Cube> getCubes(ModelPart part) {
-                try {
-                        List<ModelPart.Cube> cubes = (List<ModelPart.Cube>) CUBES_FIELD.get(part);
-                        if (cubes instanceof ImmutableList) {
-                                cubes = new ArrayList<>(cubes);
-                                CUBES_FIELD.set(part, cubes);
-                        }
-                        return cubes;
-                } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
-                }
-        }
+    }
 }

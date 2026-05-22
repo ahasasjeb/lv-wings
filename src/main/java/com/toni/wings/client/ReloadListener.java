@@ -1,6 +1,5 @@
 package com.toni.wings.client;
 
-import com.mojang.logging.LogUtils;
 import com.toni.wings.WingsMod;
 import com.toni.wings.client.apparatus.WingForm;
 import com.toni.wings.client.renderer.LayerCapeWings;
@@ -20,6 +19,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.slf4j.Logger;
+import com.mojang.logging.LogUtils;
 
 import java.util.Iterator;
 import java.util.List;
@@ -29,11 +29,6 @@ import java.util.stream.Stream;
 public class ReloadListener implements ResourceManagerReloadListener {
 
     private static final Logger LOGGER = LogUtils.getLogger();
-
-    /*@SubscribeEvent
-    public static void onModelBakeEvent(RenderLivingEvent.Pre event) {
-        if(event.getEntity().hasEffect(WingsEffects.WINGS))
-    }*/
 
     @Override
     public void onResourceManagerReload(@Nonnull ResourceManager rm) {
@@ -50,7 +45,6 @@ public class ReloadListener implements ResourceManagerReloadListener {
             WingForm.register(WingsMod.MONARCH_BUTTERFLY_WINGS, ClientProxy.createInsectoidWings(WingsMod.WINGS.getKey(WingsMod.MONARCH_BUTTERFLY_WINGS)));
             WingForm.register(WingsMod.SLIME_WINGS, ClientProxy.createInsectoidWings(WingsMod.WINGS.getKey(WingsMod.SLIME_WINGS)));
             WingForm.register(WingsMod.LVJIA_SUPER_WINGS, ClientProxy.createEndPortalWings(WingsMod.WINGS.getKey(WingsMod.LVJIA_SUPER_WINGS)));
-            //WingForm.register(WingsMod.METALLIC_WINGS, ClientProxy.createAvianWings(WingsMod.WINGS.getKey(WingsMod.METALLIC_WINGS)));
         }
 
         Minecraft mc = Minecraft.getInstance();

@@ -99,7 +99,7 @@ public final class BuffedFlightApparatus implements FlightApparatus {
         }
         double radiusSquared = radius * radius;
         AABB searchBox = player.getBoundingBox().inflate(radius);
-    List<Mob> hostiles = player.level().getEntitiesOfClass(Mob.class, searchBox,
+        List<Mob> hostiles = player.level().getEntitiesOfClass(Mob.class, searchBox,
             mob -> isRepellableHostile(mob, player, radiusSquared));
         if (hostiles.isEmpty()) {
             return;
@@ -142,9 +142,6 @@ public final class BuffedFlightApparatus implements FlightApparatus {
 
     private static void pushAwayFromPlayer(Mob mob, Player player, MobAvoidanceSettings settings) {
         double radius = settings.radius();
-        if (radius <= 0.0D) {
-            return;
-        }
         Vec3 offset = mob.position().subtract(player.position());
         double distanceSquared = offset.lengthSqr();
         if (distanceSquared < 1.0E-6D) {
@@ -213,7 +210,6 @@ public final class BuffedFlightApparatus implements FlightApparatus {
      */
     public record MobAvoidanceSettings(double radius, double horizontalPush, double verticalPush, int intervalTicks) {
         public static final MobAvoidanceSettings DEFAULT = new MobAvoidanceSettings(14.0D, 0.35D, 0.05D, 10);
-        public static final MobAvoidanceSettings DISABLED = new MobAvoidanceSettings(0.0D, 0.0D, 0.0D, 0);
 
         public MobAvoidanceSettings {
             if (radius < 0.0D) {
@@ -228,10 +224,6 @@ public final class BuffedFlightApparatus implements FlightApparatus {
             if (intervalTicks < 0) {
                 throw new IllegalArgumentException("间隔时间必须为非负数");
             }
-        }
-
-        public static MobAvoidanceSettings disabled() {
-            return DISABLED;
         }
 
         public boolean isEnabled() {

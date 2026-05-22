@@ -126,6 +126,10 @@ public final class AnimatorAvian implements Animator {
         return Math.min(Math.abs(index - 1), 2) / 2.0F;
     }
 
+    private static SimplexNoise createNoise() {
+        return new SimplexNoise(new LegacyRandomSource(new Random().nextLong()));
+    }
+
     private final class LandMovement implements Movement {
         @Override
         public Vec3 getWingRotation(int index, float delta) {
@@ -150,7 +154,7 @@ public final class AnimatorAvian implements Animator {
     }
 
     private final class GlideMovement implements Movement {
-        private final SimplexNoise noise = new SimplexNoise(new LegacyRandomSource(new Random().nextLong()));
+        private final SimplexNoise noise = createNoise();
 
         private int time;
 
@@ -242,7 +246,7 @@ public final class AnimatorAvian implements Animator {
     }
 
     private final class FallMovement implements Movement {
-        private final SimplexNoise noise = new SimplexNoise(new LegacyRandomSource(new Random().nextLong()));
+        private final SimplexNoise noise = createNoise();
 
         private final WingPose wing = WingPose.builder()
             .with(0, 30.0D, -23.0D, -50.0D)

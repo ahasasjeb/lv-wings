@@ -42,8 +42,7 @@ public final class ClientProxy extends Proxy {
     @Override
     public void init(IEventBus modBus) {
         super.init(modBus);
-    LayerWings.init(modBus);
-        //modBus.register(BakeModels.class);
+        LayerWings.init(modBus);
         MinecraftForge.EVENT_BUS.register(KeyInputListener.builder()
             .category("key.categories.wings")
             .key("key.wings.fly", KeyConflictContext.IN_GAME, KeyModifier.NONE, GLFW.GLFW_KEY_R)
@@ -62,7 +61,7 @@ public final class ClientProxy extends Proxy {
         );
 
         modBus.addListener(ClientProxy::registerItemColors);
-    modBus.addListener(KeyInputListener::registerKeyMappings);
+        modBus.addListener(KeyInputListener::registerKeyMappings);
     }
 
     @Override

@@ -33,6 +33,11 @@ public final class FlightViewDefault implements FlightView {
         @Override
         public void ifFormPresent(Consumer<FormRenderer> consumer) {
         }
+
+        @Override
+        public boolean hasForm() {
+            return false;
+        }
     };
 
     private final Flight flight;
@@ -49,6 +54,11 @@ public final class FlightViewDefault implements FlightView {
     @Override
     public void ifFormPresent(Consumer<FormRenderer> consumer) {
         this.animator.ifFormPresent(consumer);
+    }
+
+    @Override
+    public boolean hasForm() {
+        return this.animator.hasForm();
     }
 
     @Override
@@ -85,6 +95,8 @@ public final class FlightViewDefault implements FlightView {
         void update(Flight flight, Player player);
 
         void ifFormPresent(Consumer<FormRenderer> consumer);
+
+        boolean hasForm();
     }
 
     private static final class PresentWingState implements WingState {
@@ -118,6 +130,11 @@ public final class FlightViewDefault implements FlightView {
         @Override
         public void ifFormPresent(Consumer<FormRenderer> consumer) {
             this.behavior.ifFormPresent(consumer);
+        }
+
+        @Override
+        public boolean hasForm() {
+            return true;
         }
 
         public static <T extends Animator> WingState newState(WingForm<T> shape) {
