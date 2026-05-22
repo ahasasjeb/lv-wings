@@ -107,7 +107,7 @@ public final class NetBuilder {
     private static class NoopConsumerFactory<T extends Message, S extends MessageContext> implements ConsumerFactory<T, S> {
         @Override
         public BiConsumer<T, Supplier<NetworkEvent.Context>> create(Supplier<BiConsumer<? super T, S>> handlerFactory) {
-            return (msg, ctx) -> ctx.get().setPacketHandled(false);
+            return (msg, ctx) -> ctx.get().setPacketHandled(true);
         }
     }
 

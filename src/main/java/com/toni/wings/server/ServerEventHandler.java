@@ -19,6 +19,7 @@ import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.GameType;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
@@ -85,6 +86,14 @@ public final class ServerEventHandler {
     }
 
     @SubscribeEvent
+    public static void onPlayerChangeGameMode(PlayerEvent.PlayerChangeGameModeEvent event) {
+        if (event.getNewGameMode() == GameType.SPECTATOR) {
+            Flights.get(event.getEntity()).filter(Flight::isFlying)
+                .ifPresent(flight -> flight.setIsFlying(false, Flight.PlayerSet.ofAll()));
+        }
+    }
+
+    @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent event) {
         Flights.ifPlayer(event.getEntity(), (player, flight) ->
             flight.setIsFlying(false, Flight.PlayerSet.ofAll())
@@ -93,8 +102,10 @@ public final class ServerEventHandler {
 
     @SubscribeEvent
     public static void onPlayerFlightCheck(PlayerFlightCheckEvent event) {
-        Flights.get(event.getEntity()).filter(Flight::isFlying)
-            .ifPresent(flight -> event.setFlying());
+        if (!event.getEntity().isSpectator()) {
+            Flights.get(event.getEntity()).filter(Flight::isFlying)
+                .ifPresent(flight -> event.setFlying());
+        }
     }
 
     @SubscribeEvent

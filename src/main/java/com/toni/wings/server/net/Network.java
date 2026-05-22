@@ -10,7 +10,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 
 public final class Network {
     private final SimpleChannel network = new NetBuilder(WingsMod.locate("net"))
-        .version(1).optionalServer().requiredClient()
+        .version(2).optionalServer().requiredClient()
         .serverbound(MessageControlFlying::new).consumer(() -> MessageControlFlying::handle)
         .clientbound(MessageSyncFlight::new).consumer(() -> MessageSyncFlight::handle)
         .build();

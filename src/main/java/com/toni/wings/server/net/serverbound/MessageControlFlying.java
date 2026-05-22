@@ -29,7 +29,12 @@ public final class MessageControlFlying implements Message {
 
     public static void handle(MessageControlFlying message, ServerMessageContext context) {
         Player player = context.getPlayer();
-        Flights.get(player).filter(f -> f.canFly(player))
-            .ifPresent(flight -> flight.setIsFlying(message.isFlying, Flight.PlayerSet.ofOthers()));
+        Flights.get(player).ifPresent(flight -> {
+            if (message.isFlying && !flight.canFly(player)) {
+                flight.setIsFlying(false, flight.isFlying() ? Flight.PlayerSet.ofAll() : Flight.PlayerSet.ofSelf());
+                return;
+            }
+            flight.setIsFlying(message.isFlying, Flight.PlayerSet.ofOthers());
+        });
     }
 }

@@ -115,7 +115,7 @@ public final class FlightDefault implements Flight {
 
     @Override
     public boolean canFly(Player player) {
-        return (this.hasEffect(player) && this.flightApparatus.isUsable(player));
+        return !player.isSpectator() && this.hasEffect(player) && this.flightApparatus.isUsable(player);
     }
 
     @Override
@@ -167,6 +167,15 @@ public final class FlightDefault implements Flight {
 
     @Override
     public void tick(Player player) {
+        if (player.isSpectator()) {
+            if (this.isFlying()) {
+                this.setIsFlying(false, player.level().isClientSide ? PlayerSet.empty() : PlayerSet.ofAll());
+            }
+            this.state = this.state.notFlying();
+            this.tickFlyingAmount();
+            return;
+        }
+
         boolean hasEffect = this.hasEffect(player);
         if (hasEffect || !player.isEffectiveAi()) {
             if (!hasEffect && !player.level().isClientSide) {
@@ -179,17 +188,18 @@ public final class FlightDefault implements Flight {
                 this.setIsFlying(false, PlayerSet.ofAll());
             }
         }
+        this.tickFlyingAmount();
+        if (this.isFlying() && this.getTimeFlying() >= MAX_TIME_FLYING && player.isLocalPlayer() && player.onGround()) {
+            this.setIsFlying(false, PlayerSet.ofOthers());
+        }
+    }
+
+    private void tickFlyingAmount() {
         this.setPrevTimeFlying(this.getTimeFlying());
-        if (this.isFlying()) {
-            if (this.getTimeFlying() < MAX_TIME_FLYING) {
-                this.setTimeFlying(this.getTimeFlying() + 1);
-            } else if (player.isLocalPlayer() && player.onGround()) {
-                this.setIsFlying(false, PlayerSet.ofOthers());
-            }
-        } else {
-            if (this.getTimeFlying() > INITIAL_TIME_FLYING) {
-                this.setTimeFlying(this.getTimeFlying() - 1);
-            }
+        if (this.isFlying() && this.getTimeFlying() < MAX_TIME_FLYING) {
+            this.setTimeFlying(this.getTimeFlying() + 1);
+        } else if (!this.isFlying() && this.getTimeFlying() > INITIAL_TIME_FLYING) {
+            this.setTimeFlying(this.getTimeFlying() - 1);
         }
     }
 
@@ -218,18 +228,15 @@ public final class FlightDefault implements Flight {
     public void serialize(FriendlyByteBuf buf) {
         buf.writeBoolean(this.isFlying());
         buf.writeVarInt(this.getTimeFlying());
-        buf.writeUtf(Objects.requireNonNull(WingsMod.WINGS.getKey(this.getWing())).toString());
+        buf.writeVarInt(WingsMod.WINGS.getId(this.getWing()));
     }
 
     @Override
     public void deserialize(FriendlyByteBuf buf) {
         this.setIsFlying(buf.readBoolean());
         this.setTimeFlying(buf.readVarInt());
-        ResourceLocation wingId = ResourceLocation.tryParse(buf.readUtf(64));
-        FlightApparatus wing = wingId != null
-                ? WingsMod.WINGS.getOptional(wingId).orElse(FlightApparatus.NONE)
-                : FlightApparatus.NONE;
-        this.setWing(wing);
+        FlightApparatus wing = WingsMod.WINGS.byId(buf.readVarInt());
+        this.setWing(wing == null ? FlightApparatus.NONE : wing);
     }
 
     public static final class Serializer implements NBTSerializer<FlightDefault, CompoundTag> {
@@ -261,8 +268,8 @@ public final class FlightDefault implements Flight {
             f.setTimeFlying(compound.getInt(TIME_FLYING));
             ResourceLocation wingId = ResourceLocation.tryParse(compound.getString(WING));
             FlightApparatus wing = wingId != null
-                    ? WingsMod.WINGS.getOptional(wingId).orElse(FlightApparatus.NONE)
-                    : FlightApparatus.NONE;
+                ? WingsMod.WINGS.getOptional(wingId).orElse(FlightApparatus.NONE)
+                : FlightApparatus.NONE;
             f.setWing(wing);
             return f;
         }
