@@ -20,18 +20,24 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.ClientAsset;
 import net.minecraft.world.entity.player.PlayerSkin;
+import org.jspecify.annotations.NonNull;
 
+import java.util.Objects;
+
+@SuppressWarnings("null")
 public final class LayerCapeWings extends RenderLayer<AvatarRenderState, PlayerModel> {
 
-    private final HumanoidModel<AvatarRenderState> model;
+    private final @NonNull HumanoidModel<AvatarRenderState> model;
 
     public LayerCapeWings(RenderLayerParent<AvatarRenderState, PlayerModel> parent, EntityModelSet entityModelSet) {
-        super(parent);
-        this.model = new PlayerCapeModel(entityModelSet.bakeLayer(ModelLayers.PLAYER_CAPE));
+        super(Objects.requireNonNull(parent, "parent"));
+        this.model = new PlayerCapeModel(
+                Objects.requireNonNull(entityModelSet, "model set").bakeLayer(ModelLayers.PLAYER_CAPE));
     }
 
     @Override
-    public void submit(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int packedLight, AvatarRenderState state, float limbSwing, float limbSwingAmount) {
+    public void submit(@NonNull PoseStack poseStack, @NonNull SubmitNodeCollector submitNodeCollector, int packedLight,
+            @NonNull AvatarRenderState state, float limbSwing, float limbSwingAmount) {
         if (state.isInvisible || !state.showCape) {
             return;
         }

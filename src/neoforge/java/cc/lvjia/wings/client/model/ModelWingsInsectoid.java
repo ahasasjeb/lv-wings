@@ -12,19 +12,22 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.ARGB;
+import org.jspecify.annotations.NonNull;
 
-public final class ModelWingsInsectoid extends ModelWings<AnimatorInsectoid> {
-    private final ModelPart wingLeft;
-    private final ModelPart wingRight;
-    private final RotationAngles rotation = new RotationAngles();
+import java.util.Objects;
 
-    public ModelWingsInsectoid(ModelPart root) {
+public final class ModelWingsInsectoid extends ModelWings<@NonNull AnimatorInsectoid> {
+    private final @NonNull ModelPart wingLeft;
+    private final @NonNull ModelPart wingRight;
+    private final @NonNull RotationAngles rotation = new RotationAngles();
+
+    public ModelWingsInsectoid(@NonNull ModelPart root) {
         super(root);
-        this.wingLeft = root.getChild("WingLeft");
-        this.wingRight = root.getChild("WingRight");
+        this.wingLeft = Objects.requireNonNull(root.getChild("WingLeft"), "WingLeft");
+        this.wingRight = Objects.requireNonNull(root.getChild("WingRight"), "WingRight");
     }
 
-    public static LayerDefinition createBodyLayer() {
+    public static @NonNull LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
@@ -32,11 +35,12 @@ public final class ModelWingsInsectoid extends ModelWings<AnimatorInsectoid> {
 
         partdefinition.addOrReplaceChild("WingRight", CubeListBuilder.create().texOffs(0, 24).addBox(-19, -8, 0, 19, 24, 0, new CubeDeformation(0.0F)), PartPose.offset(0, 2, 3.5F));
 
-        return LayerDefinition.create(meshdefinition, 64, 64);
+        return Objects.requireNonNull(LayerDefinition.create(meshdefinition, 64, 64), "insectoid wing layer");
     }
 
     @Override
-    public void render(AnimatorInsectoid animator, float delta, PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void render(@NonNull AnimatorInsectoid animator, float delta, @NonNull PoseStack matrixStack,
+            @NonNull VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         animator.getRotation(delta, this.rotation);
         setAngles(this.wingLeft, this.wingRight, this.rotation);
         int color = ARGB.colorFromFloat(alpha, red, green, blue);

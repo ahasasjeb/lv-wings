@@ -21,6 +21,7 @@ public final class FlightViews {
         return get(entity).isPresent();
     }
 
+    @SuppressWarnings("null")
     public static Optional<FlightView> get(LivingEntity entity) {
         if (entity instanceof AbstractClientPlayer player) {
             return Optional.of(VIEWS.computeIfAbsent(player, ignored -> new FlightViewDefault(player,

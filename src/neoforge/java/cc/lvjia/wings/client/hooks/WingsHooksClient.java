@@ -16,6 +16,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MapItem;
 import net.neoforged.neoforge.common.NeoForge;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.invoke.MethodHandle;
 
@@ -55,7 +56,7 @@ public final class WingsHooksClient {
         }
     }
 
-    private static AbstractClientPlayer resolvePlayer(AvatarRenderState state) {
+    private static @Nullable AbstractClientPlayer resolvePlayer(@Nullable AvatarRenderState state) {
         AbstractClientPlayer player = RENDERING_PLAYER.get();
         if (player != null) {
             return player;
