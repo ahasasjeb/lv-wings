@@ -21,35 +21,8 @@ public final class WingsConfig {
         FLIGHT_ANTI_CHEAT_SETTINGS = DATA.flightAntiCheat.toSettings();
     }
 
-    private static int clamp(int value, int min, int max) {
-        return Math.max(min, Math.min(max, value));
-    }
-
-    private static double clamp(double value, double min, double max) {
-        if (!Double.isFinite(value)) {
-            return min;
-        }
-        return Math.max(min, Math.min(max, value));
-    }
-
-    public record FlightAntiCheatSettings(
-            boolean enabled,
-            int takeoffGraceTicks,
-            int softViolationLimit,
-            int hardViolationLimit,
-            int correctionCooldownTicks,
-            double softHorizontalLimit,
-            double softVerticalLimit,
-            double softTotalLimit,
-            double hardHorizontalLimit,
-            double hardVerticalLimit,
-            double hardTotalLimit,
-            double upwardAssistHorizontalThreshold,
-            double upwardAssistMaxBonus) {
-    }
-
     public static final class Data {
-        public boolean allowUnderwaterFlight = false;
+        public boolean allowUnderwaterFlight = WingsConfigDefaults.ALLOW_UNDERWATER_FLIGHT;
         public AntiCheatData flightAntiCheat = new AntiCheatData();
 
         static Data defaults() {
@@ -66,33 +39,49 @@ public final class WingsConfig {
     }
 
     public static final class AntiCheatData {
-        public boolean enabled = false;
-        public int takeoffGraceTicks = 12;
-        public int softViolationLimit = 8;
-        public int hardViolationLimit = 4;
-        public int correctionCooldownTicks = 10;
-        public double softHorizontalLimit = 2.0D;
-        public double softVerticalLimit = 1.95D;
-        public double softTotalLimit = 2.2D;
-        public double hardHorizontalLimit = 3.5D;
-        public double hardVerticalLimit = 3.2D;
-        public double hardTotalLimit = 4.0D;
-        public double upwardAssistHorizontalThreshold = 1.0D;
-        public double upwardAssistMaxBonus = 0.9D;
+        public boolean enabled = WingsConfigDefaults.FLIGHT_ANTI_CHEAT.enabled();
+        public int takeoffGraceTicks = WingsConfigDefaults.FLIGHT_ANTI_CHEAT.takeoffGraceTicks();
+        public int softViolationLimit = WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softViolationLimit();
+        public int hardViolationLimit = WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardViolationLimit();
+        public int correctionCooldownTicks = WingsConfigDefaults.FLIGHT_ANTI_CHEAT.correctionCooldownTicks();
+        public double softHorizontalLimit = WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softHorizontalLimit();
+        public double softVerticalLimit = WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softVerticalLimit();
+        public double softTotalLimit = WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softTotalLimit();
+        public double hardHorizontalLimit = WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardHorizontalLimit();
+        public double hardVerticalLimit = WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardVerticalLimit();
+        public double hardTotalLimit = WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardTotalLimit();
+        public double upwardAssistHorizontalThreshold = WingsConfigDefaults.FLIGHT_ANTI_CHEAT.upwardAssistHorizontalThreshold();
+        public double upwardAssistMaxBonus = WingsConfigDefaults.FLIGHT_ANTI_CHEAT.upwardAssistMaxBonus();
 
         void normalize() {
-            this.takeoffGraceTicks = clamp(this.takeoffGraceTicks, 0, 200);
-            this.softViolationLimit = clamp(this.softViolationLimit, 1, 50);
-            this.hardViolationLimit = clamp(this.hardViolationLimit, 1, 50);
-            this.correctionCooldownTicks = clamp(this.correctionCooldownTicks, 0, 200);
-            this.softHorizontalLimit = clamp(this.softHorizontalLimit, 0.0D, 10.0D);
-            this.softVerticalLimit = clamp(this.softVerticalLimit, 0.0D, 10.0D);
-            this.softTotalLimit = clamp(this.softTotalLimit, 0.0D, 10.0D);
-            this.hardHorizontalLimit = clamp(this.hardHorizontalLimit, 0.0D, 20.0D);
-            this.hardVerticalLimit = clamp(this.hardVerticalLimit, 0.0D, 20.0D);
-            this.hardTotalLimit = clamp(this.hardTotalLimit, 0.0D, 20.0D);
-            this.upwardAssistHorizontalThreshold = clamp(this.upwardAssistHorizontalThreshold, 0.0D, 5.0D);
-            this.upwardAssistMaxBonus = clamp(this.upwardAssistMaxBonus, 0.0D, 5.0D);
+            this.takeoffGraceTicks = WingsConfigDefaults.clamp(this.takeoffGraceTicks,
+                    WingsConfigDefaults.FLIGHT_TAKEOFF_GRACE_TICKS_MIN,
+                    WingsConfigDefaults.FLIGHT_TAKEOFF_GRACE_TICKS_MAX);
+            this.softViolationLimit = WingsConfigDefaults.clamp(this.softViolationLimit,
+                    WingsConfigDefaults.FLIGHT_VIOLATION_LIMIT_MIN,
+                    WingsConfigDefaults.FLIGHT_VIOLATION_LIMIT_MAX);
+            this.hardViolationLimit = WingsConfigDefaults.clamp(this.hardViolationLimit,
+                    WingsConfigDefaults.FLIGHT_VIOLATION_LIMIT_MIN,
+                    WingsConfigDefaults.FLIGHT_VIOLATION_LIMIT_MAX);
+            this.correctionCooldownTicks = WingsConfigDefaults.clamp(this.correctionCooldownTicks,
+                    WingsConfigDefaults.FLIGHT_CORRECTION_COOLDOWN_TICKS_MIN,
+                    WingsConfigDefaults.FLIGHT_CORRECTION_COOLDOWN_TICKS_MAX);
+            this.softHorizontalLimit = WingsConfigDefaults.clamp(this.softHorizontalLimit,
+                    WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MIN, WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MAX);
+            this.softVerticalLimit = WingsConfigDefaults.clamp(this.softVerticalLimit,
+                    WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MIN, WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MAX);
+            this.softTotalLimit = WingsConfigDefaults.clamp(this.softTotalLimit,
+                    WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MIN, WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MAX);
+            this.hardHorizontalLimit = WingsConfigDefaults.clamp(this.hardHorizontalLimit,
+                    WingsConfigDefaults.FLIGHT_HARD_LIMIT_MIN, WingsConfigDefaults.FLIGHT_HARD_LIMIT_MAX);
+            this.hardVerticalLimit = WingsConfigDefaults.clamp(this.hardVerticalLimit,
+                    WingsConfigDefaults.FLIGHT_HARD_LIMIT_MIN, WingsConfigDefaults.FLIGHT_HARD_LIMIT_MAX);
+            this.hardTotalLimit = WingsConfigDefaults.clamp(this.hardTotalLimit,
+                    WingsConfigDefaults.FLIGHT_HARD_LIMIT_MIN, WingsConfigDefaults.FLIGHT_HARD_LIMIT_MAX);
+            this.upwardAssistHorizontalThreshold = WingsConfigDefaults.clamp(this.upwardAssistHorizontalThreshold,
+                    WingsConfigDefaults.FLIGHT_UPWARD_ASSIST_MIN, WingsConfigDefaults.FLIGHT_UPWARD_ASSIST_MAX);
+            this.upwardAssistMaxBonus = WingsConfigDefaults.clamp(this.upwardAssistMaxBonus,
+                    WingsConfigDefaults.FLIGHT_UPWARD_ASSIST_MIN, WingsConfigDefaults.FLIGHT_UPWARD_ASSIST_MAX);
         }
 
         FlightAntiCheatSettings toSettings() {

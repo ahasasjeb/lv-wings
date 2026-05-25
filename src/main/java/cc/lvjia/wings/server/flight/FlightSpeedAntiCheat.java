@@ -1,5 +1,6 @@
 package cc.lvjia.wings.server.flight;
 
+import cc.lvjia.wings.server.config.FlightAntiCheatSettings;
 import cc.lvjia.wings.server.config.WingsConfig;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -33,7 +34,7 @@ public final class FlightSpeedAntiCheat {
         long now = System.nanoTime();
         cleanupExpiredStates(now);
 
-        WingsConfig.FlightAntiCheatSettings settings = WingsConfig.getFlightAntiCheatSettings();
+        FlightAntiCheatSettings settings = WingsConfig.getFlightAntiCheatSettings();
         if (!settings.enabled()) {
             clear(player);
             return;
@@ -91,7 +92,7 @@ public final class FlightSpeedAntiCheat {
         long now = System.nanoTime();
         cleanupExpiredStates(now);
 
-        WingsConfig.FlightAntiCheatSettings settings = WingsConfig.getFlightAntiCheatSettings();
+        FlightAntiCheatSettings settings = WingsConfig.getFlightAntiCheatSettings();
         if (!settings.enabled()) {
             clear(player);
             return;
@@ -169,7 +170,7 @@ public final class FlightSpeedAntiCheat {
                 && !player.isChangingDimension();
     }
 
-    private static double computeUpwardVerticalBonus(double horizontal, WingsConfig.FlightAntiCheatSettings settings) {
+    private static double computeUpwardVerticalBonus(double horizontal, FlightAntiCheatSettings settings) {
         double threshold = settings.upwardAssistHorizontalThreshold();
         double maxBonus = settings.upwardAssistMaxBonus();
         if (threshold <= 0.0D || maxBonus <= 0.0D) {

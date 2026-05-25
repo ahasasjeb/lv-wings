@@ -21,7 +21,7 @@ public final class InSomniableCapability {
     }
 
     public static Optional<InSomniable> getInSomniable(Player player) {
-        return Optional.ofNullable(player.getCapability(INSOMNIABLE_CAPABILITY));
+        return Optional.of(player.getData(WingsAttachments.INSOMNIABLE.get()));
     }
 
     @SubscribeEvent

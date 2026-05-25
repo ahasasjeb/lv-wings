@@ -1,4 +1,4 @@
-package cc.lvjia.wings.server.asm;
+package cc.lvjia.wings.client.asm;
 
 import net.minecraft.world.entity.Entity;
 import net.neoforged.bus.api.Event;

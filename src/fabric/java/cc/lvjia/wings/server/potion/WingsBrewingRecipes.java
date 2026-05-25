@@ -1,6 +1,5 @@
 package cc.lvjia.wings.server.potion;
 
-import cc.lvjia.wings.server.item.WingsItems;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.Item;
@@ -15,20 +14,11 @@ import net.minecraft.world.level.ItemLike;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 @SuppressWarnings("null")
 public final class WingsBrewingRecipes {
-    private static final List<Mix> MIXES = List.of(
-            mix(Items.FEATHER, WingsItems.ANGEL_WINGS_BOTTLE),
-            mix(Items.RED_DYE, WingsItems.PARROT_WINGS_BOTTLE),
-            mix(WingsItems.BAT_BLOOD_BOTTLE.get(), WingsItems.BAT_WINGS_BOTTLE),
-            mix(Items.BLUE_DYE, WingsItems.BLUE_BUTTERFLY_WINGS_BOTTLE),
-            mix(Items.LEATHER, WingsItems.DRAGON_WINGS_BOTTLE),
-            mix(Items.BONE, WingsItems.EVIL_WINGS_BOTTLE),
-            mix(Items.OXEYE_DAISY, WingsItems.FAIRY_WINGS_BOTTLE),
-            mix(Items.BLAZE_POWDER, WingsItems.FIRE_WINGS_BOTTLE),
-            mix(Items.ORANGE_DYE, WingsItems.MONARCH_BUTTERFLY_WINGS_BOTTLE),
-            mix(Items.SLIME_BALL, WingsItems.SLIME_WINGS_BOTTLE));
+    private static final List<Mix> MIXES = createMixes();
 
     private WingsBrewingRecipes() {
     }
@@ -64,6 +54,12 @@ public final class WingsBrewingRecipes {
 
     private static Mix mix(ItemLike ingredient, Supplier<? extends Item> result) {
         return new Mix(Ingredient.of(ingredient), result);
+    }
+
+    private static List<Mix> createMixes() {
+        Stream.Builder<Mix> builder = Stream.builder();
+        WingsBrewingCatalog.forEachMix((ingredient, result) -> builder.add(mix(ingredient, result)));
+        return builder.build().toList();
     }
 
     private record Mix(Ingredient ingredient, Supplier<? extends Item> result) {

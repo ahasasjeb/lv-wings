@@ -1,8 +1,6 @@
 package cc.lvjia.wings.server.item;
 
 import cc.lvjia.wings.server.apparatus.FlightApparatus;
-import cc.lvjia.wings.server.effect.WingsEffects;
-import cc.lvjia.wings.server.flight.Flights;
 import cc.lvjia.wings.server.sound.WingsSounds;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -18,12 +16,11 @@ public class BatBloodBottleItem extends Item {
     }
 
     public static boolean removeWings(Player player) {
-        return WingsEffects.WINGS.isBound() && player.removeEffect(WingsEffects.WINGS);
+        return WingsBottleActions.removeWings(player);
     }
 
     public static boolean removeWings(ServerPlayer player, FlightApparatus wings) {
-        boolean changed = Flights.get(player).filter(flight -> flight.getWing() == wings).isPresent();
-        return changed && WingsEffects.WINGS.isBound() && player.removeEffect(WingsEffects.WINGS);
+        return WingsBottleActions.removeWings(player, wings);
     }
 
     @Override

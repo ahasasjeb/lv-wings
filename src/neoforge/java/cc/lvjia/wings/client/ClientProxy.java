@@ -99,9 +99,7 @@ public final class ClientProxy extends Proxy {
                     if (player == null || player.isSpectator()) {
                         return;
                     }
-                    Flights.get(player).ifPresent(flight ->
-                            flight.toggleIsFlying(Flight.PlayerSet.ofOthers())
-                    );
+                    Flights.get(player).toggleIsFlying(Flight.PlayerSet.ofOthers());
                     Flights.ifPlayer(player, (p, flight) -> {
                         if (flight.getWing().equals(WingsMod.WINGLESS) && !flight.isFlying()) {
                             BatBloodBottleItem.removeWings(player);

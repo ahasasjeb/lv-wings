@@ -1,5 +1,6 @@
 package cc.lvjia.wings.server.asm;
 
+import cc.lvjia.wings.client.asm.GetCameraEyeHeightEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;

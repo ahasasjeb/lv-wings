@@ -1,13 +1,9 @@
 package cc.lvjia.wings.server.item;
 
 import cc.lvjia.wings.server.apparatus.FlightApparatus;
-import cc.lvjia.wings.server.effect.WingsEffects;
-import cc.lvjia.wings.server.flight.Flight;
-import cc.lvjia.wings.server.flight.Flights;
 import cc.lvjia.wings.server.sound.WingsSounds;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -22,17 +18,7 @@ public class WingsBottleItem extends Item {
     }
 
     public static boolean giveWing(ServerPlayer player, FlightApparatus wings) {
-        boolean changed = Flights.get(player).filter(flight -> {
-            if (flight.getWing() != wings) {
-                flight.setWing(wings, Flight.PlayerSet.ofAll());
-                return true;
-            }
-            return false;
-        }).isPresent();
-        if (WingsEffects.WINGS.isBound()) {
-            player.addEffect(new MobEffectInstance(WingsEffects.WINGS, MobEffectInstance.INFINITE_DURATION, 0, true, false));
-        }
-        return changed;
+        return WingsBottleActions.giveWing(player, wings);
     }
 
     @Override

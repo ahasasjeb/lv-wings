@@ -8,10 +8,6 @@ import org.apache.logging.log4j.Logger;
 
 public final class ConfigWingSettings implements WingSettings {
     private static final Logger LOGGER = LogManager.getLogger("WingsConfig");
-    private static final int MIN_SATIATION = 0;
-    private static final int MAX_SATIATION = 20;
-    private static final double MIN_EXERTION = 0.0D;
-    private static final double MAX_EXERTION = 10.0D;
 
     private final Identifier key;
     private final ModConfigSpec.IntValue requiredFlightSatiation;
@@ -24,52 +20,64 @@ public final class ConfigWingSettings implements WingSettings {
     private final double defaultLandingExertion;
 
     ConfigWingSettings(Identifier key, ModConfigSpec.Builder builder) {
-        this(key, builder, 5, 0.0001D, 2, 0.005D);
+        this(key, builder, WingsConfigDefaults.WING_SETTINGS);
     }
 
-    ConfigWingSettings(Identifier key, ModConfigSpec.Builder builder, int defaultFlightSatiation, double defaultFlyingExertion, int defaultLandSatiation, double defaultLandingExertion) {
+    ConfigWingSettings(Identifier key, ModConfigSpec.Builder builder, WingsConfigDefaults.WingSettingsData defaults) {
         this.key = key;
-        this.defaultFlightSatiation = defaultFlightSatiation;
-        this.defaultFlyingExertion = defaultFlyingExertion;
-        this.defaultLandSatiation = defaultLandSatiation;
-        this.defaultLandingExertion = defaultLandingExertion;
+        this.defaultFlightSatiation = defaults.requiredFlightSatiation();
+        this.defaultFlyingExertion = defaults.flyingExertion();
+        this.defaultLandSatiation = defaults.requiredLandSatiation();
+        this.defaultLandingExertion = defaults.landingExertion();
 
         builder.push(key.getPath());
 
         this.requiredFlightSatiation = builder
                 .comment("使用 " + key + " 开始飞行所需的最低饱食度")
-                .defineInRange("requiredFlightSatiation", defaultFlightSatiation, MIN_SATIATION, MAX_SATIATION);
+                .defineInRange("requiredFlightSatiation", this.defaultFlightSatiation,
+                        WingsConfigDefaults.WING_MIN_SATIATION, WingsConfigDefaults.WING_MAX_SATIATION);
         this.flyingExertion = builder
                 .comment("使用 " + key + " 飞行时每刻消耗的饱食度")
-                .defineInRange("flyingExertion", defaultFlyingExertion, MIN_EXERTION, MAX_EXERTION);
+                .defineInRange("flyingExertion", this.defaultFlyingExertion,
+                        WingsConfigDefaults.WING_MIN_EXERTION, WingsConfigDefaults.WING_MAX_EXERTION);
         this.requiredLandSatiation = builder
                 .comment("使用 " + key + " 安全着陆所需的最低饱食度")
-                .defineInRange("requiredLandSatiation", defaultLandSatiation, MIN_SATIATION, MAX_SATIATION);
+                .defineInRange("requiredLandSatiation", this.defaultLandSatiation,
+                        WingsConfigDefaults.WING_MIN_SATIATION, WingsConfigDefaults.WING_MAX_SATIATION);
         this.landingExertion = builder
                 .comment("使用 " + key + " 着陆时消耗的饱食度")
-                .defineInRange("landingExertion", defaultLandingExertion, MIN_EXERTION, MAX_EXERTION);
+                .defineInRange("landingExertion", this.defaultLandingExertion,
+                        WingsConfigDefaults.WING_MIN_EXERTION, WingsConfigDefaults.WING_MAX_EXERTION);
 
         builder.pop();
     }
 
     @Override
     public int getRequiredFlightSatiation() {
-        return this.readInt(this.requiredFlightSatiation, "requiredFlightSatiation", MIN_SATIATION, MAX_SATIATION, this.defaultFlightSatiation);
+        return this.readInt(this.requiredFlightSatiation, "requiredFlightSatiation",
+                WingsConfigDefaults.WING_MIN_SATIATION, WingsConfigDefaults.WING_MAX_SATIATION,
+                this.defaultFlightSatiation);
     }
 
     @Override
     public float getFlyingExertion() {
-        return this.readFloat(this.flyingExertion, "flyingExertion", MIN_EXERTION, MAX_EXERTION, this.defaultFlyingExertion);
+        return this.readFloat(this.flyingExertion, "flyingExertion",
+                WingsConfigDefaults.WING_MIN_EXERTION, WingsConfigDefaults.WING_MAX_EXERTION,
+                this.defaultFlyingExertion);
     }
 
     @Override
     public int getRequiredLandSatiation() {
-        return this.readInt(this.requiredLandSatiation, "requiredLandSatiation", MIN_SATIATION, MAX_SATIATION, this.defaultLandSatiation);
+        return this.readInt(this.requiredLandSatiation, "requiredLandSatiation",
+                WingsConfigDefaults.WING_MIN_SATIATION, WingsConfigDefaults.WING_MAX_SATIATION,
+                this.defaultLandSatiation);
     }
 
     @Override
     public float getLandingExertion() {
-        return this.readFloat(this.landingExertion, "landingExertion", MIN_EXERTION, MAX_EXERTION, this.defaultLandingExertion);
+        return this.readFloat(this.landingExertion, "landingExertion",
+                WingsConfigDefaults.WING_MIN_EXERTION, WingsConfigDefaults.WING_MAX_EXERTION,
+                this.defaultLandingExertion);
     }
 
     public void validate() {

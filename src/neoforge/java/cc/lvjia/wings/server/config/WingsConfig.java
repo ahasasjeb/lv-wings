@@ -8,25 +8,7 @@ public final class WingsConfig {
     public static final ModConfigSpec SPEC;
     private static final Logger LOGGER = LogManager.getLogger("WingsConfig");
 
-    private static final boolean DEFAULT_ALLOW_UNDERWATER_FLIGHT = false;
     private static final ModConfigSpec.BooleanValue ALLOW_UNDERWATER_FLIGHT;
-
-    private static final boolean DEFAULT_ENABLE_FLIGHT_ANTI_CHEAT = false;
-    private static final int DEFAULT_TAKEOFF_GRACE_TICKS = 12;
-    private static final int DEFAULT_SOFT_VIOLATION_LIMIT = 8;
-    private static final int DEFAULT_HARD_VIOLATION_LIMIT = 4;
-    private static final int DEFAULT_CORRECTION_COOLDOWN_TICKS = 10;
-
-    private static final double DEFAULT_SOFT_HORIZONTAL_LIMIT = 2.0D;
-    private static final double DEFAULT_SOFT_VERTICAL_LIMIT = 1.95D;
-    private static final double DEFAULT_SOFT_TOTAL_LIMIT = 2.2D;
-
-    private static final double DEFAULT_HARD_HORIZONTAL_LIMIT = 3.5D;
-    private static final double DEFAULT_HARD_VERTICAL_LIMIT = 3.2D;
-    private static final double DEFAULT_HARD_TOTAL_LIMIT = 4.0D;
-
-    private static final double DEFAULT_UPWARD_ASSIST_HORIZONTAL_THRESHOLD = 1.0D;
-    private static final double DEFAULT_UPWARD_ASSIST_MAX_BONUS = 0.9D;
 
     private static final ModConfigSpec.BooleanValue ENABLE_FLIGHT_ANTI_CHEAT;
     private static final ModConfigSpec.IntValue TAKEOFF_GRACE_TICKS;
@@ -45,7 +27,7 @@ public final class WingsConfig {
     private static final ModConfigSpec.DoubleValue UPWARD_ASSIST_HORIZONTAL_THRESHOLD;
     private static final ModConfigSpec.DoubleValue UPWARD_ASSIST_MAX_BONUS;
 
-    private static volatile FlightAntiCheatSettings FLIGHT_ANTI_CHEAT_SETTINGS = defaultFlightAntiCheatSettings();
+    private static volatile FlightAntiCheatSettings FLIGHT_ANTI_CHEAT_SETTINGS = WingsConfigDefaults.FLIGHT_ANTI_CHEAT;
 
     static {
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
@@ -53,7 +35,7 @@ public final class WingsConfig {
 
         ALLOW_UNDERWATER_FLIGHT = builder
             .comment("Whether players can fly while underwater. Disabled by default.")
-            .define("allowUnderwaterFlight", DEFAULT_ALLOW_UNDERWATER_FLIGHT);
+            .define("allowUnderwaterFlight", WingsConfigDefaults.ALLOW_UNDERWATER_FLIGHT);
 
         builder.pop();
 
@@ -61,55 +43,72 @@ public final class WingsConfig {
 
         ENABLE_FLIGHT_ANTI_CHEAT = builder
             .comment("Enable wings flight anti-cheat on server side. Default: false")
-            .define("enabled", DEFAULT_ENABLE_FLIGHT_ANTI_CHEAT);
+            .define("enabled", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.enabled());
 
         TAKEOFF_GRACE_TICKS = builder
             .comment("Grace ticks after takeoff before speed checks are enforced.")
-            .defineInRange("takeoffGraceTicks", DEFAULT_TAKEOFF_GRACE_TICKS, 0, 200);
+            .defineInRange("takeoffGraceTicks", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.takeoffGraceTicks(),
+                    WingsConfigDefaults.FLIGHT_TAKEOFF_GRACE_TICKS_MIN,
+                    WingsConfigDefaults.FLIGHT_TAKEOFF_GRACE_TICKS_MAX);
 
         SOFT_VIOLATION_LIMIT = builder
             .comment("How many soft violations trigger correction.")
-            .defineInRange("softViolationLimit", DEFAULT_SOFT_VIOLATION_LIMIT, 1, 50);
+            .defineInRange("softViolationLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softViolationLimit(),
+                    WingsConfigDefaults.FLIGHT_VIOLATION_LIMIT_MIN,
+                    WingsConfigDefaults.FLIGHT_VIOLATION_LIMIT_MAX);
 
         HARD_VIOLATION_LIMIT = builder
             .comment("How many hard violations trigger correction.")
-            .defineInRange("hardViolationLimit", DEFAULT_HARD_VIOLATION_LIMIT, 1, 50);
+            .defineInRange("hardViolationLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardViolationLimit(),
+                    WingsConfigDefaults.FLIGHT_VIOLATION_LIMIT_MIN,
+                    WingsConfigDefaults.FLIGHT_VIOLATION_LIMIT_MAX);
 
         CORRECTION_COOLDOWN_TICKS = builder
             .comment("Cooldown ticks between corrections.")
-            .defineInRange("correctionCooldownTicks", DEFAULT_CORRECTION_COOLDOWN_TICKS, 0, 200);
+            .defineInRange("correctionCooldownTicks", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.correctionCooldownTicks(),
+                    WingsConfigDefaults.FLIGHT_CORRECTION_COOLDOWN_TICKS_MIN,
+                    WingsConfigDefaults.FLIGHT_CORRECTION_COOLDOWN_TICKS_MAX);
 
         SOFT_HORIZONTAL_LIMIT = builder
             .comment("Soft horizontal movement limit.")
-            .defineInRange("softHorizontalLimit", DEFAULT_SOFT_HORIZONTAL_LIMIT, 0.0D, 10.0D);
+            .defineInRange("softHorizontalLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softHorizontalLimit(),
+                    WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MIN, WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MAX);
 
         SOFT_VERTICAL_LIMIT = builder
             .comment("Soft upward vertical movement limit.")
-            .defineInRange("softVerticalLimit", DEFAULT_SOFT_VERTICAL_LIMIT, 0.0D, 10.0D);
+            .defineInRange("softVerticalLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softVerticalLimit(),
+                    WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MIN, WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MAX);
 
         SOFT_TOTAL_LIMIT = builder
             .comment("Soft total movement limit.")
-            .defineInRange("softTotalLimit", DEFAULT_SOFT_TOTAL_LIMIT, 0.0D, 10.0D);
+            .defineInRange("softTotalLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softTotalLimit(),
+                    WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MIN, WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MAX);
 
         HARD_HORIZONTAL_LIMIT = builder
             .comment("Hard horizontal movement limit.")
-            .defineInRange("hardHorizontalLimit", DEFAULT_HARD_HORIZONTAL_LIMIT, 0.0D, 20.0D);
+            .defineInRange("hardHorizontalLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardHorizontalLimit(),
+                    WingsConfigDefaults.FLIGHT_HARD_LIMIT_MIN, WingsConfigDefaults.FLIGHT_HARD_LIMIT_MAX);
 
         HARD_VERTICAL_LIMIT = builder
             .comment("Hard upward vertical movement limit.")
-            .defineInRange("hardVerticalLimit", DEFAULT_HARD_VERTICAL_LIMIT, 0.0D, 20.0D);
+            .defineInRange("hardVerticalLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardVerticalLimit(),
+                    WingsConfigDefaults.FLIGHT_HARD_LIMIT_MIN, WingsConfigDefaults.FLIGHT_HARD_LIMIT_MAX);
 
         HARD_TOTAL_LIMIT = builder
             .comment("Hard total movement limit.")
-            .defineInRange("hardTotalLimit", DEFAULT_HARD_TOTAL_LIMIT, 0.0D, 20.0D);
+            .defineInRange("hardTotalLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardTotalLimit(),
+                    WingsConfigDefaults.FLIGHT_HARD_LIMIT_MIN, WingsConfigDefaults.FLIGHT_HARD_LIMIT_MAX);
 
         UPWARD_ASSIST_HORIZONTAL_THRESHOLD = builder
             .comment("When horizontal speed is below this value, upward limits gain extra tolerance.")
-            .defineInRange("upwardAssistHorizontalThreshold", DEFAULT_UPWARD_ASSIST_HORIZONTAL_THRESHOLD, 0.0D, 5.0D);
+            .defineInRange("upwardAssistHorizontalThreshold",
+                    WingsConfigDefaults.FLIGHT_ANTI_CHEAT.upwardAssistHorizontalThreshold(),
+                    WingsConfigDefaults.FLIGHT_UPWARD_ASSIST_MIN, WingsConfigDefaults.FLIGHT_UPWARD_ASSIST_MAX);
 
         UPWARD_ASSIST_MAX_BONUS = builder
             .comment("Maximum extra upward tolerance applied at very low horizontal speed.")
-            .defineInRange("upwardAssistMaxBonus", DEFAULT_UPWARD_ASSIST_MAX_BONUS, 0.0D, 5.0D);
+            .defineInRange("upwardAssistMaxBonus", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.upwardAssistMaxBonus(),
+                    WingsConfigDefaults.FLIGHT_UPWARD_ASSIST_MIN, WingsConfigDefaults.FLIGHT_UPWARD_ASSIST_MAX);
 
         builder.pop();
         SPEC = builder.build();
@@ -121,9 +120,10 @@ public final class WingsConfig {
     public static boolean isUnderwaterFlightAllowed() {
         Boolean allow = ALLOW_UNDERWATER_FLIGHT.get();
         if (allow == null) {
-            LOGGER.warn("Underwater flight flag is null. Reverting to default {}.", DEFAULT_ALLOW_UNDERWATER_FLIGHT);
-            ALLOW_UNDERWATER_FLIGHT.set(DEFAULT_ALLOW_UNDERWATER_FLIGHT);
-            return DEFAULT_ALLOW_UNDERWATER_FLIGHT;
+            LOGGER.warn("Underwater flight flag is null. Reverting to default {}.",
+                    WingsConfigDefaults.ALLOW_UNDERWATER_FLIGHT);
+            ALLOW_UNDERWATER_FLIGHT.set(WingsConfigDefaults.ALLOW_UNDERWATER_FLIGHT);
+            return WingsConfigDefaults.ALLOW_UNDERWATER_FLIGHT;
         }
         return allow;
     }
@@ -139,19 +139,32 @@ public final class WingsConfig {
 
     private static FlightAntiCheatSettings loadFlightAntiCheatSettings() {
         return new FlightAntiCheatSettings(
-                readBoolean(ENABLE_FLIGHT_ANTI_CHEAT, DEFAULT_ENABLE_FLIGHT_ANTI_CHEAT, "enabled"),
-                readInt(TAKEOFF_GRACE_TICKS, DEFAULT_TAKEOFF_GRACE_TICKS, "takeoffGraceTicks"),
-                readInt(SOFT_VIOLATION_LIMIT, DEFAULT_SOFT_VIOLATION_LIMIT, "softViolationLimit"),
-                readInt(HARD_VIOLATION_LIMIT, DEFAULT_HARD_VIOLATION_LIMIT, "hardViolationLimit"),
-                readInt(CORRECTION_COOLDOWN_TICKS, DEFAULT_CORRECTION_COOLDOWN_TICKS, "correctionCooldownTicks"),
-                readDouble(SOFT_HORIZONTAL_LIMIT, DEFAULT_SOFT_HORIZONTAL_LIMIT, "softHorizontalLimit"),
-                readDouble(SOFT_VERTICAL_LIMIT, DEFAULT_SOFT_VERTICAL_LIMIT, "softVerticalLimit"),
-                readDouble(SOFT_TOTAL_LIMIT, DEFAULT_SOFT_TOTAL_LIMIT, "softTotalLimit"),
-                readDouble(HARD_HORIZONTAL_LIMIT, DEFAULT_HARD_HORIZONTAL_LIMIT, "hardHorizontalLimit"),
-                readDouble(HARD_VERTICAL_LIMIT, DEFAULT_HARD_VERTICAL_LIMIT, "hardVerticalLimit"),
-                readDouble(HARD_TOTAL_LIMIT, DEFAULT_HARD_TOTAL_LIMIT, "hardTotalLimit"),
-                readDouble(UPWARD_ASSIST_HORIZONTAL_THRESHOLD, DEFAULT_UPWARD_ASSIST_HORIZONTAL_THRESHOLD, "upwardAssistHorizontalThreshold"),
-                readDouble(UPWARD_ASSIST_MAX_BONUS, DEFAULT_UPWARD_ASSIST_MAX_BONUS, "upwardAssistMaxBonus")
+                readBoolean(ENABLE_FLIGHT_ANTI_CHEAT, WingsConfigDefaults.FLIGHT_ANTI_CHEAT.enabled(), "enabled"),
+                readInt(TAKEOFF_GRACE_TICKS, WingsConfigDefaults.FLIGHT_ANTI_CHEAT.takeoffGraceTicks(),
+                        "takeoffGraceTicks"),
+                readInt(SOFT_VIOLATION_LIMIT, WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softViolationLimit(),
+                        "softViolationLimit"),
+                readInt(HARD_VIOLATION_LIMIT, WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardViolationLimit(),
+                        "hardViolationLimit"),
+                readInt(CORRECTION_COOLDOWN_TICKS, WingsConfigDefaults.FLIGHT_ANTI_CHEAT.correctionCooldownTicks(),
+                        "correctionCooldownTicks"),
+                readDouble(SOFT_HORIZONTAL_LIMIT, WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softHorizontalLimit(),
+                        "softHorizontalLimit"),
+                readDouble(SOFT_VERTICAL_LIMIT, WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softVerticalLimit(),
+                        "softVerticalLimit"),
+                readDouble(SOFT_TOTAL_LIMIT, WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softTotalLimit(),
+                        "softTotalLimit"),
+                readDouble(HARD_HORIZONTAL_LIMIT, WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardHorizontalLimit(),
+                        "hardHorizontalLimit"),
+                readDouble(HARD_VERTICAL_LIMIT, WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardVerticalLimit(),
+                        "hardVerticalLimit"),
+                readDouble(HARD_TOTAL_LIMIT, WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardTotalLimit(),
+                        "hardTotalLimit"),
+                readDouble(UPWARD_ASSIST_HORIZONTAL_THRESHOLD,
+                        WingsConfigDefaults.FLIGHT_ANTI_CHEAT.upwardAssistHorizontalThreshold(),
+                        "upwardAssistHorizontalThreshold"),
+                readDouble(UPWARD_ASSIST_MAX_BONUS, WingsConfigDefaults.FLIGHT_ANTI_CHEAT.upwardAssistMaxBonus(),
+                        "upwardAssistMaxBonus")
         );
     }
 
@@ -185,38 +198,4 @@ public final class WingsConfig {
         return defaultValue;
     }
 
-    private static FlightAntiCheatSettings defaultFlightAntiCheatSettings() {
-        return new FlightAntiCheatSettings(
-                DEFAULT_ENABLE_FLIGHT_ANTI_CHEAT,
-                DEFAULT_TAKEOFF_GRACE_TICKS,
-                DEFAULT_SOFT_VIOLATION_LIMIT,
-                DEFAULT_HARD_VIOLATION_LIMIT,
-                DEFAULT_CORRECTION_COOLDOWN_TICKS,
-                DEFAULT_SOFT_HORIZONTAL_LIMIT,
-                DEFAULT_SOFT_VERTICAL_LIMIT,
-                DEFAULT_SOFT_TOTAL_LIMIT,
-                DEFAULT_HARD_HORIZONTAL_LIMIT,
-                DEFAULT_HARD_VERTICAL_LIMIT,
-                DEFAULT_HARD_TOTAL_LIMIT,
-                DEFAULT_UPWARD_ASSIST_HORIZONTAL_THRESHOLD,
-                DEFAULT_UPWARD_ASSIST_MAX_BONUS
-        );
-    }
-
-    public record FlightAntiCheatSettings(
-            boolean enabled,
-            int takeoffGraceTicks,
-            int softViolationLimit,
-            int hardViolationLimit,
-            int correctionCooldownTicks,
-            double softHorizontalLimit,
-            double softVerticalLimit,
-            double softTotalLimit,
-            double hardHorizontalLimit,
-            double hardVerticalLimit,
-            double hardTotalLimit,
-            double upwardAssistHorizontalThreshold,
-            double upwardAssistMaxBonus
-    ) {
-    }
 }

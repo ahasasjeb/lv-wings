@@ -12,7 +12,6 @@ import net.neoforged.neoforge.capabilities.EntityCapability;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
-import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
@@ -25,19 +24,11 @@ public final class Flights {
     }
 
     public static boolean has(Player player) {
-        return resolve(player) != null;
+        return player.hasData(WingsAttachments.FLIGHT.get());
     }
 
-    public static Optional<Flight> get(Player player) {
-        return Optional.ofNullable(resolve(player));
-    }
-
-    private static Flight resolve(Player player) {
-        Flight flight = player.getCapability(FLIGHT_CAPABILITY);
-        if (flight == null && player.hasData(WingsAttachments.FLIGHT.get())) {
-            flight = player.getData(WingsAttachments.FLIGHT.get());
-        }
-        return flight;
+    public static Flight get(Player player) {
+        return player.getData(WingsAttachments.FLIGHT.get());
     }
 
     public static void ifPlayer(Entity entity, BiConsumer<Player, Flight> action) {
@@ -46,32 +37,32 @@ public final class Flights {
 
     public static void ifPlayer(Entity entity, Predicate<Player> condition, BiConsumer<Player, Flight> action) {
         if (entity instanceof Player player) {
-            get(player).filter(flight -> condition.test(player)).ifPresent(flight -> action.accept(player, flight));
+            if (condition.test(player)) {
+                action.accept(player, get(player));
+            }
         }
     }
 
     @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event) {
         if (!event.isWasDeath()) {
-            get(event.getOriginal()).ifPresent(oldInstance ->
-                    get(event.getEntity()).ifPresent(newInstance -> newInstance.clone(oldInstance))
-            );
+            get(event.getEntity()).clone(get(event.getOriginal()));
         }
     }
 
     @SubscribeEvent
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
-        get(event.getEntity()).ifPresent(flight -> flight.sync(Flight.PlayerSet.ofSelf()));
+        get(event.getEntity()).sync(Flight.PlayerSet.ofSelf());
     }
 
     @SubscribeEvent
     public static void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
-        get(event.getEntity()).ifPresent(flight -> flight.sync(Flight.PlayerSet.ofSelf()));
+        get(event.getEntity()).sync(Flight.PlayerSet.ofSelf());
     }
 
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-        get(event.getEntity()).ifPresent(flight -> flight.sync(Flight.PlayerSet.ofSelf()));
+        get(event.getEntity()).sync(Flight.PlayerSet.ofSelf());
     }
 
     @SubscribeEvent

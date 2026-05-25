@@ -1,9 +1,7 @@
 package cc.lvjia.wings;
 
 import cc.lvjia.wings.client.ClientProxy;
-import cc.lvjia.wings.server.apparatus.BuffedFlightApparatus;
 import cc.lvjia.wings.server.apparatus.FlightApparatus;
-import cc.lvjia.wings.server.apparatus.SimpleFlightApparatus;
 import cc.lvjia.wings.server.command.WingsArgument;
 import cc.lvjia.wings.server.config.WingsConfig;
 import cc.lvjia.wings.server.config.WingsConfigEvents;
@@ -17,11 +15,9 @@ import cc.lvjia.wings.server.sound.WingsSounds;
 import com.mojang.serialization.Lifecycle;
 import net.minecraft.core.DefaultedMappedRegistry;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.effect.MobEffects;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -32,49 +28,25 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 @Mod(WingsMod.ID)
 public final class WingsMod {
-    public static final String ID = "wings";
-    public static final Registry<FlightApparatus> WINGS = new DefaultedMappedRegistry<>(Names.NONE.toString(), ResourceKey.createRegistryKey(locate("wings")), Lifecycle.experimental(), false);
-    public static final FlightApparatus NONE = Registry.register(WINGS, Names.NONE, FlightApparatus.NONE);
-    public static final FlightApparatus WINGLESS = Registry.register(WINGS, Names.WINGLESS, new FlightApparatus() {
-        @Override
-        public void onFlight(Player player, Vec3 direction) {
-            FlightApparatus.NONE.onFlight(player, direction);
-        }
-
-        @Override
-        public void onLanding(Player player, Vec3 direction) {
-            FlightApparatus.NONE.onLanding(player, direction);
-        }
-
-        @Override
-        public boolean isUsable(Player player) {
-            return FlightApparatus.NONE.isUsable(player);
-        }
-
-        @Override
-        public boolean isLandable(Player player) {
-            return FlightApparatus.NONE.isLandable(player);
-        }
-
-        @Override
-        public FlightApparatus.FlightState createState(Flight flight) {
-            return FlightApparatus.NONE.createState(flight);
-        }
-    });
-    public static final FlightApparatus ANGEL_WINGS = Registry.register(WINGS, Names.ANGEL, new SimpleFlightApparatus(WingsItemsConfig.ANGEL));
-    public static final FlightApparatus PARROT_WINGS = Registry.register(WINGS, Names.PARROT, new SimpleFlightApparatus(WingsItemsConfig.PARROT));
-    public static final FlightApparatus BAT_WINGS = Registry.register(WINGS, Names.BAT, new SimpleFlightApparatus(WingsItemsConfig.BAT));
-    public static final FlightApparatus BLUE_BUTTERFLY_WINGS = Registry.register(WINGS, Names.BLUE_BUTTERFLY, new SimpleFlightApparatus(WingsItemsConfig.BLUE_BUTTERFLY));
-    public static final FlightApparatus DRAGON_WINGS = Registry.register(WINGS, Names.DRAGON, new SimpleFlightApparatus(WingsItemsConfig.DRAGON));
-    public static final FlightApparatus EVIL_WINGS = Registry.register(WINGS, Names.EVIL, new SimpleFlightApparatus(WingsItemsConfig.EVIL));
-    public static final FlightApparatus FAIRY_WINGS = Registry.register(WINGS, Names.FAIRY, new SimpleFlightApparatus(WingsItemsConfig.FAIRY));
-    public static final FlightApparatus MONARCH_BUTTERFLY_WINGS = Registry.register(WINGS, Names.MONARCH_BUTTERFLY, new SimpleFlightApparatus(WingsItemsConfig.MONARCH_BUTTERFLY));
-    public static final FlightApparatus SLIME_WINGS = Registry.register(WINGS, Names.SLIME, new SimpleFlightApparatus(WingsItemsConfig.SLIME));
-    public static final FlightApparatus FIRE_WINGS = Registry.register(WINGS, Names.FIRE, new SimpleFlightApparatus(WingsItemsConfig.FIRE));
-    public static final FlightApparatus LVJIA_SUPER_WINGS = Registry.register(WINGS, Names.LVJIA_SUPER,
-            (FlightApparatus) new BuffedFlightApparatus(WingsItemsConfig.LVJIA_SUPER,
-                    BuffedFlightApparatus.EffectSettings.of(MobEffects.RESISTANCE, 2, 40, 40),
-                    BuffedFlightApparatus.EffectSettings.of(MobEffects.JUMP_BOOST, 1, 40, 40)));
+    public static final String ID = WingsCore.ID;
+    public static final ResourceKey<Registry<FlightApparatus>> WINGS_KEY = WingsCore.WINGS_KEY;
+    public static final Registry<FlightApparatus> WINGS = new DefaultedMappedRegistry<>(Names.NONE.toString(),
+            WINGS_KEY, Lifecycle.experimental(), false);
+    private static final WingsCore.WingSet WING_SET = WingsCore.registerWings((id, wing) ->
+            Registry.register(WINGS, id, wing));
+    public static final FlightApparatus NONE = WING_SET.none();
+    public static final FlightApparatus WINGLESS = WING_SET.wingless();
+    public static final FlightApparatus ANGEL_WINGS = WING_SET.angel();
+    public static final FlightApparatus PARROT_WINGS = WING_SET.parrot();
+    public static final FlightApparatus BAT_WINGS = WING_SET.bat();
+    public static final FlightApparatus BLUE_BUTTERFLY_WINGS = WING_SET.blueButterfly();
+    public static final FlightApparatus DRAGON_WINGS = WING_SET.dragon();
+    public static final FlightApparatus EVIL_WINGS = WING_SET.evil();
+    public static final FlightApparatus FAIRY_WINGS = WING_SET.fairy();
+    public static final FlightApparatus MONARCH_BUTTERFLY_WINGS = WING_SET.monarchButterfly();
+    public static final FlightApparatus SLIME_WINGS = WING_SET.slime();
+    public static final FlightApparatus FIRE_WINGS = WING_SET.fire();
+    public static final FlightApparatus LVJIA_SUPER_WINGS = WING_SET.lvjiaSuper();
     private static final DeferredRegister<net.minecraft.commands.synchronization.ArgumentTypeInfo<?, ?>> COMMAND_ARGUMENT_TYPES =
             DeferredRegister.create(net.minecraft.core.registries.Registries.COMMAND_ARGUMENT_TYPE, ID);
     public static final DeferredHolder<net.minecraft.commands.synchronization.ArgumentTypeInfo<?, ?>, net.minecraft.commands.synchronization.SingletonArgumentInfo<WingsArgument>> WINGS_ARGUMENT_TYPE =
@@ -115,11 +87,7 @@ public final class WingsMod {
     }
 
     public static Identifier locate(String name) {
-        Identifier location = Identifier.tryBuild(WingsMod.ID, name);
-        if (location == null) {
-            throw new IllegalArgumentException("Invalid resource path: " + name);
-        }
-        return location;
+        return WingsCore.locate(name);
     }
 
     public void addFlightListeners(Player player, Flight instance) {
@@ -139,29 +107,21 @@ public final class WingsMod {
 
     public static final class Names {
         public static final Identifier
-                NONE = create("none"),
-                WINGLESS = create("wingless"),
-                ANGEL = create("angel_wings"),
-                PARROT = create("parrot_wings"),
-                SLIME = create("slime_wings"),
-                BLUE_BUTTERFLY = create("blue_butterfly_wings"),
-                MONARCH_BUTTERFLY = create("monarch_butterfly_wings"),
-                FIRE = create("fire_wings"),
-                BAT = create("bat_wings"),
-                FAIRY = create("fairy_wings"),
-                EVIL = create("evil_wings"),
-                DRAGON = create("dragon_wings"),
-                LVJIA_SUPER = create("lvjia_super_wing");
+                NONE = WingsCore.Names.NONE,
+                WINGLESS = WingsCore.Names.WINGLESS,
+                ANGEL = WingsCore.Names.ANGEL,
+                PARROT = WingsCore.Names.PARROT,
+                SLIME = WingsCore.Names.SLIME,
+                BLUE_BUTTERFLY = WingsCore.Names.BLUE_BUTTERFLY,
+                MONARCH_BUTTERFLY = WingsCore.Names.MONARCH_BUTTERFLY,
+                FIRE = WingsCore.Names.FIRE,
+                BAT = WingsCore.Names.BAT,
+                FAIRY = WingsCore.Names.FAIRY,
+                EVIL = WingsCore.Names.EVIL,
+                DRAGON = WingsCore.Names.DRAGON,
+                LVJIA_SUPER = WingsCore.Names.LVJIA_SUPER;
 
         private Names() {
-        }
-
-        private static Identifier create(String path) {
-            Identifier location = Identifier.tryBuild(ID, path);
-            if (location == null) {
-                throw new IllegalArgumentException("Invalid resource path: " + path);
-            }
-            return location;
         }
     }
 }

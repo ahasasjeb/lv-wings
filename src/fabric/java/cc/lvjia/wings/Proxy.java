@@ -1,10 +1,10 @@
 package cc.lvjia.wings;
 
 import cc.lvjia.wings.server.flight.Flight;
+import cc.lvjia.wings.server.FlightListenerSupport;
 import cc.lvjia.wings.server.net.Message;
 import cc.lvjia.wings.server.net.Network;
 import cc.lvjia.wings.server.net.clientbound.MessageSyncFlight;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
 public class Proxy {
@@ -15,29 +15,17 @@ public class Proxy {
     }
 
     public void addFlightListeners(Player player, Flight instance) {
-        if (player instanceof ServerPlayer serverPlayer) {
-            instance.registerFlyingListener(isFlying -> {
-                boolean hasVanillaFlight = player.getAbilities().instabuild || player.isSpectator();
-                player.getAbilities().mayfly = isFlying || hasVanillaFlight;
-                if (isFlying || !hasVanillaFlight) {
-                    player.getAbilities().flying = false;
-                }
-                serverPlayer.onUpdateAbilities();
-            });
-            instance.registerFlyingListener(isFlying -> {
-                if (isFlying) {
-                    player.removeVehicle();
-                }
-            });
-            Flight.Notifier notifier = Flight.Notifier.of(
-                    () -> this.network.sendToPlayer(new MessageSyncFlight(player, instance), serverPlayer),
-                    p -> this.network.sendToPlayer(new MessageSyncFlight(player, instance), p),
-                    () -> this.network.sendToAllTracking(new MessageSyncFlight(player, instance), serverPlayer)
-            );
-            instance.registerSyncListener(players -> players.notify(notifier));
-            // 先把当前权威状态同步给追踪者，避免新加入视角时看到旧值
-            instance.sync(Flight.PlayerSet.ofOthers());
-        }
+        FlightListenerSupport.addFlightListeners(player, instance, new FlightListenerSupport.Sync() {
+            @Override
+            public void sendToPlayer(Player source, Flight flight, net.minecraft.server.level.ServerPlayer target) {
+                network.sendToPlayer(new MessageSyncFlight(source, flight), target);
+            }
+
+            @Override
+            public void sendToAllTracking(Player source, Flight flight, net.minecraft.server.level.ServerPlayer trackedEntity) {
+                network.sendToAllTracking(new MessageSyncFlight(source, flight), trackedEntity);
+            }
+        });
     }
 
     public void invalidateFlightView(Player player) {

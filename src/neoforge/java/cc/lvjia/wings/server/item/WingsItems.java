@@ -14,7 +14,6 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-import java.util.List;
 import java.util.function.Supplier;
 
 public final class WingsItems {
@@ -47,20 +46,6 @@ public final class WingsItems {
             bottle("dragon_wings_bottle", () -> WingsMod.DRAGON_WINGS));
     public static final DeferredHolder<Item, Item> LVJIA_SUPER_WINGS_BOTTLE = REG.register("lvjia_super_wings_bottle",
             bottle("lvjia_super_wings_bottle", () -> WingsMod.LVJIA_SUPER_WINGS));
-    private static final List<DeferredHolder<Item, Item>> WING_BOTTLES = List.of(
-            ANGEL_WINGS_BOTTLE,
-            PARROT_WINGS_BOTTLE,
-            SLIME_WINGS_BOTTLE,
-            BLUE_BUTTERFLY_WINGS_BOTTLE,
-            MONARCH_BUTTERFLY_WINGS_BOTTLE,
-            FIRE_WINGS_BOTTLE,
-            BAT_WINGS_BOTTLE,
-            FAIRY_WINGS_BOTTLE,
-            EVIL_WINGS_BOTTLE,
-            DRAGON_WINGS_BOTTLE,
-            LVJIA_SUPER_WINGS_BOTTLE
-    );
-
     private WingsItems() {
     }
 
@@ -89,7 +74,7 @@ public final class WingsItems {
     }
 
     private static void acceptWingBottles(BuildCreativeModeTabContentsEvent event) {
-        WING_BOTTLES.forEach(holder -> event.accept(holder.get()));
+        WingsItemCatalog.forEachWingBottle(item -> event.accept(item.get()));
     }
 
 }

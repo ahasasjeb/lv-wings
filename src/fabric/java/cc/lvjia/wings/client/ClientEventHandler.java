@@ -5,6 +5,7 @@ import cc.lvjia.wings.client.asm.AnimatePlayerModelEvent;
 import cc.lvjia.wings.client.asm.ApplyPlayerRotationsEvent;
 import cc.lvjia.wings.client.asm.GetCameraEyeHeightEvent;
 import cc.lvjia.wings.client.event.EmptyOffHandPresentEvent;
+import cc.lvjia.wings.client.flight.FlightPoseSupport;
 import cc.lvjia.wings.client.flight.FlightView;
 import cc.lvjia.wings.client.flight.FlightViews;
 import cc.lvjia.wings.server.flight.Flight;
@@ -25,14 +26,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
-import java.util.Map;
-import java.util.WeakHashMap;
-
 public final class ClientEventHandler {
     private static ResourceKey<Level> lastPlayerDimension;
     private static CameraType lastCameraType = CameraType.FIRST_PERSON;
     private static float smoothedCameraRoll;
-    private static final Map<Player, FlightPoseAngles> FLIGHT_POSE_ANGLES = new WeakHashMap<>();
 
     private ClientEventHandler() {
     }
@@ -57,7 +54,7 @@ public final class ClientEventHandler {
         Flight flight = Flights.get(player);
         float delta = event.getTicksExisted() - player.tickCount;
         float amt = flight.getFlyingAmount(delta);
-        if (!shouldApplyFlightPose(player, amt)) {
+        if (!FlightPoseSupport.shouldApplyFlightPose(player, amt)) {
             return;
         }
         PlayerModel model = event.getModel();
@@ -92,10 +89,11 @@ public final class ClientEventHandler {
             PoseStack matrixStack = event.getMatrixStack();
             float delta = event.getDelta();
             float amt = flight.getFlyingAmount(delta);
-            if (shouldApplyFlightPose(player, amt)) {
-                FlightPoseAngles angles = getFlightPoseAngles(player, flight.isFlying(), amt, delta);
-                matrixStack.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(amt, 0.0F, angles.roll)));
-                matrixStack.mulPose(Axis.XP.rotationDegrees(Mth.lerp(amt, 0.0F, angles.pitch)));
+            if (FlightPoseSupport.shouldApplyFlightPose(player, amt)) {
+                FlightPoseSupport.FlightPoseAngles angles = FlightPoseSupport.getFlightPoseAngles(player,
+                        flight.isFlying(), amt, delta);
+                matrixStack.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(amt, 0.0F, angles.roll())));
+                matrixStack.mulPose(Axis.XP.rotationDegrees(Mth.lerp(amt, 0.0F, angles.pitch())));
                 matrixStack.translate(0.0D, -1.2D * MathH.easeInOut(amt), 0.0D);
             }
         });
@@ -105,7 +103,7 @@ public final class ClientEventHandler {
         Entity entity = event.getEntity();
         if (entity instanceof LocalPlayer) {
             FlightViews.get((LocalPlayer) entity)
-                    .ifPresent(flight -> flight.tickEyeHeight(event::setValue));
+                    .ifPresent(flight -> flight.tickEyeHeight(event.getValue(), event::setValue));
         }
     }
 
@@ -134,12 +132,13 @@ public final class ClientEventHandler {
             float amt = flight.getFlyingAmount(delta);
             if (player.isSpectator() || amt <= 0.0F) {
                 smoothedCameraRoll = 0.0F;
-                FLIGHT_POSE_ANGLES.remove(player);
+                FlightPoseSupport.clear(player);
                 return;
             }
 
-            FlightPoseAngles angles = getFlightPoseAngles(player, flight.isFlying(), amt, delta);
-            float targetRoll = Mth.lerp(amt, 0.0F, -angles.roll * 0.25F);
+            FlightPoseSupport.FlightPoseAngles angles = FlightPoseSupport.getFlightPoseAngles(player,
+                    flight.isFlying(), amt, delta);
+            float targetRoll = Mth.lerp(amt, 0.0F, -angles.roll() * 0.25F);
             if (!Float.isFinite(targetRoll)) {
                 targetRoll = 0.0F;
             }
@@ -175,7 +174,7 @@ public final class ClientEventHandler {
         if (player == null) {
             lastPlayerDimension = null;
             smoothedCameraRoll = 0.0F;
-            FLIGHT_POSE_ANGLES.clear();
+            FlightPoseSupport.clearAll();
             return;
         }
         ResourceKey<Level> current = player.level().dimension();
@@ -185,29 +184,4 @@ public final class ClientEventHandler {
         }
     }
 
-    private static boolean shouldApplyFlightPose(Player player, float amount) {
-        return amount > 0.0F && !player.isSpectator();
-    }
-
-    private static float getBodyYawRoll(Player player, float delta) {
-        float diffO = Mth.wrapDegrees(player.yBodyRotO - player.yRotO);
-        float diff = Mth.wrapDegrees(player.yBodyRot - player.getYRot());
-        return Mth.rotLerp(delta, diffO, diff);
-    }
-
-    private static FlightPoseAngles getFlightPoseAngles(Player player, boolean flying, float amount, float delta) {
-        FlightPoseAngles angles = FLIGHT_POSE_ANGLES.computeIfAbsent(player, ignored -> new FlightPoseAngles());
-        if (flying) {
-            angles.roll = getBodyYawRoll(player, delta);
-            angles.pitch = -Mth.lerp(delta, player.xRotO, player.getXRot()) - 90.0F;
-        } else if (amount <= 0.0F) {
-            FLIGHT_POSE_ANGLES.remove(player);
-        }
-        return angles;
-    }
-
-    private static final class FlightPoseAngles {
-        private float roll;
-        private float pitch;
-    }
 }

@@ -10,3 +10,81 @@ subprojects {
         options.encoding = 'UTF-8'
     }
 }
+
+tasks.register('reportPlatformSourceDrift') {
+    group = 'verification'
+    description = 'Reports same-path and same-name Java files that still diverge between Fabric and NeoForge sources.'
+
+    def fabricDir = layout.projectDirectory.dir('src/fabric/java')
+    def neoforgeDir = layout.projectDirectory.dir('src/neoforge/java')
+    def reportFile = layout.buildDirectory.file('reports/platform-source-drift.txt')
+
+    inputs.dir(fabricDir)
+    inputs.dir(neoforgeDir)
+    outputs.file(reportFile)
+
+    doLast {
+        def fabricRoot = fabricDir.asFile.toPath()
+        def neoforgeRoot = neoforgeDir.asFile.toPath()
+        def fabricFiles = fileTree(fabricDir.asFile) { include '**/*.java' }.files.sort { it.path }
+        def neoforgeFiles = fileTree(neoforgeDir.asFile) { include '**/*.java' }.files.sort { it.path }
+        def neoforgeByRelative = neoforgeFiles.collectEntries { file ->
+            def relative = neoforgeRoot.relativize(file.toPath()).toString().replace('\\', '/')
+            [(relative): file]
+        }
+        def fabricByName = fabricFiles.groupBy { it.name }
+        def neoforgeByName = neoforgeFiles.groupBy { it.name }
+
+        def samePath = []
+        def changedSamePath = []
+        fabricFiles.each { source ->
+            def relative = fabricRoot.relativize(source.toPath()).toString().replace('\\', '/')
+            def target = neoforgeByRelative[relative]
+            if (target == null) {
+                return
+            }
+            samePath << relative
+            def sourceText = source.getText('UTF-8').replace('\r\n', '\n')
+            def targetText = target.getText('UTF-8').replace('\r\n', '\n')
+            if (sourceText != targetText) {
+                changedSamePath << relative
+            }
+        }
+
+        def sameNameDifferentPath = []
+        fabricByName.keySet().intersect(neoforgeByName.keySet()).sort().each { name ->
+            fabricByName[name].each { fabricFile ->
+                neoforgeByName[name].each { neoforgeFile ->
+                    def fabricRelative = fabricRoot.relativize(fabricFile.toPath()).toString().replace('\\', '/')
+                    def neoforgeRelative = neoforgeRoot.relativize(neoforgeFile.toPath()).toString().replace('\\', '/')
+                    if (fabricRelative != neoforgeRelative) {
+                        sameNameDifferentPath << "${name}: fabric=${fabricRelative}, neoforge=${neoforgeRelative}"
+                    }
+                }
+            }
+        }
+
+        def output = []
+        output << 'Fabric/NeoForge platform source drift report'
+        output << "Same relative path Java pairs: ${samePath.size()}"
+        output << "Divergent same-path Java pairs: ${changedSamePath.size()}"
+        output << ''
+        output << 'Divergent same-path files:'
+        output.addAll(changedSamePath.collect { "  - ${it}" })
+        output << ''
+        output << 'Same basename but different relative path:'
+        output.addAll(sameNameDifferentPath.collect { "  - ${it}" })
+        output << ''
+
+        def target = reportFile.get().asFile
+        target.parentFile.mkdirs()
+        target.setText(output.join(System.lineSeparator()), 'UTF-8')
+        logger.lifecycle("Platform source drift report written to ${target}")
+    }
+}
+
+subprojects {
+    tasks.matching { it.name == 'check' }.configureEach {
+        dependsOn rootProject.tasks.named('reportPlatformSourceDrift')
+    }
+}

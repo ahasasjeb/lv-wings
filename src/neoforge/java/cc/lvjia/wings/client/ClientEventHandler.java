@@ -2,12 +2,14 @@ package cc.lvjia.wings.client;
 
 import cc.lvjia.wings.WingsMod;
 import cc.lvjia.wings.client.audio.WingsSound;
+import cc.lvjia.wings.client.asm.AnimatePlayerModelEvent;
+import cc.lvjia.wings.client.asm.ApplyPlayerRotationsEvent;
+import cc.lvjia.wings.client.asm.GetCameraEyeHeightEvent;
 import cc.lvjia.wings.client.event.EmptyOffHandPresentEvent;
+import cc.lvjia.wings.client.flight.FlightPoseSupport;
 import cc.lvjia.wings.client.flight.FlightView;
 import cc.lvjia.wings.client.flight.FlightViews;
-import cc.lvjia.wings.server.asm.AnimatePlayerModelEvent;
-import cc.lvjia.wings.server.asm.ApplyPlayerRotationsEvent;
-import cc.lvjia.wings.server.asm.GetCameraEyeHeightEvent;
+import cc.lvjia.wings.server.flight.Flight;
 import cc.lvjia.wings.server.flight.Flights;
 import cc.lvjia.wings.util.MathH;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -30,15 +32,11 @@ import net.neoforged.neoforge.client.event.ViewportEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
-import java.util.Map;
-import java.util.WeakHashMap;
-
 @EventBusSubscriber(value = Dist.CLIENT, modid = WingsMod.ID)
 public final class ClientEventHandler {
     private static ResourceKey<Level> lastPlayerDimension;
     private static CameraType lastCameraType = CameraType.FIRST_PERSON;
     private static float smoothedCameraRoll;
-    private static final Map<Player, FlightPoseAngles> FLIGHT_POSE_ANGLES = new WeakHashMap<>();
 
     private ClientEventHandler() {
     }
@@ -46,38 +44,37 @@ public final class ClientEventHandler {
     @SubscribeEvent
     public static void onAnimatePlayerModel(AnimatePlayerModelEvent event) {
         Player player = event.getEntity();
-        Flights.get(player).ifPresent(flight -> {
-            float delta = event.getTicksExisted() - player.tickCount;
-            float amt = flight.getFlyingAmount(delta);
-            if (!shouldApplyFlightPose(player, amt)) {
-                return;
-            }
-            PlayerModel model = event.getModel();
-            float pitch = event.getPitch();
-            model.head.xRot = MathH.toRadians(MathH.lerp(pitch, pitch / 4.0F - 90.0F, amt));
-            model.leftArm.xRot = MathH.lerp(model.leftArm.xRot, -3.2F, amt);
-            model.rightArm.xRot = MathH.lerp(model.rightArm.xRot, -3.2F, amt);
-            model.leftLeg.xRot = MathH.lerp(model.leftLeg.xRot, 0.0F, amt);
-            model.rightLeg.xRot = MathH.lerp(model.rightLeg.xRot, 0.0F, amt);
-            model.hat.xRot = 0;
-            model.hat.yRot = 0;
-            model.hat.zRot = 0;
-            model.leftSleeve.xRot = 0;
-            model.leftSleeve.yRot = 0;
-            model.leftSleeve.zRot = 0;
-            model.rightSleeve.xRot = 0;
-            model.rightSleeve.yRot = 0;
-            model.rightSleeve.zRot = 0;
-            model.leftPants.xRot = 0;
-            model.leftPants.yRot = 0;
-            model.leftPants.zRot = 0;
-            model.rightPants.xRot = 0;
-            model.rightPants.yRot = 0;
-            model.rightPants.zRot = 0;
-            model.jacket.xRot = 0;
-            model.jacket.yRot = 0;
-            model.jacket.zRot = 0;
-        });
+        Flight flight = Flights.get(player);
+        float delta = event.getTicksExisted() - player.tickCount;
+        float amt = flight.getFlyingAmount(delta);
+        if (!FlightPoseSupport.shouldApplyFlightPose(player, amt)) {
+            return;
+        }
+        PlayerModel model = event.getModel();
+        float pitch = event.getPitch();
+        model.head.xRot = MathH.toRadians(MathH.lerp(pitch, pitch / 4.0F - 90.0F, amt));
+        model.leftArm.xRot = MathH.lerp(model.leftArm.xRot, -3.2F, amt);
+        model.rightArm.xRot = MathH.lerp(model.rightArm.xRot, -3.2F, amt);
+        model.leftLeg.xRot = MathH.lerp(model.leftLeg.xRot, 0.0F, amt);
+        model.rightLeg.xRot = MathH.lerp(model.rightLeg.xRot, 0.0F, amt);
+        model.hat.xRot = 0;
+        model.hat.yRot = 0;
+        model.hat.zRot = 0;
+        model.leftSleeve.xRot = 0;
+        model.leftSleeve.yRot = 0;
+        model.leftSleeve.zRot = 0;
+        model.rightSleeve.xRot = 0;
+        model.rightSleeve.yRot = 0;
+        model.rightSleeve.zRot = 0;
+        model.leftPants.xRot = 0;
+        model.leftPants.yRot = 0;
+        model.leftPants.zRot = 0;
+        model.rightPants.xRot = 0;
+        model.rightPants.yRot = 0;
+        model.rightPants.zRot = 0;
+        model.jacket.xRot = 0;
+        model.jacket.yRot = 0;
+        model.jacket.zRot = 0;
     }
 
     @SubscribeEvent
@@ -86,10 +83,11 @@ public final class ClientEventHandler {
             PoseStack matrixStack = event.getMatrixStack();
             float delta = event.getDelta();
             float amt = flight.getFlyingAmount(delta);
-            if (shouldApplyFlightPose(player, amt)) {
-                FlightPoseAngles angles = getFlightPoseAngles(player, flight.isFlying(), amt, delta);
-                matrixStack.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(amt, 0.0F, angles.roll)));
-                matrixStack.mulPose(Axis.XP.rotationDegrees(Mth.lerp(amt, 0.0F, angles.pitch)));
+            if (FlightPoseSupport.shouldApplyFlightPose(player, amt)) {
+                FlightPoseSupport.FlightPoseAngles angles = FlightPoseSupport.getFlightPoseAngles(player,
+                        flight.isFlying(), amt, delta);
+                matrixStack.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(amt, 0.0F, angles.roll())));
+                matrixStack.mulPose(Axis.XP.rotationDegrees(Mth.lerp(amt, 0.0F, angles.pitch())));
                 matrixStack.translate(0.0D, -1.2D * MathH.easeInOut(amt), 0.0D);
             }
         });
@@ -130,13 +128,14 @@ public final class ClientEventHandler {
             float amt = flight.getFlyingAmount(delta);
             if (player.isSpectator() || amt <= 0.0F) {
                 smoothedCameraRoll = 0.0F;
-                FLIGHT_POSE_ANGLES.remove(player);
+                FlightPoseSupport.clear(player);
                 event.setRoll(0.0F);
                 return;
             }
 
-            FlightPoseAngles angles = getFlightPoseAngles(player, flight.isFlying(), amt, delta);
-            float targetRoll = Mth.lerp(amt, 0.0F, -angles.roll * 0.25F);
+            FlightPoseSupport.FlightPoseAngles angles = FlightPoseSupport.getFlightPoseAngles(player,
+                    flight.isFlying(), amt, delta);
+            float targetRoll = Mth.lerp(amt, 0.0F, -angles.roll() * 0.25F);
             if (!Float.isFinite(targetRoll)) {
                 targetRoll = 0.0F;
             }
@@ -155,11 +154,9 @@ public final class ClientEventHandler {
 
     @SubscribeEvent
     public static void onEmptyOffHandPresentEvent(EmptyOffHandPresentEvent event) {
-        Flights.get(event.getPlayer()).ifPresent(flight -> {
-            if (flight.isFlying()) {
-                event.allow();
-            }
-        });
+        if (Flights.get(event.getPlayer()).isFlying()) {
+            event.allow();
+        }
     }
 
     @SubscribeEvent
@@ -183,7 +180,7 @@ public final class ClientEventHandler {
         if (player == null) {
             lastPlayerDimension = null;
             smoothedCameraRoll = 0.0F;
-            FLIGHT_POSE_ANGLES.clear();
+            FlightPoseSupport.clearAll();
             return;
         }
         ResourceKey<Level> current = player.level().dimension();
@@ -193,29 +190,4 @@ public final class ClientEventHandler {
         }
     }
 
-    private static boolean shouldApplyFlightPose(Player player, float amount) {
-        return amount > 0.0F && !player.isSpectator();
-    }
-
-    private static float getBodyYawRoll(Player player, float delta) {
-        float diffO = Mth.wrapDegrees(player.yBodyRotO - player.yRotO);
-        float diff = Mth.wrapDegrees(player.yBodyRot - player.getYRot());
-        return Mth.rotLerp(delta, diffO, diff);
-    }
-
-    private static FlightPoseAngles getFlightPoseAngles(Player player, boolean flying, float amount, float delta) {
-        FlightPoseAngles angles = FLIGHT_POSE_ANGLES.computeIfAbsent(player, ignored -> new FlightPoseAngles());
-        if (flying) {
-            angles.roll = getBodyYawRoll(player, delta);
-            angles.pitch = -Mth.lerp(delta, player.xRotO, player.getXRot()) - 90.0F;
-        } else if (amount <= 0.0F) {
-            FLIGHT_POSE_ANGLES.remove(player);
-        }
-        return angles;
-    }
-
-    private static final class FlightPoseAngles {
-        private float roll;
-        private float pitch;
-    }
 }

@@ -84,19 +84,18 @@ public final class ServerEventHandler {
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
-        Flights.get(player).ifPresent(flight -> {
-            if (FlightStateReset.clearSpectator(player, flight)) {
-                return;
+        Flight flight = Flights.get(player);
+        if (FlightStateReset.clearSpectator(player, flight)) {
+            return;
+        }
+        flight.tick(player);
+        if (player instanceof ServerPlayer serverPlayer && !serverPlayer.level().isClientSide()) {
+            if (flight.isFlying() && player.getAbilities().flying) {
+                player.getAbilities().flying = false;
+                serverPlayer.onUpdateAbilities();
             }
-            flight.tick(player);
-            if (player instanceof ServerPlayer serverPlayer && !serverPlayer.level().isClientSide()) {
-                if (flight.isFlying() && player.getAbilities().flying) {
-                    player.getAbilities().flying = false;
-                    serverPlayer.onUpdateAbilities();
-                }
-                FlightSpeedAntiCheat.tick(serverPlayer, flight);
-            }
-        });
+            FlightSpeedAntiCheat.tick(serverPlayer, flight);
+        }
     }
 
     @SubscribeEvent
@@ -118,22 +117,22 @@ public final class ServerEventHandler {
         if (event.getEntity().isSpectator()) {
             return;
         }
-        Flights.get(event.getEntity()).filter(Flight::isFlying)
-                .ifPresent(flight -> event.setFlying());
+        if (Flights.get(event.getEntity()).isFlying()) {
+            event.setFlying();
+        }
     }
 
     @SubscribeEvent
     public static void onPlayerFlown(PlayerFlownEvent event) {
         Player player = event.getEntity();
-        Flights.get(player).ifPresent(flight -> {
-            if (FlightStateReset.clearSpectator(player, flight)) {
-                return;
-            }
-            flight.onFlown(player, event.getDirection());
-            if (player instanceof ServerPlayer serverPlayer && !serverPlayer.level().isClientSide()) {
-                FlightSpeedAntiCheat.recordMovement(serverPlayer, flight, event.getDirection());
-            }
-        });
+        Flight flight = Flights.get(player);
+        if (FlightStateReset.clearSpectator(player, flight)) {
+            return;
+        }
+        flight.onFlown(player, event.getDirection());
+        if (player instanceof ServerPlayer serverPlayer && !serverPlayer.level().isClientSide()) {
+            FlightSpeedAntiCheat.recordMovement(serverPlayer, flight, event.getDirection());
+        }
     }
 
     @SubscribeEvent

@@ -23,8 +23,8 @@ public final class FlightViews {
 
     public static Optional<FlightView> get(LivingEntity entity) {
         if (entity instanceof AbstractClientPlayer player) {
-            return Flights.get(player)
-                    .map(flight -> VIEWS.computeIfAbsent(player, ignored -> new FlightViewDefault(player, flight)));
+            return Optional.of(VIEWS.computeIfAbsent(player, ignored -> new FlightViewDefault(player,
+                    Flights.get(player))));
         }
         return Optional.empty();
     }

@@ -1,0 +1,308 @@
+# Fabric + NeoForge 双加载器项目：缺点清单与改进建议
+
+> 基于 `src/main/java`（2370 行，26.7%）、`src/fabric/java`（3241 行）、`src/neoforge/java`（3272 行）深入审计，
+> 总计 137 Java 文件，其中 44 对同名文件分布在 Fabric 与 NeoForge 两边。
+
+---
+
+## 一、关键缺陷（Critical Issues）
+
+### 1. 同名不同质文件：隐式分叉代码库
+**严重程度：🔴 最高**
+
+44 个同名文件分布在 `src/fabric/java` 和 `src/neoforge/java` 的相同包路径下，实现相似功能但依赖不同平台 API，**无编译时/IDE 强制同步机制**。修改一边时极易忘记同步另一边。
+
+#### 1.1 `BatBloodBottleItem.removeWings()` 逻辑缺失
+- **Fabric**（`src/fabric/java/.../item/BatBloodBottleItem.java:25-53`）：移除翅膀后调用 `clearFlightState()`，重置飞行状态、翅膀类型、动画状态、反作弊标记。
+- **NeoForge**（`src/neoforge/java/.../item/BatBloodBottleItem.java:20-27`）：仅移除药水效果，**完全不重置飞行状态**。NeoForge 端玩家喝掉蝙蝠血瓶后，内部飞行状态可能残留。
+
+#### 1.2 `WingsBottleItem.giveWing()` 因 Flights API 差异产生语义分裂
+- **Fabric**：`Flights.get(player)` 直接返回 `Flight`。
+- **NeoForge**：`Flights.get(player)` 返回 `Optional<Flight>`，需 `.filter(...).isPresent()` 包装。
+- 后果：共享层代码无法安全调用 `Flights.get()`。
+
+#### 1.3 `ServerEventHandler` 事件覆盖范围不一致
+- **Fabric**：使用 Fabric API 事件，包含 `ServerEntityLevelChangeEvents.AFTER_PLAYER_CHANGE_LEVEL`、`EntityTrackingEvents.START_TRACKING`。
+- **NeoForge**：使用 `@SubscribeEvent`，**缺少 Fabric 端等价的维度切换同步逻辑**。
+- **NeoForge 独有**：`onEntityMount` 事件在 Fabric 端不存在。
+
+#### 1.4 已确认的不一致文件清单
+| 文件 | Fabric 差异 | NeoForge 差异 |
+|------|-------------|---------------|
+| `BatBloodBottleItem.java` | 有 `clearFlightState()` | 无 `clearFlightState()` |
+| `WingsBottleItem.java` | 直接 `Flights.get()` | `Flights.get().filter()` Optional 包装 |
+| `Flights.java` | `get()` 返回 `Flight` | `get()` 返回 `Optional<Flight>` |
+| `Flights.java` | 无 Capability | 有 `FLIGHT_CAPABILITY` 双轨 |
+| `ServerEventHandler.java` | 有 dimension change tracking | 无显式处理 |
+| `ServerEventHandler.java` | 无 mount 拦截 | 有 `onEntityMount` |
+| `WingsConfig.java` | JSON + `ConfigFiles.load()` | `ModConfigSpec.Builder` + TOML |
+| `WingsItemsConfig.java` | JSON + `ConfigWingSettings(Identifier)` | `ModConfigSpec` + `ConfigWingSettings(Identifier, Builder)` |
+| `WingsAttachments.java` | Fabric Attachment API | NeoForge Attachment + Capability |
+| `Proxy.java` | 无酿造注册 | 有 `registerBrewingRecipes` |
+| `ClientEventHandler.java` | fabric callback 注册 | `@EventBusSubscriber` 注解 |
+| `ClientProxy.java` | 流式 chain | modBus + NeoForge.EVENT_BUS 双总线 |
+| `Network.java` | `PayloadTypeRegistry` + `ServerPlayNetworking` | `RegisterPayloadHandlersEvent` + `PacketDistributor` |
+| `WingsCommand.java` | `ResourceArgument` | 自定义 `WingsArgument` |
+| `WingsHooks.java` | 直接调用 `ServerEventHandler` | 通过 `NeoForge.EVENT_BUS.post()` |
+| `LayerWings.java` | `LivingEntityRenderLayerRegistrationCallback` | `EntityRenderersEvent.AddLayers` |
+
+---
+
+### 2. `Flights` API 签名不统一：共享层的编译屏障
+**严重程度：🔴 高**
+
+```java
+// Fabric: src/fabric/java/cc/lvjia/wings/server/flight/Flights.java:16
+public static Flight get(Player player)
+
+// NeoForge: src/neoforge/java/cc/lvjia/wings/server/flight/Flights.java:31
+public static Optional<Flight> get(Player player)
+```
+
+`src/main/java` 中的共享代码无法安全调用 `Flights.get()`，因为编译时不知道返回类型。共享类只能通过回调接口（`FlightListenerSupport.Sync`）工作，无法主动查询玩家飞行状态，**人为压缩了共享层的编码能力**。
+
+---
+
+### 3. 配置系统完全分叉：默认值与行为双轨维护
+**严重程度：🟠 高**
+
+| 维度 | Fabric | NeoForge |
+|------|--------|----------|
+| 配置格式 | JSON (`wings-common.json`, `wings-items.json`) | TOML (`wings-common.toml`, `wings-items.toml`) |
+| 加载机制 | 自定义 `ConfigFiles.load()` | `ModConfigSpec.Builder` + `ModContainer.registerConfig()` |
+| 默认值位置 | 各 `Data` 类的字段初始化 | 各 `static final` 常量 + `defineInRange()` |
+| 值校验 | 手动 `normalize()` + `clamp()` | `defineInRange()` 自动限制 |
+| 热重载 | 需自行实现文件监听 | 通过 `WingsConfigEvents.onReload` |
+
+所有 13 个反作弊配置项的默认值、取值范围、注释在两边分别硬编码。修改一个默认值（如 `softHorizontalLimit`）需在两个文件中手动同步。
+
+`WingsItemsConfig` 同理：Fabric 用 `Map<String, ConfigWingSettings.Data>`，NeoForge 用 `ModConfigSpec.Builder` 内嵌定义。`ConfigWingSettings` 构造函数参数不同（Fabric：`Identifier`，NeoForge：`Identifier + ModConfigSpec.Builder`）。
+
+---
+
+### 4. 事件系统重复定义：隐式契约风险
+**严重程度：🟠 中高**
+
+以下事件在两边同名，分发机制不同但字段结构必须手动同步：
+
+- `PlayerFlightCheckEvent`
+- `PlayerFlownEvent`
+- `GetLivingHeadLimitEvent`
+- `GetCameraEyeHeightEvent`
+- `AnimatePlayerModelEvent`
+- `ApplyPlayerRotationsEvent`
+
+```java
+// Fabric: src/fabric/java/.../asm/WingsHooks.java
+PlayerFlightCheckEvent ev = new PlayerFlightCheckEvent(player);
+ServerEventHandler.onPlayerFlightCheck(ev);  // 直接调静态方法
+return ev.isFlying();
+
+// NeoForge: src/neoforge/java/.../asm/WingsHooks.java
+PlayerFlightCheckEvent ev = new PlayerFlightCheckEvent(player);
+NeoForge.EVENT_BUS.post(ev);  // 事件总线广播
+return ev.isFlying();
+```
+
+`WingsHooks` 也是同名文件，IDE 不会提示跨平台差异。在 Fabric 端给 `PlayerFlownEvent` 新增字段后忘记同步 NeoForge 端，两边行为会无声息地分叉。
+
+---
+
+### 5. 附件/能力系统：NeoForge 端的双重抽象
+**严重程度：🟠 中高**
+
+- **Fabric**（`src/fabric/java/.../WingsAttachments.java`）：使用 Fabric Attachment API，持久化通过 `Codec`。
+- **NeoForge**（`src/neoforge/java/.../WingsAttachments.java` + `src/neoforge/java/.../flight/Flights.java`）：使用 NeoForge `AttachmentType` + `DeferredRegister`，额外引入 `EntityCapability<Flight, Void>`。`Flights.resolve()` 先查 capability，fallback 到 attachment，形成双轨存储。`InSomniableCapability` 同理。调试难度和维护成本显著高于 Fabric 端。
+
+---
+
+### 6. 代码风格与空安全注解不一致
+**严重程度：🟡 中**
+
+Fabric 端大量使用 `org.jspecify.annotations.NonNull`、`@Nullable`、`@SuppressWarnings("null")`。NeoForge 端基本不使用这些注解。同一命名空间下代码遵循不同规范。
+
+---
+
+### 7. Mixin 配置需分别维护
+**严重程度：🟡 中低**
+
+- Fabric（`src/fabric/resources/wings.mixins.json`）：独有 `PotionBrewingMixin`。
+- NeoForge（`src/neoforge/resources/wings.mixins.json`）：独有 `ClientHooksMixin`。
+- 在 `src/main/java` 新增共享 mixin 后需手动在两个 JSON 中注册，遗漏会导致某一端逻辑静默失效。
+
+---
+
+### 8. 共享层代码量偏低
+**严重程度：🟡 中**
+
+共享代码仅占 26.7%（~2370 行）。大量本可不依赖加载器 API 的代码留在平台层：
+
+- `WingsBottleItem`、`BatBloodBottleItem` 的业务逻辑（`finishUsingItem`、`giveWing`、`removeWings`）与平台无关。
+- `ClientProxy.registerWingForms()` 仅 `wingKey()` 获取方式不同，其余完全一致。
+- `ServerEventHandler.onPlayerEntityInteract`（蝙蝠血瓶交互）两边完全一致，仅因事件注册 API 不同而整体复制。
+- `ClientEventHandler` 中的姿态计算逻辑（`FlightPoseAngles`、`getBodyYawRoll`、`shouldApplyFlightPose`）与平台无关。
+
+---
+
+## 二、改进建议（Actionable Recommendations）
+
+### 建议 1：统一 `Flights` API，打破共享层编译屏障
+**优先级：P0**
+
+1. 在 `src/main/java` 中定义 `FlightsAccess` 接口：
+```java
+public interface FlightsAccess {
+    Flight get(Player player);
+    boolean has(Player player);
+    void ifPlayer(Entity entity, BiConsumer<Player, Flight> action);
+}
+```
+2. 两边 `Flights` 类实现该接口，通过静态委托注册。
+3. 在 `main` 提供静态入口 `Flights.get(Player)`。
+4. `WingsBottleItem`、`BatBloodBottleItem`、`FlightSpeedAntiCheat` 等可全部下放到 `main`，消除两边实现差异。
+
+---
+
+### 建议 2：将纯业务逻辑类下放到 `src/main/java`
+**优先级：P0**
+
+**可移动的文件/方法：**
+- `WingsBottleItem.java`、`BatBloodBottleItem.java`：全部业务逻辑（解决 `Flights.get()` 后即可移动）。
+- `ServerEventHandler` 中的业务方法：`onPlayerEntityInteract`、`onPlayerTick`、`onLivingDeath`、`onPlayerFlightCheck`、`onPlayerFlown`、`onGetLivingHeadLimit`。提取到 `WingsServerLogic` 共享类。
+- `ClientEventHandler` 中的姿态计算：`FlightPoseAngles`、`getBodyYawRoll`、`shouldApplyFlightPose`、`getFlightPoseAngles`。提取到 `WingsClientLogic`。
+- `ClientProxy` 中 `registerWingForms()` 的注册列表：WingForm 映射逻辑在共享层定义，两边只需传入 `EntityModelSet`。
+
+---
+
+### 建议 3：统一配置抽象，消除双轨硬编码
+**优先级：P1**
+
+1. 在 `main` 中定义共享配置数据接口：
+```java
+public interface WingsConfigData {
+    boolean allowUnderwaterFlight();
+    FlightAntiCheatSettings flightAntiCheat();
+    Map<Identifier, WingSettingsData> wingSettings();
+}
+```
+2. 两边 `WingsConfig` 只负责加载和提供该接口的实现。
+3. 默认值集中到 `WingsConfigDefaults` 共享常量类。
+4. `WingsItemsConfig` 同理。
+
+---
+
+### 建议 4：统一事件分发，建立显式契约
+**优先级：P1**
+
+1. 将所有事件类提升到 `src/main/java`。
+2. 在 `main` 中定义 `WingsEventBus` 接口：
+```java
+public interface WingsEventBus {
+    <T extends WingsEvent> void post(T event);
+}
+```
+3. `WingsHooks` 提升到 `main`，通过注入的 `WingsEventBus` 分发：
+```java
+public static boolean onFlightCheck(Player player, boolean defaultValue) {
+    if (defaultValue) return true;
+    PlayerFlightCheckEvent ev = new PlayerFlightCheckEvent(player);
+    WingsCore.EVENT_BUS.post(ev);
+    return ev.isFlying();
+}
+```
+4. 平台层在初始化时注入具体实现（Fabric：直接调用，NeoForge：委托 `NeoForge.EVENT_BUS.post()`）。
+
+---
+
+### 建议 5：简化 NeoForge 数据存储，去除 Capability 冗余
+**优先级：P1**
+
+1. 如果 `AttachmentType` 已满足需求（`.copyOnDeath()`、序列化），**移除 `Flights.FLIGHT_CAPABILITY`**。
+2. `InSomniableCapability` 同理：数据已有 attachment 支撑，去除 capability 层。
+3. 如需 capability 供其他 mod 查询，保留只读 capability 委托层，但写操作统一走 attachment。
+
+---
+
+### 建议 6：统一空安全注解与代码风格
+**优先级：P2**
+
+1. 根 `build.gradle` 引入 `org.jspecify:jspecify` 依赖。
+2. NeoForge 端补上 `@NonNull` / `@Nullable` 注解。
+3. 统一使用 `Objects.requireNonNull()` 进行防御性编程。
+
+---
+
+### 建议 7：建立同名文件差异检查机制
+**优先级：P2**
+
+编写 Gradle 任务或 CI 脚本，自动比较 `src/fabric/java` 和 `src/neoforge/java` 中同名文件的差异，在 PR 时高亮变更偏差。长期目标：同名文件从 44 个减少到 10 个以下。
+
+---
+
+### 建议 8：统一命令参数类型
+**优先级：P2**
+
+在 `main` 中定义 `WingsArgumentType` 接口，两边分别适配。或在 NeoForge 端也使用 `ResourceArgument`（如果支持），消除自定义 `WingsArgument`。
+
+---
+
+### 建议 9：建立 `Proxy` 的共享契约
+**优先级：P2**
+
+在 `main` 中定义 `Proxy` 抽象基类：
+```java
+public abstract class Proxy {
+    protected final Network network = createNetwork();
+    public abstract void init();
+    public abstract void addFlightListeners(Player player, Flight flight);
+    public abstract void invalidateFlightView(Player player);
+    public abstract void sendToServer(Message message);
+    protected abstract Network createNetwork();
+}
+```
+
+---
+
+### 建议 10：考虑多加载器抽象方案
+**优先级：P3**
+
+- **引入 Architectury API**：统一注册、事件、网络、配置 API，胶水代码压缩到 30%。
+- **或自行建立内部平台抽象层**（`cc.lvjia.wings.platform.*`）：封装注册表、事件总线、网络通道、配置系统。
+
+---
+
+## 三、重构优先级路线图
+
+| 阶段 | 任务 | 预期效果 |
+|------|------|----------|
+| **Phase 1** | 统一 `Flights.get()` API；`WingsBottleItem`、`BatBloodBottleItem` 下沉到 `main` | 消除已确认的行为不一致，减少 3 对同名文件 |
+| **Phase 2** | 统一配置抽象（`WingsConfigData` + `WingsConfigDefaults`） | 消除双轨默认值维护 |
+| **Phase 3** | 提取 `WingsServerLogic` / `WingsClientLogic`，业务方法下沉 | 共享层比例从 26.7% 提升至 40%+ |
+| **Phase 4** | 统一事件总线抽象，事件类提升到 `main` | 消除事件类重复定义 |
+| **Phase 5** | 清理 NeoForge Capability 冗余；统一空安全注解 | 降低 NeoForge 端复杂度 |
+| **Phase 6** | 建立 CI 同名文件差异检查；评估 Architectury API 迁移 | 长期防止回归 |
+
+---
+
+## 四、文件定位速查表
+
+| 问题 | Fabric 路径 | NeoForge 路径 | 共享层路径 |
+|------|-------------|---------------|------------|
+| 血瓶逻辑不一致 | `src/fabric/java/../item/BatBloodBottleItem.java` | `src/neoforge/java/../item/BatBloodBottleItem.java` | — |
+| 翅膀给予逻辑差异 | `src/fabric/java/../item/WingsBottleItem.java` | `src/neoforge/java/../item/WingsBottleItem.java` | — |
+| Flights API | `src/fabric/java/../flight/Flights.java` | `src/neoforge/java/../flight/Flights.java` | — |
+| 配置硬编码 | `src/fabric/java/../config/WingsConfig.java` | `src/neoforge/java/../config/WingsConfig.java` | — |
+| 事件分发 | `src/fabric/java/../asm/WingsHooks.java` | `src/neoforge/java/../asm/WingsHooks.java` | `src/main/java/../mixin/LivingEntityMixin.java` |
+| 附件双轨 | `src/fabric/java/../WingsAttachments.java` | `src/neoforge/java/../WingsAttachments.java` | — |
+| 命令参数 | `src/fabric/java/../command/WingsCommand.java` | `src/neoforge/java/../command/WingsCommand.java` | `src/main/java/../command/WingsCommandActions.java` |
+| 网络注册 | `src/fabric/java/../net/Network.java` | `src/neoforge/java/../net/Network.java` | `src/main/java/../net/Message.java` |
+| Proxy | `src/fabric/java/../Proxy.java` | `src/neoforge/java/../Proxy.java` | — |
+| Mixin 配置 | `src/fabric/resources/wings.mixins.json` | `src/neoforge/resources/wings.mixins.json` | `src/main/java/../mixin/*.java` |
+| 客户端渲染 | `src/fabric/java/../renderer/LayerWings.java` | `src/neoforge/java/../renderer/LayerWings.java` | — |
+| 客户端事件 | `src/fabric/java/../ClientEventHandler.java` | `src/neoforge/java/../ClientEventHandler.java` | — |
+| 客户端代理 | `src/fabric/java/../ClientProxy.java` | `src/neoforge/java/../ClientProxy.java` | — |
+| 梦/能力 | `src/fabric/java/../dreamcatcher/InSomniableCapability.java` | `src/neoforge/java/../dreamcatcher/InSomniableCapability.java` | `src/main/java/../dreamcatcher/InSomniable.java` |
+| 物品配置 | `src/fabric/java/../config/WingsItemsConfig.java` | `src/neoforge/java/../config/WingsItemsConfig.java` | `src/main/java/../item/WingsItemCatalog.java` |
+
+> 统计：`src/main/java` 41 文件 / ~2370 行（26.7%），`src/fabric/java` 48 文件 / ~3241 行，`src/neoforge/java` 48 文件 / ~3272 行，两边 44 对同名文件。
+> 构建系统：Gradle 子项目（`fabric/build.gradle` + `neoforge/build.gradle`），通过 source set `../src/main/java` 共享代码。

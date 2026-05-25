@@ -1,4 +1,4 @@
-package cc.lvjia.wings.server.asm;
+package cc.lvjia.wings.client.asm;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.entity.player.Player;

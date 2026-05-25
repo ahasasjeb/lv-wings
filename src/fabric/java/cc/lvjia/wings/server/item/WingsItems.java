@@ -77,18 +77,8 @@ public final class WingsItems {
                                 .register(WingsItems::addWings);
         }
 
-        private static void addWings(FabricCreativeModeTabOutput entries) {
-                entries.accept(ANGEL_WINGS_BOTTLE.get());
-                entries.accept(PARROT_WINGS_BOTTLE.get());
-                entries.accept(SLIME_WINGS_BOTTLE.get());
-                entries.accept(BLUE_BUTTERFLY_WINGS_BOTTLE.get());
-                entries.accept(MONARCH_BUTTERFLY_WINGS_BOTTLE.get());
-                entries.accept(FIRE_WINGS_BOTTLE.get());
-                entries.accept(BAT_WINGS_BOTTLE.get());
-                entries.accept(FAIRY_WINGS_BOTTLE.get());
-                entries.accept(EVIL_WINGS_BOTTLE.get());
-                entries.accept(DRAGON_WINGS_BOTTLE.get());
-                entries.accept(LVJIA_SUPER_WINGS_BOTTLE.get());
+    private static void addWings(FabricCreativeModeTabOutput entries) {
+                WingsItemCatalog.forEachWingBottle(item -> entries.accept(item.get()));
         }
 
 }

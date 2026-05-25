@@ -1,16 +1,16 @@
 package cc.lvjia.wings;
 
 import cc.lvjia.wings.server.flight.Flight;
+import cc.lvjia.wings.server.FlightListenerSupport;
 import cc.lvjia.wings.server.item.WingsItems;
 import cc.lvjia.wings.server.net.Network;
 import cc.lvjia.wings.server.net.Message;
 import cc.lvjia.wings.server.net.clientbound.MessageSyncFlight;
+import cc.lvjia.wings.server.potion.WingsBrewingCatalog;
 import cc.lvjia.wings.server.potion.PotionMix;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -36,43 +36,22 @@ public class Proxy {
             builder.addRecipe(new PotionMix(Potions.LONG_SLOW_FALLING, Ingredient.of(item), new ItemStack(supplier.get())));
         };
 
-        reg.accept(Items.FEATHER, WingsItems.ANGEL_WINGS_BOTTLE);
-        reg.accept(Items.RED_DYE, WingsItems.PARROT_WINGS_BOTTLE);
-        reg.accept(WingsItems.BAT_BLOOD_BOTTLE.get(), WingsItems.BAT_WINGS_BOTTLE);
-        reg.accept(Items.BLUE_DYE, WingsItems.BLUE_BUTTERFLY_WINGS_BOTTLE);
-        reg.accept(Items.LEATHER, WingsItems.DRAGON_WINGS_BOTTLE);
-        reg.accept(Items.BONE, WingsItems.EVIL_WINGS_BOTTLE);
-        reg.accept(Items.OXEYE_DAISY, WingsItems.FAIRY_WINGS_BOTTLE);
-        reg.accept(Items.BLAZE_POWDER, WingsItems.FIRE_WINGS_BOTTLE);
-        reg.accept(Items.ORANGE_DYE, WingsItems.MONARCH_BUTTERFLY_WINGS_BOTTLE);
-        reg.accept(Items.SLIME_BALL, WingsItems.SLIME_WINGS_BOTTLE);
+        WingsBrewingCatalog.forEachMix(reg);
     }
 
     @SuppressWarnings("deprecation")
     public void addFlightListeners(Player player, Flight instance) {
-        if (player instanceof ServerPlayer serverPlayer) {
-            instance.registerFlyingListener(isFlying -> {
-                boolean hasVanillaFlight = player.getAbilities().instabuild || player.isSpectator();
-                player.getAbilities().mayfly = isFlying || hasVanillaFlight;
-                if (isFlying || !hasVanillaFlight) {
-                    player.getAbilities().flying = false;
-                }
-                serverPlayer.onUpdateAbilities();
-            });
-            instance.registerFlyingListener(isFlying -> {
-                if (isFlying) {
-                    player.removeVehicle();
-                }
-            });
-            Flight.Notifier notifier = Flight.Notifier.of(
-                    () -> this.network.sendToPlayer(new MessageSyncFlight(player, instance), serverPlayer),
-                    p -> this.network.sendToPlayer(new MessageSyncFlight(player, instance), p),
-                    () -> this.network.sendToAllTracking(new MessageSyncFlight(player, instance), serverPlayer)
-            );
-            instance.registerSyncListener(players -> players.notify(notifier));
-            // 先把当前权威状态同步给追踪者，避免新加入视角时看到旧值
-            instance.sync(Flight.PlayerSet.ofOthers());
-        }
+        FlightListenerSupport.addFlightListeners(player, instance, new FlightListenerSupport.Sync() {
+            @Override
+            public void sendToPlayer(Player source, Flight flight, net.minecraft.server.level.ServerPlayer target) {
+                network.sendToPlayer(new MessageSyncFlight(source, flight), target);
+            }
+
+            @Override
+            public void sendToAllTracking(Player source, Flight flight, net.minecraft.server.level.ServerPlayer trackedEntity) {
+                network.sendToAllTracking(new MessageSyncFlight(source, flight), trackedEntity);
+            }
+        });
     }
 
     public void invalidateFlightView(Player player) {

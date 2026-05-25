@@ -1,11 +1,6 @@
 package cc.lvjia.wings.server.item;
 
 import cc.lvjia.wings.server.apparatus.FlightApparatus;
-import cc.lvjia.wings.server.effect.WingsEffects;
-import cc.lvjia.wings.server.flight.Flight;
-import cc.lvjia.wings.server.flight.FlightAnimationState;
-import cc.lvjia.wings.server.flight.FlightSpeedAntiCheat;
-import cc.lvjia.wings.server.flight.Flights;
 import cc.lvjia.wings.server.sound.WingsSounds;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -23,33 +18,11 @@ public class BatBloodBottleItem extends Item {
     }
 
     public static boolean removeWings(Player player) {
-        boolean removed = WingsEffects.WINGS.isBound() && player.removeEffect(WingsEffects.WINGS);
-        if (removed) {
-            clearFlightState(player);
-        }
-        return removed;
+        return WingsBottleActions.removeWings(player);
     }
 
     public static boolean removeWings(ServerPlayer player, FlightApparatus wings) {
-        boolean changed = Flights.get(player).getWing() == wings;
-        if (!changed || !WingsEffects.WINGS.isBound() || !player.removeEffect(WingsEffects.WINGS)) {
-            return false;
-        }
-        clearFlightState(player);
-        return true;
-    }
-
-    private static void clearFlightState(Player player) {
-        Flight flight = Flights.get(player);
-        Flight.PlayerSet players = player.level().isClientSide() ? Flight.PlayerSet.empty()
-                : Flight.PlayerSet.ofAll();
-        flight.setIsFlying(false, players);
-        flight.setWing(FlightApparatus.NONE, players);
-        flight.setTimeFlying(0);
-        flight.setAnimationState(FlightAnimationState.IDLE);
-        if (player instanceof ServerPlayer serverPlayer) {
-            FlightSpeedAntiCheat.clear(serverPlayer);
-        }
+        return WingsBottleActions.removeWings(player, wings);
     }
 
     @Override

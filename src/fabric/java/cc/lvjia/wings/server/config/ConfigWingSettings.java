@@ -5,34 +5,18 @@ import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.Nullable;
 
 public final class ConfigWingSettings implements WingSettings {
-    private static final int MIN_SATIATION = 0;
-    private static final int MAX_SATIATION = 20;
-    private static final double MIN_EXERTION = 0.0D;
-    private static final double MAX_EXERTION = 10.0D;
-
     private final Identifier key;
     private final Data defaults;
     private Data current;
 
     ConfigWingSettings(Identifier key) {
-        this(key, new Data());
+        this(key, Data.defaults());
     }
 
     ConfigWingSettings(Identifier key, Data defaults) {
         this.key = key;
         this.defaults = defaults.copy().normalize();
         this.current = this.defaults.copy();
-    }
-
-    private static int clamp(int value, int min, int max) {
-        return Math.max(min, Math.min(max, value));
-    }
-
-    private static double clamp(double value, double min, double max) {
-        if (!Double.isFinite(value)) {
-            return min;
-        }
-        return Math.max(min, Math.min(max, value));
     }
 
     public Identifier getKey() {
@@ -68,10 +52,23 @@ public final class ConfigWingSettings implements WingSettings {
     }
 
     public static final class Data {
-        public int requiredFlightSatiation = 5;
-        public double flyingExertion = 0.0001D;
-        public int requiredLandSatiation = 2;
-        public double landingExertion = 0.005D;
+        public int requiredFlightSatiation = WingsConfigDefaults.WING_SETTINGS.requiredFlightSatiation();
+        public double flyingExertion = WingsConfigDefaults.WING_SETTINGS.flyingExertion();
+        public int requiredLandSatiation = WingsConfigDefaults.WING_SETTINGS.requiredLandSatiation();
+        public double landingExertion = WingsConfigDefaults.WING_SETTINGS.landingExertion();
+
+        static Data defaults() {
+            return from(WingsConfigDefaults.WING_SETTINGS);
+        }
+
+        static Data from(WingsConfigDefaults.WingSettingsData defaults) {
+            Data data = new Data();
+            data.requiredFlightSatiation = defaults.requiredFlightSatiation();
+            data.flyingExertion = defaults.flyingExertion();
+            data.requiredLandSatiation = defaults.requiredLandSatiation();
+            data.landingExertion = defaults.landingExertion();
+            return data;
+        }
 
         Data copy() {
             Data copy = new Data();
@@ -83,10 +80,14 @@ public final class ConfigWingSettings implements WingSettings {
         }
 
         Data normalize() {
-            this.requiredFlightSatiation = clamp(this.requiredFlightSatiation, MIN_SATIATION, MAX_SATIATION);
-            this.flyingExertion = clamp(this.flyingExertion, MIN_EXERTION, MAX_EXERTION);
-            this.requiredLandSatiation = clamp(this.requiredLandSatiation, MIN_SATIATION, MAX_SATIATION);
-            this.landingExertion = clamp(this.landingExertion, MIN_EXERTION, MAX_EXERTION);
+            this.requiredFlightSatiation = WingsConfigDefaults.clamp(this.requiredFlightSatiation,
+                    WingsConfigDefaults.WING_MIN_SATIATION, WingsConfigDefaults.WING_MAX_SATIATION);
+            this.flyingExertion = WingsConfigDefaults.clamp(this.flyingExertion,
+                    WingsConfigDefaults.WING_MIN_EXERTION, WingsConfigDefaults.WING_MAX_EXERTION);
+            this.requiredLandSatiation = WingsConfigDefaults.clamp(this.requiredLandSatiation,
+                    WingsConfigDefaults.WING_MIN_SATIATION, WingsConfigDefaults.WING_MAX_SATIATION);
+            this.landingExertion = WingsConfigDefaults.clamp(this.landingExertion,
+                    WingsConfigDefaults.WING_MIN_EXERTION, WingsConfigDefaults.WING_MAX_EXERTION);
             return this;
         }
     }
