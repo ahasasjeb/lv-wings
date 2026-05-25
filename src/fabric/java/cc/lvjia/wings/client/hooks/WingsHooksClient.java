@@ -1,6 +1,6 @@
 package cc.lvjia.wings.client.hooks;
 
-import cc.lvjia.wings.client.ClientEventHandler;
+import cc.lvjia.wings.client.FabricClientEventHandler;
 import cc.lvjia.wings.client.asm.AnimatePlayerModelEvent;
 import cc.lvjia.wings.client.asm.ApplyPlayerRotationsEvent;
 import cc.lvjia.wings.client.asm.GetCameraEyeHeightEvent;
@@ -31,19 +31,19 @@ public final class WingsHooksClient {
 
     public static float onGetCameraEyeHeight(Entity entity, float eyeHeight) {
         GetCameraEyeHeightEvent event = GetCameraEyeHeightEvent.create(entity, eyeHeight);
-        ClientEventHandler.onGetCameraEyeHeight(event);
+        FabricClientEventHandler.onGetCameraEyeHeight(event);
         return event.getValue();
     }
 
     public static float onComputeCameraRoll(float delta) {
-        return ClientEventHandler.computeCameraRoll(delta);
+        return FabricClientEventHandler.computeCameraRoll(delta);
     }
 
     public static void onSetPlayerRotationAngles(AvatarRenderState state, PlayerModel model) {
         AbstractClientPlayer player = resolvePlayer(state);
         if (player != null) {
             try {
-                ClientEventHandler
+                FabricClientEventHandler
                         .onAnimatePlayerModel(new AnimatePlayerModelEvent(player, model, state.ageInTicks, state.xRot));
             } finally {
                 RENDERING_PLAYER.remove();
@@ -62,7 +62,7 @@ public final class WingsHooksClient {
             AbstractClientPlayer player = resolvePlayer(state);
             if (player != null) {
                 float delta = state.ageInTicks - player.tickCount;
-                ClientEventHandler.onApplyRotations(new ApplyPlayerRotationsEvent(player, matrixStack, delta));
+                FabricClientEventHandler.onApplyRotations(new ApplyPlayerRotationsEvent(player, matrixStack, delta));
             }
         } finally {
             RENDERING_PLAYER.remove();
@@ -119,7 +119,7 @@ public final class WingsHooksClient {
             }
             if (fromEmpty) {
                 EmptyOffHandPresentEvent ev = new EmptyOffHandPresentEvent(player);
-                ClientEventHandler.onEmptyOffHandPresentEvent(ev);
+                FabricClientEventHandler.onEmptyOffHandPresentEvent(ev);
                 return !ev.isAllowed();
             }
         }

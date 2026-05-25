@@ -10,8 +10,8 @@
     "ServerPlayerMixin"
   ],
   "client": [
-    "CameraMixin",
-    "ItemInHandRendererMixin",
+    "FabricCameraMixin",
+    "FabricItemInHandRendererMixin",
     "PlayerModelMixin",
     "PlayerRendererMixin",
     "client.LivingEntityRendererAccessor"

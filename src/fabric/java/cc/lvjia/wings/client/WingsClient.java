@@ -6,7 +6,7 @@ import net.fabricmc.api.ClientModInitializer;
 public final class WingsClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        ClientProxy proxy = new ClientProxy();
+        FabricClientProxy proxy = new FabricClientProxy();
         WingsMod.instance().setProxy(proxy);
         proxy.initClient();
     }

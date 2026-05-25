@@ -25,11 +25,11 @@ import org.jspecify.annotations.NonNull;
 import java.util.Objects;
 
 @SuppressWarnings("null")
-public final class LayerCapeWings extends RenderLayer<AvatarRenderState, PlayerModel> {
+public final class NeoForgeLayerCapeWings extends RenderLayer<AvatarRenderState, PlayerModel> {
 
     private final @NonNull HumanoidModel<AvatarRenderState> model;
 
-    public LayerCapeWings(RenderLayerParent<AvatarRenderState, PlayerModel> parent, EntityModelSet entityModelSet) {
+    public NeoForgeLayerCapeWings(RenderLayerParent<AvatarRenderState, PlayerModel> parent, EntityModelSet entityModelSet) {
         super(Objects.requireNonNull(parent, "parent"));
         this.model = new PlayerCapeModel(
                 Objects.requireNonNull(entityModelSet, "model set").bakeLayer(ModelLayers.PLAYER_CAPE));

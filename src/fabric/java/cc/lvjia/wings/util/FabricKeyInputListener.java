@@ -10,10 +10,10 @@ import org.jspecify.annotations.NonNull;
 import java.util.Objects;
 
 @SuppressWarnings("null")
-public final class KeyInputListener {
+public final class FabricKeyInputListener {
     private final @NonNull ImmutableListMultimap<@NonNull KeyMapping, @NonNull Runnable> bindings;
 
-    private KeyInputListener(@NonNull ImmutableListMultimap<@NonNull KeyMapping, @NonNull Runnable> bindings) {
+    private FabricKeyInputListener(@NonNull ImmutableListMultimap<@NonNull KeyMapping, @NonNull Runnable> bindings) {
         this.bindings = Objects.requireNonNull(bindings, "bindings");
     }
 
@@ -31,7 +31,7 @@ public final class KeyInputListener {
     public interface Builder {
         @NonNull CategoryBuilder category(KeyMapping.Category category);
 
-        @NonNull KeyInputListener build();
+        @NonNull FabricKeyInputListener build();
     }
 
     public interface CategoryBuilder extends Builder {
@@ -48,8 +48,8 @@ public final class KeyInputListener {
         }
 
         @Override
-        public @NonNull KeyInputListener build() {
-            return new KeyInputListener(this.bindings.build());
+        public @NonNull FabricKeyInputListener build() {
+            return new FabricKeyInputListener(this.bindings.build());
         }
     }
 
@@ -66,7 +66,7 @@ public final class KeyInputListener {
         }
 
         @Override
-        public final @NonNull KeyInputListener build() {
+        public final @NonNull FabricKeyInputListener build() {
             return this.parent.build();
         }
     }

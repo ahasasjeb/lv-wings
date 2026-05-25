@@ -3,7 +3,7 @@ package cc.lvjia.wings.server;
 import cc.lvjia.wings.server.asm.GetLivingHeadLimitEvent;
 import cc.lvjia.wings.server.asm.PlayerFlightCheckEvent;
 import cc.lvjia.wings.server.asm.PlayerFlownEvent;
-import cc.lvjia.wings.server.command.WingsCommand;
+import cc.lvjia.wings.server.command.FabricWingsCommand;
 import cc.lvjia.wings.server.dreamcatcher.InSomniableEventHandler;
 import cc.lvjia.wings.server.flight.Flight;
 import cc.lvjia.wings.server.flight.FlightStateReset;
@@ -36,15 +36,15 @@ import org.jspecify.annotations.NonNull;
 import java.util.Objects;
 
 @SuppressWarnings("null")
-public final class ServerEventHandler {
-    private ServerEventHandler() {
+public final class FabricServerEventHandler {
+    private FabricServerEventHandler() {
     }
 
     public static void register() {
         UseEntityCallback.EVENT
                 .register((player, level, hand, entity, hitResult) -> onPlayerEntityInteract(player, hand, entity));
         ServerTickEvents.END_SERVER_TICK
-                .register(server -> server.getPlayerList().getPlayers().forEach(ServerEventHandler::onPlayerTick));
+                .register(server -> server.getPlayerList().getPlayers().forEach(FabricServerEventHandler::onPlayerTick));
         ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> onLivingDeath(entity));
         ServerPlayerEvents.LEAVE.register(player -> {
             MessageControlFlying.clearRateLimit(player);
@@ -60,7 +60,7 @@ public final class ServerEventHandler {
                 .register((player, origin, destination) -> Flights.onPlayerChangedDimension(player));
         EntityTrackingEvents.START_TRACKING.register(Flights::onPlayerStartTracking);
         CommandRegistrationCallback.EVENT
-                .register((dispatcher, buildContext, selection) -> WingsCommand.register(dispatcher, buildContext));
+                .register((dispatcher, buildContext, selection) -> FabricWingsCommand.register(dispatcher, buildContext));
         InSomniableEventHandler.register();
     }
 

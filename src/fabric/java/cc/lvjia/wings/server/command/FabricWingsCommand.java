@@ -18,24 +18,24 @@ import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
 
 @SuppressWarnings("null")
-public class WingsCommand {
+public class FabricWingsCommand {
     public static void register(@NonNull CommandDispatcher<CommandSourceStack> dispatcher,
             @NonNull CommandBuildContext buildContext) {
         dispatcher.register(literal("wings").requires(Commands.hasPermission(WingsCommandActions.PERMISSION_CHECK))
                 .then(literal("give")
                         .then(argument("wings", ResourceArgument.resource(buildContext, WingsMod.WINGS_KEY))
-                                .executes(ctx -> WingsCommandActions.giveWingSelf(ctx, WingsCommand::getWings)))
+                                .executes(ctx -> WingsCommandActions.giveWingSelf(ctx, FabricWingsCommand::getWings)))
                         .then(argument("targets", EntityArgument.players())
                                 .then(argument("wings", ResourceArgument.resource(buildContext, WingsMod.WINGS_KEY))
-                                        .executes(ctx -> WingsCommandActions.giveWing(ctx, WingsCommand::getWings)))))
+                                        .executes(ctx -> WingsCommandActions.giveWing(ctx, FabricWingsCommand::getWings)))))
                 .then(literal("take")
                         .executes(WingsCommandActions::takeWingsSelf)
                         .then(argument("wings", ResourceArgument.resource(buildContext, WingsMod.WINGS_KEY))
-                                .executes(ctx -> WingsCommandActions.takeSpecificWingsSelf(ctx, WingsCommand::getWings)))
+                                .executes(ctx -> WingsCommandActions.takeSpecificWingsSelf(ctx, FabricWingsCommand::getWings)))
                         .then(argument("targets", EntityArgument.players())
                                 .executes(WingsCommandActions::takeWings)
                                 .then(argument("wings", ResourceArgument.resource(buildContext, WingsMod.WINGS_KEY))
-                                        .executes(ctx -> WingsCommandActions.takeSpecificWings(ctx, WingsCommand::getWings))))));
+                                        .executes(ctx -> WingsCommandActions.takeSpecificWings(ctx, FabricWingsCommand::getWings))))));
     }
 
     private static @NonNull FlightApparatus getWings(@NonNull CommandContext<CommandSourceStack> ctx,

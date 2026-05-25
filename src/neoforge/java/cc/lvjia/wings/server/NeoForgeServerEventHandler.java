@@ -4,7 +4,7 @@ import cc.lvjia.wings.WingsMod;
 import cc.lvjia.wings.server.asm.GetLivingHeadLimitEvent;
 import cc.lvjia.wings.server.asm.PlayerFlightCheckEvent;
 import cc.lvjia.wings.server.asm.PlayerFlownEvent;
-import cc.lvjia.wings.server.command.WingsCommand;
+import cc.lvjia.wings.server.command.NeoForgeWingsCommand;
 import cc.lvjia.wings.server.flight.Flight;
 import cc.lvjia.wings.server.flight.FlightSpeedAntiCheat;
 import cc.lvjia.wings.server.flight.FlightStateReset;
@@ -32,8 +32,8 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 @EventBusSubscriber(modid = WingsMod.ID)
-public final class ServerEventHandler {
-    private ServerEventHandler() {
+public final class NeoForgeServerEventHandler {
+    private NeoForgeServerEventHandler() {
     }
 
     @SubscribeEvent
@@ -150,7 +150,7 @@ public final class ServerEventHandler {
 
     @SubscribeEvent
     public static void onRegisterCommands(RegisterCommandsEvent event) {
-        WingsCommand.register(event.getDispatcher());
+        NeoForgeWingsCommand.register(event.getDispatcher());
     }
 
 }

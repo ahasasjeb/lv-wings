@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * 修改相机视角高度，用于翅膀飞行时的视角调整
  */
 @Mixin(Camera.class)
-public abstract class CameraMixin {
+public abstract class FabricCameraMixin {
     @Shadow
     @Final
     private Quaternionf rotation;

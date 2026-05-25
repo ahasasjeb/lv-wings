@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * 修改手持物品渲染器，支持翅膀飞行时的空手渲染
  */
 @Mixin(ItemInHandRenderer.class)
-public abstract class ItemInHandRendererMixin {
+public abstract class FabricItemInHandRendererMixin {
     @Shadow
     private ItemStack mainHandItem;
 

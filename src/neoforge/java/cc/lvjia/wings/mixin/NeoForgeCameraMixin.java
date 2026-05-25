@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
  * 修改相机视角高度，用于翅膀飞行时的视角调整
  */
 @Mixin(Camera.class)
-public abstract class CameraMixin {
+public abstract class NeoForgeCameraMixin {
     /**
      * 重定向实体眼睛高度获取，用于飞行时的视角调整
      */

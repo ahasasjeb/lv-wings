@@ -9,13 +9,13 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.settings.IKeyConflictContext;
 import net.neoforged.neoforge.client.settings.KeyModifier;
 
-public final class KeyInputListener {
+public final class NeoForgeKeyInputListener {
     private static final java.util.List<KeyMapping> KEY_MAPPINGS = new java.util.ArrayList<>();
     private static final java.util.Set<KeyMapping.Category> KEY_CATEGORIES = new java.util.LinkedHashSet<>();
 
     private final ImmutableListMultimap<KeyMapping, Runnable> bindings;
 
-    private KeyInputListener(ImmutableListMultimap<KeyMapping, Runnable> bindings) {
+    private NeoForgeKeyInputListener(ImmutableListMultimap<KeyMapping, Runnable> bindings) {
         this.bindings = bindings;
     }
 
@@ -39,7 +39,7 @@ public final class KeyInputListener {
     public interface Builder {
         CategoryBuilder category(KeyMapping.Category category);
 
-        KeyInputListener build();
+        NeoForgeKeyInputListener build();
     }
 
     public interface CategoryBuilder extends Builder {
@@ -64,8 +64,8 @@ public final class KeyInputListener {
         }
 
         @Override
-        public KeyInputListener build() {
-            return new KeyInputListener(this.bindings.build());
+        public NeoForgeKeyInputListener build() {
+            return new NeoForgeKeyInputListener(this.bindings.build());
         }
     }
 
@@ -82,7 +82,7 @@ public final class KeyInputListener {
         }
 
         @Override
-        public final KeyInputListener build() {
+        public final NeoForgeKeyInputListener build() {
             return this.parent.build();
         }
     }

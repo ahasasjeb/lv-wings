@@ -7,7 +7,7 @@ import cc.lvjia.wings.server.net.Network;
 import cc.lvjia.wings.server.net.clientbound.MessageSyncFlight;
 import net.minecraft.world.entity.player.Player;
 
-public class Proxy {
+public class FabricProxy {
     protected final Network network = new Network();
 
     public void init() {

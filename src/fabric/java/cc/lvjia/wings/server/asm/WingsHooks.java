@@ -1,6 +1,6 @@
 package cc.lvjia.wings.server.asm;
 
-import cc.lvjia.wings.server.ServerEventHandler;
+import cc.lvjia.wings.server.FabricServerEventHandler;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -24,13 +24,13 @@ public final class WingsHooks {
         if (defaultValue)
             return true;
         PlayerFlightCheckEvent ev = new PlayerFlightCheckEvent(player);
-        ServerEventHandler.onPlayerFlightCheck(ev);
+        FabricServerEventHandler.onPlayerFlightCheck(ev);
         return ev.isFlying();
     }
 
     public static boolean onUpdateBodyRotation(LivingEntity living, float movementYaw) {
         GetLivingHeadLimitEvent ev = GetLivingHeadLimitEvent.create(living);
-        ServerEventHandler.onGetLivingHeadLimit(ev);
+        FabricServerEventHandler.onGetLivingHeadLimit(ev);
         if (ev.isVanilla())
             return false;
 
@@ -50,6 +50,6 @@ public final class WingsHooks {
     }
 
     public static void onAddFlown(Player player, double x, double y, double z) {
-        ServerEventHandler.onPlayerFlown(new PlayerFlownEvent(player, new Vec3(x, y, z)));
+        FabricServerEventHandler.onPlayerFlown(new PlayerFlownEvent(player, new Vec3(x, y, z)));
     }
 }

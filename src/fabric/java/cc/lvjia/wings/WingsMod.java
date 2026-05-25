@@ -1,6 +1,6 @@
 package cc.lvjia.wings;
 
-import cc.lvjia.wings.server.ServerEventHandler;
+import cc.lvjia.wings.server.FabricServerEventHandler;
 import cc.lvjia.wings.server.apparatus.FlightApparatus;
 import cc.lvjia.wings.server.config.WingsConfig;
 import cc.lvjia.wings.server.config.WingsItemsConfig;
@@ -40,7 +40,7 @@ public final class WingsMod implements ModInitializer {
     public static final @NonNull FlightApparatus FIRE_WINGS = WING_SET.fire();
     public static final @NonNull FlightApparatus LVJIA_SUPER_WINGS = WING_SET.lvjiaSuper();
     private static @Nullable WingsMod INSTANCE;
-    private Proxy proxy = new Proxy();
+    private FabricProxy proxy = new FabricProxy();
 
     public WingsMod() {
         if (INSTANCE != null) throw new IllegalStateException("Already constructed!");
@@ -74,11 +74,11 @@ public final class WingsMod implements ModInitializer {
         WingsSounds.register();
         WingsEffects.register();
         WingsAttachments.register();
-        ServerEventHandler.register();
+        FabricServerEventHandler.register();
         this.proxy.init();
     }
 
-    public void setProxy(Proxy proxy) {
+    public void setProxy(FabricProxy proxy) {
         this.proxy = Objects.requireNonNull(proxy, "proxy");
     }
 
@@ -90,7 +90,7 @@ public final class WingsMod implements ModInitializer {
         this.requireProxy().invalidateFlightView(player);
     }
 
-    private Proxy requireProxy() {
+    private FabricProxy requireProxy() {
         return this.proxy;
     }
 

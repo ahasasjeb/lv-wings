@@ -1,6 +1,6 @@
 package cc.lvjia.wings;
 
-import cc.lvjia.wings.client.ClientProxy;
+import cc.lvjia.wings.client.NeoForgeClientProxy;
 import cc.lvjia.wings.server.apparatus.FlightApparatus;
 import cc.lvjia.wings.server.command.WingsArgument;
 import cc.lvjia.wings.server.config.WingsConfig;
@@ -57,7 +57,7 @@ public final class WingsMod {
                     )
             );
     private static WingsMod INSTANCE;
-    private final Proxy proxy;
+    private final NeoForgeProxy proxy;
 
     public WingsMod(IEventBus modEventBus, ModContainer modContainer) {
         if (INSTANCE != null) throw new IllegalStateException("Already constructed!");
@@ -78,7 +78,7 @@ public final class WingsMod {
         WingsEffects.REG.register(modEventBus);
         COMMAND_ARGUMENT_TYPES.register(modEventBus);
 
-        this.proxy = FMLEnvironment.getDist().isClient() ? new ClientProxy() : new Proxy();
+        this.proxy = FMLEnvironment.getDist().isClient() ? new NeoForgeClientProxy() : new NeoForgeProxy();
         this.proxy.init(modEventBus);
     }
 
@@ -98,9 +98,9 @@ public final class WingsMod {
         this.requireProxy().invalidateFlightView(player);
     }
 
-    private Proxy requireProxy() {
+    private NeoForgeProxy requireProxy() {
         if (this.proxy == null) {
-            throw new IllegalStateException("Proxy not initialized");
+            throw new IllegalStateException("NeoForgeProxy not initialized");
         }
         return this.proxy;
     }

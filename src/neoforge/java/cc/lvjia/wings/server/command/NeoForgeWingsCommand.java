@@ -8,7 +8,7 @@ import net.minecraft.commands.arguments.EntityArgument;
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
 
-public class WingsCommand {
+public class NeoForgeWingsCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(literal("wings").requires(Commands.hasPermission(WingsCommandActions.PERMISSION_CHECK))
                 .then(literal("give")
