@@ -95,6 +95,6 @@ Brewing steps:
 2. 在上方槽位放入对应的材料
 3. 等待酿造完成即可获得对应的翅膀药水
 
-由GPT-5.2-codex、GPT-5.3-codex、GPT-6.4、Minimax 2.7维护，人类进入游戏测试。
+由GPT-5.2-codex、GPT-5.3-codex、GPT-5.4、GPT-5.5、Minimax 2.7维护，人类进入游戏测试。
 
 Maintained by GPT-5.2-codex, GPT-5.3-codex, GPT-5.4, GPT-5.5 and Minimax 2.7, humans enter the game for testing.
