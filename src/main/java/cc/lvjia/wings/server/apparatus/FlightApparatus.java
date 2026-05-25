@@ -3,6 +3,7 @@ package cc.lvjia.wings.server.apparatus;
 import cc.lvjia.wings.server.flight.Flight;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.NonNull;
 
 /**
  * 飞行“装置/能力”接口。
@@ -15,38 +16,38 @@ public interface FlightApparatus {
      */
     FlightApparatus NONE = new FlightApparatus() {
         @Override
-        public void onFlight(Player player, Vec3 direction) {
+        public void onFlight(@NonNull Player player, @NonNull Vec3 direction) {
         }
 
         @Override
-        public void onLanding(Player player, Vec3 direction) {
+        public void onLanding(@NonNull Player player, @NonNull Vec3 direction) {
         }
 
         @Override
-        public boolean isUsable(Player player) {
+        public boolean isUsable(@NonNull Player player) {
             return true;
         }
 
         @Override
-        public boolean isLandable(Player player) {
+        public boolean isLandable(@NonNull Player player) {
             return true;
         }
 
         @Override
-        public FlightState createState(Flight flight) {
+        public @NonNull FlightState createState(@NonNull Flight flight) {
             return FlightState.NONE;
         }
     };
 
-    void onFlight(Player player, Vec3 direction);
+    void onFlight(@NonNull Player player, @NonNull Vec3 direction);
 
-    void onLanding(Player player, Vec3 direction);
+    void onLanding(@NonNull Player player, @NonNull Vec3 direction);
 
-    boolean isUsable(Player player);
+    boolean isUsable(@NonNull Player player);
 
-    boolean isLandable(Player player);
+    boolean isLandable(@NonNull Player player);
 
-    FlightState createState(Flight flight);
+    @NonNull FlightState createState(@NonNull Flight flight);
 
     /**
      * 每 tick 更新的飞行状态对象（通常由 {@link #createState(Flight)} 创建）。
@@ -55,6 +56,6 @@ public interface FlightApparatus {
         FlightState NONE = (player) -> {
         };
 
-        void onUpdate(Player player);
+        void onUpdate(@NonNull Player player);
     }
 }

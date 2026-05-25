@@ -12,6 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.permissions.PermissionCheck;
 import net.minecraft.server.permissions.Permissions;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Collection;
 import java.util.List;
@@ -26,41 +27,45 @@ public final class WingsCommandActions {
     private WingsCommandActions() {
     }
 
-    public static int giveWingSelf(CommandContext<CommandSourceStack> ctx, WingsGetter getter)
+    public static int giveWingSelf(@NonNull CommandContext<CommandSourceStack> ctx, @NonNull WingsGetter getter)
             throws CommandSyntaxException {
         return executeGiveWing(ctx, getSelf(ctx), getter.get(ctx, "wings"));
     }
 
-    public static int giveWing(CommandContext<CommandSourceStack> ctx, WingsGetter getter)
+    public static int giveWing(@NonNull CommandContext<CommandSourceStack> ctx, @NonNull WingsGetter getter)
             throws CommandSyntaxException {
         return executeGiveWing(ctx, EntityArgument.getPlayers(ctx, "targets"), getter.get(ctx, "wings"));
     }
 
-    public static int takeWingsSelf(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+    public static int takeWingsSelf(@NonNull CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         return executeTakeWings(ctx, getSelf(ctx));
     }
 
-    public static int takeWings(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+    public static int takeWings(@NonNull CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         return executeTakeWings(ctx, EntityArgument.getPlayers(ctx, "targets"));
     }
 
-    public static int takeSpecificWingsSelf(CommandContext<CommandSourceStack> ctx, WingsGetter getter)
+    public static int takeSpecificWingsSelf(@NonNull CommandContext<CommandSourceStack> ctx,
+            @NonNull WingsGetter getter)
             throws CommandSyntaxException {
         return executeTakeSpecificWings(ctx, getSelf(ctx), getter.get(ctx, "wings"));
     }
 
-    public static int takeSpecificWings(CommandContext<CommandSourceStack> ctx, WingsGetter getter)
+    public static int takeSpecificWings(@NonNull CommandContext<CommandSourceStack> ctx,
+            @NonNull WingsGetter getter)
             throws CommandSyntaxException {
         return executeTakeSpecificWings(ctx, EntityArgument.getPlayers(ctx, "targets"), getter.get(ctx, "wings"));
     }
 
-    private static Collection<ServerPlayer> getSelf(CommandContext<CommandSourceStack> ctx)
+    private static @NonNull Collection<@NonNull ServerPlayer> getSelf(
+            @NonNull CommandContext<CommandSourceStack> ctx)
             throws CommandSyntaxException {
         return List.of(ctx.getSource().getPlayerOrException());
     }
 
-    private static int executeGiveWing(CommandContext<CommandSourceStack> ctx, Collection<ServerPlayer> targets,
-            FlightApparatus wings) throws CommandSyntaxException {
+    private static int executeGiveWing(@NonNull CommandContext<CommandSourceStack> ctx,
+            @NonNull Collection<@NonNull ServerPlayer> targets, @NonNull FlightApparatus wings)
+            throws CommandSyntaxException {
         int count = 0;
         for (ServerPlayer player : targets) {
             if (WingsBottleItem.giveWing(player, wings)) {
@@ -81,7 +86,8 @@ public final class WingsCommandActions {
         return count;
     }
 
-    private static int executeTakeWings(CommandContext<CommandSourceStack> ctx, Collection<ServerPlayer> targets)
+    private static int executeTakeWings(@NonNull CommandContext<CommandSourceStack> ctx,
+            @NonNull Collection<@NonNull ServerPlayer> targets)
             throws CommandSyntaxException {
         int count = 0;
         for (ServerPlayer player : targets) {
@@ -103,8 +109,9 @@ public final class WingsCommandActions {
         return count;
     }
 
-    private static int executeTakeSpecificWings(CommandContext<CommandSourceStack> ctx,
-            Collection<ServerPlayer> targets, FlightApparatus wings) throws CommandSyntaxException {
+    private static int executeTakeSpecificWings(@NonNull CommandContext<CommandSourceStack> ctx,
+            @NonNull Collection<@NonNull ServerPlayer> targets, @NonNull FlightApparatus wings)
+            throws CommandSyntaxException {
         int count = 0;
         for (ServerPlayer player : targets) {
             if (BatBloodBottleItem.removeWings(player, wings)) {
@@ -127,6 +134,7 @@ public final class WingsCommandActions {
 
     @FunctionalInterface
     public interface WingsGetter {
-        FlightApparatus get(CommandContext<CommandSourceStack> ctx, String name) throws CommandSyntaxException;
+        @NonNull FlightApparatus get(@NonNull CommandContext<CommandSourceStack> ctx, @NonNull String name)
+                throws CommandSyntaxException;
     }
 }

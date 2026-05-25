@@ -24,7 +24,6 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.Objects;
 
-@SuppressWarnings("null")
 public final class NeoForgeLayerCapeWings extends RenderLayer<AvatarRenderState, PlayerModel> {
 
     private final @NonNull HumanoidModel<AvatarRenderState> model;

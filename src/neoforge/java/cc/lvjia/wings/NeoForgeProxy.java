@@ -2,7 +2,6 @@ package cc.lvjia.wings;
 
 import cc.lvjia.wings.server.flight.Flight;
 import cc.lvjia.wings.server.FlightListenerSupport;
-import cc.lvjia.wings.server.item.WingsItems;
 import cc.lvjia.wings.server.net.Network;
 import cc.lvjia.wings.server.net.Message;
 import cc.lvjia.wings.server.net.clientbound.MessageSyncFlight;
@@ -39,7 +38,6 @@ public class NeoForgeProxy {
         WingsBrewingCatalog.forEachMix(reg);
     }
 
-    @SuppressWarnings("deprecation")
     public void addFlightListeners(Player player, Flight instance) {
         FlightListenerSupport.addFlightListeners(player, instance, new FlightListenerSupport.Sync() {
             @Override

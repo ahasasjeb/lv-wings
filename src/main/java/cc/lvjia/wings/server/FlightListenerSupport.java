@@ -8,6 +8,7 @@ public final class FlightListenerSupport {
     private FlightListenerSupport() {
     }
 
+    @SuppressWarnings("deprecation")
     public static void addFlightListeners(Player player, Flight instance, Sync sync) {
         if (player instanceof ServerPlayer serverPlayer) {
             instance.registerFlyingListener(isFlying -> {

@@ -30,7 +30,6 @@ import org.jspecify.annotations.NonNull;
 import java.util.List;
 import java.util.Objects;
 
-@SuppressWarnings("null")
 public final class NeoForgeLayerWings extends RenderLayer<AvatarRenderState, PlayerModel> {
 
     public static final @NonNull ModelLayerLocation INSECTOID_WINGS = layer("insectoid_wings");

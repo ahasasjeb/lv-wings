@@ -11,18 +11,19 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Objects;
 
 public final class WingsCore {
     public static final String ID = "wings";
-    public static final ResourceKey<Registry<FlightApparatus>> WINGS_KEY = Objects.requireNonNull(
+    public static final @NonNull ResourceKey<Registry<FlightApparatus>> WINGS_KEY = Objects.requireNonNull(
             ResourceKey.createRegistryKey(locate("wings")), "wings registry key");
 
     private WingsCore() {
     }
 
-    public static Identifier locate(String name) {
+    public static @NonNull Identifier locate(@NonNull String name) {
         Identifier id = Identifier.tryBuild(ID, name);
         if (id == null) {
             throw new IllegalArgumentException("Invalid resource path: " + name);
@@ -30,7 +31,7 @@ public final class WingsCore {
         return id;
     }
 
-    public static WingSet registerWings(WingRegistrar registrar) {
+    public static @NonNull WingSet registerWings(@NonNull WingRegistrar registrar) {
         FlightApparatus none = registrar.register(Names.NONE, FlightApparatus.NONE);
         FlightApparatus wingless = registrar.register(Names.WINGLESS, wingless());
         FlightApparatus angel = registrar.register(Names.ANGEL, new SimpleFlightApparatus(WingsItemsConfig.ANGEL));
@@ -56,27 +57,27 @@ public final class WingsCore {
     private static FlightApparatus wingless() {
         return new FlightApparatus() {
             @Override
-            public void onFlight(Player player, Vec3 direction) {
+            public void onFlight(@NonNull Player player, @NonNull Vec3 direction) {
                 FlightApparatus.NONE.onFlight(player, direction);
             }
 
             @Override
-            public void onLanding(Player player, Vec3 direction) {
+            public void onLanding(@NonNull Player player, @NonNull Vec3 direction) {
                 FlightApparatus.NONE.onLanding(player, direction);
             }
 
             @Override
-            public boolean isUsable(Player player) {
+            public boolean isUsable(@NonNull Player player) {
                 return FlightApparatus.NONE.isUsable(player);
             }
 
             @Override
-            public boolean isLandable(Player player) {
+            public boolean isLandable(@NonNull Player player) {
                 return FlightApparatus.NONE.isLandable(player);
             }
 
             @Override
-            public FlightApparatus.FlightState createState(Flight flight) {
+            public FlightApparatus.@NonNull FlightState createState(@NonNull Flight flight) {
                 return FlightApparatus.NONE.createState(flight);
             }
         };
@@ -84,7 +85,7 @@ public final class WingsCore {
 
     @FunctionalInterface
     public interface WingRegistrar {
-        FlightApparatus register(Identifier id, FlightApparatus wing);
+        @NonNull FlightApparatus register(@NonNull Identifier id, @NonNull FlightApparatus wing);
     }
 
     public record WingSet(
@@ -122,7 +123,7 @@ public final class WingsCore {
         private Names() {
         }
 
-        private static Identifier create(String path) {
+        private static @NonNull Identifier create(@NonNull String path) {
             return locate(path);
         }
     }
