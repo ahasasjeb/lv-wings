@@ -57,10 +57,6 @@ public final class WingsHooksClient {
     }
 
     private static @Nullable AbstractClientPlayer resolvePlayer(@Nullable AvatarRenderState state) {
-        AbstractClientPlayer player = RENDERING_PLAYER.get();
-        if (player != null) {
-            return player;
-        }
         if (state != null) {
             Minecraft minecraft = Minecraft.getInstance();
             ClientLevel level = minecraft.level;
@@ -71,7 +67,7 @@ public final class WingsHooksClient {
                 }
             }
         }
-        return null;
+        return RENDERING_PLAYER.get();
     }
 
     public static boolean onCheckRenderEmptyHand(boolean isMainHand, ItemStack itemStackMainHand) {
