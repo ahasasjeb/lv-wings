@@ -14,7 +14,6 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.NonNull;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.function.IntConsumer;
 
@@ -58,14 +57,15 @@ public final class InSomniable {
                 0xFBFF
         };
 
-        private final List<@NonNull String> members = List.of(
+        private static final @NonNull String @NonNull [] MEMBERS = {
                 "wings.dreamcatcher.jiu",
                 "wings.dreamcatcher.sua",
                 "wings.dreamcatcher.siyeon",
                 "wings.dreamcatcher.handong",
                 "wings.dreamcatcher.yoohyeon",
                 "wings.dreamcatcher.dami",
-                "wings.dreamcatcher.gahyeon");
+                "wings.dreamcatcher.gahyeon"
+        };
 
         private int state;
 
@@ -82,7 +82,7 @@ public final class InSomniable {
             if (note >= 6 && note <= 14 && ((this.state = (this.state | this.mask[note - 6]) << 1) & 0x20000) == 0) {
                 @NonNull ItemLike rewardItem = Objects.requireNonNull(WingsItems.ANGEL_WINGS_BOTTLE.get(),
                         "angel wings bottle");
-                @NonNull String member = this.members.get(world.getRandom().nextInt(this.members.size()));
+                @NonNull String member = MEMBERS[world.getRandom().nextInt(MEMBERS.length)];
                 ItemStack stack = new ItemStack(rewardItem);
                 stack.<Component>set(customNameComponent(), Component.translatable(member));
                 ItemEntity entity = new ItemEntity(world, pos.getX() + 0.5D, pos.getY() + 1.25D, pos.getZ() + 0.5D, stack);
@@ -104,8 +104,8 @@ public final class InSomniable {
         }
     }
 
-    private static DataComponentType<Component> customNameComponent() {
-        return DataComponents.CUSTOM_NAME;
+    private static @NonNull DataComponentType<Component> customNameComponent() {
+        return Objects.requireNonNull(DataComponents.CUSTOM_NAME, "custom name component");
     }
 
     private static final class InSomniacState implements State {

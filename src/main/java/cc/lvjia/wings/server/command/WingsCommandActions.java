@@ -34,7 +34,7 @@ public final class WingsCommandActions {
 
     public static int giveWing(@NonNull CommandContext<CommandSourceStack> ctx, @NonNull WingsGetter getter)
             throws CommandSyntaxException {
-        return executeGiveWing(ctx, EntityArgument.getPlayers(ctx, "targets"), getter.get(ctx, "wings"));
+        return executeGiveWing(ctx, getTargets(ctx), getter.get(ctx, "wings"));
     }
 
     public static int takeWingsSelf(@NonNull CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
@@ -42,7 +42,7 @@ public final class WingsCommandActions {
     }
 
     public static int takeWings(@NonNull CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
-        return executeTakeWings(ctx, EntityArgument.getPlayers(ctx, "targets"));
+        return executeTakeWings(ctx, getTargets(ctx));
     }
 
     public static int takeSpecificWingsSelf(@NonNull CommandContext<CommandSourceStack> ctx,
@@ -54,13 +54,27 @@ public final class WingsCommandActions {
     public static int takeSpecificWings(@NonNull CommandContext<CommandSourceStack> ctx,
             @NonNull WingsGetter getter)
             throws CommandSyntaxException {
-        return executeTakeSpecificWings(ctx, EntityArgument.getPlayers(ctx, "targets"), getter.get(ctx, "wings"));
+        return executeTakeSpecificWings(ctx, getTargets(ctx), getter.get(ctx, "wings"));
     }
 
     private static @NonNull Collection<@NonNull ServerPlayer> getSelf(
             @NonNull CommandContext<CommandSourceStack> ctx)
             throws CommandSyntaxException {
-        return List.of(ctx.getSource().getPlayerOrException());
+        return List.<@NonNull ServerPlayer>of(ctx.getSource().getPlayerOrException());
+    }
+
+    @SuppressWarnings("null")
+    private static @NonNull Collection<@NonNull ServerPlayer> getTargets(
+            @NonNull CommandContext<CommandSourceStack> ctx)
+            throws CommandSyntaxException {
+        return EntityArgument.getPlayers(ctx, "targets");
+    }
+
+    private static @NonNull ServerPlayer getSingleTarget(@NonNull Collection<@NonNull ServerPlayer> targets) {
+        for (ServerPlayer target : targets) {
+            return target;
+        }
+        throw new IllegalArgumentException("Expected one target");
     }
 
     private static int executeGiveWing(@NonNull CommandContext<CommandSourceStack> ctx,
@@ -77,7 +91,7 @@ public final class WingsCommandActions {
         }
         if (targets.size() == 1) {
             ctx.getSource().sendSuccess(() -> Component.translatable("commands.wings.give.success.single",
-                    targets.iterator().next().getDisplayName()), true);
+                    getSingleTarget(targets).getDisplayName()), true);
         } else {
             int successCount = count;
             ctx.getSource().sendSuccess(
@@ -100,7 +114,7 @@ public final class WingsCommandActions {
         }
         if (targets.size() == 1) {
             ctx.getSource().sendSuccess(() -> Component.translatable("commands.wings.take.success.single",
-                    targets.iterator().next().getDisplayName()), true);
+                    getSingleTarget(targets).getDisplayName()), true);
         } else {
             int successCount = count;
             ctx.getSource().sendSuccess(
@@ -123,7 +137,7 @@ public final class WingsCommandActions {
         }
         if (targets.size() == 1) {
             ctx.getSource().sendSuccess(() -> Component.translatable("commands.wings.take.success.single",
-                    targets.iterator().next().getDisplayName()), true);
+                    getSingleTarget(targets).getDisplayName()), true);
         } else {
             int successCount = count;
             ctx.getSource().sendSuccess(

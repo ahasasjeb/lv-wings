@@ -22,27 +22,28 @@ public final class BuffedFlightApparatus implements FlightApparatus {
     private final @NonNull List<@NonNull EffectSettings> effects;
     private final @NonNull MobAvoidanceSettings mobAvoidance;
 
-    public BuffedFlightApparatus(@NonNull WingSettings settings, EffectSettings... effects) {
+    public BuffedFlightApparatus(@NonNull WingSettings settings, @NonNull EffectSettings... effects) {
         this(new SimpleFlightApparatus(settings), MobAvoidanceSettings.DEFAULT, effects);
     }
 
     public BuffedFlightApparatus(@NonNull WingSettings settings, @NonNull MobAvoidanceSettings mobAvoidance,
-            EffectSettings... effects) {
+            @NonNull EffectSettings... effects) {
         this(new SimpleFlightApparatus(settings), mobAvoidance, effects);
     }
 
-    public BuffedFlightApparatus(@NonNull FlightApparatus delegate, EffectSettings... effects) {
+    public BuffedFlightApparatus(@NonNull FlightApparatus delegate, @NonNull EffectSettings... effects) {
         this(delegate, MobAvoidanceSettings.DEFAULT, effects);
     }
 
     public BuffedFlightApparatus(@NonNull FlightApparatus delegate, @NonNull MobAvoidanceSettings mobAvoidance,
-            EffectSettings... effects) {
+            @NonNull EffectSettings... effects) {
         this.delegate = Objects.requireNonNull(delegate, "委托");
         this.mobAvoidance = Objects.requireNonNull(mobAvoidance, "敌对生物回避设置");
         this.effects = copyNonNullEffects(effects);
     }
 
-    private static @NonNull List<@NonNull EffectSettings> copyNonNullEffects(EffectSettings... effects) {
+    @SuppressWarnings("null")
+    private static @NonNull List<@NonNull EffectSettings> copyNonNullEffects(@NonNull EffectSettings... effects) {
         List<@NonNull EffectSettings> configuredEffects = new ArrayList<>();
         Arrays.stream(Objects.requireNonNull(effects, "效果列表"))
                 .filter(Objects::nonNull)
@@ -222,8 +223,8 @@ public final class BuffedFlightApparatus implements FlightApparatus {
      * 默认配置清除仇恨并温和地推开大约14格半径内的敌对生物。
      */
     public record MobAvoidanceSettings(double radius, double horizontalPush, double verticalPush, int intervalTicks) {
-        public static final MobAvoidanceSettings DEFAULT = new MobAvoidanceSettings(14.0D, 0.35D, 0.05D, 10);
-        public static final MobAvoidanceSettings DISABLED = new MobAvoidanceSettings(0.0D, 0.0D, 0.0D, 0);
+        public static final @NonNull MobAvoidanceSettings DEFAULT = new MobAvoidanceSettings(14.0D, 0.35D, 0.05D, 10);
+        public static final @NonNull MobAvoidanceSettings DISABLED = new MobAvoidanceSettings(0.0D, 0.0D, 0.0D, 0);
 
         public MobAvoidanceSettings {
             if (radius < 0.0D) {

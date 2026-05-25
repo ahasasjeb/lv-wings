@@ -54,7 +54,7 @@ public final class WingsCore {
                 monarchButterfly, slime, fire, lvjiaSuper);
     }
 
-    private static FlightApparatus wingless() {
+    private static @NonNull FlightApparatus wingless() {
         return new FlightApparatus() {
             @Override
             public void onFlight(@NonNull Player player, @NonNull Vec3 direction) {
