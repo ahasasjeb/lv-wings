@@ -31,9 +31,8 @@ public final class InSomniableEventHandler {
                     world.mayInteract(player, pos) &&
                     !player.blockActionRestricted(world, pos, ((ServerPlayer) player).gameMode.getGameModeForPlayer())
             ) {
-                InSomniableCapability.getInSomniable(player).ifPresent(inSomniable ->
-                        inSomniable.onPlay(world, player, pos, state.getValue(NoteBlock.NOTE))
-                );
+                InSomniableCapability.getInSomniable(player)
+                        .onPlay(world, player, pos, state.getValue(NoteBlock.NOTE));
             }
         }
     }

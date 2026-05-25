@@ -10,8 +10,6 @@ import net.neoforged.neoforge.capabilities.EntityCapability;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
-import java.util.Optional;
-
 @EventBusSubscriber(modid = WingsMod.ID)
 public final class InSomniableCapability {
     public static final EntityCapability<InSomniable, Void> INSOMNIABLE_CAPABILITY =
@@ -20,16 +18,13 @@ public final class InSomniableCapability {
     private InSomniableCapability() {
     }
 
-    public static Optional<InSomniable> getInSomniable(Player player) {
-        return Optional.of(player.getData(WingsAttachments.INSOMNIABLE.get()));
+    public static InSomniable getInSomniable(Player player) {
+        return player.getData(WingsAttachments.INSOMNIABLE.get());
     }
 
     @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event) {
-        getInSomniable(event.getOriginal())
-                .ifPresent(oldInstance -> getInSomniable(event.getEntity())
-                        .ifPresent(newInstance -> newInstance.clone(oldInstance))
-                );
+        getInSomniable(event.getEntity()).clone(getInSomniable(event.getOriginal()));
     }
 
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {

@@ -10,6 +10,7 @@ import cc.lvjia.wings.client.flight.FlightViews;
 import cc.lvjia.wings.client.model.ModelWings;
 import cc.lvjia.wings.client.model.ModelWingsAvian;
 import cc.lvjia.wings.client.model.ModelWingsInsectoid;
+import cc.lvjia.wings.client.net.ClientNetwork;
 import cc.lvjia.wings.client.renderer.FabricLayerWings;
 import cc.lvjia.wings.server.apparatus.FlightApparatus;
 import cc.lvjia.wings.server.flight.Flight;
@@ -109,7 +110,7 @@ public final class FabricClientProxy extends FabricProxy {
     }
 
     public void initClient() {
-        this.network.registerClient();
+        ClientNetwork.register();
         FabricLayerWings.init();
         FabricClientEventHandler.register();
         FabricKeyInputListener.builder()

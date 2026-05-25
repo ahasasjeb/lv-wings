@@ -2,7 +2,6 @@ package cc.lvjia.wings.server.net;
 
 import cc.lvjia.wings.server.net.clientbound.MessageSyncFlight;
 import cc.lvjia.wings.server.net.serverbound.MessageControlFlying;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -25,10 +24,6 @@ public final class Network {
         PayloadTypeRegistry.clientboundPlay().register(MessageSyncFlight.TYPE, MessageSyncFlight.STREAM_CODEC);
         ServerPlayNetworking.registerGlobalReceiver(MessageControlFlying.TYPE, MessageControlFlying::handle);
         LOGGER.info("Network payloads registered");
-    }
-
-    public void registerClient() {
-        ClientPlayNetworking.registerGlobalReceiver(MessageSyncFlight.TYPE, MessageSyncFlight::handle);
     }
 
     public void sendToPlayer(Message message, ServerPlayer player) {
