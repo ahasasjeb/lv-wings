@@ -192,7 +192,7 @@ public final class BuffedFlightApparatus implements FlightApparatus {
         };
     }
 
-    public record EffectSettings(@NonNull Holder<@NonNull MobEffect> effect, int amplifier, int durationTicks,
+    public record EffectSettings(@NonNull Holder<MobEffect> effect, int amplifier, int durationTicks,
             int refreshThreshold) {
         public EffectSettings {
             Objects.requireNonNull(effect, "效果");
@@ -204,7 +204,7 @@ public final class BuffedFlightApparatus implements FlightApparatus {
             }
         }
 
-        public static @NonNull EffectSettings of(@NonNull Holder<@NonNull MobEffect> effect, int amplifier,
+        public static @NonNull EffectSettings of(@NonNull Holder<MobEffect> effect, int amplifier,
                 int durationTicks, int refreshThreshold) {
             return new EffectSettings(effect, amplifier, durationTicks, refreshThreshold);
         }

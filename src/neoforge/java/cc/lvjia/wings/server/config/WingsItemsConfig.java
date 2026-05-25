@@ -2,23 +2,24 @@ package cc.lvjia.wings.server.config;
 
 import cc.lvjia.wings.WingsMod;
 import net.neoforged.neoforge.common.ModConfigSpec;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
 public final class WingsItemsConfig {
-    public static final ModConfigSpec SPEC;
-    public static final ConfigWingSettings ANGEL;
-    public static final ConfigWingSettings PARROT;
-    public static final ConfigWingSettings SLIME;
-    public static final ConfigWingSettings BLUE_BUTTERFLY;
-    public static final ConfigWingSettings MONARCH_BUTTERFLY;
-    public static final ConfigWingSettings FIRE;
-    public static final ConfigWingSettings BAT;
-    public static final ConfigWingSettings FAIRY;
-    public static final ConfigWingSettings EVIL;
-    public static final ConfigWingSettings DRAGON;
-    public static final ConfigWingSettings LVJIA_SUPER;
-    private static final List<ConfigWingSettings> ALL;
+    public static final @NonNull ModConfigSpec SPEC;
+    public static final @NonNull ConfigWingSettings ANGEL;
+    public static final @NonNull ConfigWingSettings PARROT;
+    public static final @NonNull ConfigWingSettings SLIME;
+    public static final @NonNull ConfigWingSettings BLUE_BUTTERFLY;
+    public static final @NonNull ConfigWingSettings MONARCH_BUTTERFLY;
+    public static final @NonNull ConfigWingSettings FIRE;
+    public static final @NonNull ConfigWingSettings BAT;
+    public static final @NonNull ConfigWingSettings FAIRY;
+    public static final @NonNull ConfigWingSettings EVIL;
+    public static final @NonNull ConfigWingSettings DRAGON;
+    public static final @NonNull ConfigWingSettings LVJIA_SUPER;
+    private static final @NonNull List<@NonNull ConfigWingSettings> ALL;
 
     static {
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();

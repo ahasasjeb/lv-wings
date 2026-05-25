@@ -32,21 +32,21 @@ public final class WingsCore {
     }
 
     public static @NonNull WingSet registerWings(@NonNull WingRegistrar registrar) {
-        FlightApparatus none = registrar.register(Names.NONE, FlightApparatus.NONE);
-        FlightApparatus wingless = registrar.register(Names.WINGLESS, wingless());
-        FlightApparatus angel = registrar.register(Names.ANGEL, new SimpleFlightApparatus(WingsItemsConfig.ANGEL));
-        FlightApparatus parrot = registrar.register(Names.PARROT, new SimpleFlightApparatus(WingsItemsConfig.PARROT));
-        FlightApparatus bat = registrar.register(Names.BAT, new SimpleFlightApparatus(WingsItemsConfig.BAT));
-        FlightApparatus blueButterfly = registrar.register(Names.BLUE_BUTTERFLY,
+        @NonNull FlightApparatus none = registrar.register(Names.NONE, FlightApparatus.NONE);
+        @NonNull FlightApparatus wingless = registrar.register(Names.WINGLESS, wingless());
+        @NonNull FlightApparatus angel = registrar.register(Names.ANGEL, new SimpleFlightApparatus(WingsItemsConfig.ANGEL));
+        @NonNull FlightApparatus parrot = registrar.register(Names.PARROT, new SimpleFlightApparatus(WingsItemsConfig.PARROT));
+        @NonNull FlightApparatus bat = registrar.register(Names.BAT, new SimpleFlightApparatus(WingsItemsConfig.BAT));
+        @NonNull FlightApparatus blueButterfly = registrar.register(Names.BLUE_BUTTERFLY,
                 new SimpleFlightApparatus(WingsItemsConfig.BLUE_BUTTERFLY));
-        FlightApparatus dragon = registrar.register(Names.DRAGON, new SimpleFlightApparatus(WingsItemsConfig.DRAGON));
-        FlightApparatus evil = registrar.register(Names.EVIL, new SimpleFlightApparatus(WingsItemsConfig.EVIL));
-        FlightApparatus fairy = registrar.register(Names.FAIRY, new SimpleFlightApparatus(WingsItemsConfig.FAIRY));
-        FlightApparatus monarchButterfly = registrar.register(Names.MONARCH_BUTTERFLY,
+        @NonNull FlightApparatus dragon = registrar.register(Names.DRAGON, new SimpleFlightApparatus(WingsItemsConfig.DRAGON));
+        @NonNull FlightApparatus evil = registrar.register(Names.EVIL, new SimpleFlightApparatus(WingsItemsConfig.EVIL));
+        @NonNull FlightApparatus fairy = registrar.register(Names.FAIRY, new SimpleFlightApparatus(WingsItemsConfig.FAIRY));
+        @NonNull FlightApparatus monarchButterfly = registrar.register(Names.MONARCH_BUTTERFLY,
                 new SimpleFlightApparatus(WingsItemsConfig.MONARCH_BUTTERFLY));
-        FlightApparatus slime = registrar.register(Names.SLIME, new SimpleFlightApparatus(WingsItemsConfig.SLIME));
-        FlightApparatus fire = registrar.register(Names.FIRE, new SimpleFlightApparatus(WingsItemsConfig.FIRE));
-        FlightApparatus lvjiaSuper = registrar.register(Names.LVJIA_SUPER,
+        @NonNull FlightApparatus slime = registrar.register(Names.SLIME, new SimpleFlightApparatus(WingsItemsConfig.SLIME));
+        @NonNull FlightApparatus fire = registrar.register(Names.FIRE, new SimpleFlightApparatus(WingsItemsConfig.FIRE));
+        @NonNull FlightApparatus lvjiaSuper = registrar.register(Names.LVJIA_SUPER,
                 new BuffedFlightApparatus(WingsItemsConfig.LVJIA_SUPER,
                         BuffedFlightApparatus.EffectSettings.of(MobEffects.RESISTANCE, 2, 40, 40),
                         BuffedFlightApparatus.EffectSettings.of(MobEffects.JUMP_BOOST, 1, 40, 40)));
@@ -89,23 +89,23 @@ public final class WingsCore {
     }
 
     public record WingSet(
-            FlightApparatus none,
-            FlightApparatus wingless,
-            FlightApparatus angel,
-            FlightApparatus parrot,
-            FlightApparatus bat,
-            FlightApparatus blueButterfly,
-            FlightApparatus dragon,
-            FlightApparatus evil,
-            FlightApparatus fairy,
-            FlightApparatus monarchButterfly,
-            FlightApparatus slime,
-            FlightApparatus fire,
-            FlightApparatus lvjiaSuper) {
+            @NonNull FlightApparatus none,
+            @NonNull FlightApparatus wingless,
+            @NonNull FlightApparatus angel,
+            @NonNull FlightApparatus parrot,
+            @NonNull FlightApparatus bat,
+            @NonNull FlightApparatus blueButterfly,
+            @NonNull FlightApparatus dragon,
+            @NonNull FlightApparatus evil,
+            @NonNull FlightApparatus fairy,
+            @NonNull FlightApparatus monarchButterfly,
+            @NonNull FlightApparatus slime,
+            @NonNull FlightApparatus fire,
+            @NonNull FlightApparatus lvjiaSuper) {
     }
 
     public static final class Names {
-        public static final Identifier
+        public static final @NonNull Identifier
                 NONE = create("none"),
                 WINGLESS = create("wingless"),
                 ANGEL = create("angel_wings"),

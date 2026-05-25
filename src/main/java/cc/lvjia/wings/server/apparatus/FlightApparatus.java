@@ -14,7 +14,7 @@ public interface FlightApparatus {
     /**
      * 空实现：不做任何额外行为。
      */
-    FlightApparatus NONE = new FlightApparatus() {
+    @NonNull FlightApparatus NONE = new FlightApparatus() {
         @Override
         public void onFlight(@NonNull Player player, @NonNull Vec3 direction) {
         }
@@ -53,7 +53,7 @@ public interface FlightApparatus {
      * 每 tick 更新的飞行状态对象（通常由 {@link #createState(Flight)} 创建）。
      */
     interface FlightState {
-        FlightState NONE = (player) -> {
+        @NonNull FlightState NONE = (player) -> {
         };
 
         void onUpdate(@NonNull Player player);
