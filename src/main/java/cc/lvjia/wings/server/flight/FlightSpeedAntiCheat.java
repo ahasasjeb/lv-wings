@@ -1,5 +1,6 @@
 package cc.lvjia.wings.server.flight;
 
+import cc.lvjia.wings.server.config.FlightAntiCheatSettings;
 import cc.lvjia.wings.server.config.WingsConfig;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -10,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 保守的翅膀飞行限速器。
@@ -19,13 +21,20 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class FlightSpeedAntiCheat {
     private static final Logger LOGGER = LogManager.getLogger("WingsFlightAntiCheat");
 
+    private static final long STATE_TTL_NANOS = TimeUnit.MINUTES.toNanos(10);
+    private static final long CLEANUP_INTERVAL_NANOS = TimeUnit.SECONDS.toNanos(30);
+    private static final int CLEAN_TICKS_TO_RELAX = 20;
     private static final Map<UUID, TrackingState> STATES = new ConcurrentHashMap<>();
+    private static volatile long nextCleanupNanos;
 
     private FlightSpeedAntiCheat() {
     }
 
     public static void tick(ServerPlayer player, Flight flight) {
-        WingsConfig.FlightAntiCheatSettings settings = WingsConfig.getFlightAntiCheatSettings();
+        long now = System.nanoTime();
+        cleanupExpiredStates(now);
+
+        FlightAntiCheatSettings settings = WingsConfig.getFlightAntiCheatSettings();
         if (!settings.enabled()) {
             clear(player);
             return;
@@ -37,8 +46,9 @@ public final class FlightSpeedAntiCheat {
         }
 
         if (state == null) {
-            state = STATES.computeIfAbsent(player.getUUID(), key -> new TrackingState());
+            state = STATES.computeIfAbsent(player.getUUID(), key -> new TrackingState(now));
         }
+        state.markSeen(now);
 
         if (player.tickCount < state.cooldownUntilTick) {
             return;
@@ -67,19 +77,22 @@ public final class FlightSpeedAntiCheat {
         player.setDeltaMovement(Vec3.ZERO);
         player.fallDistance = 0.0F;
         flight.setIsFlying(false, Flight.PlayerSet.ofAll());
-        player.connection.teleport(safePosition.x(), safePosition.y(), safePosition.z(), player.getYRot(), player.getXRot());
+        player.connection.teleport(safePosition.x(), safePosition.y(), safePosition.z(), player.getYRot(),
+                player.getXRot());
 
         LOGGER.info(
                 "Corrected suspicious wings flight speed for {} (horizontal={}, vertical={}, total={})",
                 player.getPlainTextName(),
                 String.format("%.3f", correction.horizontal()),
                 String.format("%.3f", correction.vertical()),
-                String.format("%.3f", correction.total())
-        );
+                String.format("%.3f", correction.total()));
     }
 
     public static void recordMovement(ServerPlayer player, Flight flight, Vec3 movement) {
-        WingsConfig.FlightAntiCheatSettings settings = WingsConfig.getFlightAntiCheatSettings();
+        long now = System.nanoTime();
+        cleanupExpiredStates(now);
+
+        FlightAntiCheatSettings settings = WingsConfig.getFlightAntiCheatSettings();
         if (!settings.enabled()) {
             clear(player);
             return;
@@ -90,7 +103,8 @@ public final class FlightSpeedAntiCheat {
             return;
         }
 
-        TrackingState state = STATES.computeIfAbsent(player.getUUID(), key -> new TrackingState());
+        TrackingState state = STATES.computeIfAbsent(player.getUUID(), key -> new TrackingState(now));
+        state.markSeen(now);
         if (player.tickCount < state.cooldownUntilTick) {
             return;
         }
@@ -106,19 +120,21 @@ public final class FlightSpeedAntiCheat {
         double softTotalLimit = settings.softTotalLimit() + totalBonus;
         double hardTotalLimit = settings.hardTotalLimit() + totalBonus;
 
-        if (flight.getTimeFlying() <= settings.takeoffGraceTicks() || player.isInWater() || player.isInLava()) {
+        if (flight.getTimeFlying() <= settings.takeoffGraceTicks()
+                || player.isInLava()
+                || (player.isInWater() && !WingsConfig.isUnderwaterFlightAllowed())) {
             state.captureSafePosition(player);
             state.relax();
             return;
         }
 
         boolean hardViolation = horizontal > settings.hardHorizontalLimit()
-            || vertical > hardVerticalLimit
-            || total > hardTotalLimit;
+                || vertical > hardVerticalLimit
+                || total > hardTotalLimit;
         boolean softViolation = hardViolation
-            || horizontal > settings.softHorizontalLimit()
-            || vertical > softVerticalLimit
-            || total > softTotalLimit;
+                || horizontal > settings.softHorizontalLimit()
+                || vertical > softVerticalLimit
+                || total > softTotalLimit;
 
         if (!softViolation) {
             state.captureSafePosition(player);
@@ -126,15 +142,23 @@ public final class FlightSpeedAntiCheat {
             return;
         }
 
-        state.softViolations++;
-        state.hardViolations = hardViolation ? state.hardViolations + 1 : 0;
-        if (state.softViolations >= settings.softViolationLimit() || state.hardViolations >= settings.hardViolationLimit()) {
+        state.recordViolation(hardViolation);
+        if (state.softViolations >= settings.softViolationLimit()
+                || state.hardViolations >= settings.hardViolationLimit()) {
             state.pendingCorrection = new PendingCorrection(horizontal, vertical, total);
         }
     }
 
     public static void clear(Player player) {
         STATES.remove(player.getUUID());
+    }
+
+    private static void cleanupExpiredStates(long now) {
+        if (now < nextCleanupNanos) {
+            return;
+        }
+        nextCleanupNanos = now + CLEANUP_INTERVAL_NANOS;
+        STATES.entrySet().removeIf(entry -> now - entry.getValue().lastSeenNanos > STATE_TTL_NANOS);
     }
 
     private static boolean shouldMonitor(ServerPlayer player, Flight flight) {
@@ -146,7 +170,7 @@ public final class FlightSpeedAntiCheat {
                 && !player.isChangingDimension();
     }
 
-    private static double computeUpwardVerticalBonus(double horizontal, WingsConfig.FlightAntiCheatSettings settings) {
+    private static double computeUpwardVerticalBonus(double horizontal, FlightAntiCheatSettings settings) {
         double threshold = settings.upwardAssistHorizontalThreshold();
         double maxBonus = settings.upwardAssistMaxBonus();
         if (threshold <= 0.0D || maxBonus <= 0.0D) {
@@ -163,16 +187,39 @@ public final class FlightSpeedAntiCheat {
         private Vec3 safePosition;
         private int softViolations;
         private int hardViolations;
+        private int cleanTicks;
         private int cooldownUntilTick;
         private PendingCorrection pendingCorrection;
+        private volatile long lastSeenNanos;
+
+        private TrackingState(long now) {
+            this.lastSeenNanos = now;
+        }
+
+        private void markSeen(long now) {
+            this.lastSeenNanos = now;
+        }
 
         private void captureSafePosition(ServerPlayer player) {
             this.safePosition = player.position();
         }
 
+        private void recordViolation(boolean hardViolation) {
+            this.cleanTicks = 0;
+            this.softViolations++;
+            if (hardViolation) {
+                this.hardViolations++;
+            }
+        }
+
         private void relax() {
+            this.cleanTicks++;
+            if (this.cleanTicks < CLEAN_TICKS_TO_RELAX) {
+                return;
+            }
+            this.cleanTicks = 0;
             this.softViolations = Math.max(0, this.softViolations - 1);
-            this.hardViolations = 0;
+            this.hardViolations = Math.max(0, this.hardViolations - 1);
         }
     }
 }

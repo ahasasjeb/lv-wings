@@ -10,39 +10,49 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.NonNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public final class BuffedFlightApparatus implements FlightApparatus {
-    private final FlightApparatus delegate;
-    private final List<EffectSettings> effects;
-    private final MobAvoidanceSettings mobAvoidance;
+    private final @NonNull FlightApparatus delegate;
+    private final @NonNull List<@NonNull EffectSettings> effects;
+    private final @NonNull MobAvoidanceSettings mobAvoidance;
 
-    public BuffedFlightApparatus(WingSettings settings, EffectSettings... effects) {
+    public BuffedFlightApparatus(@NonNull WingSettings settings, @NonNull EffectSettings... effects) {
         this(new SimpleFlightApparatus(settings), MobAvoidanceSettings.DEFAULT, effects);
     }
 
-    public BuffedFlightApparatus(WingSettings settings, MobAvoidanceSettings mobAvoidance, EffectSettings... effects) {
+    public BuffedFlightApparatus(@NonNull WingSettings settings, @NonNull MobAvoidanceSettings mobAvoidance,
+            @NonNull EffectSettings... effects) {
         this(new SimpleFlightApparatus(settings), mobAvoidance, effects);
     }
 
-    public BuffedFlightApparatus(FlightApparatus delegate, EffectSettings... effects) {
+    public BuffedFlightApparatus(@NonNull FlightApparatus delegate, @NonNull EffectSettings... effects) {
         this(delegate, MobAvoidanceSettings.DEFAULT, effects);
     }
 
-    public BuffedFlightApparatus(FlightApparatus delegate, MobAvoidanceSettings mobAvoidance, EffectSettings... effects) {
+    public BuffedFlightApparatus(@NonNull FlightApparatus delegate, @NonNull MobAvoidanceSettings mobAvoidance,
+            @NonNull EffectSettings... effects) {
         this.delegate = Objects.requireNonNull(delegate, "委托");
         this.mobAvoidance = Objects.requireNonNull(mobAvoidance, "敌对生物回避设置");
-        this.effects = Arrays.stream(effects)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toUnmodifiableList());
+        this.effects = copyNonNullEffects(effects);
     }
 
-    private static void applyHostileMobAvoidance(Player player, MobAvoidanceSettings settings) {
-        if (player == null || !player.isAlive()) {
+    @SuppressWarnings("null")
+    private static @NonNull List<@NonNull EffectSettings> copyNonNullEffects(@NonNull EffectSettings... effects) {
+        List<@NonNull EffectSettings> configuredEffects = new ArrayList<>();
+        Arrays.stream(Objects.requireNonNull(effects, "效果列表"))
+                .filter(Objects::nonNull)
+                .forEach(configuredEffects::add);
+        return List.copyOf(configuredEffects);
+    }
+
+    private static void applyHostileMobAvoidance(@NonNull Player player, @NonNull MobAvoidanceSettings settings) {
+        if (!player.isAlive()) {
             return;
         }
         double radius = settings.radius();
@@ -51,7 +61,7 @@ public final class BuffedFlightApparatus implements FlightApparatus {
         }
         double radiusSquared = radius * radius;
         AABB searchBox = player.getBoundingBox().inflate(radius);
-        List<Mob> hostiles = player.level().getEntitiesOfClass(Mob.class, searchBox,
+        List<@NonNull Mob> hostiles = player.level().getEntitiesOfClass(Mob.class, searchBox,
                 mob -> isRepellableHostile(mob, player, radiusSquared));
         if (hostiles.isEmpty()) {
             return;
@@ -62,7 +72,7 @@ public final class BuffedFlightApparatus implements FlightApparatus {
         }
     }
 
-    private static boolean isRepellableHostile(Mob mob, Player player, double radiusSquared) {
+    private static boolean isRepellableHostile(@NonNull Mob mob, @NonNull Player player, double radiusSquared) {
         if (!(mob instanceof Enemy)) {
             return false;
         }
@@ -78,7 +88,7 @@ public final class BuffedFlightApparatus implements FlightApparatus {
         return !(mob.distanceToSqr(player) > radiusSquared);
     }
 
-    private static void neutralizeAggression(Mob mob, Player player) {
+    private static void neutralizeAggression(@NonNull Mob mob, @NonNull Player player) {
         if (mob.getTarget() == player) {
             mob.setTarget(null);
         }
@@ -89,7 +99,8 @@ public final class BuffedFlightApparatus implements FlightApparatus {
         mob.getNavigation().stop();
     }
 
-    private static void pushAwayFromPlayer(Mob mob, Player player, MobAvoidanceSettings settings) {
+    private static void pushAwayFromPlayer(@NonNull Mob mob, @NonNull Player player,
+            @NonNull MobAvoidanceSettings settings) {
         double radius = settings.radius();
         if (radius <= 0.0D) {
             return;
@@ -134,27 +145,27 @@ public final class BuffedFlightApparatus implements FlightApparatus {
     }
 
     @Override
-    public void onFlight(Player player, Vec3 direction) {
+    public void onFlight(@NonNull Player player, @NonNull Vec3 direction) {
         this.delegate.onFlight(player, direction);
     }
 
     @Override
-    public void onLanding(Player player, Vec3 direction) {
+    public void onLanding(@NonNull Player player, @NonNull Vec3 direction) {
         this.delegate.onLanding(player, direction);
     }
 
     @Override
-    public boolean isUsable(Player player) {
+    public boolean isUsable(@NonNull Player player) {
         return this.delegate.isUsable(player);
     }
 
     @Override
-    public boolean isLandable(Player player) {
+    public boolean isLandable(@NonNull Player player) {
         return this.delegate.isLandable(player);
     }
 
     @Override
-    public FlightState createState(Flight flight) {
+    public @NonNull FlightState createState(@NonNull Flight flight) {
         FlightState base = this.delegate.createState(flight);
         boolean hasEffects = !this.effects.isEmpty();
         boolean avoidanceEnabled = this.mobAvoidance.isEnabled();
@@ -165,7 +176,7 @@ public final class BuffedFlightApparatus implements FlightApparatus {
             private int mobAvoidanceCooldown;
 
             @Override
-            public void onUpdate(Player player) {
+            public void onUpdate(@NonNull Player player) {
                 base.onUpdate(player);
                 if (!player.level().isClientSide()) {
                     if (hasEffects) {
@@ -182,7 +193,8 @@ public final class BuffedFlightApparatus implements FlightApparatus {
         };
     }
 
-    public record EffectSettings(Holder<MobEffect> effect, int amplifier, int durationTicks, int refreshThreshold) {
+    public record EffectSettings(@NonNull Holder<MobEffect> effect, int amplifier, int durationTicks,
+            int refreshThreshold) {
         public EffectSettings {
             Objects.requireNonNull(effect, "效果");
             if (durationTicks <= 0) {
@@ -193,11 +205,12 @@ public final class BuffedFlightApparatus implements FlightApparatus {
             }
         }
 
-        public static EffectSettings of(Holder<MobEffect> effect, int amplifier, int durationTicks, int refreshThreshold) {
+        public static @NonNull EffectSettings of(@NonNull Holder<MobEffect> effect, int amplifier,
+                int durationTicks, int refreshThreshold) {
             return new EffectSettings(effect, amplifier, durationTicks, refreshThreshold);
         }
 
-        private void apply(Player player) {
+        private void apply(@NonNull Player player) {
             MobEffectInstance existing = player.getEffect(this.effect);
             if (existing == null || existing.getAmplifier() < this.amplifier || existing.getDuration() <= this.refreshThreshold) {
                 player.addEffect(new MobEffectInstance(this.effect, this.durationTicks, this.amplifier, true, false, false));
@@ -210,8 +223,8 @@ public final class BuffedFlightApparatus implements FlightApparatus {
      * 默认配置清除仇恨并温和地推开大约14格半径内的敌对生物。
      */
     public record MobAvoidanceSettings(double radius, double horizontalPush, double verticalPush, int intervalTicks) {
-        public static final MobAvoidanceSettings DEFAULT = new MobAvoidanceSettings(14.0D, 0.35D, 0.05D, 10);
-        public static final MobAvoidanceSettings DISABLED = new MobAvoidanceSettings(0.0D, 0.0D, 0.0D, 0);
+        public static final @NonNull MobAvoidanceSettings DEFAULT = new MobAvoidanceSettings(14.0D, 0.35D, 0.05D, 10);
+        public static final @NonNull MobAvoidanceSettings DISABLED = new MobAvoidanceSettings(0.0D, 0.0D, 0.0D, 0);
 
         public MobAvoidanceSettings {
             if (radius < 0.0D) {

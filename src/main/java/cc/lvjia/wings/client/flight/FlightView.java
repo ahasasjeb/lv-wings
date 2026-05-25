@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.resources.Identifier;
+import org.jspecify.annotations.NonNull;
 
 import java.util.function.Consumer;
 
@@ -16,10 +17,11 @@ public interface FlightView {
     void tickEyeHeight(float value, FloatConsumer valueOut);
 
     interface FormRenderer {
-        Identifier getTexture();
+        @NonNull Identifier getTexture();
 
-        RenderType getRenderType();
+        @NonNull RenderType getRenderType();
 
-        void render(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha, float delta);
+        void render(@NonNull PoseStack matrixStack, @NonNull VertexConsumer buffer, int packedLight, int packedOverlay, float red,
+                float green, float blue, float alpha, float delta);
     }
 }

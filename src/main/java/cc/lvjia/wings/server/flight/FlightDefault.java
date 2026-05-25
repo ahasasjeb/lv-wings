@@ -6,7 +6,11 @@ import cc.lvjia.wings.server.config.WingsConfig;
 import cc.lvjia.wings.server.effect.WingsEffects;
 import cc.lvjia.wings.util.CubicBezier;
 import cc.lvjia.wings.util.MathH;
+import cc.lvjia.wings.util.NBTSerializer;
 import com.google.common.collect.Lists;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
@@ -14,11 +18,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
 
+@SuppressWarnings("null")
 public final class FlightDefault implements Flight {
     private static final CubicBezier FLY_AMOUNT_CURVE = new CubicBezier(0.37F, 0.13F, 0.3F, 1.12F);
 
@@ -37,6 +43,14 @@ public final class FlightDefault implements Flight {
     private static final float PITCH_OFFSET = 30.0F;
 
     private static final Identifier DEFAULT_WING_ID = WingsMod.Names.NONE;
+
+    public static final Codec<FlightDefault> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Codec.BOOL.optionalFieldOf(Serializer.IS_FLYING, false).forGetter(FlightDefault::isFlying),
+            Codec.INT.optionalFieldOf(Serializer.TIME_FLYING, INITIAL_TIME_FLYING)
+                    .forGetter(FlightDefault::getTimeFlying),
+            Codec.STRING.optionalFieldOf(Serializer.WING, DEFAULT_WING_ID.toString())
+                    .forGetter(FlightDefault::getWingId))
+            .apply(instance, FlightDefault::fromPersistentData));
 
     private final List<FlyingListener> flyingListeners = Lists.newArrayList();
 
@@ -58,17 +72,29 @@ public final class FlightDefault implements Flight {
 
     private WingState state = this.voidState;
 
-    private static Identifier wingIdFor(FlightApparatus wing) {
+    private static Identifier wingIdFor(@Nullable FlightApparatus wing) {
         Identifier key = wing != null ? WingsMod.WINGS.getKey(wing) : null;
         return key != null ? key : DEFAULT_WING_ID;
     }
 
-    private static FlightApparatus wingFrom(Identifier id) {
+    private static FlightApparatus wingFrom(@Nullable Identifier id) {
         return id != null ? WingsMod.WINGS.getOptional(id).orElse(FlightApparatus.NONE) : FlightApparatus.NONE;
     }
 
-    private static FlightApparatus wingFrom(String rawId) {
+    private static FlightApparatus wingFrom(@Nullable String rawId) {
         return wingFrom(Identifier.tryParse(rawId));
+    }
+
+    private static FlightDefault fromPersistentData(boolean isFlying, int timeFlying, String wingId) {
+        FlightDefault flight = new FlightDefault();
+        flight.setIsFlying(isFlying);
+        flight.setTimeFlying(timeFlying);
+        flight.setWing(wingFrom(wingId));
+        return flight;
+    }
+
+    private String getWingId() {
+        return wingIdFor(this.getWing()).toString();
     }
 
     @Override
@@ -122,7 +148,8 @@ public final class FlightDefault implements Flight {
 
     @Override
     public float getFlyingAmount(float delta) {
-        float amount = FLY_AMOUNT_CURVE.eval(MathH.lerp(this.getPrevTimeFlying(), this.getTimeFlying(), delta) / MAX_TIME_FLYING);
+        float amount = FLY_AMOUNT_CURVE
+                .eval(MathH.lerp(this.getPrevTimeFlying(), this.getTimeFlying(), delta) / MAX_TIME_FLYING);
         return Mth.clamp(amount, 0.0F, 1.0F);
     }
 
@@ -146,7 +173,8 @@ public final class FlightDefault implements Flight {
 
     @Override
     public boolean canFly(Player player) {
-        return !this.isUnderwaterFlightBlocked(player) && this.hasEffect(player) && this.flightApparatus.isUsable(player);
+        return !this.isUnderwaterFlightBlocked(player) && this.hasEffect(player)
+                && this.flightApparatus.isUsable(player);
     }
 
     @Override
@@ -174,8 +202,7 @@ public final class FlightDefault implements Flight {
                 float elevationBoost = MathH.transform(
                         Math.abs(player.getXRot()),
                         45.0F, 90.0F,
-                        1.0F, 0.0F
-                );
+                        1.0F, 0.0F);
                 float pitch = -MathH.toRadians(player.getXRot() - PITCH_OFFSET * elevationBoost);
                 float yaw = -MathH.toRadians(player.getYRot()) - MathH.PI;
                 float vxz = -Mth.cos(pitch);
@@ -185,8 +212,7 @@ public final class FlightDefault implements Flight {
                 player.setDeltaMovement(player.getDeltaMovement().add(
                         vx * vxz * speed,
                         vy * speed + Y_BOOST * (player.getXRot() > 0.0F ? elevationBoost : 1.0D),
-                        vz * vxz * speed
-                ));
+                        vz * vxz * speed));
             }
             if (this.canLand(player)) {
                 Vec3 mot = player.getDeltaMovement();
@@ -295,7 +321,11 @@ public final class FlightDefault implements Flight {
         this.animationTracker.load(animationState);
     }
 
-    public static final class Serializer {
+    private boolean isUnderwaterFlightBlocked(Player player) {
+        return player.isUnderWater() && !WingsConfig.isUnderwaterFlightAllowed();
+    }
+
+    public static final class Serializer implements NBTSerializer<FlightDefault, CompoundTag> {
         private static final String IS_FLYING = "isFlying";
 
         private static final String TIME_FLYING = "timeFlying";
@@ -308,6 +338,27 @@ public final class FlightDefault implements Flight {
             this.factory = factory;
         }
 
+        @Override
+        public CompoundTag serialize(FlightDefault instance) {
+            CompoundTag compound = new CompoundTag();
+            compound.putBoolean(IS_FLYING, instance.isFlying());
+            compound.putInt(TIME_FLYING, instance.getTimeFlying());
+            compound.putString(WING, wingIdFor(instance.getWing()).toString());
+            return compound;
+        }
+
+        @Override
+        public FlightDefault deserialize(CompoundTag compound) {
+            FlightDefault f = Objects.requireNonNull(this.factory.get(), "flight factory");
+            f.setIsFlying(compound.getBoolean(IS_FLYING).orElse(false), PlayerSet.ofAll());
+            f.setTimeFlying(compound.getInt(TIME_FLYING).orElse(INITIAL_TIME_FLYING));
+            String wingIdRaw = compound.contains(WING)
+                    ? compound.getString(WING).orElse(DEFAULT_WING_ID.toString())
+                    : DEFAULT_WING_ID.toString();
+            f.setWing(wingFrom(wingIdRaw));
+            return f;
+        }
+
         public void serialize(FlightDefault instance, ValueOutput output) {
             output.putBoolean(IS_FLYING, instance.isFlying());
             output.putInt(TIME_FLYING, instance.getTimeFlying());
@@ -315,7 +366,7 @@ public final class FlightDefault implements Flight {
         }
 
         public FlightDefault deserialize(ValueInput input) {
-            FlightDefault flight = this.factory.get();
+            FlightDefault flight = Objects.requireNonNull(this.factory.get(), "flight factory");
             flight.setIsFlying(input.getBooleanOr(IS_FLYING, false), PlayerSet.ofAll());
             flight.setTimeFlying(input.getIntOr(TIME_FLYING, INITIAL_TIME_FLYING));
             String wingIdRaw = input.getStringOr(WING, DEFAULT_WING_ID.toString());
@@ -348,9 +399,5 @@ public final class FlightDefault implements Flight {
         private void onUpdate(Player player) {
             this.activity.onUpdate(player);
         }
-    }
-
-    private boolean isUnderwaterFlightBlocked(Player player) {
-        return player.isUnderWater() && !WingsConfig.isUnderwaterFlightAllowed();
     }
 }

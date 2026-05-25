@@ -1,0 +1,11 @@
+NeoForge-26.1.x/
+minecraft_client_26.1.2/
+fabric-api-26.1.2/
+.gradle/
+build/
+run/
+run-data/
+fabric/build/
+fabric/run/
+neoforge/build/
+neoforge/run/

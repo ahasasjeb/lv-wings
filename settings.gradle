@@ -1,5 +1,10 @@
 pluginManagement {
     repositories {
+        maven {
+            name = 'Fabric'
+            url = 'https://maven.fabricmc.net/'
+        }
+        mavenCentral()
         gradlePluginPortal()
     }
 }
@@ -8,4 +13,7 @@ plugins {
     id 'org.gradle.toolchains.foojay-resolver-convention' version '0.9.0'
 }
 
-rootProject.name = "wings"
+rootProject.name = "lv-wings-fabric-neoforge"
+
+include 'fabric'
+include 'neoforge'

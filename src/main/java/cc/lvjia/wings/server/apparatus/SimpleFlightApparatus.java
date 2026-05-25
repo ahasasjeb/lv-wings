@@ -4,18 +4,19 @@ import cc.lvjia.wings.server.flight.Flight;
 import cc.lvjia.wings.server.item.WingSettings;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Objects;
 
 public final class SimpleFlightApparatus implements FlightApparatus {
-    private final WingSettings settings;
+    private final @NonNull WingSettings settings;
 
-    public SimpleFlightApparatus(WingSettings settings) {
+    public SimpleFlightApparatus(@NonNull WingSettings settings) {
         this.settings = Objects.requireNonNull(settings);
     }
 
     @Override
-    public void onFlight(Player player, Vec3 direction) {
+    public void onFlight(@NonNull Player player, @NonNull Vec3 direction) {
         int distance = Math.round((float) direction.length() * 100.0F);
         if (distance > 0) {
             player.causeFoodExhaustion(distance * this.settings.getFlyingExertion());
@@ -23,22 +24,22 @@ public final class SimpleFlightApparatus implements FlightApparatus {
     }
 
     @Override
-    public void onLanding(Player player, Vec3 direction) {
+    public void onLanding(@NonNull Player player, @NonNull Vec3 direction) {
         player.causeFoodExhaustion(this.settings.getLandingExertion());
     }
 
     @Override
-    public boolean isUsable(Player player) {
+    public boolean isUsable(@NonNull Player player) {
         return player.getFoodData().getFoodLevel() >= this.settings.getRequiredFlightSatiation();
     }
 
     @Override
-    public boolean isLandable(Player player) {
+    public boolean isLandable(@NonNull Player player) {
         return player.getFoodData().getFoodLevel() >= this.settings.getRequiredLandSatiation();
     }
 
     @Override
-    public FlightState createState(Flight flight) {
+    public @NonNull FlightState createState(@NonNull Flight flight) {
         return (player) -> {
         };
     }

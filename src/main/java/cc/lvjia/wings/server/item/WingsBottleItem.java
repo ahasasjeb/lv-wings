@@ -1,18 +1,16 @@
 package cc.lvjia.wings.server.item;
 
 import cc.lvjia.wings.server.apparatus.FlightApparatus;
-import cc.lvjia.wings.server.effect.WingsEffects;
-import cc.lvjia.wings.server.flight.Flight;
-import cc.lvjia.wings.server.flight.Flights;
 import cc.lvjia.wings.server.sound.WingsSounds;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.jspecify.annotations.NonNull;
 
+@SuppressWarnings("null")
 public class WingsBottleItem extends Item {
     private final FlightApparatus wings;
 
@@ -22,31 +20,23 @@ public class WingsBottleItem extends Item {
     }
 
     public static boolean giveWing(ServerPlayer player, FlightApparatus wings) {
-        boolean changed = Flights.get(player).filter(flight -> {
-            if (flight.getWing() != wings) {
-                flight.setWing(wings, Flight.PlayerSet.ofAll());
-                return true;
-            }
-            return false;
-        }).isPresent();
-        if (WingsEffects.WINGS.isBound()) {
-            player.addEffect(new MobEffectInstance(WingsEffects.WINGS, MobEffectInstance.INFINITE_DURATION, 0, true, false));
-        }
-        return changed;
+        return WingsBottleActions.giveWing(player, wings);
     }
 
     @Override
-    public boolean isFoil(ItemStack stack) {
+    public boolean isFoil(@NonNull ItemStack stack) {
         return true;
     }
 
     @Override
-    public ItemStack finishUsingItem(ItemStack stack, Level world, LivingEntity living) {
+    public @NonNull ItemStack finishUsingItem(@NonNull ItemStack stack, @NonNull Level world,
+            @NonNull LivingEntity living) {
         ItemStack result = super.finishUsingItem(stack, world, living);
 
         if (!world.isClientSide() && living instanceof ServerPlayer player) {
             giveWing(player, this.wings);
-            world.playSound(null, player.getX(), player.getY(), player.getZ(), WingsSounds.ITEM_ARMOR_EQUIP_WINGS.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+            world.playSound(null, player.getX(), player.getY(), player.getZ(), WingsSounds.ITEM_ARMOR_EQUIP_WINGS.get(),
+                    SoundSource.PLAYERS, 1.0F, 1.0F);
         }
 
         return result;

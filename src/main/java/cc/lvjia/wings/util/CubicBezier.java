@@ -106,10 +106,8 @@ public final class CubicBezier {
     private float getTForX(float x) {
         float intervalStart = 0;
         int currentSample = 1;
-        for (final int lastSample = SPLINE_TABLE_SIZE - 1;
-             currentSample != lastSample && this.sampleValues[currentSample] <= x;
-             currentSample++
-        ) {
+        for (final int lastSample = SPLINE_TABLE_SIZE - 1; currentSample != lastSample
+                && this.sampleValues[currentSample] <= x; currentSample++) {
             intervalStart += SAMPLE_STEP_SIZE;
         }
         currentSample--;

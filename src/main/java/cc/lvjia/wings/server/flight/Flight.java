@@ -29,13 +29,13 @@ public interface Flight {
 
     FlightApparatus getWing();
 
-    FlightAnimationState getAnimationState();
-
-    void setAnimationState(FlightAnimationState animationState);
-
     default void setWing(FlightApparatus wing) {
         this.setWing(wing, PlayerSet.empty());
     }
+
+    FlightAnimationState getAnimationState();
+
+    void setAnimationState(FlightAnimationState animationState);
 
     float getFlyingAmount(float delta);
 

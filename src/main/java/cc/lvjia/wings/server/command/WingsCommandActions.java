@@ -1,0 +1,155 @@
+package cc.lvjia.wings.server.command;
+
+import cc.lvjia.wings.server.apparatus.FlightApparatus;
+import cc.lvjia.wings.server.item.BatBloodBottleItem;
+import cc.lvjia.wings.server.item.WingsBottleItem;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.PermissionCheck;
+import net.minecraft.server.permissions.Permissions;
+import org.jspecify.annotations.NonNull;
+
+import java.util.Collection;
+import java.util.Collections;
+
+public final class WingsCommandActions {
+    public static final PermissionCheck PERMISSION_CHECK = new PermissionCheck.Require(Permissions.COMMANDS_GAMEMASTER);
+    private static final SimpleCommandExceptionType ERROR_GIVE_FAILED = new SimpleCommandExceptionType(
+            Component.translatable("commands.wings.give.failed"));
+    private static final SimpleCommandExceptionType ERROR_TAKE_FAILED = new SimpleCommandExceptionType(
+            Component.translatable("commands.wings.take.failed"));
+
+    private WingsCommandActions() {
+    }
+
+    public static int giveWingSelf(@NonNull CommandContext<CommandSourceStack> ctx, @NonNull WingsGetter getter)
+            throws CommandSyntaxException {
+        return executeGiveWing(ctx, getSelf(ctx), getter.get(ctx, "wings"));
+    }
+
+    public static int giveWing(@NonNull CommandContext<CommandSourceStack> ctx, @NonNull WingsGetter getter)
+            throws CommandSyntaxException {
+        return executeGiveWing(ctx, getTargets(ctx), getter.get(ctx, "wings"));
+    }
+
+    public static int takeWingsSelf(@NonNull CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        return executeTakeWings(ctx, getSelf(ctx));
+    }
+
+    public static int takeWings(@NonNull CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        return executeTakeWings(ctx, getTargets(ctx));
+    }
+
+    public static int takeSpecificWingsSelf(@NonNull CommandContext<CommandSourceStack> ctx,
+            @NonNull WingsGetter getter)
+            throws CommandSyntaxException {
+        return executeTakeSpecificWings(ctx, getSelf(ctx), getter.get(ctx, "wings"));
+    }
+
+    public static int takeSpecificWings(@NonNull CommandContext<CommandSourceStack> ctx,
+            @NonNull WingsGetter getter)
+            throws CommandSyntaxException {
+        return executeTakeSpecificWings(ctx, getTargets(ctx), getter.get(ctx, "wings"));
+    }
+
+    @SuppressWarnings("null")
+    private static @NonNull Collection<@NonNull ServerPlayer> getSelf(
+            @NonNull CommandContext<CommandSourceStack> ctx)
+            throws CommandSyntaxException {
+        return Collections.singletonList(ctx.getSource().getPlayerOrException());
+    }
+
+    @SuppressWarnings("null")
+    private static @NonNull Collection<@NonNull ServerPlayer> getTargets(
+            @NonNull CommandContext<CommandSourceStack> ctx)
+            throws CommandSyntaxException {
+        return EntityArgument.getPlayers(ctx, "targets");
+    }
+
+    private static @NonNull ServerPlayer getSingleTarget(@NonNull Collection<@NonNull ServerPlayer> targets) {
+        for (ServerPlayer target : targets) {
+            return target;
+        }
+        throw new IllegalArgumentException("Expected one target");
+    }
+
+    private static int executeGiveWing(@NonNull CommandContext<CommandSourceStack> ctx,
+            @NonNull Collection<@NonNull ServerPlayer> targets, @NonNull FlightApparatus wings)
+            throws CommandSyntaxException {
+        int count = 0;
+        for (ServerPlayer player : targets) {
+            if (WingsBottleItem.giveWing(player, wings)) {
+                count++;
+            }
+        }
+        if (count == 0) {
+            throw ERROR_GIVE_FAILED.create();
+        }
+        if (targets.size() == 1) {
+            ctx.getSource().sendSuccess(() -> Component.translatable("commands.wings.give.success.single",
+                    getSingleTarget(targets).getDisplayName()), true);
+        } else {
+            int successCount = count;
+            ctx.getSource().sendSuccess(
+                    () -> Component.translatable("commands.wings.give.success.multiple", successCount), true);
+        }
+        return count;
+    }
+
+    private static int executeTakeWings(@NonNull CommandContext<CommandSourceStack> ctx,
+            @NonNull Collection<@NonNull ServerPlayer> targets)
+            throws CommandSyntaxException {
+        int count = 0;
+        for (ServerPlayer player : targets) {
+            if (BatBloodBottleItem.removeWings(player)) {
+                count++;
+            }
+        }
+        if (count == 0) {
+            throw ERROR_TAKE_FAILED.create();
+        }
+        if (targets.size() == 1) {
+            ctx.getSource().sendSuccess(() -> Component.translatable("commands.wings.take.success.single",
+                    getSingleTarget(targets).getDisplayName()), true);
+        } else {
+            int successCount = count;
+            ctx.getSource().sendSuccess(
+                    () -> Component.translatable("commands.wings.take.success.multiple", successCount), true);
+        }
+        return count;
+    }
+
+    private static int executeTakeSpecificWings(@NonNull CommandContext<CommandSourceStack> ctx,
+            @NonNull Collection<@NonNull ServerPlayer> targets, @NonNull FlightApparatus wings)
+            throws CommandSyntaxException {
+        int count = 0;
+        for (ServerPlayer player : targets) {
+            if (BatBloodBottleItem.removeWings(player, wings)) {
+                count++;
+            }
+        }
+        if (count == 0) {
+            throw ERROR_TAKE_FAILED.create();
+        }
+        if (targets.size() == 1) {
+            ctx.getSource().sendSuccess(() -> Component.translatable("commands.wings.take.success.single",
+                    getSingleTarget(targets).getDisplayName()), true);
+        } else {
+            int successCount = count;
+            ctx.getSource().sendSuccess(
+                    () -> Component.translatable("commands.wings.take.success.multiple", successCount), true);
+        }
+        return count;
+    }
+
+    @FunctionalInterface
+    public interface WingsGetter {
+        @NonNull FlightApparatus get(@NonNull CommandContext<CommandSourceStack> ctx, @NonNull String name)
+                throws CommandSyntaxException;
+    }
+}

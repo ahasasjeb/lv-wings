@@ -2,15 +2,19 @@ package cc.lvjia.wings.server.dreamcatcher;
 
 import cc.lvjia.wings.server.item.WingsItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import org.jspecify.annotations.NonNull;
 
+import java.util.Objects;
 import java.util.function.IntConsumer;
 
 public final class InSomniable {
@@ -53,14 +57,14 @@ public final class InSomniable {
                 0xFBFF
         };
 
-        private final String[] members = {
+        private static final @NonNull String @NonNull [] MEMBERS = {
                 "wings.dreamcatcher.jiu",
                 "wings.dreamcatcher.sua",
                 "wings.dreamcatcher.siyeon",
                 "wings.dreamcatcher.handong",
                 "wings.dreamcatcher.yoohyeon",
                 "wings.dreamcatcher.dami",
-                "wings.dreamcatcher.gahyeon",
+                "wings.dreamcatcher.gahyeon"
         };
 
         private int state;
@@ -76,8 +80,11 @@ public final class InSomniable {
         @Override
         public State onPlay(Level world, Player player, BlockPos pos, int note) {
             if (note >= 6 && note <= 14 && ((this.state = (this.state | this.mask[note - 6]) << 1) & 0x20000) == 0) {
-                ItemStack stack = new ItemStack(WingsItems.ANGEL_WINGS_BOTTLE.get());
-                stack.set(DataComponents.CUSTOM_NAME, Component.translatable(this.members[world.getRandom().nextInt(this.members.length)]));
+                @NonNull ItemLike rewardItem = Objects.requireNonNull(WingsItems.ANGEL_WINGS_BOTTLE.get(),
+                        "angel wings bottle");
+                @NonNull String member = MEMBERS[world.getRandom().nextInt(MEMBERS.length)];
+                ItemStack stack = new ItemStack(rewardItem);
+                stack.<Component>set(customNameComponent(), Component.translatable(member));
                 ItemEntity entity = new ItemEntity(world, pos.getX() + 0.5D, pos.getY() + 1.25D, pos.getZ() + 0.5D, stack);
                 entity.setDefaultPickUpDelay();
                 world.addFreshEntity(entity);
@@ -95,6 +102,10 @@ public final class InSomniable {
         public void ifSearching(IntConsumer consumer) {
             consumer.accept(this.state);
         }
+    }
+
+    private static @NonNull DataComponentType<Component> customNameComponent() {
+        return Objects.requireNonNull(DataComponents.CUSTOM_NAME, "custom name component");
     }
 
     private static final class InSomniacState implements State {
