@@ -11,10 +11,10 @@ group = mod_group_id
 sourceSets {
     main {
         java {
-            srcDirs = ['src/main/java', '../src/common/java']
+            srcDirs = ['../src/main/java', '../src/neoforge/java']
         }
         resources {
-            srcDirs = ['src/main/resources', '../src/common/resources', 'src/generated/resources']
+            srcDirs = ['../src/main/resources', '../src/neoforge/resources', 'src/generated/resources']
             exclude("**/*.bbmodel")
             exclude("src/generated/**/.cache")
         }
@@ -30,7 +30,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 neoForge {
     version = project.neo_version
 
-    accessTransformers = project.files('src/main/resources/META-INF/accesstransformer.cfg')
+    accessTransformers = project.files('../src/neoforge/resources/META-INF/accesstransformer.cfg')
 
     runs {
         client {
@@ -54,8 +54,8 @@ neoForge {
             clientData()
             programArguments.addAll '--mod', project.mod_id, '--all',
                     '--output', file('src/generated/resources/').getAbsolutePath(),
-                    '--existing', file('src/main/resources/').getAbsolutePath(),
-                    '--existing', file('../src/common/resources/').getAbsolutePath()
+                    '--existing', file('../src/neoforge/resources/').getAbsolutePath(),
+                    '--existing', file('../src/main/resources/').getAbsolutePath()
             gameDirectory = project.file('run-data')
         }
 
@@ -99,7 +99,7 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
     ]
     inputs.properties replaceProperties
     expand replaceProperties
-    from "src/main/templates"
+    from "../src/neoforge/templates"
     into "build/generated/sources/modMetadata"
 }
 

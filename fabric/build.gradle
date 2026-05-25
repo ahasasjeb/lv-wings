@@ -17,10 +17,10 @@ repositories {
 sourceSets {
     main {
         java {
-            srcDirs = ['src/main/java', '../src/common/java']
+            srcDirs = ['../src/main/java', '../src/fabric/java']
         }
         resources {
-            srcDirs = ['src/main/resources', '../src/common/resources']
+            srcDirs = ['../src/main/resources', '../src/fabric/resources']
         }
     }
 }
