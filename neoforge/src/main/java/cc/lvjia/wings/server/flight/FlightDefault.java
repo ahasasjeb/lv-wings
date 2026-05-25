@@ -1,0 +1,356 @@
+package cc.lvjia.wings.server.flight;
+
+import cc.lvjia.wings.WingsMod;
+import cc.lvjia.wings.server.apparatus.FlightApparatus;
+import cc.lvjia.wings.server.config.WingsConfig;
+import cc.lvjia.wings.server.effect.WingsEffects;
+import cc.lvjia.wings.util.CubicBezier;
+import cc.lvjia.wings.util.MathH;
+import com.google.common.collect.Lists;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.Vec3;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Supplier;
+
+public final class FlightDefault implements Flight {
+    private static final CubicBezier FLY_AMOUNT_CURVE = new CubicBezier(0.37F, 0.13F, 0.3F, 1.12F);
+
+    private static final int INITIAL_TIME_FLYING = 0;
+
+    private static final int MAX_TIME_FLYING = 20;
+
+    private static final float MIN_SPEED = 0.03F;
+
+    private static final float MAX_SPEED = 0.0715F;
+
+    private static final float Y_BOOST = 0.05F;
+
+    private static final float FALL_REDUCTION = 0.9F;
+
+    private static final float PITCH_OFFSET = 30.0F;
+
+    private static final Identifier DEFAULT_WING_ID = WingsMod.Names.NONE;
+
+    private final List<FlyingListener> flyingListeners = Lists.newArrayList();
+
+    private final List<SyncListener> syncListeners = Lists.newArrayList();
+
+    private final WingState voidState = new WingState(FlightApparatus.NONE, FlightApparatus.FlightState.NONE);
+
+    private final FlightAnimationTracker animationTracker = new FlightAnimationTracker();
+
+    private int prevTimeFlying = INITIAL_TIME_FLYING;
+
+    private int timeFlying = INITIAL_TIME_FLYING;
+
+    private boolean isFlying;
+
+    private FlightApparatus flightApparatus = FlightApparatus.NONE;
+
+    private FlightAnimationState animationState = FlightAnimationState.IDLE;
+
+    private WingState state = this.voidState;
+
+    private static Identifier wingIdFor(FlightApparatus wing) {
+        Identifier key = wing != null ? WingsMod.WINGS.getKey(wing) : null;
+        return key != null ? key : DEFAULT_WING_ID;
+    }
+
+    private static FlightApparatus wingFrom(Identifier id) {
+        return id != null ? WingsMod.WINGS.getOptional(id).orElse(FlightApparatus.NONE) : FlightApparatus.NONE;
+    }
+
+    private static FlightApparatus wingFrom(String rawId) {
+        return wingFrom(Identifier.tryParse(rawId));
+    }
+
+    @Override
+    public void setIsFlying(boolean isFlying, PlayerSet players) {
+        if (this.isFlying != isFlying) {
+            this.isFlying = isFlying;
+            this.flyingListeners.forEach(FlyingListener.onChangeUsing(isFlying));
+            this.sync(players);
+        }
+    }
+
+    @Override
+    public boolean isFlying() {
+        return this.isFlying;
+    }
+
+    @Override
+    public int getTimeFlying() {
+        return this.timeFlying;
+    }
+
+    @Override
+    public void setTimeFlying(int timeFlying) {
+        this.timeFlying = timeFlying;
+    }
+
+    @Override
+    public void setWing(FlightApparatus wing, PlayerSet players) {
+        Objects.requireNonNull(wing);
+        if (this.flightApparatus != wing) {
+            this.flightApparatus = wing;
+            this.state = this.state.next(wing);
+            this.sync(players);
+        }
+    }
+
+    @Override
+    public FlightApparatus getWing() {
+        return this.flightApparatus;
+    }
+
+    @Override
+    public FlightAnimationState getAnimationState() {
+        return this.animationState;
+    }
+
+    @Override
+    public void setAnimationState(FlightAnimationState animationState) {
+        this.loadAnimationState(animationState);
+    }
+
+    @Override
+    public float getFlyingAmount(float delta) {
+        float amount = FLY_AMOUNT_CURVE.eval(MathH.lerp(this.getPrevTimeFlying(), this.getTimeFlying(), delta) / MAX_TIME_FLYING);
+        return Mth.clamp(amount, 0.0F, 1.0F);
+    }
+
+    private int getPrevTimeFlying() {
+        return this.prevTimeFlying;
+    }
+
+    private void setPrevTimeFlying(int prevTimeFlying) {
+        this.prevTimeFlying = prevTimeFlying;
+    }
+
+    @Override
+    public void registerFlyingListener(FlyingListener listener) {
+        this.flyingListeners.add(listener);
+    }
+
+    @Override
+    public void registerSyncListener(SyncListener listener) {
+        this.syncListeners.add(listener);
+    }
+
+    @Override
+    public boolean canFly(Player player) {
+        return !this.isUnderwaterFlightBlocked(player) && this.hasEffect(player) && this.flightApparatus.isUsable(player);
+    }
+
+    @Override
+    public boolean hasEffect(Player player) {
+        return WingsEffects.WINGS.isBound() && player.hasEffect(WingsEffects.WINGS);
+    }
+
+    @Override
+    public boolean canLand(Player player) {
+        return this.flightApparatus.isLandable(player);
+    }
+
+    private void onWornUpdate(Player player) {
+        boolean underwaterFlightBlocked = this.isUnderwaterFlightBlocked(player);
+        if (underwaterFlightBlocked && this.isFlying()) {
+            if (player.level().isClientSide()) {
+                this.setIsFlying(false, PlayerSet.empty());
+            } else {
+                this.setIsFlying(false, PlayerSet.ofAll());
+            }
+        }
+        if (player.isEffectiveAi() && !underwaterFlightBlocked) {
+            if (this.isFlying()) {
+                float speed = Mth.clampedLerp(MIN_SPEED, MAX_SPEED, player.zza);
+                float elevationBoost = MathH.transform(
+                        Math.abs(player.getXRot()),
+                        45.0F, 90.0F,
+                        1.0F, 0.0F
+                );
+                float pitch = -MathH.toRadians(player.getXRot() - PITCH_OFFSET * elevationBoost);
+                float yaw = -MathH.toRadians(player.getYRot()) - MathH.PI;
+                float vxz = -Mth.cos(pitch);
+                float vy = Mth.sin(pitch);
+                float vz = Mth.cos(yaw);
+                float vx = Mth.sin(yaw);
+                player.setDeltaMovement(player.getDeltaMovement().add(
+                        vx * vxz * speed,
+                        vy * speed + Y_BOOST * (player.getXRot() > 0.0F ? elevationBoost : 1.0D),
+                        vz * vxz * speed
+                ));
+            }
+            if (this.canLand(player)) {
+                Vec3 mot = player.getDeltaMovement();
+                if (mot.y() < 0.0D) {
+                    player.setDeltaMovement(mot.multiply(1.0D, FALL_REDUCTION, 1.0D));
+                }
+                player.fallDistance = 0.0F;
+            }
+        }
+        if (!player.level().isClientSide()) {
+            if (underwaterFlightBlocked) {
+                this.state = this.state.notFlying();
+                return;
+            }
+            if (this.flightApparatus.isUsable(player)) {
+                (this.state = this.state.next(this.flightApparatus)).onUpdate(player);
+            } else if (this.isFlying()) {
+                this.setIsFlying(false, PlayerSet.ofAll());
+                this.state = this.state.notFlying();
+            }
+        }
+    }
+
+    @Override
+    public void tick(Player player) {
+        boolean hasEffect = this.hasEffect(player);
+        if (hasEffect || !player.isEffectiveAi()) {
+            if (!hasEffect && !player.level().isClientSide()) {
+                this.setWing(FlightApparatus.NONE, PlayerSet.ofAll());
+            }
+            this.onWornUpdate(player);
+        } else if (!player.level().isClientSide()) {
+            this.setWing(FlightApparatus.NONE, PlayerSet.ofAll());
+            if (this.isFlying()) {
+                this.setIsFlying(false, PlayerSet.ofAll());
+            }
+        }
+        this.setPrevTimeFlying(this.getTimeFlying());
+        if (this.isFlying()) {
+            if (this.getTimeFlying() < MAX_TIME_FLYING) {
+                this.setTimeFlying(this.getTimeFlying() + 1);
+            } else if (player.isLocalPlayer() && player.onGround()) {
+                this.setIsFlying(false, PlayerSet.ofOthers());
+            }
+        } else {
+            if (this.getTimeFlying() > INITIAL_TIME_FLYING) {
+                this.setTimeFlying(this.getTimeFlying() - 1);
+            }
+        }
+        if (!player.level().isClientSide()) {
+            boolean shouldSyncAnimation = this.animationTracker.tick(this, player);
+            this.animationState = this.animationTracker.getState();
+            if (shouldSyncAnimation) {
+                this.sync(PlayerSet.ofOthers());
+            }
+        }
+    }
+
+    @Override
+    public void onFlown(Player player, Vec3 direction) {
+        if (this.isFlying()) {
+            this.flightApparatus.onFlight(player, direction);
+        } else if (player.getDeltaMovement().y() < -0.5D) {
+            this.flightApparatus.onLanding(player, direction);
+        }
+    }
+
+    @Override
+    public void clone(Flight other) {
+        this.setIsFlying(other.isFlying());
+        this.setTimeFlying(other.getTimeFlying());
+        this.setWing(other.getWing());
+        this.loadAnimationState(other.getAnimationState());
+    }
+
+    @Override
+    public void sync(PlayerSet players) {
+        // 这里只分发“状态变了”，不直接耦合网络层，这样客户端视图和服务端广播都能复用同一条链路。
+        this.syncListeners.forEach(SyncListener.onSyncUsing(players));
+    }
+
+    @Override
+    public void serialize(FriendlyByteBuf buf) {
+        buf.writeBoolean(this.isFlying());
+        buf.writeVarInt(this.getTimeFlying());
+        buf.writeIdentifier(wingIdFor(this.getWing()));
+        buf.writeByte(this.getAnimationState().id());
+    }
+
+    @Override
+    public void deserialize(FriendlyByteBuf buf) {
+        this.setIsFlying(buf.readBoolean());
+        this.setTimeFlying(buf.readVarInt());
+        Identifier wingId;
+        try {
+            wingId = buf.readIdentifier();
+        } catch (IllegalArgumentException ex) {
+            wingId = DEFAULT_WING_ID;
+        }
+        this.setWing(wingFrom(wingId));
+        this.loadAnimationState(FlightAnimationState.byId(buf.readUnsignedByte()));
+    }
+
+    private void loadAnimationState(FlightAnimationState animationState) {
+        this.animationState = Objects.requireNonNull(animationState);
+        this.animationTracker.load(animationState);
+    }
+
+    public static final class Serializer {
+        private static final String IS_FLYING = "isFlying";
+
+        private static final String TIME_FLYING = "timeFlying";
+
+        private static final String WING = "wing";
+
+        private final Supplier<FlightDefault> factory;
+
+        public Serializer(Supplier<FlightDefault> factory) {
+            this.factory = factory;
+        }
+
+        public void serialize(FlightDefault instance, ValueOutput output) {
+            output.putBoolean(IS_FLYING, instance.isFlying());
+            output.putInt(TIME_FLYING, instance.getTimeFlying());
+            output.putString(WING, wingIdFor(instance.getWing()).toString());
+        }
+
+        public FlightDefault deserialize(ValueInput input) {
+            FlightDefault flight = this.factory.get();
+            flight.setIsFlying(input.getBooleanOr(IS_FLYING, false), PlayerSet.ofAll());
+            flight.setTimeFlying(input.getIntOr(TIME_FLYING, INITIAL_TIME_FLYING));
+            String wingIdRaw = input.getStringOr(WING, DEFAULT_WING_ID.toString());
+            flight.setWing(wingFrom(wingIdRaw));
+            return flight;
+        }
+    }
+
+    private final class WingState {
+        private final FlightApparatus apparatus;
+
+        private final FlightApparatus.FlightState activity;
+
+        private WingState(FlightApparatus apparatus, FlightApparatus.FlightState activity) {
+            this.apparatus = apparatus;
+            this.activity = activity;
+        }
+
+        private WingState notFlying() {
+            return FlightDefault.this.voidState;
+        }
+
+        private WingState next(FlightApparatus wf) {
+            if (this.apparatus.equals(wf)) {
+                return this;
+            }
+            return new WingState(wf, wf.createState(FlightDefault.this));
+        }
+
+        private void onUpdate(Player player) {
+            this.activity.onUpdate(player);
+        }
+    }
+
+    private boolean isUnderwaterFlightBlocked(Player player) {
+        return player.isUnderWater() && !WingsConfig.isUnderwaterFlightAllowed();
+    }
+}
