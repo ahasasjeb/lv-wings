@@ -117,6 +117,14 @@ public final class Model3DTexture extends ModelPart.Cube {
                 (float) (u + width), (float) (v + height));
     }
 
+    public static ModelPart.Cube create(
+            float posX, float posY, float posZ,
+            int width, int height,
+            int u, int v,
+            int textureWidth, int textureHeight) {
+        return create(posX, posY, posZ, width, height, u, v);
+    }
+
     private static Field findPolygonsField() {
         for (Field field : ModelPart.Cube.class.getDeclaredFields()) {
             if (Modifier.isStatic(field.getModifiers())) {
