@@ -15,7 +15,7 @@ import net.minecraft.server.permissions.Permissions;
 import org.jspecify.annotations.NonNull;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
 
 public final class WingsCommandActions {
     public static final PermissionCheck PERMISSION_CHECK = new PermissionCheck.Require(Permissions.COMMANDS_GAMEMASTER);
@@ -57,10 +57,11 @@ public final class WingsCommandActions {
         return executeTakeSpecificWings(ctx, getTargets(ctx), getter.get(ctx, "wings"));
     }
 
+    @SuppressWarnings("null")
     private static @NonNull Collection<@NonNull ServerPlayer> getSelf(
             @NonNull CommandContext<CommandSourceStack> ctx)
             throws CommandSyntaxException {
-        return List.<@NonNull ServerPlayer>of(ctx.getSource().getPlayerOrException());
+        return Collections.singletonList(ctx.getSource().getPlayerOrException());
     }
 
     @SuppressWarnings("null")
