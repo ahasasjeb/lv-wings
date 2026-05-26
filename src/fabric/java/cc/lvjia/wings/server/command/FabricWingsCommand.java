@@ -20,7 +20,7 @@ import static net.minecraft.commands.Commands.literal;
 @SuppressWarnings("null")
 public class FabricWingsCommand {
     public static void register(@NonNull CommandDispatcher<CommandSourceStack> dispatcher,
-            @NonNull CommandBuildContext buildContext) {
+                                @NonNull CommandBuildContext buildContext) {
         dispatcher.register(literal("wings").requires(Commands.hasPermission(WingsCommandActions.PERMISSION_CHECK))
                 .then(literal("give")
                         .then(argument("wings", ResourceArgument.resource(buildContext, WingsMod.WINGS_KEY))
@@ -39,7 +39,7 @@ public class FabricWingsCommand {
     }
 
     private static @NonNull FlightApparatus getWings(@NonNull CommandContext<CommandSourceStack> ctx,
-            @NonNull String name) throws CommandSyntaxException {
+                                                     @NonNull String name) throws CommandSyntaxException {
         return Objects.requireNonNull(ResourceArgument.getResource(ctx, name, WingsMod.WINGS_KEY).value(),
                 "wings argument");
     }

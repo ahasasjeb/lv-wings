@@ -27,7 +27,7 @@ public final class BuffedFlightApparatus implements FlightApparatus {
     }
 
     public BuffedFlightApparatus(@NonNull WingSettings settings, @NonNull MobAvoidanceSettings mobAvoidance,
-            @NonNull EffectSettings... effects) {
+                                 @NonNull EffectSettings... effects) {
         this(new SimpleFlightApparatus(settings), mobAvoidance, effects);
     }
 
@@ -36,7 +36,7 @@ public final class BuffedFlightApparatus implements FlightApparatus {
     }
 
     public BuffedFlightApparatus(@NonNull FlightApparatus delegate, @NonNull MobAvoidanceSettings mobAvoidance,
-            @NonNull EffectSettings... effects) {
+                                 @NonNull EffectSettings... effects) {
         this.delegate = Objects.requireNonNull(delegate, "委托");
         this.mobAvoidance = Objects.requireNonNull(mobAvoidance, "敌对生物回避设置");
         this.effects = copyNonNullEffects(effects);
@@ -100,7 +100,7 @@ public final class BuffedFlightApparatus implements FlightApparatus {
     }
 
     private static void pushAwayFromPlayer(@NonNull Mob mob, @NonNull Player player,
-            @NonNull MobAvoidanceSettings settings) {
+                                           @NonNull MobAvoidanceSettings settings) {
         double radius = settings.radius();
         if (radius <= 0.0D) {
             return;
@@ -194,7 +194,7 @@ public final class BuffedFlightApparatus implements FlightApparatus {
     }
 
     public record EffectSettings(@NonNull Holder<MobEffect> effect, int amplifier, int durationTicks,
-            int refreshThreshold) {
+                                 int refreshThreshold) {
         public EffectSettings {
             Objects.requireNonNull(effect, "效果");
             if (durationTicks <= 0) {
@@ -206,7 +206,7 @@ public final class BuffedFlightApparatus implements FlightApparatus {
         }
 
         public static @NonNull EffectSettings of(@NonNull Holder<MobEffect> effect, int amplifier,
-                int durationTicks, int refreshThreshold) {
+                                                 int durationTicks, int refreshThreshold) {
             return new EffectSettings(effect, amplifier, durationTicks, refreshThreshold);
         }
 

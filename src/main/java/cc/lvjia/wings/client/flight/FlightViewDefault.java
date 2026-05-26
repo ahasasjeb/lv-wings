@@ -3,8 +3,8 @@ package cc.lvjia.wings.client.flight;
 import cc.lvjia.wings.client.apparatus.WingForm;
 import cc.lvjia.wings.client.flight.state.State;
 import cc.lvjia.wings.client.flight.state.StateIdle;
-import cc.lvjia.wings.server.flight.FlightAnimationState;
 import cc.lvjia.wings.server.flight.Flight;
+import cc.lvjia.wings.server.flight.FlightAnimationState;
 import cc.lvjia.wings.util.function.FloatConsumer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -93,7 +93,8 @@ public final class FlightViewDefault implements FlightView {
         void ifFormPresent(@NonNull Consumer<FormRenderer> consumer);
     }
 
-    private record PresentWingState(@NonNull WingForm<? extends @NonNull Animator> wing, Strategy behavior) implements WingState {
+    private record PresentWingState(@NonNull WingForm<? extends @NonNull Animator> wing,
+                                    Strategy behavior) implements WingState {
 
         public static <T extends @NonNull Animator> WingState newState(@NonNull WingForm<T> shape) {
             return new PresentWingState(shape, new WingStrategy<>(shape));
@@ -145,7 +146,7 @@ public final class FlightViewDefault implements FlightView {
 
                     @Override
                     public void render(@NonNull PoseStack matrixStack, @NonNull VertexConsumer buffer, int packedLight,
-                            int packedOverlay, float red, float green, float blue, float alpha, float delta) {
+                                       int packedOverlay, float red, float green, float blue, float alpha, float delta) {
                         WingStrategy.this.shape.getModel().render(WingStrategy.this.animator, delta, matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
                     }
                 };

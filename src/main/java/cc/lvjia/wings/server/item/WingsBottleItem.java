@@ -30,7 +30,7 @@ public class WingsBottleItem extends Item {
 
     @Override
     public @NonNull ItemStack finishUsingItem(@NonNull ItemStack stack, @NonNull Level world,
-            @NonNull LivingEntity living) {
+                                              @NonNull LivingEntity living) {
         ItemStack result = super.finishUsingItem(stack, world, living);
 
         if (!world.isClientSide() && living instanceof ServerPlayer player) {

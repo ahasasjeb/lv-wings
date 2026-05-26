@@ -31,8 +31,8 @@ public final class ServerEventActions {
     }
 
     public static @NonNull InteractionResult onPlayerEntityInteract(@NonNull Player player,
-            @NonNull InteractionHand hand, @NonNull Entity target, @NonNull Supplier<ItemStack> batBloodBottle,
-            @Nullable DestroyedItemCallback destroyedItemCallback) {
+                                                                    @NonNull InteractionHand hand, @NonNull Entity target, @NonNull Supplier<ItemStack> batBloodBottle,
+                                                                    @Nullable DestroyedItemCallback destroyedItemCallback) {
         ItemStack stack = player.getItemInHand(hand);
         Item glassBottle = Objects.requireNonNull(Items.GLASS_BOTTLE, "glass bottle");
         if (!(target instanceof Bat) || stack.getItem() != glassBottle) {

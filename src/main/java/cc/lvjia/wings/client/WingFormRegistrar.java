@@ -25,7 +25,7 @@ public final class WingFormRegistrar {
     }
 
     public static void register(@NonNull EntityModelSet modelSet, @NonNull ModelLayerLocation avianWings,
-            @NonNull ModelLayerLocation insectoidWings) {
+                                @NonNull ModelLayerLocation insectoidWings) {
         WingForm.clear();
         WingForm.register(WingsMod.ANGEL_WINGS, createAvianWings(modelSet, avianWings, wingKey(WingsMod.ANGEL_WINGS)));
         WingForm.register(WingsMod.PARROT_WINGS, createAvianWings(modelSet, avianWings, wingKey(WingsMod.PARROT_WINGS)));
@@ -46,12 +46,12 @@ public final class WingFormRegistrar {
     }
 
     private static @NonNull WingForm<@NonNull AnimatorAvian> createAvianWings(@NonNull EntityModelSet modelSet,
-            @NonNull ModelLayerLocation layer, @NonNull Identifier name) {
+                                                                              @NonNull ModelLayerLocation layer, @NonNull Identifier name) {
         return createWings(name, AnimatorAvian::new, new ModelWingsAvian(modelSet.bakeLayer(layer)));
     }
 
     private static @NonNull WingForm<@NonNull AnimatorAvian> createEndPortalWings(@NonNull EntityModelSet modelSet,
-            @NonNull ModelLayerLocation layer, @NonNull Identifier name) {
+                                                                                  @NonNull ModelLayerLocation layer, @NonNull Identifier name) {
         return createWings(name, AnimatorAvian::new, new ModelWingsAvian(modelSet.bakeLayer(layer)),
                 RenderTypes::endPortal);
     }
@@ -62,13 +62,13 @@ public final class WingFormRegistrar {
     }
 
     private static <A extends @NonNull Animator> @NonNull WingForm<A> createWings(@NonNull Identifier name,
-            @NonNull Supplier<@NonNull A> animator, @NonNull ModelWings<A> model) {
+                                                                                  @NonNull Supplier<@NonNull A> animator, @NonNull ModelWings<A> model) {
         return createWings(name, animator, model, null);
     }
 
     private static <A extends @NonNull Animator> @NonNull WingForm<A> createWings(@NonNull Identifier name,
-            @NonNull Supplier<@NonNull A> animator, @NonNull ModelWings<A> model,
-            @Nullable Supplier<@NonNull RenderType> renderType) {
+                                                                                  @NonNull Supplier<@NonNull A> animator, @NonNull ModelWings<A> model,
+                                                                                  @Nullable Supplier<@NonNull RenderType> renderType) {
         String texturePath = "textures/entity/" + name.getPath() + ".png";
         Identifier texture = Objects.requireNonNull(
                 Identifier.tryBuild(Objects.requireNonNull(name.getNamespace(), "namespace"), texturePath),

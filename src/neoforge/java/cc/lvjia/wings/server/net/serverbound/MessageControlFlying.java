@@ -24,14 +24,13 @@ import java.util.concurrent.ConcurrentHashMap;
  * 服务端会再次校验玩家是否允许飞行（例如是否拥有翅膀/是否满足条件）。
  */
 public record MessageControlFlying(boolean isFlying) implements Message {
-    private static final Logger LOGGER = LogManager.getLogger("WingsNetwork");
-    private static final int MIN_CONTROL_INTERVAL_TICKS = 2;
-    private static final Map<UUID, Integer> LAST_CONTROL_TICKS = new ConcurrentHashMap<>();
-
     public static final CustomPacketPayload.Type<MessageControlFlying> TYPE = new CustomPacketPayload.Type<>(WingsMod.locate("control_flying"));
     public static final StreamCodec<FriendlyByteBuf, MessageControlFlying> STREAM_CODEC =
             StreamCodec.of((buf, message) -> buf.writeBoolean(message.isFlying()),
                     buf -> new MessageControlFlying(buf.readBoolean()));
+    private static final Logger LOGGER = LogManager.getLogger("WingsNetwork");
+    private static final int MIN_CONTROL_INTERVAL_TICKS = 2;
+    private static final Map<UUID, Integer> LAST_CONTROL_TICKS = new ConcurrentHashMap<>();
 
     public static void handle(MessageControlFlying message, IPayloadContext context) {
         context.enqueueWork(() -> {

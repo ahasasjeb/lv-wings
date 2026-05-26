@@ -45,11 +45,11 @@ public final class FlightDefault implements Flight {
     private static final Identifier DEFAULT_WING_ID = WingsMod.Names.NONE;
 
     public static final Codec<FlightDefault> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.BOOL.optionalFieldOf(Serializer.IS_FLYING, false).forGetter(FlightDefault::isFlying),
-            Codec.INT.optionalFieldOf(Serializer.TIME_FLYING, INITIAL_TIME_FLYING)
-                    .forGetter(FlightDefault::getTimeFlying),
-            Codec.STRING.optionalFieldOf(Serializer.WING, DEFAULT_WING_ID.toString())
-                    .forGetter(FlightDefault::getWingId))
+                    Codec.BOOL.optionalFieldOf(Serializer.IS_FLYING, false).forGetter(FlightDefault::isFlying),
+                    Codec.INT.optionalFieldOf(Serializer.TIME_FLYING, INITIAL_TIME_FLYING)
+                            .forGetter(FlightDefault::getTimeFlying),
+                    Codec.STRING.optionalFieldOf(Serializer.WING, DEFAULT_WING_ID.toString())
+                            .forGetter(FlightDefault::getWingId))
             .apply(instance, FlightDefault::fromPersistentData));
 
     private final List<FlyingListener> flyingListeners = Lists.newArrayList();

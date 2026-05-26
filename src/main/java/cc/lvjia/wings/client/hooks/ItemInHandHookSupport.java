@@ -18,7 +18,7 @@ public final class ItemInHandHookSupport {
     }
 
     public static boolean canRenderEmptyOffhand(boolean isMainHand, AbstractClientPlayer player, InteractionHand hand,
-            ItemStack offHandItem, ItemStack mainHandItem) {
+                                                ItemStack offHandItem, ItemStack mainHandItem) {
         if (isMainHand) {
             return true;
         }
@@ -37,7 +37,7 @@ public final class ItemInHandHookSupport {
     }
 
     public static boolean onCheckDoReequipAnimation(ItemStack from, ItemStack to, int slot,
-            EmptyOffhandAllowance emptyOffhandAllowance, NormalReequipRule normalReequipRule) {
+                                                    EmptyOffhandAllowance emptyOffhandAllowance, NormalReequipRule normalReequipRule) {
         boolean fromEmpty = from.isEmpty();
         boolean toEmpty = to.isEmpty();
         boolean isOffHand = slot == -1;

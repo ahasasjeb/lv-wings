@@ -29,7 +29,7 @@ public final class SodiumBypassVertexConsumer implements VertexConsumer {
             return delegate;
         }
         return Objects.requireNonNull(CACHE.computeIfAbsent(delegate,
-                key -> new SodiumBypassVertexConsumer(Objects.requireNonNull(key, "delegate"))),
+                        key -> new SodiumBypassVertexConsumer(Objects.requireNonNull(key, "delegate"))),
                 "vertex consumer wrapper");
     }
 

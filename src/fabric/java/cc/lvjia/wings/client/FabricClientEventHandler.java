@@ -1,9 +1,9 @@
 package cc.lvjia.wings.client;
 
-import cc.lvjia.wings.client.audio.WingsSound;
 import cc.lvjia.wings.client.asm.AnimatePlayerModelEvent;
 import cc.lvjia.wings.client.asm.ApplyPlayerRotationsEvent;
 import cc.lvjia.wings.client.asm.GetCameraEyeHeightEvent;
+import cc.lvjia.wings.client.audio.WingsSound;
 import cc.lvjia.wings.client.event.EmptyOffHandPresentEvent;
 import cc.lvjia.wings.client.flight.FlightPoseSupport;
 import cc.lvjia.wings.client.flight.FlightView;
@@ -125,8 +125,8 @@ public final class FabricClientEventHandler {
             return 0.0F;
         }
 
-        final boolean[] handled = { false };
-        final float[] rollOut = { 0.0F };
+        final boolean[] handled = {false};
+        final float[] rollOut = {0.0F};
         Flights.ifPlayer(cameraEntity, (player, flight) -> {
             handled[0] = true;
             float amt = flight.getFlyingAmount(delta);

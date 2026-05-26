@@ -9,12 +9,12 @@
     "ServerPlayerMixin"
   ],
   "client": [
-    "NeoForgeCameraMixin",
     "ClientHooksMixin",
+    "NeoForgeCameraMixin",
     "NeoForgeItemInHandRendererMixin",
-    "client.LivingEntityRendererAccessor",
     "PlayerModelMixin",
-    "PlayerRendererMixin"
+    "PlayerRendererMixin",
+    "client.LivingEntityRendererAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

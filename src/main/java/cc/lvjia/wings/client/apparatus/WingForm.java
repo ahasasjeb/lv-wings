@@ -23,7 +23,7 @@ public final class WingForm<A extends @NonNull Animator> {
     private final @NonNull ModelWings<A> model;
 
     private WingForm(@NonNull Supplier<@NonNull A> animator, @NonNull ModelWings<A> model,
-            @NonNull Identifier texture, @NonNull Supplier<@NonNull RenderType> renderType) {
+                     @NonNull Identifier texture, @NonNull Supplier<@NonNull RenderType> renderType) {
         this.animator = Objects.requireNonNull(animator);
 
         this.model = Objects.requireNonNull(model);
@@ -32,13 +32,13 @@ public final class WingForm<A extends @NonNull Animator> {
     }
 
     public static <A extends @NonNull Animator> @NonNull WingForm<A> of(@NonNull Supplier<@NonNull A> animator,
-            @NonNull ModelWings<A> model, @NonNull Identifier texture) {
+                                                                        @NonNull ModelWings<A> model, @NonNull Identifier texture) {
         return new WingForm<>(animator, model, texture, () -> RenderTypes.entityCutout(texture));
     }
 
     public static <A extends @NonNull Animator> @NonNull WingForm<A> of(@NonNull Supplier<@NonNull A> animator,
-            @NonNull ModelWings<A> model, @NonNull Identifier texture,
-            @NonNull Supplier<@NonNull RenderType> renderType) {
+                                                                        @NonNull ModelWings<A> model, @NonNull Identifier texture,
+                                                                        @NonNull Supplier<@NonNull RenderType> renderType) {
         return new WingForm<>(animator, model, texture, renderType);
     }
 

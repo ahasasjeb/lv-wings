@@ -31,7 +31,7 @@ public abstract class PlayerRendererMixin {
      */
     @Inject(method = "setupRotations(Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;FF)V", at = @At("RETURN"))
     private void wings$applyRotations(AvatarRenderState state, PoseStack poseStack, float ageInTicks, float rotationYaw,
-            CallbackInfo ci) {
+                                      CallbackInfo ci) {
         WingsHooksClient.onApplyPlayerRotations(state, poseStack);
     }
 }

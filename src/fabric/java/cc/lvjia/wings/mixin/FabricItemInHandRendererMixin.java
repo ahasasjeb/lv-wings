@@ -56,7 +56,7 @@ public abstract class FabricItemInHandRendererMixin {
      */
     @Inject(method = "renderArmWithItem(Lnet/minecraft/client/player/AbstractClientPlayer;FFLnet/minecraft/world/InteractionHand;FLnet/minecraft/world/item/ItemStack;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;I)V", at = @At("HEAD"))
     private void wings$cacheHand(AbstractClientPlayer player, float f, float f1, InteractionHand hand, float f2,
-            ItemStack stack, float f3, PoseStack poseStack, SubmitNodeCollector collector, int light, CallbackInfo ci) {
+                                 ItemStack stack, float f3, PoseStack poseStack, SubmitNodeCollector collector, int light, CallbackInfo ci) {
         this.wings$currentHand = hand;
         this.wings$forceOppositeArm = false;
     }
@@ -79,8 +79,8 @@ public abstract class FabricItemInHandRendererMixin {
      */
     @ModifyVariable(method = "renderArmWithItem(Lnet/minecraft/client/player/AbstractClientPlayer;FFLnet/minecraft/world/InteractionHand;FLnet/minecraft/world/item/ItemStack;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;I)V", at = @At(value = "STORE"), ordinal = 0)
     private boolean wings$allowEmptyOffhandRender(boolean original, AbstractClientPlayer player, float f, float f1,
-            InteractionHand hand, float f2, ItemStack stack, float f3, PoseStack poseStack,
-            SubmitNodeCollector collector, int light) {
+                                                  InteractionHand hand, float f2, ItemStack stack, float f3, PoseStack poseStack,
+                                                  SubmitNodeCollector collector, int light) {
         boolean allowed = WingsHooksClient.onCheckRenderEmptyHand(original, player, hand, stack, this.mainHandItem);
         this.wings$forceOppositeArm = !original && allowed && this.wings$currentHand == InteractionHand.OFF_HAND;
         return allowed;
@@ -94,8 +94,8 @@ public abstract class FabricItemInHandRendererMixin {
      */
     @ModifyVariable(method = "renderArmWithItem(Lnet/minecraft/client/player/AbstractClientPlayer;FFLnet/minecraft/world/InteractionHand;FLnet/minecraft/world/item/ItemStack;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;I)V", at = @At(value = "STORE"), ordinal = 0)
     private HumanoidArm wings$restoreOffhandArm(HumanoidArm arm, AbstractClientPlayer player, float f, float f1,
-            InteractionHand hand, float f2, ItemStack stack, float f3, PoseStack poseStack,
-            SubmitNodeCollector collector, int light) {
+                                                InteractionHand hand, float f2, ItemStack stack, float f3, PoseStack poseStack,
+                                                SubmitNodeCollector collector, int light) {
         if (this.wings$forceOppositeArm && hand == InteractionHand.OFF_HAND) {
             return player.getMainArm().getOpposite();
         }

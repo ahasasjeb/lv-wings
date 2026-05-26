@@ -58,7 +58,7 @@ public final class Model3DTexture extends ModelPart.Cube {
             throw new RuntimeException("Model3DTexture: cannot access polygon constructor signature", e);
         }
         Object[] polygons = (Object[]) Array.newInstance(polygonClass, faceCount);
-        int[] quadIndex = { 0 };
+        int[] quadIndex = {0};
         float x0 = this.minX;
         float x1 = (this.minX + this.width);
         float y0 = this.minY;
@@ -166,7 +166,7 @@ public final class Model3DTexture extends ModelPart.Cube {
 
     @Override
     public void compile(PoseStack.@NonNull Pose pose, @NonNull VertexConsumer buffer, int packedLight,
-            int packedOverlay, int color) {
+                        int packedOverlay, int color) {
         // Wrap buffer to bypass Sodium's vertex writer optimization
         VertexConsumer safeBuffer = Objects.requireNonNull(buffer, "vertex consumer");
         super.compile(pose, SodiumBypassVertexConsumer.wrap(safeBuffer), packedLight, packedOverlay, color);
@@ -174,6 +174,6 @@ public final class Model3DTexture extends ModelPart.Cube {
 
     interface FaceAdder {
         void add(float x, float y, float z, float x2, float y2, float z2, float u1, float v1, float u2, float v2,
-                Direction normal);
+                 Direction normal);
     }
 }

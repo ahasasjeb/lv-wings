@@ -27,7 +27,7 @@ public final class FabricLayerCapeWings extends RenderLayer<AvatarRenderState, P
 
     @Override
     public void submit(@NonNull PoseStack poseStack, @NonNull SubmitNodeCollector submitNodeCollector, int packedLight,
-            @NonNull AvatarRenderState state, float limbSwing, float limbSwingAmount) {
+                       @NonNull AvatarRenderState state, float limbSwing, float limbSwingAmount) {
         WingsLayerRenderer.submitCape(poseStack, submitNodeCollector, packedLight, state, this.model);
     }
 }

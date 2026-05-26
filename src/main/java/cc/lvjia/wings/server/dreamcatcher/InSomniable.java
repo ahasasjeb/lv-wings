@@ -8,8 +8,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.NonNull;
@@ -26,6 +26,10 @@ public final class InSomniable {
 
     private InSomniable(State state) {
         this.state = state;
+    }
+
+    private static @NonNull DataComponentType<Component> customNameComponent() {
+        return Objects.requireNonNull(DataComponents.CUSTOM_NAME, "custom name component");
     }
 
     public void onPlay(Level world, Player player, BlockPos pos, int note) {
@@ -45,6 +49,15 @@ public final class InSomniable {
     }
 
     private static final class SearchState implements State {
+        private static final @NonNull String @NonNull [] MEMBERS = {
+                "wings.dreamcatcher.jiu",
+                "wings.dreamcatcher.sua",
+                "wings.dreamcatcher.siyeon",
+                "wings.dreamcatcher.handong",
+                "wings.dreamcatcher.yoohyeon",
+                "wings.dreamcatcher.dami",
+                "wings.dreamcatcher.gahyeon"
+        };
         private final int[] mask = {
                 0xBFBE,
                 0xFFFD,
@@ -56,17 +69,6 @@ public final class InSomniable {
                 0xF7FF,
                 0xFBFF
         };
-
-        private static final @NonNull String @NonNull [] MEMBERS = {
-                "wings.dreamcatcher.jiu",
-                "wings.dreamcatcher.sua",
-                "wings.dreamcatcher.siyeon",
-                "wings.dreamcatcher.handong",
-                "wings.dreamcatcher.yoohyeon",
-                "wings.dreamcatcher.dami",
-                "wings.dreamcatcher.gahyeon"
-        };
-
         private int state;
 
         private SearchState() {
@@ -84,7 +86,7 @@ public final class InSomniable {
                         "angel wings bottle");
                 @NonNull String member = MEMBERS[world.getRandom().nextInt(MEMBERS.length)];
                 ItemStack stack = new ItemStack(rewardItem);
-                stack.<Component>set(customNameComponent(), Component.translatable(member));
+                stack.set(customNameComponent(), Component.translatable(member));
                 ItemEntity entity = new ItemEntity(world, pos.getX() + 0.5D, pos.getY() + 1.25D, pos.getZ() + 0.5D, stack);
                 entity.setDefaultPickUpDelay();
                 world.addFreshEntity(entity);
@@ -102,10 +104,6 @@ public final class InSomniable {
         public void ifSearching(IntConsumer consumer) {
             consumer.accept(this.state);
         }
-    }
-
-    private static @NonNull DataComponentType<Component> customNameComponent() {
-        return Objects.requireNonNull(DataComponents.CUSTOM_NAME, "custom name component");
     }
 
     private static final class InSomniacState implements State {

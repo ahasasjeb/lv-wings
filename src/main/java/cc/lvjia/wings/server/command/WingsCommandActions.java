@@ -46,13 +46,13 @@ public final class WingsCommandActions {
     }
 
     public static int takeSpecificWingsSelf(@NonNull CommandContext<CommandSourceStack> ctx,
-            @NonNull WingsGetter getter)
+                                            @NonNull WingsGetter getter)
             throws CommandSyntaxException {
         return executeTakeSpecificWings(ctx, getSelf(ctx), getter.get(ctx, "wings"));
     }
 
     public static int takeSpecificWings(@NonNull CommandContext<CommandSourceStack> ctx,
-            @NonNull WingsGetter getter)
+                                        @NonNull WingsGetter getter)
             throws CommandSyntaxException {
         return executeTakeSpecificWings(ctx, getTargets(ctx), getter.get(ctx, "wings"));
     }
@@ -79,7 +79,7 @@ public final class WingsCommandActions {
     }
 
     private static int executeGiveWing(@NonNull CommandContext<CommandSourceStack> ctx,
-            @NonNull Collection<@NonNull ServerPlayer> targets, @NonNull FlightApparatus wings)
+                                       @NonNull Collection<@NonNull ServerPlayer> targets, @NonNull FlightApparatus wings)
             throws CommandSyntaxException {
         int count = 0;
         for (ServerPlayer player : targets) {
@@ -102,7 +102,7 @@ public final class WingsCommandActions {
     }
 
     private static int executeTakeWings(@NonNull CommandContext<CommandSourceStack> ctx,
-            @NonNull Collection<@NonNull ServerPlayer> targets)
+                                        @NonNull Collection<@NonNull ServerPlayer> targets)
             throws CommandSyntaxException {
         int count = 0;
         for (ServerPlayer player : targets) {
@@ -125,7 +125,7 @@ public final class WingsCommandActions {
     }
 
     private static int executeTakeSpecificWings(@NonNull CommandContext<CommandSourceStack> ctx,
-            @NonNull Collection<@NonNull ServerPlayer> targets, @NonNull FlightApparatus wings)
+                                                @NonNull Collection<@NonNull ServerPlayer> targets, @NonNull FlightApparatus wings)
             throws CommandSyntaxException {
         int count = 0;
         for (ServerPlayer player : targets) {

@@ -6,11 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.ARGB;
 import org.jspecify.annotations.NonNull;
 
@@ -40,7 +36,7 @@ public final class ModelWingsInsectoid extends ModelWings<@NonNull AnimatorInsec
 
     @Override
     public void render(@NonNull AnimatorInsectoid animator, float delta, @NonNull PoseStack matrixStack,
-            @NonNull VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+                       @NonNull VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         animator.getRotation(delta, this.rotation);
         setAngles(this.wingLeft, this.wingRight, this.rotation);
         int color = ARGB.colorFromFloat(alpha, red, green, blue);

@@ -1,17 +1,17 @@
 package cc.lvjia.wings.client.renderer;
 
 import cc.lvjia.wings.client.NeoForgeClientProxy;
-import cc.lvjia.wings.mixin.client.LivingEntityRendererAccessor;
 import cc.lvjia.wings.client.model.ModelWingsAvian;
 import cc.lvjia.wings.client.model.ModelWingsInsectoid;
+import cc.lvjia.wings.mixin.client.LivingEntityRendererAccessor;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.geom.EntityModelSet;
-import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.layers.CapeLayer;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.neoforged.bus.api.IEventBus;
@@ -67,7 +67,7 @@ public final class NeoForgeLayerWings extends RenderLayer<AvatarRenderState, Pla
 
     @Override
     public void submit(@NonNull PoseStack poseStack, @NonNull SubmitNodeCollector submitNodeCollector, int packedLight,
-            @NonNull AvatarRenderState state, float limbSwing, float limbSwingAmount) {
+                       @NonNull AvatarRenderState state, float limbSwing, float limbSwingAmount) {
         WingsLayerRenderer.submitWings(poseStack, submitNodeCollector, packedLight, state, this.getParentModel());
     }
 

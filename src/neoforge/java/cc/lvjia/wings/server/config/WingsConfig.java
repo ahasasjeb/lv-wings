@@ -34,81 +34,81 @@ public final class WingsConfig {
         builder.comment("General configuration for lv wings").push("general");
 
         ALLOW_UNDERWATER_FLIGHT = builder
-            .comment("Whether players can fly while underwater. Disabled by default.")
-            .define("allowUnderwaterFlight", WingsConfigDefaults.ALLOW_UNDERWATER_FLIGHT);
+                .comment("Whether players can fly while underwater. Disabled by default.")
+                .define("allowUnderwaterFlight", WingsConfigDefaults.ALLOW_UNDERWATER_FLIGHT);
 
         builder.pop();
 
         builder.comment("Server-side anti-cheat settings for wings flight").push("flightAntiCheat");
 
         ENABLE_FLIGHT_ANTI_CHEAT = builder
-            .comment("Enable wings flight anti-cheat on server side. Default: false")
-            .define("enabled", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.enabled());
+                .comment("Enable wings flight anti-cheat on server side. Default: false")
+                .define("enabled", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.enabled());
 
         TAKEOFF_GRACE_TICKS = builder
-            .comment("Grace ticks after takeoff before speed checks are enforced.")
-            .defineInRange("takeoffGraceTicks", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.takeoffGraceTicks(),
-                    WingsConfigDefaults.FLIGHT_TAKEOFF_GRACE_TICKS_MIN,
-                    WingsConfigDefaults.FLIGHT_TAKEOFF_GRACE_TICKS_MAX);
+                .comment("Grace ticks after takeoff before speed checks are enforced.")
+                .defineInRange("takeoffGraceTicks", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.takeoffGraceTicks(),
+                        WingsConfigDefaults.FLIGHT_TAKEOFF_GRACE_TICKS_MIN,
+                        WingsConfigDefaults.FLIGHT_TAKEOFF_GRACE_TICKS_MAX);
 
         SOFT_VIOLATION_LIMIT = builder
-            .comment("How many soft violations trigger correction.")
-            .defineInRange("softViolationLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softViolationLimit(),
-                    WingsConfigDefaults.FLIGHT_VIOLATION_LIMIT_MIN,
-                    WingsConfigDefaults.FLIGHT_VIOLATION_LIMIT_MAX);
+                .comment("How many soft violations trigger correction.")
+                .defineInRange("softViolationLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softViolationLimit(),
+                        WingsConfigDefaults.FLIGHT_VIOLATION_LIMIT_MIN,
+                        WingsConfigDefaults.FLIGHT_VIOLATION_LIMIT_MAX);
 
         HARD_VIOLATION_LIMIT = builder
-            .comment("How many hard violations trigger correction.")
-            .defineInRange("hardViolationLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardViolationLimit(),
-                    WingsConfigDefaults.FLIGHT_VIOLATION_LIMIT_MIN,
-                    WingsConfigDefaults.FLIGHT_VIOLATION_LIMIT_MAX);
+                .comment("How many hard violations trigger correction.")
+                .defineInRange("hardViolationLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardViolationLimit(),
+                        WingsConfigDefaults.FLIGHT_VIOLATION_LIMIT_MIN,
+                        WingsConfigDefaults.FLIGHT_VIOLATION_LIMIT_MAX);
 
         CORRECTION_COOLDOWN_TICKS = builder
-            .comment("Cooldown ticks between corrections.")
-            .defineInRange("correctionCooldownTicks", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.correctionCooldownTicks(),
-                    WingsConfigDefaults.FLIGHT_CORRECTION_COOLDOWN_TICKS_MIN,
-                    WingsConfigDefaults.FLIGHT_CORRECTION_COOLDOWN_TICKS_MAX);
+                .comment("Cooldown ticks between corrections.")
+                .defineInRange("correctionCooldownTicks", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.correctionCooldownTicks(),
+                        WingsConfigDefaults.FLIGHT_CORRECTION_COOLDOWN_TICKS_MIN,
+                        WingsConfigDefaults.FLIGHT_CORRECTION_COOLDOWN_TICKS_MAX);
 
         SOFT_HORIZONTAL_LIMIT = builder
-            .comment("Soft horizontal movement limit.")
-            .defineInRange("softHorizontalLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softHorizontalLimit(),
-                    WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MIN, WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MAX);
+                .comment("Soft horizontal movement limit.")
+                .defineInRange("softHorizontalLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softHorizontalLimit(),
+                        WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MIN, WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MAX);
 
         SOFT_VERTICAL_LIMIT = builder
-            .comment("Soft upward vertical movement limit.")
-            .defineInRange("softVerticalLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softVerticalLimit(),
-                    WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MIN, WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MAX);
+                .comment("Soft upward vertical movement limit.")
+                .defineInRange("softVerticalLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softVerticalLimit(),
+                        WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MIN, WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MAX);
 
         SOFT_TOTAL_LIMIT = builder
-            .comment("Soft total movement limit.")
-            .defineInRange("softTotalLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softTotalLimit(),
-                    WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MIN, WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MAX);
+                .comment("Soft total movement limit.")
+                .defineInRange("softTotalLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softTotalLimit(),
+                        WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MIN, WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MAX);
 
         HARD_HORIZONTAL_LIMIT = builder
-            .comment("Hard horizontal movement limit.")
-            .defineInRange("hardHorizontalLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardHorizontalLimit(),
-                    WingsConfigDefaults.FLIGHT_HARD_LIMIT_MIN, WingsConfigDefaults.FLIGHT_HARD_LIMIT_MAX);
+                .comment("Hard horizontal movement limit.")
+                .defineInRange("hardHorizontalLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardHorizontalLimit(),
+                        WingsConfigDefaults.FLIGHT_HARD_LIMIT_MIN, WingsConfigDefaults.FLIGHT_HARD_LIMIT_MAX);
 
         HARD_VERTICAL_LIMIT = builder
-            .comment("Hard upward vertical movement limit.")
-            .defineInRange("hardVerticalLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardVerticalLimit(),
-                    WingsConfigDefaults.FLIGHT_HARD_LIMIT_MIN, WingsConfigDefaults.FLIGHT_HARD_LIMIT_MAX);
+                .comment("Hard upward vertical movement limit.")
+                .defineInRange("hardVerticalLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardVerticalLimit(),
+                        WingsConfigDefaults.FLIGHT_HARD_LIMIT_MIN, WingsConfigDefaults.FLIGHT_HARD_LIMIT_MAX);
 
         HARD_TOTAL_LIMIT = builder
-            .comment("Hard total movement limit.")
-            .defineInRange("hardTotalLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardTotalLimit(),
-                    WingsConfigDefaults.FLIGHT_HARD_LIMIT_MIN, WingsConfigDefaults.FLIGHT_HARD_LIMIT_MAX);
+                .comment("Hard total movement limit.")
+                .defineInRange("hardTotalLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardTotalLimit(),
+                        WingsConfigDefaults.FLIGHT_HARD_LIMIT_MIN, WingsConfigDefaults.FLIGHT_HARD_LIMIT_MAX);
 
         UPWARD_ASSIST_HORIZONTAL_THRESHOLD = builder
-            .comment("When horizontal speed is below this value, upward limits gain extra tolerance.")
-            .defineInRange("upwardAssistHorizontalThreshold",
-                    WingsConfigDefaults.FLIGHT_ANTI_CHEAT.upwardAssistHorizontalThreshold(),
-                    WingsConfigDefaults.FLIGHT_UPWARD_ASSIST_MIN, WingsConfigDefaults.FLIGHT_UPWARD_ASSIST_MAX);
+                .comment("When horizontal speed is below this value, upward limits gain extra tolerance.")
+                .defineInRange("upwardAssistHorizontalThreshold",
+                        WingsConfigDefaults.FLIGHT_ANTI_CHEAT.upwardAssistHorizontalThreshold(),
+                        WingsConfigDefaults.FLIGHT_UPWARD_ASSIST_MIN, WingsConfigDefaults.FLIGHT_UPWARD_ASSIST_MAX);
 
         UPWARD_ASSIST_MAX_BONUS = builder
-            .comment("Maximum extra upward tolerance applied at very low horizontal speed.")
-            .defineInRange("upwardAssistMaxBonus", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.upwardAssistMaxBonus(),
-                    WingsConfigDefaults.FLIGHT_UPWARD_ASSIST_MIN, WingsConfigDefaults.FLIGHT_UPWARD_ASSIST_MAX);
+                .comment("Maximum extra upward tolerance applied at very low horizontal speed.")
+                .defineInRange("upwardAssistMaxBonus", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.upwardAssistMaxBonus(),
+                        WingsConfigDefaults.FLIGHT_UPWARD_ASSIST_MIN, WingsConfigDefaults.FLIGHT_UPWARD_ASSIST_MAX);
 
         builder.pop();
         SPEC = builder.build();

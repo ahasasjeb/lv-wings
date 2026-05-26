@@ -7,6 +7,7 @@ import com.google.gson.JsonParser;
 import net.fabricmc.loader.api.FabricLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -16,7 +17,6 @@ import java.nio.file.Path;
 import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
-import org.jspecify.annotations.Nullable;
 
 final class ConfigFiles {
     private static final Logger LOGGER = LogManager.getLogger("WingsConfig");

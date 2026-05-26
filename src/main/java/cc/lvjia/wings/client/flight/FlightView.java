@@ -19,6 +19,6 @@ public interface FlightView {
         @NonNull RenderType getRenderType();
 
         void render(@NonNull PoseStack matrixStack, @NonNull VertexConsumer buffer, int packedLight, int packedOverlay, float red,
-                float green, float blue, float alpha, float delta);
+                    float green, float blue, float alpha, float delta);
     }
 }

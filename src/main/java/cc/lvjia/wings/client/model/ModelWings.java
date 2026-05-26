@@ -23,6 +23,6 @@ public abstract class ModelWings<A extends @NonNull Animator> extends Model<A> {
     }
 
     public abstract void render(@NonNull A animator, float delta, @NonNull PoseStack matrixStack,
-            @NonNull VertexConsumer buffer, int packedLight,
-            int packedOverlay, float red, float green, float blue, float alpha);
+                                @NonNull VertexConsumer buffer, int packedLight,
+                                int packedOverlay, float red, float green, float blue, float alpha);
 }

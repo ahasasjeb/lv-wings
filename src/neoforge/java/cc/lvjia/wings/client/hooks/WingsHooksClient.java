@@ -1,8 +1,8 @@
 package cc.lvjia.wings.client.hooks;
 
-import cc.lvjia.wings.client.event.EmptyOffHandPresentEvent;
 import cc.lvjia.wings.client.asm.AnimatePlayerModelEvent;
 import cc.lvjia.wings.client.asm.ApplyPlayerRotationsEvent;
+import cc.lvjia.wings.client.event.EmptyOffHandPresentEvent;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;

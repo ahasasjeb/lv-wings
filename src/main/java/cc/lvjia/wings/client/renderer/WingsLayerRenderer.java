@@ -37,7 +37,7 @@ public final class WingsLayerRenderer {
     }
 
     public static void submitWings(@NonNull PoseStack poseStack, @NonNull SubmitNodeCollector submitNodeCollector,
-            int packedLight, @NonNull AvatarRenderState state, @NonNull PlayerModel parentModel) {
+                                   int packedLight, @NonNull AvatarRenderState state, @NonNull PlayerModel parentModel) {
         AbstractClientPlayer player = resolvePlayer(state);
         if (player == null || player.isInvisible()) {
             return;
@@ -77,7 +77,7 @@ public final class WingsLayerRenderer {
     }
 
     public static void submitCape(@NonNull PoseStack poseStack, @NonNull SubmitNodeCollector submitNodeCollector,
-            int packedLight, @NonNull AvatarRenderState state, @NonNull HumanoidModel<AvatarRenderState> model) {
+                                  int packedLight, @NonNull AvatarRenderState state, @NonNull HumanoidModel<AvatarRenderState> model) {
         if (state.isInvisible || !state.showCape) {
             return;
         }

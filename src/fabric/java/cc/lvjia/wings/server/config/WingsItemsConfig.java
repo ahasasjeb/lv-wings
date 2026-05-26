@@ -1,12 +1,11 @@
 package cc.lvjia.wings.server.config;
 
 import cc.lvjia.wings.WingsMod;
+import org.jspecify.annotations.NonNull;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Stream;
-
-import org.jspecify.annotations.NonNull;
 
 @SuppressWarnings("null")
 public final class WingsItemsConfig {

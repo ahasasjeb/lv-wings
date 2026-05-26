@@ -56,7 +56,7 @@ public final class FabricServerEventHandler {
     }
 
     public static @NonNull InteractionResult onPlayerEntityInteract(@NonNull Player player, @NonNull InteractionHand hand,
-            @NonNull Entity target) {
+                                                                    @NonNull Entity target) {
         return ServerEventActions.onPlayerEntityInteract(
                 player,
                 hand,

@@ -45,7 +45,7 @@ public final class FabricLayerWings extends RenderLayer<AvatarRenderState, Playe
     }
 
     private static void registerPlayerLayers(AvatarRenderer<?> renderer, EntityModelSet modelSet,
-            LivingEntityRenderLayerRegistrationCallback.RegistrationHelper registrationHelper) {
+                                             LivingEntityRenderLayerRegistrationCallback.RegistrationHelper registrationHelper) {
         Objects.requireNonNull(renderer, "renderer");
         Objects.requireNonNull(modelSet, "model set");
         Objects.requireNonNull(registrationHelper, "registration helper");
@@ -59,7 +59,7 @@ public final class FabricLayerWings extends RenderLayer<AvatarRenderState, Playe
 
     @Override
     public void submit(@NonNull PoseStack poseStack, @NonNull SubmitNodeCollector submitNodeCollector, int packedLight,
-            @NonNull AvatarRenderState state, float limbSwing, float limbSwingAmount) {
+                       @NonNull AvatarRenderState state, float limbSwing, float limbSwingAmount) {
         WingsLayerRenderer.submitWings(poseStack, submitNodeCollector, packedLight, state, this.getParentModel());
     }
 

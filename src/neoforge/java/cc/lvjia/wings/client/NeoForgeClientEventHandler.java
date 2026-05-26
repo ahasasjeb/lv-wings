@@ -1,10 +1,10 @@
 package cc.lvjia.wings.client;
 
 import cc.lvjia.wings.WingsMod;
-import cc.lvjia.wings.client.audio.WingsSound;
 import cc.lvjia.wings.client.asm.AnimatePlayerModelEvent;
 import cc.lvjia.wings.client.asm.ApplyPlayerRotationsEvent;
 import cc.lvjia.wings.client.asm.GetCameraEyeHeightEvent;
+import cc.lvjia.wings.client.audio.WingsSound;
 import cc.lvjia.wings.client.event.EmptyOffHandPresentEvent;
 import cc.lvjia.wings.client.flight.FlightPoseSupport;
 import cc.lvjia.wings.client.flight.FlightView;
@@ -121,7 +121,7 @@ public final class NeoForgeClientEventHandler {
             return;
         }
 
-        final boolean[] handled = { false };
+        final boolean[] handled = {false};
         Flights.ifPlayer(cameraEntity, (player, flight) -> {
             handled[0] = true;
             float delta = (float) event.getPartialTick();

@@ -71,7 +71,7 @@ public final class Access {
         }
 
         private static MethodHandle find(Class<?> refc, ObjectArrayList<String> names, MethodType type) {
-            for (ObjectListIterator<String> it = names.iterator();;) {
+            for (ObjectListIterator<String> it = names.iterator(); ; ) {
                 String name = it.next();
                 try {
                     Field f = refc.getDeclaredField(name);

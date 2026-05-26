@@ -1,7 +1,7 @@
 package cc.lvjia.wings;
 
-import cc.lvjia.wings.server.flight.Flight;
 import cc.lvjia.wings.server.FlightListenerSupport;
+import cc.lvjia.wings.server.flight.Flight;
 import cc.lvjia.wings.server.net.Message;
 import cc.lvjia.wings.server.net.Network;
 import cc.lvjia.wings.server.net.clientbound.MessageSyncFlight;

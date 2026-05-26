@@ -44,7 +44,7 @@ public final class WingsHooksClient {
     }
 
     public static boolean onCheckRenderEmptyHand(boolean isMainHand, AbstractClientPlayer player, InteractionHand hand,
-            ItemStack itemStack, ItemStack itemStackMainHand) {
+                                                 ItemStack itemStack, ItemStack itemStackMainHand) {
         return ItemInHandHookSupport.canRenderEmptyOffhand(isMainHand, player, hand, itemStack, itemStackMainHand);
     }
 
