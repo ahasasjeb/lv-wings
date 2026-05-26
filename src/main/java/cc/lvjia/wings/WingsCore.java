@@ -118,7 +118,7 @@ public final class WingsCore {
                 FAIRY = create("fairy_wings"),
                 EVIL = create("evil_wings"),
                 DRAGON = create("dragon_wings"),
-                LVJIA_SUPER = create("lvjia_super_wing");
+                LVJIA_SUPER = create("lvjia_super_wings");
 
         private Names() {
         }

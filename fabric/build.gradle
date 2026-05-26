@@ -11,7 +11,7 @@ base {
 }
 
 repositories {
-    maven { url 'https://maven.covers1624.net/' }
+    maven { url = 'https://maven.covers1624.net/' }
 }
 
 sourceSets {
@@ -80,9 +80,11 @@ java {
     targetCompatibility = JavaVersion.VERSION_25
 }
 
+def fabricProjectName = project.name
+
 jar {
     from("../LICENSE.md") {
-        rename { "${it}_${project.name}" }
+        rename { "${it}_${fabricProjectName}" }
     }
 }
 
@@ -94,7 +96,7 @@ publishing {
     }
     repositories {
         maven {
-            url "file://${rootProject.projectDir}/mcmodsrepo"
+            url = "file://${rootProject.projectDir}/mcmodsrepo"
         }
     }
 }

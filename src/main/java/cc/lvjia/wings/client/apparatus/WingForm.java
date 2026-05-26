@@ -19,16 +19,15 @@ public final class WingForm<A extends @NonNull Animator> {
     private static final Map<@NonNull FlightApparatus, @NonNull WingForm<? extends @NonNull Animator>> FORMS = new HashMap<>();
 
     private final @NonNull Supplier<@NonNull A> animator;
-    private final @NonNull Identifier texture;
     private final @NonNull Supplier<@NonNull RenderType> renderType;
-    private @NonNull ModelWings<A> model;
+    private final @NonNull ModelWings<A> model;
 
     private WingForm(@NonNull Supplier<@NonNull A> animator, @NonNull ModelWings<A> model,
             @NonNull Identifier texture, @NonNull Supplier<@NonNull RenderType> renderType) {
         this.animator = Objects.requireNonNull(animator);
 
         this.model = Objects.requireNonNull(model);
-        this.texture = Objects.requireNonNull(texture);
+        Objects.requireNonNull(texture);
         this.renderType = Objects.requireNonNull(renderType);
     }
 
@@ -61,10 +60,6 @@ public final class WingForm<A extends @NonNull Animator> {
 
     public @NonNull ModelWings<A> getModel() {
         return this.model;
-    }
-
-    public @NonNull Identifier getTexture() {
-        return this.texture;
     }
 
     public @NonNull RenderType getRenderType() {

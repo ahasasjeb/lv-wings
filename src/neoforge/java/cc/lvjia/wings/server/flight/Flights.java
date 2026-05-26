@@ -23,10 +23,6 @@ public final class Flights {
     private Flights() {
     }
 
-    public static boolean has(Player player) {
-        return player.hasData(WingsAttachments.FLIGHT.get());
-    }
-
     public static Flight get(Player player) {
         return player.getData(WingsAttachments.FLIGHT.get());
     }

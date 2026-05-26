@@ -17,10 +17,6 @@ public final class FlightViews {
     private FlightViews() {
     }
 
-    public static boolean has(LivingEntity entity) {
-        return get(entity).isPresent();
-    }
-
     @SuppressWarnings("null")
     public static Optional<FlightView> get(LivingEntity entity) {
         if (entity instanceof AbstractClientPlayer player) {
