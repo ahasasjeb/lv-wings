@@ -44,8 +44,11 @@ public record MessageControlFlying(boolean isFlying) implements Message {
             }
             LAST_CONTROL_TICKS.put(player.getUUID(), player.tickCount);
             Flight flight = WingsAttachments.getFlight(player);
+            boolean wasFlying = flight.isFlying();
             if (FlightStateReset.clearSpectator(player, flight)) {
-                LOGGER.debug("Player {} is spectator, forcing wings flight off", player.getName().getString());
+                if (wasFlying) {
+                    LOGGER.debug("Player {} is spectator, forcing wings flight off", player.getName().getString());
+                }
                 ServerPlayNetworking.send(player, new MessageSyncFlight(player, flight));
                 return;
             }
