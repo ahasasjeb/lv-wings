@@ -3,8 +3,7 @@ package cc.lvjia.wings.server.net.serverbound;
 import cc.lvjia.wings.WingsAttachments;
 import cc.lvjia.wings.WingsMod;
 import cc.lvjia.wings.server.flight.Flight;
-import cc.lvjia.wings.server.flight.FlightAnimationState;
-import cc.lvjia.wings.server.flight.FlightSpeedAntiCheat;
+import cc.lvjia.wings.server.flight.FlightStateReset;
 import cc.lvjia.wings.server.net.Message;
 import cc.lvjia.wings.server.net.clientbound.MessageSyncFlight;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -45,24 +44,8 @@ public record MessageControlFlying(boolean isFlying) implements Message {
             }
             LAST_CONTROL_TICKS.put(player.getUUID(), player.tickCount);
             Flight flight = WingsAttachments.getFlight(player);
-            if (player.isSpectator()) {
-                boolean wasFlying = flight.isFlying();
-                boolean changed = false;
-                if (flight.getTimeFlying() != 0) {
-                    flight.setTimeFlying(0);
-                    changed = true;
-                }
-                if (flight.getAnimationState() != FlightAnimationState.IDLE) {
-                    flight.setAnimationState(FlightAnimationState.IDLE);
-                    changed = true;
-                }
-                if (wasFlying) {
-                    LOGGER.debug("Player {} is spectator, forcing wings flight off", player.getName().getString());
-                    flight.setIsFlying(false, Flight.PlayerSet.ofAll());
-                } else if (changed) {
-                    flight.sync(Flight.PlayerSet.ofAll());
-                }
-                FlightSpeedAntiCheat.clear(player);
+            if (FlightStateReset.clearSpectator(player, flight)) {
+                LOGGER.debug("Player {} is spectator, forcing wings flight off", player.getName().getString());
                 ServerPlayNetworking.send(player, new MessageSyncFlight(player, flight));
                 return;
             }

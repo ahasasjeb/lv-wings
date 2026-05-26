@@ -22,27 +22,43 @@ public final class WingsBottleActions {
             changed = true;
         }
         if (WingsEffects.WINGS.isBound()) {
-            player.addEffect(
-                    new MobEffectInstance(WingsEffects.WINGS, MobEffectInstance.INFINITE_DURATION, 0, true, false));
+            changed |= player.addEffect(new MobEffectInstance(
+                    WingsEffects.WINGS,
+                    MobEffectInstance.INFINITE_DURATION,
+                    0,
+                    true,
+                    false));
         }
         return changed;
     }
 
     public static boolean removeWings(Player player) {
+        Flight flight = Flights.get(player);
         boolean removed = WingsEffects.WINGS.isBound() && player.removeEffect(WingsEffects.WINGS);
-        if (removed) {
+        boolean hadFlightState = hasFlightState(flight);
+        if (removed || hadFlightState) {
             clearFlightState(player);
         }
-        return removed;
+        return removed || hadFlightState;
     }
 
     public static boolean removeWings(ServerPlayer player, FlightApparatus wings) {
-        boolean changed = Flights.get(player).getWing() == wings;
-        if (!changed || !WingsEffects.WINGS.isBound() || !player.removeEffect(WingsEffects.WINGS)) {
+        Flight flight = Flights.get(player);
+        if (flight.getWing() != wings || !hasFlightState(flight)) {
             return false;
+        }
+        if (WingsEffects.WINGS.isBound()) {
+            player.removeEffect(WingsEffects.WINGS);
         }
         clearFlightState(player);
         return true;
+    }
+
+    private static boolean hasFlightState(Flight flight) {
+        return flight.getWing() != FlightApparatus.NONE
+                || flight.isFlying()
+                || flight.getTimeFlying() != 0
+                || flight.getAnimationState() != FlightAnimationState.IDLE;
     }
 
     private static void clearFlightState(Player player) {

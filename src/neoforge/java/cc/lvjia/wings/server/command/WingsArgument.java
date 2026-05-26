@@ -20,7 +20,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class WingsArgument implements ArgumentType<FlightApparatus> {
     public static final DynamicCommandExceptionType ERROR_UNKNOWN_WING = new DynamicCommandExceptionType(e -> Component.translatable("wings.wingsNotFound", e));
-    private static final Collection<String> EXAMPLES = Arrays.asList("magical", "wings");
+    private static final Collection<String> EXAMPLES = Arrays.asList("wings:angel_wings", "wings:dragon_wings");
 
     public WingsArgument() {
     }

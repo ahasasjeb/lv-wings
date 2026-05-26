@@ -74,7 +74,7 @@ public final class FlightAnimationTracker {
     }
 
     private boolean updateState(Flight flight, Player player) {
-        if (!(this.stateTime++ > this.stateDelay)) {
+        if (this.stateTime++ <= this.stateDelay) {
             return false;
         }
 

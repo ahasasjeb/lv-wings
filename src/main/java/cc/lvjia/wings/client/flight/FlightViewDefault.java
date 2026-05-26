@@ -9,7 +9,6 @@ import cc.lvjia.wings.util.function.FloatConsumer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import org.jspecify.annotations.NonNull;
@@ -139,11 +138,6 @@ public final class FlightViewDefault implements FlightView {
                 this.animator = Objects.requireNonNull(shape.createAnimator(), "animator");
                 this.state = new StateIdle();
                 this.renderer = new FormRenderer() {
-                    @Override
-                    public @NonNull Identifier getTexture() {
-                        return WingStrategy.this.shape.getTexture();
-                    }
-
                     @Override
                     public @NonNull RenderType getRenderType() {
                         return WingStrategy.this.shape.getRenderType();
