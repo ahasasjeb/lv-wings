@@ -9,6 +9,8 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MapItem;
 
+import org.jspecify.annotations.NonNull;
+
 import java.lang.invoke.MethodHandle;
 
 public final class ItemInHandHookSupport {
@@ -74,7 +76,7 @@ public final class ItemInHandHookSupport {
 
     @FunctionalInterface
     public interface NormalReequipRule {
-        boolean shouldReequip(ItemStack from, ItemStack to, boolean hasSlotChange);
+        boolean shouldReequip(@NonNull ItemStack from, @NonNull ItemStack to, boolean hasSlotChange);
     }
 
     private static final class GetItemStackMainHand {

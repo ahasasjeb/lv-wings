@@ -28,7 +28,8 @@ public final class InSomniable {
         this.state = state;
     }
 
-    private static @NonNull DataComponentType<Component> customNameComponent() {
+    @SuppressWarnings("null")
+    private static @NonNull DataComponentType<@NonNull Component> customNameComponent() {
         return Objects.requireNonNull(DataComponents.CUSTOM_NAME, "custom name component");
     }
 

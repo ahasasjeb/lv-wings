@@ -73,7 +73,9 @@ public final class WingFormRegistrar {
         Identifier texture = Objects.requireNonNull(
                 Identifier.tryBuild(Objects.requireNonNull(name.getNamespace(), "namespace"), texturePath),
                 "Invalid texture path: " + texturePath);
-        Supplier<RenderType> actualRenderType = renderType != null ? renderType : () -> RenderTypes.entityCutout(texture);
+        @NonNull Supplier<@NonNull RenderType> actualRenderType = renderType != null
+                ? Objects.requireNonNull(renderType)
+                : () -> RenderTypes.entityCutout(texture);
         return WingForm.of(animator, model, texture, actualRenderType);
     }
 
