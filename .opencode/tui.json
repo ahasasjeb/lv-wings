@@ -1,5 +1,5 @@
 {
   "plugin": [
-    "llm-cny"
+    "llm-cny@1.0.19"
   ]
 }
