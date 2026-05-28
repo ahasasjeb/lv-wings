@@ -48,17 +48,8 @@ public final class NeoForgeClientProxy extends NeoForgeProxy {
     @Override
     public void addFlightListeners(Player player, Flight flight) {
         super.addFlightListeners(player, flight);
-        if (player.isLocalPlayer()) {
-            // 本地玩家先更新客户端预测态，再把最终意图发回服务端做校验和纠正
-            Flight.Notifier notifier = Flight.Notifier.of(
-                    () -> {
-                    },
-                    p -> {
-                    },
-                    () -> this.sendToServer(new MessageControlFlying(flight.isFlying()))
-            );
-            flight.registerSyncListener(players -> players.notify(notifier));
-        }
+        ClientFlightListenerSupport.addLocalFlightSyncListener(player, flight,
+                isFlying -> this.sendToServer(new MessageControlFlying(isFlying)));
     }
 
     @Override

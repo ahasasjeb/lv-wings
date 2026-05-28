@@ -2,8 +2,6 @@ package cc.lvjia.wings.server.net.serverbound;
 
 import cc.lvjia.wings.WingsAttachments;
 import cc.lvjia.wings.WingsMod;
-import cc.lvjia.wings.server.flight.Flight;
-import cc.lvjia.wings.server.flight.FlightStateReset;
 import cc.lvjia.wings.server.net.Message;
 import cc.lvjia.wings.server.net.clientbound.MessageSyncFlight;
 import net.minecraft.network.FriendlyByteBuf;
@@ -13,10 +11,6 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 客户端 -> 服务端：请求切换飞行状态。
@@ -29,8 +23,6 @@ public record MessageControlFlying(boolean isFlying) implements Message {
             StreamCodec.of((buf, message) -> buf.writeBoolean(message.isFlying()),
                     buf -> new MessageControlFlying(buf.readBoolean()));
     private static final Logger LOGGER = LogManager.getLogger("WingsNetwork");
-    private static final int MIN_CONTROL_INTERVAL_TICKS = 2;
-    private static final Map<UUID, Integer> LAST_CONTROL_TICKS = new ConcurrentHashMap<>();
 
     public static void handle(MessageControlFlying message, IPayloadContext context) {
         context.enqueueWork(() -> {
@@ -39,34 +31,13 @@ public record MessageControlFlying(boolean isFlying) implements Message {
                 LOGGER.warn("Received control_flying from null player");
                 return;
             }
-            Integer lastControlTick = LAST_CONTROL_TICKS.get(player.getUUID());
-            if (lastControlTick != null && player.tickCount - lastControlTick < MIN_CONTROL_INTERVAL_TICKS) {
-                return;
-            }
-            LAST_CONTROL_TICKS.put(player.getUUID(), player.tickCount);
-            Flight flight = player.getData(WingsAttachments.FLIGHT.get());
-            boolean wasFlying = flight.isFlying();
-            if (FlightStateReset.clearSpectator(player, flight)) {
-                if (wasFlying) {
-                    LOGGER.debug("Player {} is spectator, forcing wings flight off", player.getName().getString());
-                }
-                context.reply(new MessageSyncFlight(player, flight));
-                return;
-            }
-            if (!flight.canFly(player)) {
-                LOGGER.debug("Player {} failed canFly check, ignoring control_flying", player.getName().getString());
-                context.reply(new MessageSyncFlight(player, flight));
-                return;
-            }
-            LOGGER.debug("Player {} {} flying", player.getName().getString(), message.isFlying() ? "started" : "stopped");
-            // 服务端先写入权威状态，再把同一份快照回发给操作者，修正客户端预测偏差。
-            flight.setIsFlying(message.isFlying(), Flight.PlayerSet.ofOthers());
-            context.reply(new MessageSyncFlight(player, flight));
+            ControlFlyingMessageHandler.handle(player, message.isFlying(), p -> p.getData(WingsAttachments.FLIGHT.get()),
+                    (syncPlayer, flight) -> context.reply(new MessageSyncFlight(syncPlayer, flight)));
         });
     }
 
     public static void clearRateLimit(Player player) {
-        LAST_CONTROL_TICKS.remove(player.getUUID());
+        ControlFlyingMessageHandler.clearRateLimit(player);
     }
 
     @Override

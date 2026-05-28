@@ -43,15 +43,8 @@ public final class FabricClientProxy extends FabricProxy {
     @Override
     public void addFlightListeners(Player player, Flight flight) {
         super.addFlightListeners(player, flight);
-        if (player.isLocalPlayer()) {
-            Flight.Notifier notifier = Flight.Notifier.of(
-                    () -> {
-                    },
-                    p -> {
-                    },
-                    () -> this.sendToServer(new MessageControlFlying(flight.isFlying())));
-            flight.registerSyncListener(players -> players.notify(notifier));
-        }
+        ClientFlightListenerSupport.addLocalFlightSyncListener(player, flight,
+                isFlying -> this.sendToServer(new MessageControlFlying(isFlying)));
     }
 
     @Override

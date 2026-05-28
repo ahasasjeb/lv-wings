@@ -50,8 +50,8 @@ public final class FabricLayerWings extends RenderLayer<AvatarRenderState, Playe
         Objects.requireNonNull(modelSet, "model set");
         Objects.requireNonNull(registrationHelper, "registration helper");
         List<?> layers = ((LivingEntityRendererAccessor<?, ?, ?>) renderer).wings$getLayers();
-        layers.removeIf(layer -> layer instanceof FabricLayerCapeWings || layer instanceof CapeLayer);
-        registrationHelper.register(new FabricLayerCapeWings(renderer, modelSet));
+        layers.removeIf(layer -> layer instanceof LayerCapeWings || layer instanceof CapeLayer);
+        registrationHelper.register(new LayerCapeWings(renderer, modelSet));
         if (layers.stream().noneMatch(FabricLayerWings.class::isInstance)) {
             registrationHelper.register(new FabricLayerWings(renderer));
         }

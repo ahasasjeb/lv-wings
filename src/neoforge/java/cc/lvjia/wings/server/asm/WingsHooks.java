@@ -1,7 +1,6 @@
 package cc.lvjia.wings.server.asm;
 
 import cc.lvjia.wings.client.asm.GetCameraEyeHeightEvent;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -39,19 +38,7 @@ public final class WingsHooks {
         NeoForge.EVENT_BUS.post(ev);
         if (ev.isVanilla()) return false;
 
-        // 参考原版身体旋转逻辑，但允许通过事件动态调整软/硬限制。
-        living.yBodyRot += Mth.wrapDegrees(movementYaw - living.yBodyRot) * 0.3F;
-        float hLimit = ev.getHardLimit();
-        float sLimit = ev.getSoftLimit();
-        float theta = Mth.clamp(
-                Mth.wrapDegrees(living.getYRot() - living.yBodyRot),
-                -hLimit,
-                hLimit
-        );
-        living.yBodyRot = living.getYRot() - theta;
-        if (theta * theta > sLimit * sLimit) {
-            living.yBodyRot += theta * 0.2F;
-        }
+        BodyRotationHookSupport.apply(living, movementYaw, ev.getHardLimit(), ev.getSoftLimit());
         return true;
     }
 

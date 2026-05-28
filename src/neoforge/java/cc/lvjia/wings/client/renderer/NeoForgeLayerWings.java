@@ -58,8 +58,8 @@ public final class NeoForgeLayerWings extends RenderLayer<AvatarRenderState, Pla
         Objects.requireNonNull(renderer, "renderer");
         Objects.requireNonNull(modelSet, "model set");
         List<?> layers = ((LivingEntityRendererAccessor<?, ?, ?>) renderer).wings$getLayers();
-        layers.removeIf(layer -> layer instanceof NeoForgeLayerCapeWings || layer instanceof CapeLayer);
-        renderer.addLayer(new NeoForgeLayerCapeWings(renderer, modelSet));
+        layers.removeIf(layer -> layer instanceof LayerCapeWings || layer instanceof CapeLayer);
+        renderer.addLayer(new LayerCapeWings(renderer, modelSet));
         if (layers.stream().noneMatch(NeoForgeLayerWings.class::isInstance)) {
             renderer.addLayer(new NeoForgeLayerWings(renderer));
         }
