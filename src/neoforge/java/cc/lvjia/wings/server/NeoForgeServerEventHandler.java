@@ -54,6 +54,9 @@ public final class NeoForgeServerEventHandler {
 
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
+        if (event.getEntity().level().isClientSide()) {
+            return;
+        }
         ServerEventActions.onPlayerTick(event.getEntity());
     }
 
