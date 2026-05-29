@@ -81,7 +81,7 @@ public final class ItemInHandHookSupport {
 
     private static final class GetItemStackMainHand {
         private static final MethodHandle MH = Access.getter(ItemInHandRenderer.class)
-                .name("f_109300_", "mainHandItem")
+                .name("mainHandItem")
                 .type(ItemStack.class);
 
         private GetItemStackMainHand() {
