@@ -28,44 +28,36 @@ public final class Flights {
     }
 
     public static void ifPlayer(Entity entity, BiConsumer<Player, Flight> action) {
-        ifPlayer(entity, e -> true, action);
+        FlightEventSupport.ifPlayer(entity, Flights::get, action);
     }
 
     public static void ifPlayer(Entity entity, Predicate<Player> condition, BiConsumer<Player, Flight> action) {
-        if (entity instanceof Player player) {
-            if (condition.test(player)) {
-                action.accept(player, get(player));
-            }
-        }
+        FlightEventSupport.ifPlayer(entity, condition, Flights::get, action);
     }
 
     @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event) {
-        if (!event.isWasDeath()) {
-            get(event.getEntity()).clone(get(event.getOriginal()));
-        }
+        FlightEventSupport.onPlayerClone(event.getOriginal(), event.getEntity(), !event.isWasDeath(), Flights::get);
     }
 
     @SubscribeEvent
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
-        get(event.getEntity()).sync(Flight.PlayerSet.ofSelf());
+        FlightEventSupport.syncSelf(event.getEntity(), Flights::get);
     }
 
     @SubscribeEvent
     public static void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
-        get(event.getEntity()).sync(Flight.PlayerSet.ofSelf());
+        FlightEventSupport.syncSelf(event.getEntity(), Flights::get);
     }
 
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-        get(event.getEntity()).sync(Flight.PlayerSet.ofSelf());
+        FlightEventSupport.syncSelf(event.getEntity(), Flights::get);
     }
 
     @SubscribeEvent
     public static void onPlayerStartTracking(PlayerEvent.StartTracking event) {
-        ifPlayer(event.getTarget(), (player, flight) ->
-                flight.sync(Flight.PlayerSet.ofPlayer((ServerPlayer) event.getEntity()))
-        );
+        FlightEventSupport.syncTrackingPlayer(event.getTarget(), (ServerPlayer) event.getEntity(), Flights::get);
     }
 
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {

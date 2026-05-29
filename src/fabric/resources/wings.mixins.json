@@ -4,6 +4,7 @@
   "package": "cc.lvjia.wings.mixin",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
+    "FabricEntityMixin",
     "LivingEntityMixin",
     "PlayerMixin",
     "PotionBrewingMixin",

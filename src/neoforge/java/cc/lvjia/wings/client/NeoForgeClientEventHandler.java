@@ -63,6 +63,7 @@ public final class NeoForgeClientEventHandler {
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Player entity = event.getEntity();
         if (entity instanceof AbstractClientPlayer player) {
+            Flights.get(player).tick(player);
             FlightViews.get(player).ifPresent(FlightView::tick);
         }
     }

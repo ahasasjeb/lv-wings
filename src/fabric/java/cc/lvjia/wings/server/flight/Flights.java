@@ -18,38 +18,30 @@ public final class Flights {
     }
 
     public static void ifPlayer(Entity entity, BiConsumer<Player, Flight> action) {
-        ifPlayer(entity, e -> true, action);
+        FlightEventSupport.ifPlayer(entity, Flights::get, action);
     }
 
     public static void ifPlayer(Entity entity, Predicate<Player> condition, BiConsumer<Player, Flight> action) {
-        if (entity instanceof Player player) {
-            if (condition.test(player)) {
-                action.accept(player, get(player));
-            }
-        }
+        FlightEventSupport.ifPlayer(entity, condition, Flights::get, action);
     }
 
     public static void onPlayerClone(ServerPlayer oldPlayer, ServerPlayer newPlayer, boolean alive) {
-        if (alive) {
-            get(newPlayer).clone(get(oldPlayer));
-        }
+        FlightEventSupport.onPlayerClone(oldPlayer, newPlayer, alive, Flights::get);
     }
 
     public static void onPlayerRespawn(ServerPlayer player) {
-        get(player).sync(Flight.PlayerSet.ofSelf());
+        FlightEventSupport.syncSelf(player, Flights::get);
     }
 
     public static void onPlayerChangedDimension(ServerPlayer player) {
-        get(player).sync(Flight.PlayerSet.ofSelf());
+        FlightEventSupport.syncSelf(player, Flights::get);
     }
 
     public static void onPlayerLoggedIn(ServerPlayer player) {
-        get(player).sync(Flight.PlayerSet.ofSelf());
+        FlightEventSupport.syncSelf(player, Flights::get);
     }
 
     public static void onPlayerStartTracking(Entity target, ServerPlayer player) {
-        if (target instanceof Player trackedPlayer) {
-            get(trackedPlayer).sync(Flight.PlayerSet.ofPlayer(player));
-        }
+        FlightEventSupport.syncTrackingPlayer(target, player, Flights::get);
     }
 }

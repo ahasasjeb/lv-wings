@@ -5,6 +5,7 @@ import cc.lvjia.wings.server.asm.GetLivingHeadLimitEvent;
 import cc.lvjia.wings.server.asm.PlayerFlightCheckEvent;
 import cc.lvjia.wings.server.asm.PlayerFlownEvent;
 import cc.lvjia.wings.server.command.NeoForgeWingsCommand;
+import cc.lvjia.wings.server.flight.FlightEventSupport;
 import cc.lvjia.wings.server.flight.FlightSpeedAntiCheat;
 import cc.lvjia.wings.server.flight.Flights;
 import cc.lvjia.wings.server.item.WingsItems;
@@ -46,12 +47,8 @@ public final class NeoForgeServerEventHandler {
 
     @SubscribeEvent
     public static void onEntityMount(EntityMountEvent event) {
-        if (event.isMounting()) {
-            Flights.ifPlayer(event.getEntityMounting(), (player, flight) -> {
-                if (flight.isFlying()) {
-                    event.setCanceled(true);
-                }
-            });
+        if (event.isMounting() && FlightEventSupport.isFlyingPlayer(event.getEntityMounting(), Flights::get)) {
+            event.setCanceled(true);
         }
     }
 
