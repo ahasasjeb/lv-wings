@@ -174,6 +174,7 @@ public final class FlightDefault implements Flight {
     @Override
     public boolean canFly(Player player) {
         return !this.isUnderwaterFlightBlocked(player) && this.hasEffect(player)
+                && player.getFoodData().getFoodLevel() > 0
                 && this.flightApparatus.isUsable(player);
     }
 
@@ -227,7 +228,7 @@ public final class FlightDefault implements Flight {
                 this.state = this.state.notFlying();
                 return;
             }
-            if (this.flightApparatus.isUsable(player)) {
+            if (this.canFly(player)) {
                 (this.state = this.state.next(this.flightApparatus)).onUpdate(player);
             } else if (this.isFlying()) {
                 this.setIsFlying(false, PlayerSet.ofAll());
