@@ -9,6 +9,24 @@ subprojects {
     tasks.withType(JavaCompile).configureEach {
         options.encoding = 'UTF-8'
     }
+
+    plugins.withType(JavaPlugin).configureEach {
+        sourceSets {
+            test {
+                java.srcDirs = ['../src/test/java']
+            }
+        }
+
+        dependencies {
+            testImplementation platform('org.junit:junit-bom:5.10.3')
+            testImplementation 'org.junit.jupiter:junit-jupiter'
+            testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+        }
+
+        tasks.withType(Test).configureEach {
+            useJUnitPlatform()
+        }
+    }
 }
 
 tasks.register('reportPlatformSourceDrift') {
