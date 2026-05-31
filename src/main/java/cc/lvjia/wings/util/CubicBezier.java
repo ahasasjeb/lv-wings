@@ -6,6 +6,10 @@ package cc.lvjia.wings.util;
  * Based off of
  * https://github.com/gre/bezier-easing/blob/18f06f5d058184690f5975a243e5bcfcba2e89c4/src/index.js
  */
+/*
+贝塞尔曲线数值求解器
+使用 11 点预采样 + 条件牛顿迭代或二分细分解 t 值
+*/
 public final class CubicBezier {
     private static final float NEWTON_ITERATIONS = 4.0F;
 
@@ -35,6 +39,7 @@ public final class CubicBezier {
         this.sampleValues = sampleValues;
     }
 
+    // 二分细分 在斜率很小时使用 精度控制在 1e-7
     private static float binarySubdivide(float x, float a, float b, float x1, float x2) {
         float currentX, currentT;
         int i = 0;
@@ -50,6 +55,7 @@ public final class CubicBezier {
         return currentT;
     }
 
+    // 牛顿迭代 快速收敛求解 t 值 当导数足够大时优先使用
     private static float newtonRaphsonIterate(float x, float guessT, float x1, float x2) {
         for (int i = 0; i < NEWTON_ITERATIONS; i++) {
             float currentSlope = getSlope(guessT, x1, x2);
@@ -103,6 +109,7 @@ public final class CubicBezier {
         return calcBezier(this.getTForX(x), this.y1, this.y2);
     }
 
+    // 核心求逆 给定 x 找对应 t 采用采样加速 + 牛顿或二分
     private float getTForX(float x) {
         float intervalStart = 0;
         int currentSample = 1;

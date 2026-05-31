@@ -10,6 +10,7 @@ public final class FlightAnimationRules {
     }
 
     public static float getPitch(double x, double y, double z) {
+        // 根据水平速度与垂直速度计算建议俯仰角 用于区分 lift/glide
         return MathH.toDegrees((float) -Math.atan2(y, Mth.sqrt((float) (x * x + z * z))));
     }
 

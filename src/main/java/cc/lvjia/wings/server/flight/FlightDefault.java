@@ -44,6 +44,13 @@ public final class FlightDefault implements Flight {
 
     private static final Identifier DEFAULT_WING_ID = WingsMod.Names.NONE;
 
+    /*
+    飞行物理调参
+    MIN/MAX_SPEED 控制前向速度范围
+    Y_BOOST 起飞时轻微上抬
+    FALL_REDUCTION 用于降低下落伤害或控制
+    FLY_AMOUNT_CURVE 用于 getFlyingAmount 平滑量返回
+    */
     public static final Codec<FlightDefault> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                     Codec.BOOL.optionalFieldOf(Serializer.IS_FLYING, false).forGetter(FlightDefault::isFlying),
                     Codec.INT.optionalFieldOf(Serializer.TIME_FLYING, INITIAL_TIME_FLYING)
