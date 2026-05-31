@@ -125,13 +125,11 @@ public final class BuffedFlightApparatus implements FlightApparatus {
         double pushZ = 0.0D;
 
         if (settings.horizontalPush() > 0.0D) {
-            Vec3 horizontal = new Vec3(offset.x, 0.0D, offset.z);
-            double horizontalLength = horizontal.length();
+            double horizontalLength = Math.sqrt(offset.x * offset.x + offset.z * offset.z);
             if (horizontalLength > 1.0E-6D) {
-                Vec3 horizontalNormal = horizontal.scale(1.0D / horizontalLength);
-                double scale = settings.horizontalPush() * strengthFactor;
-                pushX = horizontalNormal.x * scale;
-                pushZ = horizontalNormal.z * scale;
+                double scale = settings.horizontalPush() * strengthFactor / horizontalLength;
+                pushX = offset.x * scale;
+                pushZ = offset.z * scale;
             }
         }
 
