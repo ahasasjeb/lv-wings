@@ -11,12 +11,12 @@
     },
     ".gitlab-ci.yml": {
       "ipo_ts": 1780834876496,
-      "edit_count": 1,
+      "edit_count": 2,
       "last_lines": 16,
-      "last_ts": 1780834876496,
+      "last_ts": 1780835276166,
       "delisted": false,
       "last_source": "onEdit",
-      "last_content_hash": "b36ad7b0"
+      "last_content_hash": "81a89b9a"
     },
     "fabric/build/classes/java/main/cc/lvjia/wings/FabricProxy$1.class": {
       "ipo_ts": 1780834892464,
