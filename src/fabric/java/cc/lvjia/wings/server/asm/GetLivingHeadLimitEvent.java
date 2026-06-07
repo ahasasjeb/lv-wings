@@ -8,15 +8,14 @@ public final class GetLivingHeadLimitEvent {
 
     private float softLimit;
 
+    private boolean modified;
+
     private GetLivingHeadLimitEvent(LivingEntity living) {
         this.living = living;
     }
 
     public static GetLivingHeadLimitEvent create(LivingEntity living) {
-        GetLivingHeadLimitEvent ev = new GetLivingHeadLimitEvent(living);
-        ev.setHardLimit(75.0F);
-        ev.setSoftLimit(50.0F);
-        return ev;
+        return new GetLivingHeadLimitEvent(living);
     }
 
     public LivingEntity getEntity() {
@@ -29,6 +28,7 @@ public final class GetLivingHeadLimitEvent {
 
     public void setHardLimit(float hardLimit) {
         this.hardLimit = hardLimit;
+        this.modified = true;
     }
 
     public float getSoftLimit() {
@@ -37,6 +37,7 @@ public final class GetLivingHeadLimitEvent {
 
     public void setSoftLimit(float softLimit) {
         this.softLimit = softLimit;
+        this.modified = true;
     }
 
     public void disableSoftLimit() {
@@ -44,6 +45,6 @@ public final class GetLivingHeadLimitEvent {
     }
 
     public boolean isVanilla() {
-        return this.hardLimit == 75.0F && this.softLimit == 50.0F;
+        return !this.modified;
     }
 }

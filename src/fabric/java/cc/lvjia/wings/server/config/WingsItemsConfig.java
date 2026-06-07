@@ -1,6 +1,6 @@
 package cc.lvjia.wings.server.config;
 
-import cc.lvjia.wings.WingsMod;
+import cc.lvjia.wings.WingsCore;
 import org.jspecify.annotations.NonNull;
 
 import java.util.LinkedHashMap;
@@ -9,17 +9,17 @@ import java.util.stream.Stream;
 
 @SuppressWarnings("null")
 public final class WingsItemsConfig {
-    public static final @NonNull ConfigWingSettings ANGEL = new ConfigWingSettings(WingsMod.Names.ANGEL);
-    public static final @NonNull ConfigWingSettings PARROT = new ConfigWingSettings(WingsMod.Names.PARROT);
-    public static final @NonNull ConfigWingSettings SLIME = new ConfigWingSettings(WingsMod.Names.SLIME);
-    public static final @NonNull ConfigWingSettings BLUE_BUTTERFLY = new ConfigWingSettings(WingsMod.Names.BLUE_BUTTERFLY);
-    public static final @NonNull ConfigWingSettings MONARCH_BUTTERFLY = new ConfigWingSettings(WingsMod.Names.MONARCH_BUTTERFLY);
-    public static final @NonNull ConfigWingSettings FIRE = new ConfigWingSettings(WingsMod.Names.FIRE);
-    public static final @NonNull ConfigWingSettings BAT = new ConfigWingSettings(WingsMod.Names.BAT);
-    public static final @NonNull ConfigWingSettings FAIRY = new ConfigWingSettings(WingsMod.Names.FAIRY);
-    public static final @NonNull ConfigWingSettings EVIL = new ConfigWingSettings(WingsMod.Names.EVIL);
-    public static final @NonNull ConfigWingSettings DRAGON = new ConfigWingSettings(WingsMod.Names.DRAGON);
-    public static final @NonNull ConfigWingSettings LVJIA_SUPER = new ConfigWingSettings(WingsMod.Names.LVJIA_SUPER);
+    public static final @NonNull ConfigWingSettings ANGEL = new ConfigWingSettings(WingsCore.Names.ANGEL);
+    public static final @NonNull ConfigWingSettings PARROT = new ConfigWingSettings(WingsCore.Names.PARROT);
+    public static final @NonNull ConfigWingSettings SLIME = new ConfigWingSettings(WingsCore.Names.SLIME);
+    public static final @NonNull ConfigWingSettings BLUE_BUTTERFLY = new ConfigWingSettings(WingsCore.Names.BLUE_BUTTERFLY);
+    public static final @NonNull ConfigWingSettings MONARCH_BUTTERFLY = new ConfigWingSettings(WingsCore.Names.MONARCH_BUTTERFLY);
+    public static final @NonNull ConfigWingSettings FIRE = new ConfigWingSettings(WingsCore.Names.FIRE);
+    public static final @NonNull ConfigWingSettings BAT = new ConfigWingSettings(WingsCore.Names.BAT);
+    public static final @NonNull ConfigWingSettings FAIRY = new ConfigWingSettings(WingsCore.Names.FAIRY);
+    public static final @NonNull ConfigWingSettings EVIL = new ConfigWingSettings(WingsCore.Names.EVIL);
+    public static final @NonNull ConfigWingSettings DRAGON = new ConfigWingSettings(WingsCore.Names.DRAGON);
+    public static final @NonNull ConfigWingSettings LVJIA_SUPER = new ConfigWingSettings(WingsCore.Names.LVJIA_SUPER);
 
     private WingsItemsConfig() {
     }

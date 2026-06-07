@@ -1,5 +1,6 @@
 package cc.lvjia.wings.server.flight;
 
+import cc.lvjia.wings.WingsCore;
 import cc.lvjia.wings.WingsMod;
 import cc.lvjia.wings.server.apparatus.FlightApparatus;
 import cc.lvjia.wings.server.config.WingsConfig;
@@ -42,7 +43,7 @@ public final class FlightDefault implements Flight {
 
     private static final float PITCH_OFFSET = 30.0F;
 
-    private static final Identifier DEFAULT_WING_ID = WingsMod.Names.NONE;
+    private static final Identifier DEFAULT_WING_ID = WingsCore.Names.NONE;
 
     /*
     飞行物理调参

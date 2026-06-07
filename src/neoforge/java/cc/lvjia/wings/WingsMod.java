@@ -30,7 +30,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 public final class WingsMod {
     public static final String ID = WingsCore.ID;
     public static final ResourceKey<Registry<FlightApparatus>> WINGS_KEY = WingsCore.WINGS_KEY;
-    public static final Registry<FlightApparatus> WINGS = new DefaultedMappedRegistry<>(Names.NONE.toString(),
+    public static final Registry<FlightApparatus> WINGS = new DefaultedMappedRegistry<>(WingsCore.Names.NONE.toString(),
             WINGS_KEY, Lifecycle.experimental(), false);
     private static final WingsCore.WingSet WING_SET = WingsCore.registerWings((id, wing) ->
             Registry.register(WINGS, id, wing));
@@ -103,25 +103,5 @@ public final class WingsMod {
             throw new IllegalStateException("NeoForgeProxy not initialized");
         }
         return this.proxy;
-    }
-
-    public static final class Names {
-        public static final Identifier
-                NONE = WingsCore.Names.NONE,
-                WINGLESS = WingsCore.Names.WINGLESS,
-                ANGEL = WingsCore.Names.ANGEL,
-                PARROT = WingsCore.Names.PARROT,
-                SLIME = WingsCore.Names.SLIME,
-                BLUE_BUTTERFLY = WingsCore.Names.BLUE_BUTTERFLY,
-                MONARCH_BUTTERFLY = WingsCore.Names.MONARCH_BUTTERFLY,
-                FIRE = WingsCore.Names.FIRE,
-                BAT = WingsCore.Names.BAT,
-                FAIRY = WingsCore.Names.FAIRY,
-                EVIL = WingsCore.Names.EVIL,
-                DRAGON = WingsCore.Names.DRAGON,
-                LVJIA_SUPER = WingsCore.Names.LVJIA_SUPER;
-
-        private Names() {
-        }
     }
 }

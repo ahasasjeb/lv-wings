@@ -57,7 +57,7 @@ public final class WingsMod implements ModInitializer {
 
     private static @NonNull Registry<FlightApparatus> createWingsRegistry() {
         return Objects.requireNonNull(FabricRegistryBuilder
-                .createDefaulted(WINGS_KEY, Names.NONE)
+                .createDefaulted(WINGS_KEY, WingsCore.Names.NONE)
                 .attribute(RegistryAttribute.SYNCED)
                 .buildAndRegister(), "wings registry");
     }
@@ -92,25 +92,5 @@ public final class WingsMod implements ModInitializer {
 
     private FabricProxy requireProxy() {
         return this.proxy;
-    }
-
-    public static final class Names {
-        public static final @NonNull Identifier
-                NONE = WingsCore.Names.NONE,
-                WINGLESS = WingsCore.Names.WINGLESS,
-                ANGEL = WingsCore.Names.ANGEL,
-                PARROT = WingsCore.Names.PARROT,
-                SLIME = WingsCore.Names.SLIME,
-                BLUE_BUTTERFLY = WingsCore.Names.BLUE_BUTTERFLY,
-                MONARCH_BUTTERFLY = WingsCore.Names.MONARCH_BUTTERFLY,
-                FIRE = WingsCore.Names.FIRE,
-                BAT = WingsCore.Names.BAT,
-                FAIRY = WingsCore.Names.FAIRY,
-                EVIL = WingsCore.Names.EVIL,
-                DRAGON = WingsCore.Names.DRAGON,
-                LVJIA_SUPER = WingsCore.Names.LVJIA_SUPER;
-
-        private Names() {
-        }
     }
 }

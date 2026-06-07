@@ -2,16 +2,24 @@ package cc.lvjia.wings.client.hooks;
 
 import cc.lvjia.wings.client.asm.AnimatePlayerModelEvent;
 import cc.lvjia.wings.client.asm.ApplyPlayerRotationsEvent;
+import cc.lvjia.wings.client.asm.GetCameraEyeHeightEvent;
 import cc.lvjia.wings.client.event.EmptyOffHandPresentEvent;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.NeoForge;
 
 public final class WingsHooksClient {
     private WingsHooksClient() {
+    }
+
+    public static float onGetCameraEyeHeight(Entity entity, float eyeHeight) {
+        GetCameraEyeHeightEvent ev = GetCameraEyeHeightEvent.create(entity, eyeHeight);
+        NeoForge.EVENT_BUS.post(ev);
+        return ev.getValue();
     }
 
     public static void onSetPlayerRotationAngles(AvatarRenderState state, PlayerModel model) {
