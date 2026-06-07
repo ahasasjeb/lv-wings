@@ -1,0 +1,16 @@
+stages:
+  - build
+
+variables:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+
+build:
+  stage: build
+  image: eclipse-temurin:25-jdk
+  script:
+    - chmod +x gradlew
+    - ./gradlew clean build
+  artifacts:
+    paths:
+      - build/libs/
+    expire_in: 1 week

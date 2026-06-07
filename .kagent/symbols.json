@@ -1,0 +1,4648 @@
+{
+  "symbols": {
+    ".github/workflows/build.yml": {
+      "ipo_ts": 1780834875574,
+      "edit_count": 1,
+      "last_lines": 22,
+      "last_ts": 1780834875574,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "20b41c50"
+    },
+    ".gitlab-ci.yml": {
+      "ipo_ts": 1780834876496,
+      "edit_count": 1,
+      "last_lines": 16,
+      "last_ts": 1780834876496,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "b36ad7b0"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/FabricProxy$1.class": {
+      "ipo_ts": 1780834892464,
+      "edit_count": 1,
+      "last_lines": 10,
+      "last_ts": 1780834892464,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "2cda5878"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/FabricProxy.class": {
+      "ipo_ts": 1780834892467,
+      "edit_count": 1,
+      "last_lines": 17,
+      "last_ts": 1780834892467,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "42c6ef9"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/WingsAttachments.class": {
+      "ipo_ts": 1780834892469,
+      "edit_count": 1,
+      "last_lines": 34,
+      "last_ts": 1780834892469,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "1f3f77"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/WingsCore$1.class": {
+      "ipo_ts": 1780834892471,
+      "edit_count": 1,
+      "last_lines": 18,
+      "last_ts": 1780834892471,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "66ede7e2"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/WingsCore$Names.class": {
+      "ipo_ts": 1780834892473,
+      "edit_count": 1,
+      "last_lines": 11,
+      "last_ts": 1780834892473,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "3edfec2"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/WingsCore$WingRegistrar.class": {
+      "ipo_ts": 1780834892475,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834892475,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "b2d468cb"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/WingsCore$WingSet.class": {
+      "ipo_ts": 1780834892478,
+      "edit_count": 1,
+      "last_lines": 9,
+      "last_ts": 1780834892478,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "c1ba29c4"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/WingsCore.class": {
+      "ipo_ts": 1780834892481,
+      "edit_count": 1,
+      "last_lines": 27,
+      "last_ts": 1780834892481,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "3c968865"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/WingsMod.class": {
+      "ipo_ts": 1780834892483,
+      "edit_count": 1,
+      "last_lines": 53,
+      "last_ts": 1780834892483,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "63ae4fd4"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/ClientEventHandlerSupport.class": {
+      "ipo_ts": 1780834892485,
+      "edit_count": 1,
+      "last_lines": 65,
+      "last_ts": 1780834892485,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "73c3bb6a"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/ClientFlightInputActions.class": {
+      "ipo_ts": 1780834892488,
+      "edit_count": 1,
+      "last_lines": 11,
+      "last_ts": 1780834892488,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "11ec857e"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/ClientFlightListenerSupport$FlyingStateSender.class": {
+      "ipo_ts": 1780834892490,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834892490,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "5180d468"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/ClientFlightListenerSupport.class": {
+      "ipo_ts": 1780834892492,
+      "edit_count": 1,
+      "last_lines": 15,
+      "last_ts": 1780834892492,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "ca52fb3"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/FabricClientEventHandler.class": {
+      "ipo_ts": 1780834892494,
+      "edit_count": 1,
+      "last_lines": 50,
+      "last_ts": 1780834892494,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "2a74d187"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/FabricClientProxy.class": {
+      "ipo_ts": 1780834892496,
+      "edit_count": 1,
+      "last_lines": 31,
+      "last_ts": 1780834892496,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "df4d64c6"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/WingFormRegistrar.class": {
+      "ipo_ts": 1780834892497,
+      "edit_count": 1,
+      "last_lines": 47,
+      "last_ts": 1780834892497,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "726a952"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/WingsClient.class": {
+      "ipo_ts": 1780834892499,
+      "edit_count": 1,
+      "last_lines": 10,
+      "last_ts": 1780834892499,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "500eb1a1"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/apparatus/WingForm.class": {
+      "ipo_ts": 1780834892501,
+      "edit_count": 1,
+      "last_lines": 19,
+      "last_ts": 1780834892501,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "4456f078"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/asm/AnimatePlayerModelEvent.class": {
+      "ipo_ts": 1780834892503,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834892503,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "ffe9331c"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/asm/ApplyPlayerRotationsEvent.class": {
+      "ipo_ts": 1780834892505,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834892505,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "b22fbb39"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/asm/GetCameraEyeHeightEvent.class": {
+      "ipo_ts": 1780834892507,
+      "edit_count": 1,
+      "last_lines": 11,
+      "last_ts": 1780834892507,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "95301272"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/audio/WingsSound.class": {
+      "ipo_ts": 1780834892509,
+      "edit_count": 1,
+      "last_lines": 18,
+      "last_ts": 1780834892509,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "bdd6a792"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/event/EmptyOffHandPresentEvent.class": {
+      "ipo_ts": 1780834892511,
+      "edit_count": 1,
+      "last_lines": 9,
+      "last_ts": 1780834892511,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "173ac7e7"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/Animator.class": {
+      "ipo_ts": 1780834892513,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834892513,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "919f223d"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/AnimatorAvian$FallMovement.class": {
+      "ipo_ts": 1780834892515,
+      "edit_count": 1,
+      "last_lines": 19,
+      "last_ts": 1780834892515,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "4a85978a"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/AnimatorAvian$GlideMovement.class": {
+      "ipo_ts": 1780834892517,
+      "edit_count": 1,
+      "last_lines": 16,
+      "last_ts": 1780834892517,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "2d731e25"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/AnimatorAvian$IdleMovement.class": {
+      "ipo_ts": 1780834892518,
+      "edit_count": 1,
+      "last_lines": 17,
+      "last_ts": 1780834892518,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "8d101963"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/AnimatorAvian$LandMovement.class": {
+      "ipo_ts": 1780834892520,
+      "edit_count": 1,
+      "last_lines": 12,
+      "last_ts": 1780834892520,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "c262aa3d"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/AnimatorAvian$LiftMovement.class": {
+      "ipo_ts": 1780834892522,
+      "edit_count": 1,
+      "last_lines": 15,
+      "last_ts": 1780834892522,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "94ab5e9e"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/AnimatorAvian$Movement.class": {
+      "ipo_ts": 1780834892524,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834892524,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a378ae85"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/AnimatorAvian$RestPosition.class": {
+      "ipo_ts": 1780834892527,
+      "edit_count": 1,
+      "last_lines": 21,
+      "last_ts": 1780834892527,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "93e8c908"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/AnimatorAvian$RotationGetter.class": {
+      "ipo_ts": 1780834892529,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834892529,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "424ff35f"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/AnimatorAvian$Transition.class": {
+      "ipo_ts": 1780834892532,
+      "edit_count": 1,
+      "last_lines": 22,
+      "last_ts": 1780834892532,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "47107391"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/AnimatorAvian$WingPose$Builder.class": {
+      "ipo_ts": 1780834892534,
+      "edit_count": 1,
+      "last_lines": 9,
+      "last_ts": 1780834892534,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "3c93ac5d"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/AnimatorAvian$WingPose.class": {
+      "ipo_ts": 1780834892536,
+      "edit_count": 1,
+      "last_lines": 8,
+      "last_ts": 1780834892536,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "ab8e2c54"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/AnimatorAvian.class": {
+      "ipo_ts": 1780834892539,
+      "edit_count": 1,
+      "last_lines": 41,
+      "last_ts": 1780834892539,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "ba5ffa48"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/AnimatorInsectoid.class": {
+      "ipo_ts": 1780834892541,
+      "edit_count": 1,
+      "last_lines": 21,
+      "last_ts": 1780834892541,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "6c501fac"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/FlightPoseSupport$FlightPoseAngles.class": {
+      "ipo_ts": 1780834892543,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834892543,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "785332b8"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/FlightPoseSupport.class": {
+      "ipo_ts": 1780834892546,
+      "edit_count": 1,
+      "last_lines": 22,
+      "last_ts": 1780834892546,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "e26bcb28"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/FlightView$FormRenderer.class": {
+      "ipo_ts": 1780834892548,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834892548,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "5ace7b62"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/FlightView.class": {
+      "ipo_ts": 1780834892550,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834892550,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "de265b49"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/FlightViewDefault$1.class": {
+      "ipo_ts": 1780834892552,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892552,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "42268f24"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/FlightViewDefault$PresentWingState$WingStrategy$1.class": {
+      "ipo_ts": 1780834892554,
+      "edit_count": 1,
+      "last_lines": 12,
+      "last_ts": 1780834892554,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "597fd0ae"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/FlightViewDefault$PresentWingState$WingStrategy.class": {
+      "ipo_ts": 1780834892557,
+      "edit_count": 1,
+      "last_lines": 25,
+      "last_ts": 1780834892557,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "1b605bb2"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/FlightViewDefault$PresentWingState.class": {
+      "ipo_ts": 1780834892559,
+      "edit_count": 1,
+      "last_lines": 15,
+      "last_ts": 1780834892559,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "af44825d"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/FlightViewDefault$Strategy.class": {
+      "ipo_ts": 1780834892562,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834892562,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "331dc903"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/FlightViewDefault$WingState.class": {
+      "ipo_ts": 1780834892564,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834892564,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "20db3e8e"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/FlightViewDefault.class": {
+      "ipo_ts": 1780834892566,
+      "edit_count": 1,
+      "last_lines": 19,
+      "last_ts": 1780834892566,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "b6f7e44d"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/FlightViews.class": {
+      "ipo_ts": 1780834892568,
+      "edit_count": 1,
+      "last_lines": 20,
+      "last_ts": 1780834892568,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "987bd624"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/RotationAngles.class": {
+      "ipo_ts": 1780834892570,
+      "edit_count": 1,
+      "last_lines": 7,
+      "last_ts": 1780834892570,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "ae124e01"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/state/State$1.class": {
+      "ipo_ts": 1780834892572,
+      "edit_count": 1,
+      "last_lines": 9,
+      "last_ts": 1780834892572,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a539682d"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/state/State.class": {
+      "ipo_ts": 1780834892574,
+      "edit_count": 1,
+      "last_lines": 36,
+      "last_ts": 1780834892574,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "1e14fd55"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/state/StateFall.class": {
+      "ipo_ts": 1780834892575,
+      "edit_count": 1,
+      "last_lines": 10,
+      "last_ts": 1780834892575,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "6a47d657"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/state/StateGlide.class": {
+      "ipo_ts": 1780834892577,
+      "edit_count": 1,
+      "last_lines": 15,
+      "last_ts": 1780834892577,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "abc18d8"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/state/StateIdle.class": {
+      "ipo_ts": 1780834892579,
+      "edit_count": 1,
+      "last_lines": 16,
+      "last_ts": 1780834892579,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "4fc529af"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/state/StateLand.class": {
+      "ipo_ts": 1780834892581,
+      "edit_count": 1,
+      "last_lines": 11,
+      "last_ts": 1780834892581,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "8d14e509"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/flight/state/StateLift.class": {
+      "ipo_ts": 1780834892583,
+      "edit_count": 1,
+      "last_lines": 16,
+      "last_ts": 1780834892583,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "c05865fa"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/hooks/ClientRenderHookSupport.class": {
+      "ipo_ts": 1780834892584,
+      "edit_count": 1,
+      "last_lines": 14,
+      "last_ts": 1780834892584,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "166f491f"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/hooks/ItemInHandHookSupport$EmptyOffhandAllowance.class": {
+      "ipo_ts": 1780834892586,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834892586,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "833f96f1"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/hooks/ItemInHandHookSupport$GetItemStackMainHand.class": {
+      "ipo_ts": 1780834892588,
+      "edit_count": 1,
+      "last_lines": 11,
+      "last_ts": 1780834892588,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "47d52fb7"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/hooks/ItemInHandHookSupport$NormalReequipRule.class": {
+      "ipo_ts": 1780834892590,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834892590,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "627d768f"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/hooks/ItemInHandHookSupport$OptiFineHolder.class": {
+      "ipo_ts": 1780834892592,
+      "edit_count": 1,
+      "last_lines": 7,
+      "last_ts": 1780834892592,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "42eb2f09"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/hooks/ItemInHandHookSupport.class": {
+      "ipo_ts": 1780834892595,
+      "edit_count": 1,
+      "last_lines": 23,
+      "last_ts": 1780834892595,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "769193a8"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/hooks/WingsHooksClient.class": {
+      "ipo_ts": 1780834892597,
+      "edit_count": 1,
+      "last_lines": 44,
+      "last_ts": 1780834892597,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "80800c48"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/model/Model3DTexture$FaceAdder.class": {
+      "ipo_ts": 1780834892599,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834892599,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "dff2ac2d"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/model/Model3DTexture.class": {
+      "ipo_ts": 1780834892601,
+      "edit_count": 1,
+      "last_lines": 61,
+      "last_ts": 1780834892601,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "40aeedf"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/model/ModelWings.class": {
+      "ipo_ts": 1780834892603,
+      "edit_count": 1,
+      "last_lines": 14,
+      "last_ts": 1780834892603,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "234d061c"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/model/ModelWingsAvian.class": {
+      "ipo_ts": 1780834892605,
+      "edit_count": 1,
+      "last_lines": 69,
+      "last_ts": 1780834892605,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "352c19fa"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/model/ModelWingsInsectoid.class": {
+      "ipo_ts": 1780834892607,
+      "edit_count": 1,
+      "last_lines": 26,
+      "last_ts": 1780834892607,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "6d1169c5"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/net/ClientFlightSyncApplier.class": {
+      "ipo_ts": 1780834892609,
+      "edit_count": 1,
+      "last_lines": 11,
+      "last_ts": 1780834892609,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "eb5ddb34"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/net/ClientNetwork.class": {
+      "ipo_ts": 1780834892611,
+      "edit_count": 1,
+      "last_lines": 20,
+      "last_ts": 1780834892611,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "96010535"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/renderer/FabricLayerWings.class": {
+      "ipo_ts": 1780834892613,
+      "edit_count": 1,
+      "last_lines": 32,
+      "last_ts": 1780834892613,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "7cc13982"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/renderer/LayerCapeWings.class": {
+      "ipo_ts": 1780834892614,
+      "edit_count": 1,
+      "last_lines": 11,
+      "last_ts": 1780834892614,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "fa02bcf8"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/renderer/SodiumBypassVertexConsumer.class": {
+      "ipo_ts": 1780834892616,
+      "edit_count": 1,
+      "last_lines": 24,
+      "last_ts": 1780834892616,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "59a580a0"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/client/renderer/WingsLayerRenderer.class": {
+      "ipo_ts": 1780834892618,
+      "edit_count": 1,
+      "last_lines": 65,
+      "last_ts": 1780834892618,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "88af9e48"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/mixin/FabricCameraMixin.class": {
+      "ipo_ts": 1780834892620,
+      "edit_count": 1,
+      "last_lines": 14,
+      "last_ts": 1780834892620,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "1c363c85"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/mixin/FabricEntityMixin.class": {
+      "ipo_ts": 1780834892622,
+      "edit_count": 1,
+      "last_lines": 10,
+      "last_ts": 1780834892622,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "4eeebb26"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/mixin/FabricItemInHandRendererMixin.class": {
+      "ipo_ts": 1780834892624,
+      "edit_count": 1,
+      "last_lines": 17,
+      "last_ts": 1780834892624,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "10dc97af"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/mixin/LivingEntityMixin.class": {
+      "ipo_ts": 1780834892626,
+      "edit_count": 1,
+      "last_lines": 9,
+      "last_ts": 1780834892626,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "cf4d2c70"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/mixin/PlayerMixin.class": {
+      "ipo_ts": 1780834892628,
+      "edit_count": 1,
+      "last_lines": 10,
+      "last_ts": 1780834892628,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "c8906f81"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/mixin/PlayerModelMixin.class": {
+      "ipo_ts": 1780834892630,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892630,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "5e1667ba"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/mixin/PlayerRendererMixin.class": {
+      "ipo_ts": 1780834892633,
+      "edit_count": 1,
+      "last_lines": 9,
+      "last_ts": 1780834892633,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "e5cf002a"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/mixin/PotionBrewingMixin.class": {
+      "ipo_ts": 1780834892635,
+      "edit_count": 1,
+      "last_lines": 11,
+      "last_ts": 1780834892635,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "15646efe"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/mixin/ServerGamePacketListenerImplMixin.class": {
+      "ipo_ts": 1780834892637,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892637,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "4c32b5e"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/mixin/ServerPlayerMixin.class": {
+      "ipo_ts": 1780834892639,
+      "edit_count": 1,
+      "last_lines": 7,
+      "last_ts": 1780834892639,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "4ace7a0b"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/mixin/client/LivingEntityRendererAccessor.class": {
+      "ipo_ts": 1780834892642,
+      "edit_count": 1,
+      "last_lines": 3,
+      "last_ts": 1780834892642,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "1a22afdd"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/FabricServerEventHandler.class": {
+      "ipo_ts": 1780834892644,
+      "edit_count": 1,
+      "last_lines": 59,
+      "last_ts": 1780834892644,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "3547112d"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/FlightListenerSupport$Sync.class": {
+      "ipo_ts": 1780834892646,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834892646,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "821f6d29"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/FlightListenerSupport.class": {
+      "ipo_ts": 1780834892648,
+      "edit_count": 1,
+      "last_lines": 40,
+      "last_ts": 1780834892648,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "d358d922"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/ServerEventActions$DestroyedItemCallback.class": {
+      "ipo_ts": 1780834892650,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834892650,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "cacc303f"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/ServerEventActions.class": {
+      "ipo_ts": 1780834892653,
+      "edit_count": 1,
+      "last_lines": 57,
+      "last_ts": 1780834892653,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "abfc6c68"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/apparatus/BuffedFlightApparatus$1.class": {
+      "ipo_ts": 1780834892656,
+      "edit_count": 1,
+      "last_lines": 18,
+      "last_ts": 1780834892656,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "b6b44049"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/apparatus/BuffedFlightApparatus$EffectSettings.class": {
+      "ipo_ts": 1780834892658,
+      "edit_count": 1,
+      "last_lines": 14,
+      "last_ts": 1780834892658,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "6491b84e"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/apparatus/BuffedFlightApparatus$MobAvoidanceSettings.class": {
+      "ipo_ts": 1780834892661,
+      "edit_count": 1,
+      "last_lines": 11,
+      "last_ts": 1780834892661,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "f20eb848"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/apparatus/BuffedFlightApparatus.class": {
+      "ipo_ts": 1780834892664,
+      "edit_count": 1,
+      "last_lines": 76,
+      "last_ts": 1780834892664,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "8e36a41a"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/apparatus/FlightApparatus$1.class": {
+      "ipo_ts": 1780834892666,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834892666,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "e62af921"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/apparatus/FlightApparatus$FlightState.class": {
+      "ipo_ts": 1780834892667,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892667,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "c2003be0"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/apparatus/FlightApparatus.class": {
+      "ipo_ts": 1780834892670,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834892670,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "7a8e1751"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/apparatus/SimpleFlightApparatus.class": {
+      "ipo_ts": 1780834892671,
+      "edit_count": 1,
+      "last_lines": 15,
+      "last_ts": 1780834892671,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "ded6e3f5"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/asm/BodyRotationHookSupport.class": {
+      "ipo_ts": 1780834892673,
+      "edit_count": 1,
+      "last_lines": 8,
+      "last_ts": 1780834892673,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "cc97cacb"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/asm/GetLivingHeadLimitEvent.class": {
+      "ipo_ts": 1780834892675,
+      "edit_count": 1,
+      "last_lines": 12,
+      "last_ts": 1780834892675,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "d9d58650"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/asm/PlayerFlightCheckEvent.class": {
+      "ipo_ts": 1780834892677,
+      "edit_count": 1,
+      "last_lines": 9,
+      "last_ts": 1780834892677,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "6e372c7"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/asm/PlayerFlownEvent.class": {
+      "ipo_ts": 1780834892679,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834892679,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "adb367d5"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/asm/WingsHooks.class": {
+      "ipo_ts": 1780834892681,
+      "edit_count": 1,
+      "last_lines": 21,
+      "last_ts": 1780834892681,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "313336e1"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/command/FabricWingsCommand.class": {
+      "ipo_ts": 1780834892683,
+      "edit_count": 1,
+      "last_lines": 47,
+      "last_ts": 1780834892683,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "7b8f7c06"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/command/WingsCommandActions$WingsGetter.class": {
+      "ipo_ts": 1780834892686,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834892686,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "86c90ba9"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/command/WingsCommandActions.class": {
+      "ipo_ts": 1780834892688,
+      "edit_count": 1,
+      "last_lines": 56,
+      "last_ts": 1780834892688,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "ccf41db"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/config/ConfigFiles.class": {
+      "ipo_ts": 1780834892691,
+      "edit_count": 1,
+      "last_lines": 35,
+      "last_ts": 1780834892691,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "2b97de00"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/config/ConfigWingSettings$Data.class": {
+      "ipo_ts": 1780834892693,
+      "edit_count": 1,
+      "last_lines": 12,
+      "last_ts": 1780834892693,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a2395425"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/config/ConfigWingSettings.class": {
+      "ipo_ts": 1780834892695,
+      "edit_count": 1,
+      "last_lines": 11,
+      "last_ts": 1780834892695,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "b083ef27"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/config/FlightAntiCheatSettings.class": {
+      "ipo_ts": 1780834892697,
+      "edit_count": 1,
+      "last_lines": 8,
+      "last_ts": 1780834892697,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "2acd0111"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/config/WingsConfig$AntiCheatData.class": {
+      "ipo_ts": 1780834892699,
+      "edit_count": 1,
+      "last_lines": 22,
+      "last_ts": 1780834892699,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "6f73ccbf"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/config/WingsConfig$Data.class": {
+      "ipo_ts": 1780834892701,
+      "edit_count": 1,
+      "last_lines": 12,
+      "last_ts": 1780834892701,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "5b10641c"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/config/WingsConfig.class": {
+      "ipo_ts": 1780834892703,
+      "edit_count": 1,
+      "last_lines": 12,
+      "last_ts": 1780834892703,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "d7502c6c"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/config/WingsConfigDefaults$WingSettingsData.class": {
+      "ipo_ts": 1780834892705,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834892705,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "57eaed84"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/config/WingsConfigDefaults.class": {
+      "ipo_ts": 1780834892707,
+      "edit_count": 1,
+      "last_lines": 19,
+      "last_ts": 1780834892707,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "339bf398"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/config/WingsItemsConfig$Data.class": {
+      "ipo_ts": 1780834892709,
+      "edit_count": 1,
+      "last_lines": 20,
+      "last_ts": 1780834892709,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "99469af3"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/config/WingsItemsConfig.class": {
+      "ipo_ts": 1780834892711,
+      "edit_count": 1,
+      "last_lines": 23,
+      "last_ts": 1780834892711,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "1db462d5"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/dreamcatcher/InSomniable$InSomniacState.class": {
+      "ipo_ts": 1780834892713,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834892713,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "5d428277"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/dreamcatcher/InSomniable$SearchState.class": {
+      "ipo_ts": 1780834892715,
+      "edit_count": 1,
+      "last_lines": 22,
+      "last_ts": 1780834892715,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "271d5138"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/dreamcatcher/InSomniable$Serializer.class": {
+      "ipo_ts": 1780834892717,
+      "edit_count": 1,
+      "last_lines": 20,
+      "last_ts": 1780834892717,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "b64835da"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/dreamcatcher/InSomniable$State.class": {
+      "ipo_ts": 1780834892719,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834892719,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "7d86a5b5"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/dreamcatcher/InSomniable.class": {
+      "ipo_ts": 1780834892721,
+      "edit_count": 1,
+      "last_lines": 17,
+      "last_ts": 1780834892721,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "f11fd1f2"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/dreamcatcher/InSomniableCapability.class": {
+      "ipo_ts": 1780834892723,
+      "edit_count": 1,
+      "last_lines": 10,
+      "last_ts": 1780834892723,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "81dfcca1"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/dreamcatcher/InSomniableEventHandler.class": {
+      "ipo_ts": 1780834892725,
+      "edit_count": 1,
+      "last_lines": 33,
+      "last_ts": 1780834892725,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "67340505"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/effect/WingedEffect.class": {
+      "ipo_ts": 1780834892728,
+      "edit_count": 1,
+      "last_lines": 8,
+      "last_ts": 1780834892728,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a5277737"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/effect/WingsEffects.class": {
+      "ipo_ts": 1780834892729,
+      "edit_count": 1,
+      "last_lines": 13,
+      "last_ts": 1780834892729,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "af7d2701"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/flight/Flight$FlyingListener.class": {
+      "ipo_ts": 1780834892732,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892732,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "5e0e9471"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/flight/Flight$Notifier$1.class": {
+      "ipo_ts": 1780834892734,
+      "edit_count": 1,
+      "last_lines": 14,
+      "last_ts": 1780834892734,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "35244544"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/flight/Flight$Notifier.class": {
+      "ipo_ts": 1780834892736,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834892736,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "738bee51"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/flight/Flight$PlayerSet.class": {
+      "ipo_ts": 1780834892739,
+      "edit_count": 1,
+      "last_lines": 8,
+      "last_ts": 1780834892739,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "c4ae09b8"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/flight/Flight$SyncListener.class": {
+      "ipo_ts": 1780834892742,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892742,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "bdc0afc6"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/flight/Flight.class": {
+      "ipo_ts": 1780834892744,
+      "edit_count": 1,
+      "last_lines": 8,
+      "last_ts": 1780834892744,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "59a5087d"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/flight/FlightAnimationRules.class": {
+      "ipo_ts": 1780834892747,
+      "edit_count": 1,
+      "last_lines": 18,
+      "last_ts": 1780834892747,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "60443d24"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/flight/FlightAnimationState.class": {
+      "ipo_ts": 1780834892749,
+      "edit_count": 1,
+      "last_lines": 14,
+      "last_ts": 1780834892749,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "1bfad325"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/flight/FlightAnimationTracker.class": {
+      "ipo_ts": 1780834892752,
+      "edit_count": 1,
+      "last_lines": 23,
+      "last_ts": 1780834892752,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a65a0afb"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/flight/FlightDefault$Serializer.class": {
+      "ipo_ts": 1780834892757,
+      "edit_count": 1,
+      "last_lines": 43,
+      "last_ts": 1780834892757,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "378639e1"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/flight/FlightDefault$WingState.class": {
+      "ipo_ts": 1780834892760,
+      "edit_count": 1,
+      "last_lines": 8,
+      "last_ts": 1780834892760,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "f5ed729a"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/flight/FlightDefault.class": {
+      "ipo_ts": 1780834892763,
+      "edit_count": 1,
+      "last_lines": 116,
+      "last_ts": 1780834892763,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "14135d54"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/flight/FlightEventSupport.class": {
+      "ipo_ts": 1780834892767,
+      "edit_count": 1,
+      "last_lines": 15,
+      "last_ts": 1780834892767,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "32958bfa"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/flight/FlightSpeedAntiCheat$PendingCorrection.class": {
+      "ipo_ts": 1780834892770,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892770,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "ed37a399"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/flight/FlightSpeedAntiCheat$TrackingState.class": {
+      "ipo_ts": 1780834892773,
+      "edit_count": 1,
+      "last_lines": 19,
+      "last_ts": 1780834892773,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "da977fc2"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/flight/FlightSpeedAntiCheat.class": {
+      "ipo_ts": 1780834892776,
+      "edit_count": 1,
+      "last_lines": 85,
+      "last_ts": 1780834892776,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "f7f6069a"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/flight/FlightStateReset.class": {
+      "ipo_ts": 1780834892778,
+      "edit_count": 1,
+      "last_lines": 9,
+      "last_ts": 1780834892778,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "86559fec"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/flight/Flights.class": {
+      "ipo_ts": 1780834892780,
+      "edit_count": 1,
+      "last_lines": 29,
+      "last_ts": 1780834892780,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "bcc2253"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/item/BatBloodBottleItem.class": {
+      "ipo_ts": 1780834892783,
+      "edit_count": 1,
+      "last_lines": 17,
+      "last_ts": 1780834892783,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "2500d3d8"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/item/WingSettings.class": {
+      "ipo_ts": 1780834892785,
+      "edit_count": 1,
+      "last_lines": 3,
+      "last_ts": 1780834892785,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a57b9280"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/item/WingsBottleActions.class": {
+      "ipo_ts": 1780834892788,
+      "edit_count": 1,
+      "last_lines": 22,
+      "last_ts": 1780834892788,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "1d9289c7"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/item/WingsBottleItem.class": {
+      "ipo_ts": 1780834892792,
+      "edit_count": 1,
+      "last_lines": 16,
+      "last_ts": 1780834892792,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "939add02"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/item/WingsItemCatalog.class": {
+      "ipo_ts": 1780834892794,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892794,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "26f3b59b"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/item/WingsItems.class": {
+      "ipo_ts": 1780834892796,
+      "edit_count": 1,
+      "last_lines": 72,
+      "last_ts": 1780834892796,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "1fa1bac0"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/net/Message.class": {
+      "ipo_ts": 1780834892799,
+      "edit_count": 1,
+      "last_lines": 2,
+      "last_ts": 1780834892799,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "5e083f60"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/net/Network.class": {
+      "ipo_ts": 1780834892801,
+      "edit_count": 1,
+      "last_lines": 13,
+      "last_ts": 1780834892801,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "8d12046a"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/net/clientbound/MessageSyncFlight.class": {
+      "ipo_ts": 1780834892803,
+      "edit_count": 1,
+      "last_lines": 26,
+      "last_ts": 1780834892803,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "94741ee1"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/net/serverbound/ControlFlyingMessageHandler$FlightGetter.class": {
+      "ipo_ts": 1780834892805,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834892805,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "c60495f5"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/net/serverbound/ControlFlyingMessageHandler$FlightSync.class": {
+      "ipo_ts": 1780834892807,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834892807,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a2e96727"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/net/serverbound/ControlFlyingMessageHandler.class": {
+      "ipo_ts": 1780834892809,
+      "edit_count": 1,
+      "last_lines": 15,
+      "last_ts": 1780834892809,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "7a94f984"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/net/serverbound/MessageControlFlying.class": {
+      "ipo_ts": 1780834892811,
+      "edit_count": 1,
+      "last_lines": 36,
+      "last_ts": 1780834892811,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "56b6f7fc"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/potion/WingsBrewingCatalog.class": {
+      "ipo_ts": 1780834892814,
+      "edit_count": 1,
+      "last_lines": 8,
+      "last_ts": 1780834892814,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "9b27fe5c"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/potion/WingsBrewingRecipes$Mix.class": {
+      "ipo_ts": 1780834892816,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892816,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "eb2aeebc"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/potion/WingsBrewingRecipes.class": {
+      "ipo_ts": 1780834892818,
+      "edit_count": 1,
+      "last_lines": 42,
+      "last_ts": 1780834892818,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "ed1ebdb7"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/server/sound/WingsSounds.class": {
+      "ipo_ts": 1780834892820,
+      "edit_count": 1,
+      "last_lines": 14,
+      "last_ts": 1780834892820,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "1340f691"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/util/Access$GetterHandleBuilder.class": {
+      "ipo_ts": 1780834892822,
+      "edit_count": 1,
+      "last_lines": 28,
+      "last_ts": 1780834892822,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "afe842a1"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/util/Access$HandleBuilder.class": {
+      "ipo_ts": 1780834892824,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834892824,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "7339bf83"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/util/Access$NamingBuilder.class": {
+      "ipo_ts": 1780834892826,
+      "edit_count": 1,
+      "last_lines": 9,
+      "last_ts": 1780834892826,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "143f4a05"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/util/Access$NamingGetterHandleBuilder.class": {
+      "ipo_ts": 1780834892828,
+      "edit_count": 1,
+      "last_lines": 16,
+      "last_ts": 1780834892828,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "860f7417"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/util/Access.class": {
+      "ipo_ts": 1780834892830,
+      "edit_count": 1,
+      "last_lines": 10,
+      "last_ts": 1780834892830,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "5d2ce3a3"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/util/CubicBezier.class": {
+      "ipo_ts": 1780834892832,
+      "edit_count": 1,
+      "last_lines": 32,
+      "last_ts": 1780834892832,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "1f7ae1b1"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/util/FabricKeyInputListener$BindingBuilder.class": {
+      "ipo_ts": 1780834892834,
+      "edit_count": 1,
+      "last_lines": 9,
+      "last_ts": 1780834892834,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "6168006c"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/util/FabricKeyInputListener$Builder.class": {
+      "ipo_ts": 1780834892836,
+      "edit_count": 1,
+      "last_lines": 3,
+      "last_ts": 1780834892836,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "e631d3d1"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/util/FabricKeyInputListener$BuilderRoot.class": {
+      "ipo_ts": 1780834892838,
+      "edit_count": 1,
+      "last_lines": 11,
+      "last_ts": 1780834892838,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "64ae4e1e"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/util/FabricKeyInputListener$CategoryBuilder.class": {
+      "ipo_ts": 1780834892840,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834892840,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "57de6595"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/util/FabricKeyInputListener$CategoryBuilderRoot.class": {
+      "ipo_ts": 1780834892842,
+      "edit_count": 1,
+      "last_lines": 10,
+      "last_ts": 1780834892842,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "e27b7f6"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/util/FabricKeyInputListener$ChildBuilder.class": {
+      "ipo_ts": 1780834892844,
+      "edit_count": 1,
+      "last_lines": 9,
+      "last_ts": 1780834892844,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "2cf2deb9"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/util/FabricKeyInputListener.class": {
+      "ipo_ts": 1780834892846,
+      "edit_count": 1,
+      "last_lines": 19,
+      "last_ts": 1780834892846,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "5c75931d"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/util/MathH.class": {
+      "ipo_ts": 1780834892848,
+      "edit_count": 1,
+      "last_lines": 21,
+      "last_ts": 1780834892848,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "7e766d84"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/util/NBTSerializer.class": {
+      "ipo_ts": 1780834892850,
+      "edit_count": 1,
+      "last_lines": 3,
+      "last_ts": 1780834892850,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "72908a3"
+    },
+    "fabric/build/classes/java/main/cc/lvjia/wings/util/function/FloatConsumer.class": {
+      "ipo_ts": 1780834892852,
+      "edit_count": 1,
+      "last_lines": 3,
+      "last_ts": 1780834892852,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "5c679c80"
+    },
+    "fabric/build/resources/main/assets/wings/items/angel_wings_bottle.json": {
+      "ipo_ts": 1780834892856,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892856,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "63fbf997"
+    },
+    "fabric/build/resources/main/assets/wings/items/bat_blood_bottle.json": {
+      "ipo_ts": 1780834892858,
+      "edit_count": 1,
+      "last_lines": 12,
+      "last_ts": 1780834892858,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "edf00e93"
+    },
+    "fabric/build/resources/main/assets/wings/items/bat_wings_bottle.json": {
+      "ipo_ts": 1780834892860,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892860,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "5f21ea6b"
+    },
+    "fabric/build/resources/main/assets/wings/items/blue_butterfly_wings_bottle.json": {
+      "ipo_ts": 1780834892862,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892862,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "7c41489e"
+    },
+    "fabric/build/resources/main/assets/wings/items/dragon_wings_bottle.json": {
+      "ipo_ts": 1780834892864,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892864,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "57c4bbe3"
+    },
+    "fabric/build/resources/main/assets/wings/items/evil_wings_bottle.json": {
+      "ipo_ts": 1780834892866,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892866,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "b031aba4"
+    },
+    "fabric/build/resources/main/assets/wings/items/fairy_wings_bottle.json": {
+      "ipo_ts": 1780834892868,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892868,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "390d536b"
+    },
+    "fabric/build/resources/main/assets/wings/items/fire_wings_bottle.json": {
+      "ipo_ts": 1780834892870,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892870,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "2b36aa46"
+    },
+    "fabric/build/resources/main/assets/wings/items/lvjia_super_wings_bottle.json": {
+      "ipo_ts": 1780834892872,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892872,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "5803f00a"
+    },
+    "fabric/build/resources/main/assets/wings/items/monarch_butterfly_wings_bottle.json": {
+      "ipo_ts": 1780834892874,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892874,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "cb60edec"
+    },
+    "fabric/build/resources/main/assets/wings/items/parrot_wings_bottle.json": {
+      "ipo_ts": 1780834892877,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892877,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "2f0d9e66"
+    },
+    "fabric/build/resources/main/assets/wings/items/slime_wings_bottle.json": {
+      "ipo_ts": 1780834892879,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892879,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "4e129b5e"
+    },
+    "fabric/build/resources/main/assets/wings/lang/ar_sa.json": {
+      "ipo_ts": 1780834892881,
+      "edit_count": 1,
+      "last_lines": 80,
+      "last_ts": 1780834892881,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "f524624a"
+    },
+    "fabric/build/resources/main/assets/wings/lang/de_de.json": {
+      "ipo_ts": 1780834892883,
+      "edit_count": 1,
+      "last_lines": 80,
+      "last_ts": 1780834892883,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "89be9f76"
+    },
+    "fabric/build/resources/main/assets/wings/lang/en_us.json": {
+      "ipo_ts": 1780834892885,
+      "edit_count": 1,
+      "last_lines": 80,
+      "last_ts": 1780834892885,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "c6e8648e"
+    },
+    "fabric/build/resources/main/assets/wings/lang/es_es.json": {
+      "ipo_ts": 1780834892887,
+      "edit_count": 1,
+      "last_lines": 80,
+      "last_ts": 1780834892887,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "e3ee71d1"
+    },
+    "fabric/build/resources/main/assets/wings/lang/fr_fr.json": {
+      "ipo_ts": 1780834892889,
+      "edit_count": 1,
+      "last_lines": 80,
+      "last_ts": 1780834892889,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "463514a7"
+    },
+    "fabric/build/resources/main/assets/wings/lang/it_it.json": {
+      "ipo_ts": 1780834892891,
+      "edit_count": 1,
+      "last_lines": 80,
+      "last_ts": 1780834892891,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "b6bc0663"
+    },
+    "fabric/build/resources/main/assets/wings/lang/ja_jp.json": {
+      "ipo_ts": 1780834892893,
+      "edit_count": 1,
+      "last_lines": 80,
+      "last_ts": 1780834892893,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "241345e3"
+    },
+    "fabric/build/resources/main/assets/wings/lang/ko_kr.json": {
+      "ipo_ts": 1780834892895,
+      "edit_count": 1,
+      "last_lines": 80,
+      "last_ts": 1780834892895,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "78ddded9"
+    },
+    "fabric/build/resources/main/assets/wings/lang/pt_br.json": {
+      "ipo_ts": 1780834892897,
+      "edit_count": 1,
+      "last_lines": 71,
+      "last_ts": 1780834892897,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "e2a80dea"
+    },
+    "fabric/build/resources/main/assets/wings/lang/ru_ru.json": {
+      "ipo_ts": 1780834892899,
+      "edit_count": 1,
+      "last_lines": 80,
+      "last_ts": 1780834892899,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a95c696c"
+    },
+    "fabric/build/resources/main/assets/wings/lang/tr_tr.json": {
+      "ipo_ts": 1780834892901,
+      "edit_count": 1,
+      "last_lines": 80,
+      "last_ts": 1780834892901,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "95ba80d4"
+    },
+    "fabric/build/resources/main/assets/wings/lang/zh_cn.json": {
+      "ipo_ts": 1780834892903,
+      "edit_count": 1,
+      "last_lines": 80,
+      "last_ts": 1780834892903,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "dd92d2d2"
+    },
+    "fabric/build/resources/main/assets/wings/lang/zh_tw.json": {
+      "ipo_ts": 1780834892905,
+      "edit_count": 1,
+      "last_lines": 80,
+      "last_ts": 1780834892905,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "f176a11d"
+    },
+    "fabric/build/resources/main/assets/wings/models/item/angel_wings_bottle.json": {
+      "ipo_ts": 1780834892908,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892908,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "13c56c13"
+    },
+    "fabric/build/resources/main/assets/wings/models/item/bat_blood_bottle.json": {
+      "ipo_ts": 1780834892911,
+      "edit_count": 1,
+      "last_lines": 7,
+      "last_ts": 1780834892911,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "d878ee98"
+    },
+    "fabric/build/resources/main/assets/wings/models/item/bat_wings_bottle.json": {
+      "ipo_ts": 1780834892913,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892913,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "ee5dcbe7"
+    },
+    "fabric/build/resources/main/assets/wings/models/item/blue_butterfly_wings_bottle.json": {
+      "ipo_ts": 1780834892915,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892915,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "868ae1a2"
+    },
+    "fabric/build/resources/main/assets/wings/models/item/dragon_wings_bottle.json": {
+      "ipo_ts": 1780834892917,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892917,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a12998e7"
+    },
+    "fabric/build/resources/main/assets/wings/models/item/evil_wings_bottle.json": {
+      "ipo_ts": 1780834892920,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892920,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "871f9a8"
+    },
+    "fabric/build/resources/main/assets/wings/models/item/fairy_wings_bottle.json": {
+      "ipo_ts": 1780834892922,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892922,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "e8d6c5e7"
+    },
+    "fabric/build/resources/main/assets/wings/models/item/fire_wings_bottle.json": {
+      "ipo_ts": 1780834892924,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892924,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "8376f84a"
+    },
+    "fabric/build/resources/main/assets/wings/models/item/lvjia_super_wings_bottle.json": {
+      "ipo_ts": 1780834892926,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892926,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "72f49586"
+    },
+    "fabric/build/resources/main/assets/wings/models/item/monarch_butterfly_wings_bottle.json": {
+      "ipo_ts": 1780834892927,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892927,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "f6068668"
+    },
+    "fabric/build/resources/main/assets/wings/models/item/parrot_wings_bottle.json": {
+      "ipo_ts": 1780834892929,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892929,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "78727b6a"
+    },
+    "fabric/build/resources/main/assets/wings/models/item/slime_wings_bottle.json": {
+      "ipo_ts": 1780834892931,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892931,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "fddc0dda"
+    },
+    "fabric/build/resources/main/assets/wings/sounds.json": {
+      "ipo_ts": 1780834892933,
+      "edit_count": 1,
+      "last_lines": 21,
+      "last_ts": 1780834892933,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "fafe21f5"
+    },
+    "fabric/build/resources/main/assets/wings/textures/entity/angel_wings.png": {
+      "ipo_ts": 1780834892936,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892936,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "d3e5ce97"
+    },
+    "fabric/build/resources/main/assets/wings/textures/entity/bat_wings.png": {
+      "ipo_ts": 1780834892938,
+      "edit_count": 1,
+      "last_lines": 13,
+      "last_ts": 1780834892938,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a7494963"
+    },
+    "fabric/build/resources/main/assets/wings/textures/entity/blue_butterfly_wings.png": {
+      "ipo_ts": 1780834892940,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892940,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "bd9d5af9"
+    },
+    "fabric/build/resources/main/assets/wings/textures/entity/dragon_wings.png": {
+      "ipo_ts": 1780834892943,
+      "edit_count": 1,
+      "last_lines": 7,
+      "last_ts": 1780834892943,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "51b46d79"
+    },
+    "fabric/build/resources/main/assets/wings/textures/entity/evil_wings.png": {
+      "ipo_ts": 1780834892945,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834892945,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "bafdfcf1"
+    },
+    "fabric/build/resources/main/assets/wings/textures/entity/fairy_wings.png": {
+      "ipo_ts": 1780834892948,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892948,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "c7f05e06"
+    },
+    "fabric/build/resources/main/assets/wings/textures/entity/fire_wings.png": {
+      "ipo_ts": 1780834892950,
+      "edit_count": 1,
+      "last_lines": 46,
+      "last_ts": 1780834892950,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "2944606a"
+    },
+    "fabric/build/resources/main/assets/wings/textures/entity/monarch_butterfly_wings.png": {
+      "ipo_ts": 1780834892953,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834892953,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "78be003a"
+    },
+    "fabric/build/resources/main/assets/wings/textures/entity/parrot_wings.png": {
+      "ipo_ts": 1780834892955,
+      "edit_count": 1,
+      "last_lines": 8,
+      "last_ts": 1780834892955,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a8047513"
+    },
+    "fabric/build/resources/main/assets/wings/textures/entity/slime_wings.png": {
+      "ipo_ts": 1780834892958,
+      "edit_count": 1,
+      "last_lines": 9,
+      "last_ts": 1780834892958,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "78238e87"
+    },
+    "fabric/build/resources/main/assets/wings/textures/item/angel_wings_bottle.png": {
+      "ipo_ts": 1780834892961,
+      "edit_count": 1,
+      "last_lines": 8,
+      "last_ts": 1780834892961,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "1f82cf14"
+    },
+    "fabric/build/resources/main/assets/wings/textures/item/bat_wings_bottle.png": {
+      "ipo_ts": 1780834892964,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834892964,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "8765e502"
+    },
+    "fabric/build/resources/main/assets/wings/textures/item/blue_butterfly_wings_bottle.png": {
+      "ipo_ts": 1780834892966,
+      "edit_count": 1,
+      "last_lines": 7,
+      "last_ts": 1780834892966,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "8d2b8f5d"
+    },
+    "fabric/build/resources/main/assets/wings/textures/item/dragon_wings_bottle.png": {
+      "ipo_ts": 1780834892969,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834892969,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "e6e3a5c8"
+    },
+    "fabric/build/resources/main/assets/wings/textures/item/evil_wings_bottle.png": {
+      "ipo_ts": 1780834892971,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834892971,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a2e74591"
+    },
+    "fabric/build/resources/main/assets/wings/textures/item/fairy_wings_bottle.png": {
+      "ipo_ts": 1780834892974,
+      "edit_count": 1,
+      "last_lines": 8,
+      "last_ts": 1780834892974,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "3ec5aa40"
+    },
+    "fabric/build/resources/main/assets/wings/textures/item/fire_wings_bottle.png": {
+      "ipo_ts": 1780834892976,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834892976,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "6b429125"
+    },
+    "fabric/build/resources/main/assets/wings/textures/item/lvjia_super_wings_bottle.png": {
+      "ipo_ts": 1780834892979,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834892979,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "30f631f7"
+    },
+    "fabric/build/resources/main/assets/wings/textures/item/monarch_butterfly_wings_bottle.png": {
+      "ipo_ts": 1780834892982,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834892982,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "4cc134ad"
+    },
+    "fabric/build/resources/main/assets/wings/textures/item/parrot_wings_bottle.png": {
+      "ipo_ts": 1780834892984,
+      "edit_count": 1,
+      "last_lines": 7,
+      "last_ts": 1780834892984,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "64b7825"
+    },
+    "fabric/build/resources/main/assets/wings/textures/item/slime_wings_bottle.png": {
+      "ipo_ts": 1780834892986,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834892986,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "8cf4e2db"
+    },
+    "fabric/build/resources/main/assets/wings/textures/mob_effect/wings.png": {
+      "ipo_ts": 1780834892989,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834892989,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a91c28e6"
+    },
+    "fabric/build/resources/main/logo.png": {
+      "ipo_ts": 1780834892991,
+      "edit_count": 1,
+      "last_lines": 7,
+      "last_ts": 1780834892991,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "de6a766b"
+    },
+    "fabric/build/tmp/compileJava/previous-compilation-data.bin": {
+      "ipo_ts": 1780834893002,
+      "edit_count": 1,
+      "last_lines": 1325,
+      "last_ts": 1780834893002,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "5e11d88c"
+    },
+    "neoforge/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties": {
+      "ipo_ts": 1780834893006,
+      "edit_count": 1,
+      "last_lines": 143,
+      "last_ts": 1780834893006,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "e4aabc0c"
+    },
+    "fabric/build/resources/main/fabric.mod.json": {
+      "ipo_ts": 1780834893012,
+      "edit_count": 1,
+      "last_lines": 34,
+      "last_ts": 1780834893012,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "adec9d45"
+    },
+    "fabric/build/resources/main/wings.mixins.json": {
+      "ipo_ts": 1780834893015,
+      "edit_count": 1,
+      "last_lines": 24,
+      "last_ts": 1780834893015,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "30b34fc3"
+    },
+    "fabric/build/tmp/jar/MANIFEST.MF": {
+      "ipo_ts": 1780834893017,
+      "edit_count": 1,
+      "last_lines": 2,
+      "last_ts": 1780834893017,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "3b144d"
+    },
+    "fabric/build/tmp/sourcesJar/MANIFEST.MF": {
+      "ipo_ts": 1780834893019,
+      "edit_count": 1,
+      "last_lines": 2,
+      "last_ts": 1780834893019,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "3b144d"
+    },
+    "fabric/build/resources/main/pack.mcmeta": {
+      "ipo_ts": 1780834893022,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834893022,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "73e4d5c6"
+    },
+    "fabric/build/classes/java/test/cc/lvjia/wings/server/config/WingsConfigDefaultsTest.class": {
+      "ipo_ts": 1780834893154,
+      "edit_count": 1,
+      "last_lines": 38,
+      "last_ts": 1780834893154,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "7a59e3ae"
+    },
+    "fabric/build/reports/tests/test/css/base-style.css": {
+      "ipo_ts": 1780834893158,
+      "edit_count": 1,
+      "last_lines": 177,
+      "last_ts": 1780834893158,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "5359606e"
+    },
+    "fabric/build/reports/tests/test/css/style.css": {
+      "ipo_ts": 1780834893160,
+      "edit_count": 1,
+      "last_lines": 150,
+      "last_ts": 1780834893160,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "396ad3af"
+    },
+    "fabric/build/reports/tests/test/index.html": {
+      "ipo_ts": 1780834893162,
+      "edit_count": 1,
+      "last_lines": 116,
+      "last_ts": 1780834893162,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "18d5aca9"
+    },
+    "fabric/build/reports/tests/test/js/report.js": {
+      "ipo_ts": 1780834893164,
+      "edit_count": 1,
+      "last_lines": 228,
+      "last_ts": 1780834893164,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "b127c33"
+    },
+    "fabric/build/reports/tests/test/nddtP6Wzbk8/index.html": {
+      "ipo_ts": 1780834893167,
+      "edit_count": 1,
+      "last_lines": 153,
+      "last_ts": 1780834893167,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "78b78ed4"
+    },
+    "fabric/build/test-results/test/TEST-cc.lvjia.wings.server.config.WingsConfigDefaultsTest.xml": {
+      "ipo_ts": 1780834893169,
+      "edit_count": 1,
+      "last_lines": 11,
+      "last_ts": 1780834893169,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "48c5ca6a"
+    },
+    "fabric/build/test-results/test/binary/results-generic.bin": {
+      "ipo_ts": 1780834893171,
+      "edit_count": 1,
+      "last_lines": 1,
+      "last_ts": 1780834893171,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "adc387bd"
+    },
+    "fabric/build/tmp/compileTestJava/previous-compilation-data.bin": {
+      "ipo_ts": 1780834893175,
+      "edit_count": 1,
+      "last_lines": 294,
+      "last_ts": 1780834893175,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "9b0ee30f"
+    },
+    "fabric/build/libs/wings-26.1.2-Fabric-1.1.5-sources.jar": {
+      "ipo_ts": 1780834893183,
+      "edit_count": 1,
+      "last_lines": 606,
+      "last_ts": 1780834893183,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "55b9af46"
+    },
+    "fabric/build/libs/wings-26.1.2-Fabric-1.1.5.jar": {
+      "ipo_ts": 1780834893197,
+      "edit_count": 1,
+      "last_lines": 1402,
+      "last_ts": 1780834893197,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "814e1a63"
+    },
+    "neoforge/build/moddev/artifacts/minecraft-patched-26.1.0.19-beta-merged.jar": {
+      "ipo_ts": 1780834896561,
+      "edit_count": 1,
+      "last_lines": 215392,
+      "last_ts": 1780834896561,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "2a6ac835"
+    },
+    "neoforge/build/moddev/artifacts/minecraft-patched-26.1.0.19-beta-sources.jar": {
+      "ipo_ts": 1780834897174,
+      "edit_count": 1,
+      "last_lines": 63629,
+      "last_ts": 1780834897174,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "7ef568fe"
+    },
+    "neoforge/build/moddev/artifacts/minecraft-patched-26.1.0.19-beta.jar": {
+      "ipo_ts": 1780834898419,
+      "edit_count": 1,
+      "last_lines": 185349,
+      "last_ts": 1780834898419,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "26d93a0a"
+    },
+    "neoforge/build/tmp/createMinecraftArtifacts/nfrt-problem-report.json": {
+      "ipo_ts": 1780834898422,
+      "edit_count": 1,
+      "last_lines": 1,
+      "last_ts": 1780834898422,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "b62"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/NeoForgeProxy$1.class": {
+      "ipo_ts": 1780834898434,
+      "edit_count": 1,
+      "last_lines": 10,
+      "last_ts": 1780834898434,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "27da4e64"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/NeoForgeProxy.class": {
+      "ipo_ts": 1780834898436,
+      "edit_count": 1,
+      "last_lines": 27,
+      "last_ts": 1780834898436,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "34cda2cc"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/WingsAttachments$FlightAttachmentSerializer.class": {
+      "ipo_ts": 1780834898438,
+      "edit_count": 1,
+      "last_lines": 22,
+      "last_ts": 1780834898438,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "eb00399b"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/WingsAttachments$InSomniableAttachmentSerializer.class": {
+      "ipo_ts": 1780834898440,
+      "edit_count": 1,
+      "last_lines": 19,
+      "last_ts": 1780834898440,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "2a5e549d"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/WingsAttachments.class": {
+      "ipo_ts": 1780834898442,
+      "edit_count": 1,
+      "last_lines": 30,
+      "last_ts": 1780834898442,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "9d27e054"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/WingsCore$1.class": {
+      "ipo_ts": 1780834898443,
+      "edit_count": 1,
+      "last_lines": 18,
+      "last_ts": 1780834898443,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "66ede7e2"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/WingsCore$Names.class": {
+      "ipo_ts": 1780834898445,
+      "edit_count": 1,
+      "last_lines": 11,
+      "last_ts": 1780834898445,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "3edfec2"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/WingsCore$WingRegistrar.class": {
+      "ipo_ts": 1780834898447,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834898447,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "b2d468cb"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/WingsCore$WingSet.class": {
+      "ipo_ts": 1780834898449,
+      "edit_count": 1,
+      "last_lines": 9,
+      "last_ts": 1780834898449,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "c1ba29c4"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/WingsCore.class": {
+      "ipo_ts": 1780834898451,
+      "edit_count": 1,
+      "last_lines": 27,
+      "last_ts": 1780834898451,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "3c968865"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/WingsMod.class": {
+      "ipo_ts": 1780834898453,
+      "edit_count": 1,
+      "last_lines": 89,
+      "last_ts": 1780834898453,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a24ec63a"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/ClientEventHandlerSupport.class": {
+      "ipo_ts": 1780834898455,
+      "edit_count": 1,
+      "last_lines": 65,
+      "last_ts": 1780834898455,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "73c3bb6a"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/ClientFlightInputActions.class": {
+      "ipo_ts": 1780834898457,
+      "edit_count": 1,
+      "last_lines": 11,
+      "last_ts": 1780834898457,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "11ec857e"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/ClientFlightListenerSupport$FlyingStateSender.class": {
+      "ipo_ts": 1780834898459,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834898459,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "5180d468"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/ClientFlightListenerSupport.class": {
+      "ipo_ts": 1780834898461,
+      "edit_count": 1,
+      "last_lines": 15,
+      "last_ts": 1780834898461,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "ca52fb3"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/NeoForgeClientEventHandler.class": {
+      "ipo_ts": 1780834898463,
+      "edit_count": 1,
+      "last_lines": 47,
+      "last_ts": 1780834898463,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "374026f4"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/NeoForgeClientProxy.class": {
+      "ipo_ts": 1780834898465,
+      "edit_count": 1,
+      "last_lines": 29,
+      "last_ts": 1780834898465,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "585163ce"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/WingFormRegistrar.class": {
+      "ipo_ts": 1780834898467,
+      "edit_count": 1,
+      "last_lines": 47,
+      "last_ts": 1780834898467,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "726a952"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/apparatus/WingForm.class": {
+      "ipo_ts": 1780834898469,
+      "edit_count": 1,
+      "last_lines": 19,
+      "last_ts": 1780834898469,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "4456f078"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/asm/AnimatePlayerModelEvent.class": {
+      "ipo_ts": 1780834898471,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834898471,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "6ad9ab1b"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/asm/ApplyPlayerRotationsEvent.class": {
+      "ipo_ts": 1780834898473,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834898473,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "de8cf4a7"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/asm/GetCameraEyeHeightEvent.class": {
+      "ipo_ts": 1780834898475,
+      "edit_count": 1,
+      "last_lines": 10,
+      "last_ts": 1780834898475,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "bf647fa2"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/audio/WingsSound.class": {
+      "ipo_ts": 1780834898477,
+      "edit_count": 1,
+      "last_lines": 19,
+      "last_ts": 1780834898477,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "5bf75632"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/event/EmptyOffHandPresentEvent.class": {
+      "ipo_ts": 1780834898479,
+      "edit_count": 1,
+      "last_lines": 9,
+      "last_ts": 1780834898479,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "5c7099c2"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/Animator.class": {
+      "ipo_ts": 1780834898481,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834898481,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "919f223d"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/AnimatorAvian$FallMovement.class": {
+      "ipo_ts": 1780834898482,
+      "edit_count": 1,
+      "last_lines": 19,
+      "last_ts": 1780834898482,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "4a85978a"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/AnimatorAvian$GlideMovement.class": {
+      "ipo_ts": 1780834898484,
+      "edit_count": 1,
+      "last_lines": 16,
+      "last_ts": 1780834898484,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "2d731e25"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/AnimatorAvian$IdleMovement.class": {
+      "ipo_ts": 1780834898486,
+      "edit_count": 1,
+      "last_lines": 17,
+      "last_ts": 1780834898486,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "8d101963"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/AnimatorAvian$LandMovement.class": {
+      "ipo_ts": 1780834898488,
+      "edit_count": 1,
+      "last_lines": 12,
+      "last_ts": 1780834898488,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "c262aa3d"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/AnimatorAvian$LiftMovement.class": {
+      "ipo_ts": 1780834898490,
+      "edit_count": 1,
+      "last_lines": 15,
+      "last_ts": 1780834898490,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "94ab5e9e"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/AnimatorAvian$Movement.class": {
+      "ipo_ts": 1780834898492,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834898492,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a378ae85"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/AnimatorAvian$RestPosition.class": {
+      "ipo_ts": 1780834898494,
+      "edit_count": 1,
+      "last_lines": 21,
+      "last_ts": 1780834898494,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "93e8c908"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/AnimatorAvian$RotationGetter.class": {
+      "ipo_ts": 1780834898496,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834898496,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "424ff35f"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/AnimatorAvian$Transition.class": {
+      "ipo_ts": 1780834898498,
+      "edit_count": 1,
+      "last_lines": 22,
+      "last_ts": 1780834898498,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "47107391"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/AnimatorAvian$WingPose$Builder.class": {
+      "ipo_ts": 1780834898500,
+      "edit_count": 1,
+      "last_lines": 9,
+      "last_ts": 1780834898500,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "3c93ac5d"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/AnimatorAvian$WingPose.class": {
+      "ipo_ts": 1780834898502,
+      "edit_count": 1,
+      "last_lines": 8,
+      "last_ts": 1780834898502,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "ab8e2c54"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/AnimatorAvian.class": {
+      "ipo_ts": 1780834898505,
+      "edit_count": 1,
+      "last_lines": 41,
+      "last_ts": 1780834898505,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "ba5ffa48"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/AnimatorInsectoid.class": {
+      "ipo_ts": 1780834898507,
+      "edit_count": 1,
+      "last_lines": 21,
+      "last_ts": 1780834898507,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "6c501fac"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/FlightPoseSupport$FlightPoseAngles.class": {
+      "ipo_ts": 1780834898510,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834898510,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "785332b8"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/FlightPoseSupport.class": {
+      "ipo_ts": 1780834898512,
+      "edit_count": 1,
+      "last_lines": 22,
+      "last_ts": 1780834898512,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "e26bcb28"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/FlightView$FormRenderer.class": {
+      "ipo_ts": 1780834898514,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834898514,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "5ace7b62"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/FlightView.class": {
+      "ipo_ts": 1780834898516,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834898516,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "de265b49"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/FlightViewDefault$1.class": {
+      "ipo_ts": 1780834898518,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834898518,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "42268f24"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/FlightViewDefault$PresentWingState$WingStrategy$1.class": {
+      "ipo_ts": 1780834898520,
+      "edit_count": 1,
+      "last_lines": 12,
+      "last_ts": 1780834898520,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "597fd0ae"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/FlightViewDefault$PresentWingState$WingStrategy.class": {
+      "ipo_ts": 1780834898523,
+      "edit_count": 1,
+      "last_lines": 25,
+      "last_ts": 1780834898523,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "1b605bb2"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/FlightViewDefault$PresentWingState.class": {
+      "ipo_ts": 1780834898525,
+      "edit_count": 1,
+      "last_lines": 15,
+      "last_ts": 1780834898525,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "af44825d"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/FlightViewDefault$Strategy.class": {
+      "ipo_ts": 1780834898527,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834898527,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "331dc903"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/FlightViewDefault$WingState.class": {
+      "ipo_ts": 1780834898529,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834898529,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "20db3e8e"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/FlightViewDefault.class": {
+      "ipo_ts": 1780834898531,
+      "edit_count": 1,
+      "last_lines": 19,
+      "last_ts": 1780834898531,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "b6f7e44d"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/FlightViews.class": {
+      "ipo_ts": 1780834898534,
+      "edit_count": 1,
+      "last_lines": 20,
+      "last_ts": 1780834898534,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "987bd624"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/RotationAngles.class": {
+      "ipo_ts": 1780834898536,
+      "edit_count": 1,
+      "last_lines": 7,
+      "last_ts": 1780834898536,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "ae124e01"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/state/State$1.class": {
+      "ipo_ts": 1780834898538,
+      "edit_count": 1,
+      "last_lines": 9,
+      "last_ts": 1780834898538,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a539682d"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/state/State.class": {
+      "ipo_ts": 1780834898540,
+      "edit_count": 1,
+      "last_lines": 36,
+      "last_ts": 1780834898540,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "1e14fd55"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/state/StateFall.class": {
+      "ipo_ts": 1780834898543,
+      "edit_count": 1,
+      "last_lines": 10,
+      "last_ts": 1780834898543,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "6a47d657"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/state/StateGlide.class": {
+      "ipo_ts": 1780834898545,
+      "edit_count": 1,
+      "last_lines": 15,
+      "last_ts": 1780834898545,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "abc18d8"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/state/StateIdle.class": {
+      "ipo_ts": 1780834898547,
+      "edit_count": 1,
+      "last_lines": 16,
+      "last_ts": 1780834898547,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "4fc529af"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/state/StateLand.class": {
+      "ipo_ts": 1780834898549,
+      "edit_count": 1,
+      "last_lines": 11,
+      "last_ts": 1780834898549,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "8d14e509"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/flight/state/StateLift.class": {
+      "ipo_ts": 1780834898552,
+      "edit_count": 1,
+      "last_lines": 16,
+      "last_ts": 1780834898552,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "c05865fa"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/hooks/ClientRenderHookSupport.class": {
+      "ipo_ts": 1780834899343,
+      "edit_count": 1,
+      "last_lines": 14,
+      "last_ts": 1780834899343,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "166f491f"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/hooks/ItemInHandHookSupport$EmptyOffhandAllowance.class": {
+      "ipo_ts": 1780834899376,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834899376,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "833f96f1"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/hooks/ItemInHandHookSupport$GetItemStackMainHand.class": {
+      "ipo_ts": 1780834899379,
+      "edit_count": 1,
+      "last_lines": 11,
+      "last_ts": 1780834899379,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "47d52fb7"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/hooks/ItemInHandHookSupport$NormalReequipRule.class": {
+      "ipo_ts": 1780834899382,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834899382,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "627d768f"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/hooks/ItemInHandHookSupport$OptiFineHolder.class": {
+      "ipo_ts": 1780834899384,
+      "edit_count": 1,
+      "last_lines": 7,
+      "last_ts": 1780834899384,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "42eb2f09"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/hooks/ItemInHandHookSupport.class": {
+      "ipo_ts": 1780834899387,
+      "edit_count": 1,
+      "last_lines": 23,
+      "last_ts": 1780834899387,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "769193a8"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/hooks/WingsHooksClient.class": {
+      "ipo_ts": 1780834899389,
+      "edit_count": 1,
+      "last_lines": 33,
+      "last_ts": 1780834899389,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "73067d0d"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/model/Model3DTexture$FaceAdder.class": {
+      "ipo_ts": 1780834899391,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834899391,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "dff2ac2d"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/model/Model3DTexture.class": {
+      "ipo_ts": 1780834899394,
+      "edit_count": 1,
+      "last_lines": 61,
+      "last_ts": 1780834899394,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "40aeedf"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/model/ModelWings.class": {
+      "ipo_ts": 1780834899396,
+      "edit_count": 1,
+      "last_lines": 14,
+      "last_ts": 1780834899396,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "234d061c"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/model/ModelWingsAvian.class": {
+      "ipo_ts": 1780834899398,
+      "edit_count": 1,
+      "last_lines": 69,
+      "last_ts": 1780834899398,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "352c19fa"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/model/ModelWingsInsectoid.class": {
+      "ipo_ts": 1780834899400,
+      "edit_count": 1,
+      "last_lines": 26,
+      "last_ts": 1780834899400,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "6d1169c5"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/net/ClientFlightSyncApplier.class": {
+      "ipo_ts": 1780834899402,
+      "edit_count": 1,
+      "last_lines": 11,
+      "last_ts": 1780834899402,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "eb5ddb34"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/renderer/LayerCapeWings.class": {
+      "ipo_ts": 1780834899405,
+      "edit_count": 1,
+      "last_lines": 11,
+      "last_ts": 1780834899405,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "fa02bcf8"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/renderer/NeoForgeLayerWings.class": {
+      "ipo_ts": 1780834899407,
+      "edit_count": 1,
+      "last_lines": 37,
+      "last_ts": 1780834899407,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "3d300a0"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/renderer/SodiumBypassVertexConsumer.class": {
+      "ipo_ts": 1780834899408,
+      "edit_count": 1,
+      "last_lines": 24,
+      "last_ts": 1780834899408,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "59a580a0"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/client/renderer/WingsLayerRenderer.class": {
+      "ipo_ts": 1780834899410,
+      "edit_count": 1,
+      "last_lines": 65,
+      "last_ts": 1780834899410,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "88af9e48"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/mixin/ClientHooksMixin.class": {
+      "ipo_ts": 1780834899412,
+      "edit_count": 1,
+      "last_lines": 9,
+      "last_ts": 1780834899412,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "7ab5e673"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/mixin/LivingEntityMixin.class": {
+      "ipo_ts": 1780834899414,
+      "edit_count": 1,
+      "last_lines": 9,
+      "last_ts": 1780834899414,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "cf4d2c70"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/mixin/NeoForgeCameraMixin.class": {
+      "ipo_ts": 1780834899416,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899416,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "98deb0d9"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/mixin/NeoForgeItemInHandRendererMixin.class": {
+      "ipo_ts": 1780834899418,
+      "edit_count": 1,
+      "last_lines": 10,
+      "last_ts": 1780834899418,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "c8459182"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/mixin/PlayerMixin.class": {
+      "ipo_ts": 1780834899420,
+      "edit_count": 1,
+      "last_lines": 10,
+      "last_ts": 1780834899420,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "c8906f81"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/mixin/PlayerModelMixin.class": {
+      "ipo_ts": 1780834899427,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899427,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "5e1667ba"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/mixin/PlayerRendererMixin.class": {
+      "ipo_ts": 1780834899429,
+      "edit_count": 1,
+      "last_lines": 9,
+      "last_ts": 1780834899429,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "e5cf002a"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/mixin/ServerGamePacketListenerImplMixin.class": {
+      "ipo_ts": 1780834899431,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899431,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "4c32b5e"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/mixin/ServerPlayerMixin.class": {
+      "ipo_ts": 1780834899433,
+      "edit_count": 1,
+      "last_lines": 7,
+      "last_ts": 1780834899433,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "4ace7a0b"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/mixin/client/LivingEntityRendererAccessor.class": {
+      "ipo_ts": 1780834899435,
+      "edit_count": 1,
+      "last_lines": 3,
+      "last_ts": 1780834899435,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "1a22afdd"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/FlightListenerSupport$Sync.class": {
+      "ipo_ts": 1780834899437,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834899437,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "821f6d29"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/FlightListenerSupport.class": {
+      "ipo_ts": 1780834899439,
+      "edit_count": 1,
+      "last_lines": 40,
+      "last_ts": 1780834899439,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "d358d922"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/NeoForgeServerEventHandler.class": {
+      "ipo_ts": 1780834899441,
+      "edit_count": 1,
+      "last_lines": 44,
+      "last_ts": 1780834899441,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "b18027dc"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/ServerEventActions$DestroyedItemCallback.class": {
+      "ipo_ts": 1780834899443,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834899443,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "cacc303f"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/ServerEventActions.class": {
+      "ipo_ts": 1780834899445,
+      "edit_count": 1,
+      "last_lines": 57,
+      "last_ts": 1780834899445,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "abfc6c68"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/apparatus/BuffedFlightApparatus$1.class": {
+      "ipo_ts": 1780834899447,
+      "edit_count": 1,
+      "last_lines": 18,
+      "last_ts": 1780834899447,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "b6b44049"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/apparatus/BuffedFlightApparatus$EffectSettings.class": {
+      "ipo_ts": 1780834899449,
+      "edit_count": 1,
+      "last_lines": 14,
+      "last_ts": 1780834899449,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "6491b84e"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/apparatus/BuffedFlightApparatus$MobAvoidanceSettings.class": {
+      "ipo_ts": 1780834899451,
+      "edit_count": 1,
+      "last_lines": 11,
+      "last_ts": 1780834899451,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "f20eb848"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/apparatus/BuffedFlightApparatus.class": {
+      "ipo_ts": 1780834899453,
+      "edit_count": 1,
+      "last_lines": 76,
+      "last_ts": 1780834899453,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "8e36a41a"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/apparatus/FlightApparatus$1.class": {
+      "ipo_ts": 1780834899454,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834899454,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "e62af921"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/apparatus/FlightApparatus$FlightState.class": {
+      "ipo_ts": 1780834899456,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899456,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "c2003be0"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/apparatus/FlightApparatus.class": {
+      "ipo_ts": 1780834899458,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834899458,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "7a8e1751"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/apparatus/SimpleFlightApparatus.class": {
+      "ipo_ts": 1780834899460,
+      "edit_count": 1,
+      "last_lines": 15,
+      "last_ts": 1780834899460,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "ded6e3f5"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/asm/BodyRotationHookSupport.class": {
+      "ipo_ts": 1780834899462,
+      "edit_count": 1,
+      "last_lines": 8,
+      "last_ts": 1780834899462,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "cc97cacb"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/asm/GetLivingHeadLimitEvent.class": {
+      "ipo_ts": 1780834899464,
+      "edit_count": 1,
+      "last_lines": 15,
+      "last_ts": 1780834899464,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "c5d07ea"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/asm/PlayerFlightCheckEvent.class": {
+      "ipo_ts": 1780834899466,
+      "edit_count": 1,
+      "last_lines": 7,
+      "last_ts": 1780834899466,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "7acdbd58"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/asm/PlayerFlownEvent.class": {
+      "ipo_ts": 1780834899468,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834899468,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "c22c929a"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/asm/WingsHooks.class": {
+      "ipo_ts": 1780834899470,
+      "edit_count": 1,
+      "last_lines": 18,
+      "last_ts": 1780834899470,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "ef18dca7"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/command/NeoForgeWingsCommand.class": {
+      "ipo_ts": 1780834899472,
+      "edit_count": 1,
+      "last_lines": 43,
+      "last_ts": 1780834899472,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "c216d30"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/command/WingsArgument.class": {
+      "ipo_ts": 1780834899474,
+      "edit_count": 1,
+      "last_lines": 25,
+      "last_ts": 1780834899474,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "28c6aa2"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/command/WingsCommandActions$WingsGetter.class": {
+      "ipo_ts": 1780834899476,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834899476,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "86c90ba9"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/command/WingsCommandActions.class": {
+      "ipo_ts": 1780834899478,
+      "edit_count": 1,
+      "last_lines": 56,
+      "last_ts": 1780834899478,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "ccf41db"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/config/ConfigWingSettings.class": {
+      "ipo_ts": 1780834899480,
+      "edit_count": 1,
+      "last_lines": 45,
+      "last_ts": 1780834899480,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a7ceb4f7"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/config/FlightAntiCheatSettings.class": {
+      "ipo_ts": 1780834899482,
+      "edit_count": 1,
+      "last_lines": 8,
+      "last_ts": 1780834899482,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "2acd0111"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/config/WingsConfig.class": {
+      "ipo_ts": 1780834899484,
+      "edit_count": 1,
+      "last_lines": 56,
+      "last_ts": 1780834899484,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "67b47a47"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/config/WingsConfigDefaults$WingSettingsData.class": {
+      "ipo_ts": 1780834899486,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834899486,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "57eaed84"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/config/WingsConfigDefaults.class": {
+      "ipo_ts": 1780834899487,
+      "edit_count": 1,
+      "last_lines": 19,
+      "last_ts": 1780834899487,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "339bf398"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/config/WingsConfigEvents.class": {
+      "ipo_ts": 1780834899489,
+      "edit_count": 1,
+      "last_lines": 17,
+      "last_ts": 1780834899489,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "95ffa5c9"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/config/WingsItemsConfig.class": {
+      "ipo_ts": 1780834899491,
+      "edit_count": 1,
+      "last_lines": 15,
+      "last_ts": 1780834899491,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "16f7ace6"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/dreamcatcher/InSomniable$InSomniacState.class": {
+      "ipo_ts": 1780834899493,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834899493,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "5d428277"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/dreamcatcher/InSomniable$SearchState.class": {
+      "ipo_ts": 1780834899495,
+      "edit_count": 1,
+      "last_lines": 23,
+      "last_ts": 1780834899495,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "88280118"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/dreamcatcher/InSomniable$Serializer.class": {
+      "ipo_ts": 1780834899497,
+      "edit_count": 1,
+      "last_lines": 20,
+      "last_ts": 1780834899497,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "b64835da"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/dreamcatcher/InSomniable$State.class": {
+      "ipo_ts": 1780834899499,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834899499,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "7d86a5b5"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/dreamcatcher/InSomniable.class": {
+      "ipo_ts": 1780834899501,
+      "edit_count": 1,
+      "last_lines": 17,
+      "last_ts": 1780834899501,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "f11fd1f2"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/dreamcatcher/InSomniableCapability.class": {
+      "ipo_ts": 1780834899503,
+      "edit_count": 1,
+      "last_lines": 20,
+      "last_ts": 1780834899503,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "6259516"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/dreamcatcher/InSomniableEventHandler.class": {
+      "ipo_ts": 1780834899505,
+      "edit_count": 1,
+      "last_lines": 23,
+      "last_ts": 1780834899505,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "ec24e53c"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/effect/WingedEffect.class": {
+      "ipo_ts": 1780834899507,
+      "edit_count": 1,
+      "last_lines": 8,
+      "last_ts": 1780834899507,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a5277737"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/effect/WingsEffects.class": {
+      "ipo_ts": 1780834899508,
+      "edit_count": 1,
+      "last_lines": 14,
+      "last_ts": 1780834899508,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a1bfc986"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/flight/Flight$FlyingListener.class": {
+      "ipo_ts": 1780834899511,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899511,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "5e0e9471"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/flight/Flight$Notifier$1.class": {
+      "ipo_ts": 1780834899513,
+      "edit_count": 1,
+      "last_lines": 14,
+      "last_ts": 1780834899513,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "35244544"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/flight/Flight$Notifier.class": {
+      "ipo_ts": 1780834899515,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834899515,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "738bee51"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/flight/Flight$PlayerSet.class": {
+      "ipo_ts": 1780834899517,
+      "edit_count": 1,
+      "last_lines": 8,
+      "last_ts": 1780834899517,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "c4ae09b8"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/flight/Flight$SyncListener.class": {
+      "ipo_ts": 1780834899519,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899519,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "bdc0afc6"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/flight/Flight.class": {
+      "ipo_ts": 1780834899521,
+      "edit_count": 1,
+      "last_lines": 8,
+      "last_ts": 1780834899521,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "59a5087d"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/flight/FlightAnimationRules.class": {
+      "ipo_ts": 1780834899523,
+      "edit_count": 1,
+      "last_lines": 18,
+      "last_ts": 1780834899523,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "60443d24"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/flight/FlightAnimationState.class": {
+      "ipo_ts": 1780834899524,
+      "edit_count": 1,
+      "last_lines": 14,
+      "last_ts": 1780834899524,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "1bfad325"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/flight/FlightAnimationTracker.class": {
+      "ipo_ts": 1780834899526,
+      "edit_count": 1,
+      "last_lines": 23,
+      "last_ts": 1780834899526,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a65a0afb"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/flight/FlightDefault$Serializer.class": {
+      "ipo_ts": 1780834899528,
+      "edit_count": 1,
+      "last_lines": 43,
+      "last_ts": 1780834899528,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "378639e1"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/flight/FlightDefault$WingState.class": {
+      "ipo_ts": 1780834899530,
+      "edit_count": 1,
+      "last_lines": 8,
+      "last_ts": 1780834899530,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "f5ed729a"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/flight/FlightDefault.class": {
+      "ipo_ts": 1780834899532,
+      "edit_count": 1,
+      "last_lines": 117,
+      "last_ts": 1780834899532,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "226430c8"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/flight/FlightEventSupport.class": {
+      "ipo_ts": 1780834899534,
+      "edit_count": 1,
+      "last_lines": 15,
+      "last_ts": 1780834899534,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "32958bfa"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/flight/FlightSpeedAntiCheat$PendingCorrection.class": {
+      "ipo_ts": 1780834899536,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899536,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "ed37a399"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/flight/FlightSpeedAntiCheat$TrackingState.class": {
+      "ipo_ts": 1780834899538,
+      "edit_count": 1,
+      "last_lines": 19,
+      "last_ts": 1780834899538,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "da977fc2"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/flight/FlightSpeedAntiCheat.class": {
+      "ipo_ts": 1780834899540,
+      "edit_count": 1,
+      "last_lines": 85,
+      "last_ts": 1780834899540,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "f7f6069a"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/flight/FlightStateReset.class": {
+      "ipo_ts": 1780834899542,
+      "edit_count": 1,
+      "last_lines": 9,
+      "last_ts": 1780834899542,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "86559fec"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/flight/Flights.class": {
+      "ipo_ts": 1780834899543,
+      "edit_count": 1,
+      "last_lines": 38,
+      "last_ts": 1780834899543,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "1a1af8aa"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/item/BatBloodBottleItem.class": {
+      "ipo_ts": 1780834899545,
+      "edit_count": 1,
+      "last_lines": 18,
+      "last_ts": 1780834899545,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "508dc42e"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/item/WingSettings.class": {
+      "ipo_ts": 1780834899547,
+      "edit_count": 1,
+      "last_lines": 3,
+      "last_ts": 1780834899547,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a57b9280"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/item/WingsBottleActions.class": {
+      "ipo_ts": 1780834899550,
+      "edit_count": 1,
+      "last_lines": 23,
+      "last_ts": 1780834899550,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "3564dfbf"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/item/WingsBottleItem.class": {
+      "ipo_ts": 1780834899551,
+      "edit_count": 1,
+      "last_lines": 17,
+      "last_ts": 1780834899551,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "4d7fa150"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/item/WingsItemCatalog.class": {
+      "ipo_ts": 1780834899553,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899553,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "7a994244"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/item/WingsItems.class": {
+      "ipo_ts": 1780834899555,
+      "edit_count": 1,
+      "last_lines": 69,
+      "last_ts": 1780834899555,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "c5eb20c7"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/net/Message.class": {
+      "ipo_ts": 1780834899557,
+      "edit_count": 1,
+      "last_lines": 2,
+      "last_ts": 1780834899557,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "5e083f60"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/net/Network.class": {
+      "ipo_ts": 1780834899559,
+      "edit_count": 1,
+      "last_lines": 19,
+      "last_ts": 1780834899559,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "ba943e08"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/net/clientbound/MessageSyncFlight.class": {
+      "ipo_ts": 1780834899561,
+      "edit_count": 1,
+      "last_lines": 38,
+      "last_ts": 1780834899561,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a9ccae05"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/net/serverbound/ControlFlyingMessageHandler$FlightGetter.class": {
+      "ipo_ts": 1780834899563,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834899563,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "c60495f5"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/net/serverbound/ControlFlyingMessageHandler$FlightSync.class": {
+      "ipo_ts": 1780834899565,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834899565,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a2e96727"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/net/serverbound/ControlFlyingMessageHandler.class": {
+      "ipo_ts": 1780834899566,
+      "edit_count": 1,
+      "last_lines": 15,
+      "last_ts": 1780834899566,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "7a94f984"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/net/serverbound/MessageControlFlying.class": {
+      "ipo_ts": 1780834899568,
+      "edit_count": 1,
+      "last_lines": 38,
+      "last_ts": 1780834899568,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "4c69684"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/potion/PotionMix.class": {
+      "ipo_ts": 1780834899570,
+      "edit_count": 1,
+      "last_lines": 24,
+      "last_ts": 1780834899570,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "f40f2c20"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/potion/WingsBrewingCatalog.class": {
+      "ipo_ts": 1780834899572,
+      "edit_count": 1,
+      "last_lines": 9,
+      "last_ts": 1780834899572,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "2be08deb"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/server/sound/WingsSounds.class": {
+      "ipo_ts": 1780834899574,
+      "edit_count": 1,
+      "last_lines": 16,
+      "last_ts": 1780834899574,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "c703ec7b"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/util/Access$GetterHandleBuilder.class": {
+      "ipo_ts": 1780834899576,
+      "edit_count": 1,
+      "last_lines": 28,
+      "last_ts": 1780834899576,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "afe842a1"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/util/Access$HandleBuilder.class": {
+      "ipo_ts": 1780834899577,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834899577,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "7339bf83"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/util/Access$NamingBuilder.class": {
+      "ipo_ts": 1780834899579,
+      "edit_count": 1,
+      "last_lines": 9,
+      "last_ts": 1780834899579,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "143f4a05"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/util/Access$NamingGetterHandleBuilder.class": {
+      "ipo_ts": 1780834899581,
+      "edit_count": 1,
+      "last_lines": 16,
+      "last_ts": 1780834899581,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "860f7417"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/util/Access.class": {
+      "ipo_ts": 1780834899583,
+      "edit_count": 1,
+      "last_lines": 10,
+      "last_ts": 1780834899583,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "5d2ce3a3"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/util/CubicBezier.class": {
+      "ipo_ts": 1780834899585,
+      "edit_count": 1,
+      "last_lines": 32,
+      "last_ts": 1780834899585,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "1f7ae1b1"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/util/MathH.class": {
+      "ipo_ts": 1780834899586,
+      "edit_count": 1,
+      "last_lines": 21,
+      "last_ts": 1780834899586,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "7e766d84"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/util/NBTSerializer.class": {
+      "ipo_ts": 1780834899588,
+      "edit_count": 1,
+      "last_lines": 3,
+      "last_ts": 1780834899588,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "72908a3"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/util/NeoForgeKeyInputListener$BindingBuilder.class": {
+      "ipo_ts": 1780834899590,
+      "edit_count": 1,
+      "last_lines": 9,
+      "last_ts": 1780834899590,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "2b8e6fa2"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/util/NeoForgeKeyInputListener$Builder.class": {
+      "ipo_ts": 1780834899592,
+      "edit_count": 1,
+      "last_lines": 3,
+      "last_ts": 1780834899592,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "b0f38773"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/util/NeoForgeKeyInputListener$BuilderRoot.class": {
+      "ipo_ts": 1780834899594,
+      "edit_count": 1,
+      "last_lines": 16,
+      "last_ts": 1780834899594,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "ce1abc7"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/util/NeoForgeKeyInputListener$CategoryBuilder.class": {
+      "ipo_ts": 1780834899596,
+      "edit_count": 1,
+      "last_lines": 3,
+      "last_ts": 1780834899596,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "32f4a130"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/util/NeoForgeKeyInputListener$CategoryBuilderRoot.class": {
+      "ipo_ts": 1780834899597,
+      "edit_count": 1,
+      "last_lines": 8,
+      "last_ts": 1780834899597,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "72c43d7f"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/util/NeoForgeKeyInputListener$ChildBuilder.class": {
+      "ipo_ts": 1780834899599,
+      "edit_count": 1,
+      "last_lines": 13,
+      "last_ts": 1780834899599,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "b99d785c"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/util/NeoForgeKeyInputListener.class": {
+      "ipo_ts": 1780834899601,
+      "edit_count": 1,
+      "last_lines": 27,
+      "last_ts": 1780834899601,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "574db2b0"
+    },
+    "neoforge/build/classes/java/main/cc/lvjia/wings/util/function/FloatConsumer.class": {
+      "ipo_ts": 1780834899603,
+      "edit_count": 1,
+      "last_lines": 3,
+      "last_ts": 1780834899603,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "5c679c80"
+    },
+    "neoforge/build/classes/java/test/cc/lvjia/wings/server/config/WingsConfigDefaultsTest.class": {
+      "ipo_ts": 1780834899606,
+      "edit_count": 1,
+      "last_lines": 38,
+      "last_ts": 1780834899606,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "7a59e3ae"
+    },
+    "neoforge/build/generated/sources/modMetadata/META-INF/neoforge.mods.toml": {
+      "ipo_ts": 1780834899609,
+      "edit_count": 1,
+      "last_lines": 30,
+      "last_ts": 1780834899609,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "7d980ee5"
+    },
+    "neoforge/build/libs/wings-26.1.2-NeoForge-1.1.5.jar": {
+      "ipo_ts": 1780834899621,
+      "edit_count": 1,
+      "last_lines": 1128,
+      "last_ts": 1780834899621,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "d20cb71c"
+    },
+    "neoforge/build/reports/tests/test/css/base-style.css": {
+      "ipo_ts": 1780834899623,
+      "edit_count": 1,
+      "last_lines": 177,
+      "last_ts": 1780834899623,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "5359606e"
+    },
+    "neoforge/build/reports/tests/test/css/style.css": {
+      "ipo_ts": 1780834899625,
+      "edit_count": 1,
+      "last_lines": 150,
+      "last_ts": 1780834899625,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "396ad3af"
+    },
+    "neoforge/build/reports/tests/test/index.html": {
+      "ipo_ts": 1780834899627,
+      "edit_count": 1,
+      "last_lines": 116,
+      "last_ts": 1780834899627,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "638339a3"
+    },
+    "neoforge/build/reports/tests/test/js/report.js": {
+      "ipo_ts": 1780834899630,
+      "edit_count": 1,
+      "last_lines": 228,
+      "last_ts": 1780834899630,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "b127c33"
+    },
+    "neoforge/build/reports/tests/test/nddtP6Wzbk8/index.html": {
+      "ipo_ts": 1780834899632,
+      "edit_count": 1,
+      "last_lines": 153,
+      "last_ts": 1780834899632,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "f81dc754"
+    },
+    "neoforge/build/resources/main/META-INF/neoforge.mods.toml": {
+      "ipo_ts": 1780834899635,
+      "edit_count": 1,
+      "last_lines": 30,
+      "last_ts": 1780834899635,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "7d980ee5"
+    },
+    "neoforge/build/resources/main/assets/wings/items/angel_wings_bottle.json": {
+      "ipo_ts": 1780834899638,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899638,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "63fbf997"
+    },
+    "neoforge/build/resources/main/assets/wings/items/bat_blood_bottle.json": {
+      "ipo_ts": 1780834899640,
+      "edit_count": 1,
+      "last_lines": 12,
+      "last_ts": 1780834899640,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "edf00e93"
+    },
+    "neoforge/build/resources/main/assets/wings/items/bat_wings_bottle.json": {
+      "ipo_ts": 1780834899642,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899642,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "5f21ea6b"
+    },
+    "neoforge/build/resources/main/assets/wings/items/blue_butterfly_wings_bottle.json": {
+      "ipo_ts": 1780834899644,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899644,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "7c41489e"
+    },
+    "neoforge/build/resources/main/assets/wings/items/dragon_wings_bottle.json": {
+      "ipo_ts": 1780834899646,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899646,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "57c4bbe3"
+    },
+    "neoforge/build/resources/main/assets/wings/items/evil_wings_bottle.json": {
+      "ipo_ts": 1780834899648,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899648,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "b031aba4"
+    },
+    "neoforge/build/resources/main/assets/wings/items/fairy_wings_bottle.json": {
+      "ipo_ts": 1780834899650,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899650,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "390d536b"
+    },
+    "neoforge/build/resources/main/assets/wings/items/fire_wings_bottle.json": {
+      "ipo_ts": 1780834899652,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899652,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "2b36aa46"
+    },
+    "neoforge/build/resources/main/assets/wings/items/lvjia_super_wings_bottle.json": {
+      "ipo_ts": 1780834899654,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899654,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "5803f00a"
+    },
+    "neoforge/build/resources/main/assets/wings/items/monarch_butterfly_wings_bottle.json": {
+      "ipo_ts": 1780834899656,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899656,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "cb60edec"
+    },
+    "neoforge/build/resources/main/assets/wings/items/parrot_wings_bottle.json": {
+      "ipo_ts": 1780834899658,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899658,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "2f0d9e66"
+    },
+    "neoforge/build/resources/main/assets/wings/items/slime_wings_bottle.json": {
+      "ipo_ts": 1780834899660,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899660,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "4e129b5e"
+    },
+    "neoforge/build/resources/main/assets/wings/lang/ar_sa.json": {
+      "ipo_ts": 1780834899662,
+      "edit_count": 1,
+      "last_lines": 80,
+      "last_ts": 1780834899662,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "f524624a"
+    },
+    "neoforge/build/resources/main/assets/wings/lang/de_de.json": {
+      "ipo_ts": 1780834899664,
+      "edit_count": 1,
+      "last_lines": 80,
+      "last_ts": 1780834899664,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "89be9f76"
+    },
+    "neoforge/build/resources/main/assets/wings/lang/en_us.json": {
+      "ipo_ts": 1780834899666,
+      "edit_count": 1,
+      "last_lines": 80,
+      "last_ts": 1780834899666,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "c6e8648e"
+    },
+    "neoforge/build/resources/main/assets/wings/lang/es_es.json": {
+      "ipo_ts": 1780834899668,
+      "edit_count": 1,
+      "last_lines": 80,
+      "last_ts": 1780834899668,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "e3ee71d1"
+    },
+    "neoforge/build/resources/main/assets/wings/lang/fr_fr.json": {
+      "ipo_ts": 1780834899670,
+      "edit_count": 1,
+      "last_lines": 80,
+      "last_ts": 1780834899670,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "463514a7"
+    },
+    "neoforge/build/resources/main/assets/wings/lang/it_it.json": {
+      "ipo_ts": 1780834899672,
+      "edit_count": 1,
+      "last_lines": 80,
+      "last_ts": 1780834899672,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "b6bc0663"
+    },
+    "neoforge/build/resources/main/assets/wings/lang/ja_jp.json": {
+      "ipo_ts": 1780834899674,
+      "edit_count": 1,
+      "last_lines": 80,
+      "last_ts": 1780834899674,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "241345e3"
+    },
+    "neoforge/build/resources/main/assets/wings/lang/ko_kr.json": {
+      "ipo_ts": 1780834899677,
+      "edit_count": 1,
+      "last_lines": 80,
+      "last_ts": 1780834899677,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "78ddded9"
+    },
+    "neoforge/build/resources/main/assets/wings/lang/pt_br.json": {
+      "ipo_ts": 1780834899678,
+      "edit_count": 1,
+      "last_lines": 71,
+      "last_ts": 1780834899678,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "e2a80dea"
+    },
+    "neoforge/build/resources/main/assets/wings/lang/ru_ru.json": {
+      "ipo_ts": 1780834899681,
+      "edit_count": 1,
+      "last_lines": 80,
+      "last_ts": 1780834899681,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a95c696c"
+    },
+    "neoforge/build/resources/main/assets/wings/lang/tr_tr.json": {
+      "ipo_ts": 1780834899683,
+      "edit_count": 1,
+      "last_lines": 80,
+      "last_ts": 1780834899683,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "95ba80d4"
+    },
+    "neoforge/build/resources/main/assets/wings/lang/zh_cn.json": {
+      "ipo_ts": 1780834899685,
+      "edit_count": 1,
+      "last_lines": 80,
+      "last_ts": 1780834899685,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "dd92d2d2"
+    },
+    "neoforge/build/resources/main/assets/wings/lang/zh_tw.json": {
+      "ipo_ts": 1780834899687,
+      "edit_count": 1,
+      "last_lines": 80,
+      "last_ts": 1780834899687,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "f176a11d"
+    },
+    "neoforge/build/resources/main/assets/wings/models/item/angel_wings_bottle.json": {
+      "ipo_ts": 1780834899689,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899689,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "13c56c13"
+    },
+    "neoforge/build/resources/main/assets/wings/models/item/bat_blood_bottle.json": {
+      "ipo_ts": 1780834899691,
+      "edit_count": 1,
+      "last_lines": 7,
+      "last_ts": 1780834899691,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "d878ee98"
+    },
+    "neoforge/build/resources/main/assets/wings/models/item/bat_wings_bottle.json": {
+      "ipo_ts": 1780834899693,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899693,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "ee5dcbe7"
+    },
+    "neoforge/build/resources/main/assets/wings/models/item/blue_butterfly_wings_bottle.json": {
+      "ipo_ts": 1780834899695,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899695,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "868ae1a2"
+    },
+    "neoforge/build/resources/main/assets/wings/models/item/dragon_wings_bottle.json": {
+      "ipo_ts": 1780834899697,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899697,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a12998e7"
+    },
+    "neoforge/build/resources/main/assets/wings/models/item/evil_wings_bottle.json": {
+      "ipo_ts": 1780834899699,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899699,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "871f9a8"
+    },
+    "neoforge/build/resources/main/assets/wings/models/item/fairy_wings_bottle.json": {
+      "ipo_ts": 1780834899701,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899701,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "e8d6c5e7"
+    },
+    "neoforge/build/resources/main/assets/wings/models/item/fire_wings_bottle.json": {
+      "ipo_ts": 1780834899703,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899703,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "8376f84a"
+    },
+    "neoforge/build/resources/main/assets/wings/models/item/lvjia_super_wings_bottle.json": {
+      "ipo_ts": 1780834899705,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899705,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "72f49586"
+    },
+    "neoforge/build/resources/main/assets/wings/models/item/monarch_butterfly_wings_bottle.json": {
+      "ipo_ts": 1780834899707,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899707,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "f6068668"
+    },
+    "neoforge/build/resources/main/assets/wings/models/item/parrot_wings_bottle.json": {
+      "ipo_ts": 1780834899709,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899709,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "78727b6a"
+    },
+    "neoforge/build/resources/main/assets/wings/models/item/slime_wings_bottle.json": {
+      "ipo_ts": 1780834899711,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899711,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "fddc0dda"
+    },
+    "neoforge/build/resources/main/assets/wings/sounds.json": {
+      "ipo_ts": 1780834899712,
+      "edit_count": 1,
+      "last_lines": 21,
+      "last_ts": 1780834899712,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "fafe21f5"
+    },
+    "neoforge/build/resources/main/assets/wings/textures/entity/angel_wings.png": {
+      "ipo_ts": 1780834899715,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899715,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "d3e5ce97"
+    },
+    "neoforge/build/resources/main/assets/wings/textures/entity/bat_wings.png": {
+      "ipo_ts": 1780834899717,
+      "edit_count": 1,
+      "last_lines": 13,
+      "last_ts": 1780834899717,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a7494963"
+    },
+    "neoforge/build/resources/main/assets/wings/textures/entity/blue_butterfly_wings.png": {
+      "ipo_ts": 1780834899719,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899719,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "bd9d5af9"
+    },
+    "neoforge/build/resources/main/assets/wings/textures/entity/dragon_wings.png": {
+      "ipo_ts": 1780834899721,
+      "edit_count": 1,
+      "last_lines": 7,
+      "last_ts": 1780834899721,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "51b46d79"
+    },
+    "neoforge/build/resources/main/assets/wings/textures/entity/evil_wings.png": {
+      "ipo_ts": 1780834899723,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834899723,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "bafdfcf1"
+    },
+    "neoforge/build/resources/main/assets/wings/textures/entity/fairy_wings.png": {
+      "ipo_ts": 1780834899725,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899725,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "c7f05e06"
+    },
+    "neoforge/build/resources/main/assets/wings/textures/entity/fire_wings.png": {
+      "ipo_ts": 1780834899728,
+      "edit_count": 1,
+      "last_lines": 46,
+      "last_ts": 1780834899728,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "2944606a"
+    },
+    "neoforge/build/resources/main/assets/wings/textures/entity/monarch_butterfly_wings.png": {
+      "ipo_ts": 1780834899730,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834899730,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "78be003a"
+    },
+    "neoforge/build/resources/main/assets/wings/textures/entity/parrot_wings.png": {
+      "ipo_ts": 1780834899732,
+      "edit_count": 1,
+      "last_lines": 8,
+      "last_ts": 1780834899732,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a8047513"
+    },
+    "neoforge/build/resources/main/assets/wings/textures/entity/slime_wings.png": {
+      "ipo_ts": 1780834899734,
+      "edit_count": 1,
+      "last_lines": 9,
+      "last_ts": 1780834899734,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "78238e87"
+    },
+    "neoforge/build/resources/main/assets/wings/textures/item/angel_wings_bottle.png": {
+      "ipo_ts": 1780834899736,
+      "edit_count": 1,
+      "last_lines": 8,
+      "last_ts": 1780834899736,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "1f82cf14"
+    },
+    "neoforge/build/resources/main/assets/wings/textures/item/bat_wings_bottle.png": {
+      "ipo_ts": 1780834899739,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834899739,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "8765e502"
+    },
+    "neoforge/build/resources/main/assets/wings/textures/item/blue_butterfly_wings_bottle.png": {
+      "ipo_ts": 1780834899741,
+      "edit_count": 1,
+      "last_lines": 7,
+      "last_ts": 1780834899741,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "8d2b8f5d"
+    },
+    "neoforge/build/resources/main/assets/wings/textures/item/dragon_wings_bottle.png": {
+      "ipo_ts": 1780834899743,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834899743,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "e6e3a5c8"
+    },
+    "neoforge/build/resources/main/assets/wings/textures/item/evil_wings_bottle.png": {
+      "ipo_ts": 1780834899745,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899745,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a2e74591"
+    },
+    "neoforge/build/resources/main/assets/wings/textures/item/fairy_wings_bottle.png": {
+      "ipo_ts": 1780834899747,
+      "edit_count": 1,
+      "last_lines": 8,
+      "last_ts": 1780834899747,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "3ec5aa40"
+    },
+    "neoforge/build/resources/main/assets/wings/textures/item/fire_wings_bottle.png": {
+      "ipo_ts": 1780834899749,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834899749,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "6b429125"
+    },
+    "neoforge/build/resources/main/assets/wings/textures/item/lvjia_super_wings_bottle.png": {
+      "ipo_ts": 1780834899751,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834899751,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "30f631f7"
+    },
+    "neoforge/build/resources/main/assets/wings/textures/item/monarch_butterfly_wings_bottle.png": {
+      "ipo_ts": 1780834899753,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834899753,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "4cc134ad"
+    },
+    "neoforge/build/resources/main/assets/wings/textures/item/parrot_wings_bottle.png": {
+      "ipo_ts": 1780834899756,
+      "edit_count": 1,
+      "last_lines": 7,
+      "last_ts": 1780834899756,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "64b7825"
+    },
+    "neoforge/build/resources/main/assets/wings/textures/item/slime_wings_bottle.png": {
+      "ipo_ts": 1780834899758,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834899758,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "8cf4e2db"
+    },
+    "neoforge/build/resources/main/assets/wings/textures/mob_effect/wings.png": {
+      "ipo_ts": 1780834899760,
+      "edit_count": 1,
+      "last_lines": 5,
+      "last_ts": 1780834899760,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "a91c28e6"
+    },
+    "neoforge/build/resources/main/logo.png": {
+      "ipo_ts": 1780834899762,
+      "edit_count": 1,
+      "last_lines": 7,
+      "last_ts": 1780834899762,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "de6a766b"
+    },
+    "neoforge/build/resources/main/pack.mcmeta": {
+      "ipo_ts": 1780834899764,
+      "edit_count": 1,
+      "last_lines": 6,
+      "last_ts": 1780834899764,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "73e4d5c6"
+    },
+    "neoforge/build/resources/main/wings.mixins.json": {
+      "ipo_ts": 1780834899766,
+      "edit_count": 1,
+      "last_lines": 23,
+      "last_ts": 1780834899766,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "b0d749ff"
+    },
+    "neoforge/build/test-results/test/TEST-cc.lvjia.wings.server.config.WingsConfigDefaultsTest.xml": {
+      "ipo_ts": 1780834899769,
+      "edit_count": 1,
+      "last_lines": 11,
+      "last_ts": 1780834899769,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "7d1e6645"
+    },
+    "neoforge/build/test-results/test/binary/results-generic.bin": {
+      "ipo_ts": 1780834899771,
+      "edit_count": 1,
+      "last_lines": 1,
+      "last_ts": 1780834899771,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "1f12aecc"
+    },
+    "neoforge/build/tmp/compileJava/previous-compilation-data.bin": {
+      "ipo_ts": 1780834899781,
+      "edit_count": 1,
+      "last_lines": 2905,
+      "last_ts": 1780834899781,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "4a929dfe"
+    },
+    "neoforge/build/tmp/compileTestJava/previous-compilation-data.bin": {
+      "ipo_ts": 1780834899784,
+      "edit_count": 1,
+      "last_lines": 4,
+      "last_ts": 1780834899784,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "ccebc6c0"
+    },
+    "neoforge/build/tmp/jar/MANIFEST.MF": {
+      "ipo_ts": 1780834899787,
+      "edit_count": 1,
+      "last_lines": 9,
+      "last_ts": 1780834899787,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "9588474"
+    },
+    ".gradle/9.5.0/checksums/checksums.lock": {
+      "ipo_ts": 1780834899789,
+      "edit_count": 1,
+      "last_lines": 1,
+      "last_ts": 1780834899789,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "9888cbaf"
+    },
+    ".gradle/9.5.0/fileHashes/fileHashes.lock": {
+      "ipo_ts": 1780834899796,
+      "edit_count": 1,
+      "last_lines": 1,
+      "last_ts": 1780834899796,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "950ba748"
+    },
+    ".gradle/buildOutputCleanup/buildOutputCleanup.lock": {
+      "ipo_ts": 1780834899798,
+      "edit_count": 1,
+      "last_lines": 1,
+      "last_ts": 1780834899798,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "2b6c55e8"
+    }
+  }
+}
