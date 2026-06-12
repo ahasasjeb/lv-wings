@@ -216,7 +216,6 @@ public final class FlightDefault implements Flight {
                 float yaw = -MathH.toRadians(player.getYRot()) - MathH.PI;
                 float vxz = -Mth.cos(pitch);
                 float vy = Mth.sin(pitch);
-                // 让垂直上升的速度为横向飞行的80%，且从横向到垂直向上过渡
                 if (player.getXRot() < 0.0F) {
                     float verticalSpeedScale = MathH.transform(
                             -player.getXRot(),
@@ -224,11 +223,21 @@ public final class FlightDefault implements Flight {
                             1.0F, 0.8F);
                     vy = vy * verticalSpeedScale;
                 }
+                float upwardFactor = 1.0F;
+                if (player.getXRot() > 0.0F) {
+                    upwardFactor = elevationBoost;
+                } else if (player.getXRot() < -30.0F) {
+                    float pitchAbs = -player.getXRot();
+                    upwardFactor = MathH.transform(
+                            pitchAbs,
+                            30.0F, 90.0F,
+                            1.0F, 0.72F);
+                }
                 float vz = Mth.cos(yaw);
                 float vx = Mth.sin(yaw);
                 player.setDeltaMovement(player.getDeltaMovement().add(
                         vx * vxz * speed,
-                        vy * speed + Y_BOOST * (player.getXRot() > 0.0F ? elevationBoost : 1.0D),
+                        vy * speed + Y_BOOST * upwardFactor,
                         vz * vxz * speed));
             }
             if (this.canLand(player)) {
