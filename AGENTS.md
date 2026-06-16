@@ -40,7 +40,7 @@
 
 ## 构建与验证
 - 如果你是OpenCode，请勿执行 gradlew 命令，让用户手动构建，因为OpenCode无法正确判断命令是否执行完成，如果你不是OpenCode，就可以执行
-- 完整验证命令：`.\gradlew.bat clean build`
+- 完整验证命令：`.\gradlew.bat build`
 - 结构漂移快速检查：`.\gradlew.bat reportPlatformSourceDrift`，输出在
   `build/reports/platform-source-drift.txt`。这个报告用于定位同路径平台文件和同名异路径文件；看到同路径差异不代表必须合并，
   需要按上面的平台 facade 规则判断是否还有业务逻辑可下沉。

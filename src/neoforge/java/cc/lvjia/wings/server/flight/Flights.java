@@ -4,7 +4,7 @@ import cc.lvjia.wings.WingsAttachments;
 import cc.lvjia.wings.WingsMod;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -61,7 +61,7 @@ public final class Flights {
     }
 
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
-        event.registerEntity(FLIGHT_CAPABILITY, EntityType.PLAYER, (player, ctx) ->
+        event.registerEntity(FLIGHT_CAPABILITY, EntityTypes.PLAYER, (player, ctx) ->
                 player.getData(WingsAttachments.FLIGHT.get())
         );
     }

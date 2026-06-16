@@ -2,7 +2,7 @@ package cc.lvjia.wings.server.dreamcatcher;
 
 import cc.lvjia.wings.WingsAttachments;
 import cc.lvjia.wings.WingsMod;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -28,7 +28,7 @@ public final class InSomniableCapability {
     }
 
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
-        event.registerEntity(INSOMNIABLE_CAPABILITY, EntityType.PLAYER, (player, ctx) ->
+        event.registerEntity(INSOMNIABLE_CAPABILITY, EntityTypes.PLAYER, (player, ctx) ->
                 player.getData(WingsAttachments.INSOMNIABLE.get())
         );
     }

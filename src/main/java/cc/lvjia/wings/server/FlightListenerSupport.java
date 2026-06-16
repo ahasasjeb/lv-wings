@@ -1,6 +1,7 @@
 package cc.lvjia.wings.server;
 
 import cc.lvjia.wings.server.flight.Flight;
+import cc.lvjia.wings.server.flight.FlightAbilitySupport;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
@@ -11,11 +12,7 @@ public final class FlightListenerSupport {
     public static void addFlightListeners(Player player, Flight instance, Sync sync) {
         if (player instanceof ServerPlayer serverPlayer) {
             instance.registerFlyingListener(isFlying -> {
-                boolean hasVanillaFlight = player.getAbilities().instabuild || player.isSpectator();
-                player.getAbilities().mayfly = isFlying || hasVanillaFlight;
-                if (isFlying || !hasVanillaFlight) {
-                    player.getAbilities().flying = false;
-                }
+                FlightAbilitySupport.applyFlyingState(player, isFlying);
                 serverPlayer.onUpdateAbilities();
             });
             instance.registerFlyingListener(isFlying -> {
