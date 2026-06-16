@@ -14,10 +14,8 @@ import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -26,6 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  */
 @Mixin(ItemInHandRenderer.class)
 public abstract class FabricItemInHandRendererMixin {
+    private static final String SUBMIT_ARM_WITH_ITEM = "submitArmWithItem(Lnet/minecraft/client/player/AbstractClientPlayer;FFLnet/minecraft/world/InteractionHand;FLnet/minecraft/world/item/ItemStack;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;I)V";
     @Shadow
     private ItemStack mainHandItem;
 
@@ -39,26 +38,9 @@ public abstract class FabricItemInHandRendererMixin {
     @Final
     private Minecraft minecraft;
 
-    /**
-     * 强制使用相反手臂渲染的标记
-     */
-    @Unique
-    private boolean wings$forceOppositeArm;
-
-    /**
-     * 当前渲染的手部
-     */
-    @Unique
-    private InteractionHand wings$currentHand;
-
-    /**
-     * 缓存当前渲染的手部信息
-     */
-    @Inject(method = "renderArmWithItem(Lnet/minecraft/client/player/AbstractClientPlayer;FFLnet/minecraft/world/InteractionHand;FLnet/minecraft/world/item/ItemStack;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;I)V", at = @At("HEAD"))
-    private void wings$cacheHand(AbstractClientPlayer player, float f, float f1, InteractionHand hand, float f2,
-                                 ItemStack stack, float f3, PoseStack poseStack, SubmitNodeCollector collector, int light, CallbackInfo ci) {
-        this.wings$currentHand = hand;
-        this.wings$forceOppositeArm = false;
+    @Shadow
+    private void renderPlayerArm(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int packedLight,
+                                 float inverseArmHeight, float swingProgress, HumanoidArm arm) {
     }
 
     @Redirect(method = "tick()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Mth;clamp(FFF)F", ordinal = 3))
@@ -75,30 +57,30 @@ public abstract class FabricItemInHandRendererMixin {
     }
 
     /**
-     * 允许空手渲染，用于翅膀飞行时的动画
+     * 26.2 仅在空手分支内渲染副手手臂。不能修改 isMainHand：该标志还决定 humanoidArm 与物品渲染路径。
+     * 旧版改的是独立的 stack-empty 布尔值；此处等价于在空手副手时补一次 renderPlayerArm。
      */
-    @ModifyVariable(method = "renderArmWithItem(Lnet/minecraft/client/player/AbstractClientPlayer;FFLnet/minecraft/world/InteractionHand;FLnet/minecraft/world/item/ItemStack;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;I)V", at = @At(value = "STORE"), ordinal = 0)
-    private boolean wings$allowEmptyOffhandRender(boolean original, AbstractClientPlayer player, float f, float f1,
-                                                  InteractionHand hand, float f2, ItemStack stack, float f3, PoseStack poseStack,
-                                                  SubmitNodeCollector collector, int light) {
-        boolean allowed = WingsHooksClient.onCheckRenderEmptyHand(original, player, hand, stack, this.mainHandItem);
-        this.wings$forceOppositeArm = !original && allowed && this.wings$currentHand == InteractionHand.OFF_HAND;
-        return allowed;
-    }
-
-    // The first STORE following the boolean flag writes the local HumanoidArm in
-    // 1.21.9.
-
-    /**
-     * 恢复副手手臂渲染，确保正确的动画方向
-     */
-    @ModifyVariable(method = "renderArmWithItem(Lnet/minecraft/client/player/AbstractClientPlayer;FFLnet/minecraft/world/InteractionHand;FLnet/minecraft/world/item/ItemStack;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;I)V", at = @At(value = "STORE"), ordinal = 0)
-    private HumanoidArm wings$restoreOffhandArm(HumanoidArm arm, AbstractClientPlayer player, float f, float f1,
-                                                InteractionHand hand, float f2, ItemStack stack, float f3, PoseStack poseStack,
-                                                SubmitNodeCollector collector, int light) {
-        if (this.wings$forceOppositeArm && hand == InteractionHand.OFF_HAND) {
-            return player.getMainArm().getOpposite();
+    @Inject(
+            method = SUBMIT_ARM_WITH_ITEM,
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/item/ItemStack;isEmpty()Z",
+                    ordinal = 0,
+                    shift = At.Shift.AFTER
+            )
+    )
+    private void wings$renderAllowedEmptyOffhandArm(AbstractClientPlayer player, float frameInterp, float xRot,
+                                                      InteractionHand hand, float attack, ItemStack itemStack,
+                                                      float inverseArmHeight, PoseStack poseStack,
+                                                      SubmitNodeCollector submitNodeCollector, int lightCoords,
+                                                      CallbackInfo ci) {
+        if (!itemStack.isEmpty() || hand != InteractionHand.OFF_HAND || player.isInvisible()) {
+            return;
         }
-        return arm;
+        if (!WingsHooksClient.onCheckRenderEmptyHand(false, player, hand, itemStack, this.mainHandItem)) {
+            return;
+        }
+        this.renderPlayerArm(poseStack, submitNodeCollector, lightCoords, inverseArmHeight, attack,
+                player.getMainArm().getOpposite());
     }
 }
