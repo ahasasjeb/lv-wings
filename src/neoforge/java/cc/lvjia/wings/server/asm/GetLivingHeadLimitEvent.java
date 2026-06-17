@@ -36,20 +36,8 @@ public final class GetLivingHeadLimitEvent extends LivingEvent {
         this.modified = true;
     }
 
-    public void disableHardLimit() {
-        this.setHardLimit(Float.POSITIVE_INFINITY);
-    }
-
     public void disableSoftLimit() {
         this.setSoftLimit(Float.POSITIVE_INFINITY);
-    }
-
-    public boolean hasHardLimit() {
-        return this.getHardLimit() < Float.POSITIVE_INFINITY;
-    }
-
-    public boolean hasSoftLimit() {
-        return this.getSoftLimit() < Float.POSITIVE_INFINITY;
     }
 
     public boolean isVanilla() {
