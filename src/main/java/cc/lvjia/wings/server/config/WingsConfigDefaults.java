@@ -1,8 +1,10 @@
 package cc.lvjia.wings.server.config;
 
+// 配置默认值与范围常量，双加载器共享
 public final class WingsConfigDefaults {
     public static final boolean ALLOW_UNDERWATER_FLIGHT = false;
 
+    // === 反作弊参数范围 ===
     public static final int FLIGHT_TAKEOFF_GRACE_TICKS_MIN = 0;
     public static final int FLIGHT_TAKEOFF_GRACE_TICKS_MAX = 200;
     public static final int FLIGHT_VIOLATION_LIMIT_MIN = 1;
@@ -16,6 +18,7 @@ public final class WingsConfigDefaults {
     public static final double FLIGHT_UPWARD_ASSIST_MIN = 0.0D;
     public static final double FLIGHT_UPWARD_ASSIST_MAX = 5.0D;
 
+    // 反作弊默认配置：默认关闭，由服主在配置文件中启用
     public static final FlightAntiCheatSettings FLIGHT_ANTI_CHEAT = new FlightAntiCheatSettings(
             false,
             12,

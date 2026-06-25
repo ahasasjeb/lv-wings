@@ -26,10 +26,12 @@ import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 import java.util.function.Supplier;
 
+// 服务端事件的共享业务逻辑，由 FabricServerEventHandler / NeoForge 事件订阅调用
 public final class ServerEventActions {
     private ServerEventActions() {
     }
 
+    // 玩家对实体右键：用玻璃瓶装蝙蝠血（创造蝙蝠血瓶）
     public static @NonNull InteractionResult onPlayerEntityInteract(@NonNull Player player,
                                                                     @NonNull InteractionHand hand, @NonNull Entity target, @NonNull Supplier<ItemStack> batBloodBottle,
                                                                     @Nullable DestroyedItemCallback destroyedItemCallback) {
@@ -65,6 +67,7 @@ public final class ServerEventActions {
         return InteractionResult.SUCCESS;
     }
 
+    // 玩家每 tick 更新：清理旁观者、推进飞行状态、同步能力、反作弊检查
     public static void onPlayerTick(@NonNull Player player) {
         Flight flight = Flights.get(player);
         if (FlightStateReset.clearSpectator(player, flight)) {
@@ -80,6 +83,7 @@ public final class ServerEventActions {
         }
     }
 
+    // 生物死亡时停飞并清除反作弊记录
     public static void onLivingDeath(@NonNull LivingEntity entity) {
         Flights.ifPlayer(entity, (player, flight) -> {
             flight.setIsFlying(false, Flight.PlayerSet.ofAll());
@@ -87,6 +91,7 @@ public final class ServerEventActions {
         });
     }
 
+    // 玩家飞行检测事件：如正在飞行，覆写 fallFlying 状态
     public static void onPlayerFlightCheck(@NonNull PlayerFlightCheckEvent event) {
         if (event.getEntity().isSpectator()) {
             return;
@@ -96,6 +101,7 @@ public final class ServerEventActions {
         }
     }
 
+    // 每次挥翅时触发：飞行中触发 onFlight，下落中触发 onLanding
     public static void onPlayerFlown(@NonNull PlayerFlownEvent event) {
         Player player = event.getEntity();
         Flight flight = Flights.get(player);
@@ -108,6 +114,7 @@ public final class ServerEventActions {
         }
     }
 
+    // 飞行时限制玩家头部转动范围（硬限 50°，禁用软限）
     public static void onGetLivingHeadLimit(@NonNull GetLivingHeadLimitEvent event) {
         Flights.ifPlayer(event.getEntity(), (player, flight) -> {
             if (player.isSpectator()) {
@@ -120,6 +127,7 @@ public final class ServerEventActions {
         });
     }
 
+    // 物品销毁回调接口（如玻璃瓶用掉后需要特殊处理）
     @FunctionalInterface
     public interface DestroyedItemCallback {
         void onDestroy(@NonNull Player player, @NonNull ItemStack destroyed, @NonNull InteractionHand hand);

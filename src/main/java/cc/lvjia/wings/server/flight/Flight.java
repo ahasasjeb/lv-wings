@@ -8,15 +8,18 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Consumer;
 
+// 飞行状态核心接口，定义状态管理、物理模拟、网络同步与序列化契约
 public interface Flight {
     default void setIsFlying(boolean isFlying) {
         this.setIsFlying(isFlying, PlayerSet.empty());
     }
 
+    // 设置飞行状态并同步到指定玩家集
     void setIsFlying(boolean isFlying, PlayerSet players);
 
     boolean isFlying();
 
+    // 切换飞行状态（开→关 / 关→开）
     default void toggleIsFlying(PlayerSet players) {
         this.setIsFlying(!this.isFlying(), players);
     }
@@ -25,10 +28,12 @@ public interface Flight {
 
     void setTimeFlying(int timeFlying);
 
+    // 切换翅膀类型并同步
     void setWing(FlightApparatus wing, PlayerSet players);
 
     FlightApparatus getWing();
 
+    // 便捷方法：切换翅膀不触发网络同步
     default void setWing(FlightApparatus wing) {
         this.setWing(wing, PlayerSet.empty());
     }
@@ -37,6 +42,7 @@ public interface Flight {
 
     void setAnimationState(FlightAnimationState animationState);
 
+    // 获取翅膀展开/收起的插值量 (0~1)，delta 为帧间时间
     float getFlyingAmount(float delta);
 
     void registerFlyingListener(FlyingListener listener);
@@ -49,12 +55,16 @@ public interface Flight {
 
     boolean canLand(Player player);
 
+    // 每 tick 更新飞行物理和状态
     void tick(Player player);
 
+    // 玩家挥动翅膀时调用（触发粒子/音效）
     void onFlown(Player player, Vec3 direction);
 
+    // 从旧 Flight 复制状态（克隆/维度切换时）
     void clone(Flight other);
 
+    // 派发同步请求到指定玩家集
     void sync(PlayerSet players);
 
     void serialize(FriendlyByteBuf buf);

@@ -26,30 +26,40 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.Objects;
 
+// Fabric 服务端事件注册中心：将 Fabric API 事件桥接到共享逻辑
 @SuppressWarnings("null")
 public final class FabricServerEventHandler {
     private FabricServerEventHandler() {
     }
 
     public static void register() {
+        // 右键实体（蝙蝠 → 蝙蝠血瓶）
         UseEntityCallback.EVENT
                 .register((player, level, hand, entity, hitResult) -> onPlayerEntityInteract(player, hand, entity));
+        // 每 tick 更新所有在线玩家
         ServerTickEvents.END_SERVER_TICK
                 .register(server -> server.getPlayerList().getPlayers().forEach(FabricServerEventHandler::onPlayerTick));
+        // 死亡时停飞
         ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> onLivingDeath(entity));
+        // 玩家退出时清理限速器和反作弊状态
         ServerPlayerEvents.LEAVE.register(player -> {
             MessageControlFlying.clearRateLimit(player);
             FlightSpeedAntiCheat.clear(player);
         });
+        // 玩家克隆（维度切换/重生）时复制飞行和捕梦网状态
         ServerPlayerEvents.COPY_FROM.register((oldPlayer, newPlayer, alive) -> {
             Flights.onPlayerClone(oldPlayer, newPlayer, alive);
             cc.lvjia.wings.server.dreamcatcher.InSomniableCapability.onPlayerClone(oldPlayer, newPlayer);
         });
+        // 重生后同步飞行状态
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> Flights.onPlayerRespawn(newPlayer));
         ServerPlayerEvents.JOIN.register(Flights::onPlayerLoggedIn);
+        // 维度切换时同步飞行状态
         ServerEntityLevelChangeEvents.AFTER_PLAYER_CHANGE_LEVEL
                 .register((player, origin, destination) -> Flights.onPlayerChangedDimension(player));
+        // 新玩家开始追踪时推送飞行快照
         EntityTrackingEvents.START_TRACKING.register(Flights::onPlayerStartTracking);
+        // 注册 /wings 命令
         CommandRegistrationCallback.EVENT
                 .register((dispatcher, buildContext, selection) -> FabricWingsCommand.register(dispatcher, buildContext));
         InSomniableEventHandler.register();

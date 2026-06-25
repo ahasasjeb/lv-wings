@@ -7,6 +7,7 @@ import cc.lvjia.wings.server.net.Network;
 import cc.lvjia.wings.server.net.clientbound.MessageSyncFlight;
 import net.minecraft.world.entity.player.Player;
 
+// Fabric 平台代理：网络注册 + 飞行监听器绑定
 public class FabricProxy {
     protected final Network network = new Network();
 
@@ -14,6 +15,7 @@ public class FabricProxy {
         this.network.register();
     }
 
+    // 为玩家 Flight 注册同步监听器，使用 Fabric API 发送网络包
     public void addFlightListeners(Player player, Flight instance) {
         FlightListenerSupport.addFlightListeners(player, instance, new FlightListenerSupport.Sync() {
             @Override

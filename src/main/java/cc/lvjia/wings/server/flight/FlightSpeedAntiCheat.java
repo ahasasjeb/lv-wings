@@ -30,6 +30,7 @@ public final class FlightSpeedAntiCheat {
     private FlightSpeedAntiCheat() {
     }
 
+    // 每 tick 反作弊检查：处理积压的违规纠正
     public static void tick(ServerPlayer player, Flight flight) {
         long now = System.nanoTime();
         cleanupExpiredStates(now);
@@ -50,6 +51,7 @@ public final class FlightSpeedAntiCheat {
         }
         state.markSeen(now);
 
+        // 还在纠正冷却中，跳过
         if (player.tickCount < state.cooldownUntilTick) {
             return;
         }
@@ -61,6 +63,7 @@ public final class FlightSpeedAntiCheat {
         }
 
         if (correction == null) {
+            // 起飞宽限期或在地面时只记录安全位置，不处罚
             if (flight.getTimeFlying() <= settings.takeoffGraceTicks() || player.onGround()) {
                 state.captureSafePosition(player);
                 state.relax();
@@ -68,6 +71,7 @@ public final class FlightSpeedAntiCheat {
             return;
         }
 
+        // 执行纠正：传送回安全位置 + 清空速度 + 强制停飞
         Vec3 safePosition = state.safePosition != null ? state.safePosition : player.position();
         state.pendingCorrection = null;
         state.cooldownUntilTick = player.tickCount + settings.correctionCooldownTicks();
@@ -88,6 +92,7 @@ public final class FlightSpeedAntiCheat {
                 String.format("%.3f", correction.total()));
     }
 
+    // 记录每次挥翅的移动向量，检测是否超速
     public static void recordMovement(ServerPlayer player, Flight flight, Vec3 movement) {
         long now = System.nanoTime();
         cleanupExpiredStates(now);
@@ -113,6 +118,7 @@ public final class FlightSpeedAntiCheat {
         // 俯冲会天然放大负Y位移；这里只统计上升分量，避免把正常俯冲误判为超速。
         double vertical = Math.max(0.0D, movement.y());
         double total = Math.hypot(horizontal, vertical);
+        // 水平速度低时允许更多垂直速度（模拟悬停抬升）
         double verticalBonus = computeUpwardVerticalBonus(horizontal, settings);
         double totalBonus = verticalBonus * 0.4D;
         double softVerticalLimit = settings.softVerticalLimit() + verticalBonus;
@@ -120,6 +126,7 @@ public final class FlightSpeedAntiCheat {
         double softTotalLimit = settings.softTotalLimit() + totalBonus;
         double hardTotalLimit = settings.hardTotalLimit() + totalBonus;
 
+        // 起飞宽限期、在岩浆/水中不触发检测
         if (flight.getTimeFlying() <= settings.takeoffGraceTicks()
                 || player.isInLava()
                 || (player.isInWater() && !WingsConfig.isUnderwaterFlightAllowed())) {
@@ -137,11 +144,13 @@ public final class FlightSpeedAntiCheat {
                 || total > softTotalLimit;
 
         if (!softViolation) {
+            // 未超速，记录安全位置并减少违规计数
             state.captureSafePosition(player);
             state.relax();
             return;
         }
 
+        // 记录违规，达到阈值时标记待纠正
         state.recordViolation(hardViolation);
         if (state.softViolations >= settings.softViolationLimit()
                 || state.hardViolations >= settings.hardViolationLimit()) {

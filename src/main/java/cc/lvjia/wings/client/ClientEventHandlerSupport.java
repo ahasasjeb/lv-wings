@@ -18,6 +18,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
+// 客户端事件处理器：飞行动画姿态、摄像机翻滚、视角同步
 public final class ClientEventHandlerSupport {
     private static ResourceKey<Level> lastPlayerDimension;
     private static CameraType lastCameraType = CameraType.FIRST_PERSON;
@@ -26,6 +27,7 @@ public final class ClientEventHandlerSupport {
     private ClientEventHandlerSupport() {
     }
 
+    // 将玩家模型姿势改为飞行姿态（手臂张开、腿并拢、头调整）
     public static void applyFlightPose(Player player, PlayerModel model, float ticksExisted, float pitch) {
         Flight flight = Flights.get(player);
         float delta = ticksExisted - player.tickCount;
@@ -42,6 +44,7 @@ public final class ClientEventHandlerSupport {
         resetOuterModelParts(model);
     }
 
+    // 在渲染时对整个玩家实体应用飞行旋转（侧倾 + 俯仰 + 下移）
     public static void applyPlayerRotations(Entity entity, PoseStack matrixStack, float delta) {
         Flights.ifPlayer(entity, (player, flight) -> {
             float amount = flight.getFlyingAmount(delta);
@@ -55,12 +58,14 @@ public final class ClientEventHandlerSupport {
         });
     }
 
+    // 每 tick 更新飞行时的第三人称摄像机高度
     public static void tickCameraEyeHeight(Entity entity, float value, FloatConsumer setter) {
         if (entity instanceof LocalPlayer player) {
             FlightViews.get(player).ifPresent(flight -> flight.tickEyeHeight(value, setter));
         }
     }
 
+    // 计算第一人称视角的平滑侧倾（roll），模拟飞行转弯效果
     public static float computeCameraRoll(float delta) {
         Minecraft minecraft = Minecraft.getInstance();
         CameraType cameraType = minecraft.options.getCameraType();
@@ -94,6 +99,7 @@ public final class ClientEventHandlerSupport {
             targetRoll = 0.0F;
         }
         targetRoll = Mth.clamp(targetRoll, -35.0F, 35.0F);
+        // 使用 approachDegrees 做平滑插值，避免突变
         smoothedCameraRoll = Mth.approachDegrees(smoothedCameraRoll, targetRoll, 8.0F);
         if (!flight.isFlying() && Math.abs(smoothedCameraRoll) < 0.01F) {
             smoothedCameraRoll = 0.0F;
@@ -101,6 +107,7 @@ public final class ClientEventHandlerSupport {
         return smoothedCameraRoll;
     }
 
+    // 维度切换时标记玩家飞行视图需重新初始化
     public static void tickClientDimension() {
         Minecraft minecraft = Minecraft.getInstance();
         LocalPlayer player = minecraft.player;
@@ -117,6 +124,7 @@ public final class ClientEventHandlerSupport {
         }
     }
 
+    // 重置玩家模型的外层装饰部件（袖子、裤腿、夹克）旋转到零
     private static void resetOuterModelParts(PlayerModel model) {
         model.hat.xRot = 0;
         model.hat.yRot = 0;

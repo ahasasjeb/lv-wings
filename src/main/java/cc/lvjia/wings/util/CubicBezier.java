@@ -109,19 +109,22 @@ public final class CubicBezier {
         return calcBezier(this.getTForX(x), this.y1, this.y2);
     }
 
-    // 核心求逆 给定 x 找对应 t 采用采样加速 + 牛顿或二分
+    // 求逆：给定 x 值，通过预采样表定位 + 牛顿迭代（斜率大时）/ 二分法（斜率小时）求解 t
     private float getTForX(float x) {
         float intervalStart = 0;
         int currentSample = 1;
+        // 在预采样表中定位 x 所在的区间
         for (final int lastSample = SPLINE_TABLE_SIZE - 1; currentSample != lastSample
                 && this.sampleValues[currentSample] <= x; currentSample++) {
             intervalStart += SAMPLE_STEP_SIZE;
         }
         currentSample--;
+        // 线性插值得到初始猜测值
         float slope = (this.sampleValues[currentSample + 1] - this.sampleValues[currentSample]);
         float dist = (x - this.sampleValues[currentSample]) / slope;
         float guessForT = intervalStart + dist * SAMPLE_STEP_SIZE;
         float initialSlope = getSlope(guessForT, this.x1, this.x2);
+        // 根据初始斜率选择合适的求根方法
         if (initialSlope >= NEWTON_MIN_SLOPE) {
             return newtonRaphsonIterate(x, guessForT, this.x1, this.x2);
         }

@@ -15,14 +15,17 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.Objects;
 
+// 跨加载器共享核心：mod ID、资源定位、翅膀注册与默认翅膀清单
 public final class WingsCore {
     public static final String ID = "wings";
+    // 自定义注册表键，两加载器共享同一个 ResourceKey
     public static final @NonNull ResourceKey<Registry<FlightApparatus>> WINGS_KEY = Objects.requireNonNull(
             ResourceKey.createRegistryKey(locate("wings")), "wings registry key");
 
     private WingsCore() {
     }
 
+    // 生成 mod 命名空间的 Identifier，参数非法时抛异常而非返回 null
     public static @NonNull Identifier locate(@NonNull String name) {
         Identifier id = Identifier.tryBuild(ID, name);
         if (id == null) {
@@ -31,6 +34,7 @@ public final class WingsCore {
         return id;
     }
 
+    // 注册所有默认翅膀，通过 WingRegistrar 回调解耦具体注册 API（Fabric Registry / NeoForge DeferredRegister）
     public static @NonNull WingSet registerWings(@NonNull WingRegistrar registrar) {
         @NonNull FlightApparatus none = registrar.register(Names.NONE, FlightApparatus.NONE);
         @NonNull FlightApparatus wingless = registrar.register(Names.WINGLESS, wingless());
@@ -83,11 +87,13 @@ public final class WingsCore {
         };
     }
 
+    // 注册回调接口，解耦具体 Registry API
     @FunctionalInterface
     public interface WingRegistrar {
         @NonNull FlightApparatus register(@NonNull Identifier id, @NonNull FlightApparatus wing);
     }
 
+    // 所有翅膀实例的定型封装，编译期确保不遗漏
     public record WingSet(
             @NonNull FlightApparatus none,
             @NonNull FlightApparatus wingless,
@@ -104,6 +110,7 @@ public final class WingsCore {
             @NonNull FlightApparatus lvjiaSuper) {
     }
 
+    // 所有翅膀的 Identifier 常量，集中管理避免拼写错误
     public static final class Names {
         public static final @NonNull Identifier
                 NONE = create("none"),

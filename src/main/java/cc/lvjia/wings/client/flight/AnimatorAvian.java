@@ -6,14 +6,10 @@ import net.minecraft.world.level.levelgen.synth.SimplexNoise;
 
 import java.util.Random;
 
-/*
-鸟类翅膀动画器
-内部定义多种 Movement 实现 负责不同飞行模式的翼与羽旋转
-使用 Transition 做平滑插值切换
-每个 Movement 用 sin / noise + 权重计算关节角度
-FlapCycle 控制基础拍打节奏
-*/
+// 鸟类翅膀动画器：内部用 Movement 策略模式实现不同飞行模式的翅膀旋转角度
+// 通过 Transition 做状态切换的平滑插值，FlapCycle 控制基础拍打节奏
 public final class AnimatorAvian implements Animator {
+    // 各状态过渡插值持续 tick
     private static final int LAND_TRANSITION_DURATION = 12;
 
     private static final int GLIDE_TRANSITION_DURATION = 60;
@@ -24,10 +20,12 @@ public final class AnimatorAvian implements Animator {
 
     private static final int FALL_TRANSITION_DURATION = 8;
 
+    // 静止姿态基准，其他 Movement 在此之上叠加偏移
     private final Movement restPosition = new RestPosition();
 
     private Movement movement = new IdleMovement();
 
+    // 上一帧和当前帧的拍打相位，用于帧间插值
     private float prevFlapCycle;
 
     private float flapCycle;
@@ -96,9 +94,8 @@ public final class AnimatorAvian implements Animator {
         return Math.min(Math.abs(index - 1), 2) / 2.0F;
     }
 
-    // 动画状态策略接口 每个实现为一套翼姿势生成逻辑
-    // update 返回本次更新的 flap 增量
-    // 多数基于 restPosition 叠加偏移量
+    // Movement 策略接口：每种飞行模式有一套翅膀/羽毛旋转角度生成逻辑
+    // update() 返回本次 tick 的 flap 增量（控制拍打速度）
     private interface Movement {
         void getWingRotation(int index, float delta, RotationAngles rotation);
 

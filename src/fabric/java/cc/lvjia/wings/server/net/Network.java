@@ -10,15 +10,12 @@ import net.minecraft.world.entity.Entity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-/**
- * 模组网络通道注册与发送工具。
- * <p>
- * 负责在 {@link RegisterPayloadHandlersEvent} 时注册 payload 处理器，并提供常用的发送方法。
- */
+// Fabric 网络通道：注册 payload + 发送工具
 @SuppressWarnings("null")
 public final class Network {
     private static final Logger LOGGER = LogManager.getLogger("WingsNetwork");
 
+    // 注册客户端↔服务端的 payload 类型及处理器
     public void register() {
         PayloadTypeRegistry.serverboundPlay().register(MessageControlFlying.TYPE, MessageControlFlying.STREAM_CODEC);
         PayloadTypeRegistry.clientboundPlay().register(MessageSyncFlight.TYPE, MessageSyncFlight.STREAM_CODEC);
@@ -26,11 +23,13 @@ public final class Network {
         LOGGER.info("Network payloads registered");
     }
 
+    // 向指定玩家发送消息
     public void sendToPlayer(Message message, ServerPlayer player) {
         LOGGER.debug("Sending {} to player {}", message.type().id(), player.getName().getString());
         ServerPlayNetworking.send(player, message);
     }
 
+    // 向追踪实体的所有玩家广播消息
     public void sendToAllTracking(Message message, Entity entity) {
         LOGGER.debug("Sending {} tracking entity={}", message.type().id(), entity.getName().getString());
         for (ServerPlayer player : PlayerLookup.tracking(entity)) {
