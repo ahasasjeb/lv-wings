@@ -1,9 +1,8 @@
 package cc.lvjia.wings.client.flight;
 
 import cc.lvjia.wings.client.apparatus.WingForm;
-import cc.lvjia.wings.client.flight.state.State;
-import cc.lvjia.wings.client.flight.state.StateIdle;
 import cc.lvjia.wings.server.flight.Flight;
+import cc.lvjia.wings.server.flight.FlightAnimationEngine;
 import cc.lvjia.wings.server.flight.FlightAnimationState;
 import cc.lvjia.wings.util.function.FloatConsumer;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -130,14 +129,14 @@ public final class FlightViewDefault implements FlightView {
 
             private final @NonNull FormRenderer renderer;
 
-            private @NonNull State state;
+            private final @NonNull FlightAnimationEngine animationEngine = new FlightAnimationEngine();
 
-            private @Nullable FlightAnimationState remoteAnimationState;
+            private @Nullable FlightAnimationState displayedAnimationState;
 
             public WingStrategy(@NonNull WingForm<T> shape) {
                 this.shape = Objects.requireNonNull(shape, "shape");
                 this.animator = Objects.requireNonNull(shape.createAnimator(), "animator");
-                this.state = new StateIdle();
+                FlightAnimationVisuals.begin(FlightAnimationState.IDLE, this.animator);
                 this.renderer = new FormRenderer() {
                     @Override
                     public @NonNull RenderType getRenderType() {
@@ -159,31 +158,19 @@ public final class FlightViewDefault implements FlightView {
                     this.applyRemoteAnimationState(flight.getAnimationState());
                     return;
                 }
-                this.remoteAnimationState = null;
-                State state = Objects.requireNonNull(this.state.update(
-                        flight,
-                        player.getX() - player.xo,
-                        player.getY() - player.yo,
-                        player.getZ() - player.zo,
-                        player
-                ), "state");
-                if (!this.state.equals(state)) {
-                    state.beginAnimation(this.animator);
+                if (this.animationEngine.tick(flight, player)) {
+                    FlightAnimationVisuals.begin(this.animationEngine.getState(), this.animator);
                 }
-                this.state = state;
             }
 
             private void applyRemoteAnimationState(@NonNull FlightAnimationState animationState) {
                 FlightAnimationState safeAnimationState = Objects.requireNonNull(animationState, "animation state");
-                if (this.remoteAnimationState == safeAnimationState) {
+                if (this.displayedAnimationState == safeAnimationState) {
                     return;
                 }
-                this.remoteAnimationState = safeAnimationState;
-                State state = State.create(safeAnimationState);
-                if (!this.state.getClass().equals(state.getClass())) {
-                    state.beginAnimation(this.animator);
-                }
-                this.state = state;
+                this.displayedAnimationState = safeAnimationState;
+                this.animationEngine.load(safeAnimationState);
+                FlightAnimationVisuals.begin(safeAnimationState, this.animator);
             }
 
             @Override
