@@ -200,6 +200,7 @@ public final class ModelWingsAvian extends ModelWings<@NonNull AnimatorAvian> {
                        @NonNull VertexConsumer buffer,
                        int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         int color = ARGB.colorFromFloat(alpha, red, green, blue);
+        animator.prepareRender(delta);
 
         for (int i = 0; i < this.bonesLeft.size(); i++) {
             ModelPart left = Objects.requireNonNull(this.bonesLeft.get(i), "left bone");

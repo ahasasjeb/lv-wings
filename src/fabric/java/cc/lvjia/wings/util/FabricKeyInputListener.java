@@ -22,10 +22,15 @@ public final class FabricKeyInputListener {
     }
 
     public void register() {
-        ClientTickEvents.END_CLIENT_TICK.register(client -> this.bindings.asMap().entrySet().stream()
-                .filter(e -> e.getKey().consumeClick())
-                .flatMap(e -> e.getValue().stream())
-                .forEach(Runnable::run));
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            for (KeyMapping binding : this.bindings.keySet()) {
+                if (binding.consumeClick()) {
+                    for (Runnable handler : this.bindings.get(binding)) {
+                        handler.run();
+                    }
+                }
+            }
+        });
     }
 
     public interface Builder {

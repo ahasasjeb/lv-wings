@@ -32,22 +32,27 @@ public final class FlightSpeedAntiCheat {
 
     // 每 tick 反作弊检查：处理积压的违规纠正
     public static void tick(ServerPlayer player, Flight flight) {
-        long now = System.nanoTime();
-        cleanupExpiredStates(now);
-
         FlightAntiCheatSettings settings = WingsConfig.getFlightAntiCheatSettings();
         if (!settings.enabled()) {
             clear(player);
             return;
         }
 
-        TrackingState state = STATES.get(player.getUUID());
-        if (state == null && !shouldMonitor(player, flight)) {
+        UUID playerId = player.getUUID();
+        boolean monitoring = shouldMonitor(player, flight);
+        TrackingState state = STATES.get(playerId);
+        if (state == null && !monitoring) {
             return;
         }
 
+        long now = System.nanoTime();
+        cleanupExpiredStates(now);
+        state = STATES.get(playerId);
         if (state == null) {
-            state = STATES.computeIfAbsent(player.getUUID(), key -> new TrackingState(now));
+            if (!monitoring) {
+                return;
+            }
+            state = STATES.computeIfAbsent(playerId, key -> new TrackingState(now));
         }
         state.markSeen(now);
 
@@ -57,7 +62,7 @@ public final class FlightSpeedAntiCheat {
         }
 
         PendingCorrection correction = state.pendingCorrection;
-        if (correction == null && !shouldMonitor(player, flight)) {
+        if (correction == null && !monitoring) {
             clear(player);
             return;
         }
@@ -94,9 +99,6 @@ public final class FlightSpeedAntiCheat {
 
     // 记录翅膀飞行期间的空中移动向量，检测是否超速
     public static void recordMovement(ServerPlayer player, Flight flight, Vec3 movement) {
-        long now = System.nanoTime();
-        cleanupExpiredStates(now);
-
         FlightAntiCheatSettings settings = WingsConfig.getFlightAntiCheatSettings();
         if (!settings.enabled()) {
             clear(player);
@@ -108,6 +110,8 @@ public final class FlightSpeedAntiCheat {
             return;
         }
 
+        long now = System.nanoTime();
+        cleanupExpiredStates(now);
         TrackingState state = STATES.computeIfAbsent(player.getUUID(), key -> new TrackingState(now));
         state.markSeen(now);
         if (player.tickCount < state.cooldownUntilTick) {
