@@ -3,7 +3,7 @@ package cc.lvjia.wings.server.config;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class WingsConfigDefaultsTest {
     @Test
@@ -31,7 +31,7 @@ class WingsConfigDefaultsTest {
     void defaultFlightAntiCheatSettingsStayInsidePublishedRanges() {
         FlightAntiCheatSettings settings = WingsConfigDefaults.FLIGHT_ANTI_CHEAT;
 
-        assertFalse(settings.enabled());
+        assertTrue(settings.enabled());
         assertBetween(settings.takeoffGraceTicks(),
                 WingsConfigDefaults.FLIGHT_TAKEOFF_GRACE_TICKS_MIN,
                 WingsConfigDefaults.FLIGHT_TAKEOFF_GRACE_TICKS_MAX);
@@ -50,6 +50,9 @@ class WingsConfigDefaultsTest {
         assertBetween(settings.softVerticalLimit(),
                 WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MIN,
                 WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MAX);
+        assertBetween(settings.softDownwardLimit(),
+                WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MIN,
+                WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MAX);
         assertBetween(settings.softTotalLimit(),
                 WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MIN,
                 WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MAX);
@@ -57,6 +60,9 @@ class WingsConfigDefaultsTest {
                 WingsConfigDefaults.FLIGHT_HARD_LIMIT_MIN,
                 WingsConfigDefaults.FLIGHT_HARD_LIMIT_MAX);
         assertBetween(settings.hardVerticalLimit(),
+                WingsConfigDefaults.FLIGHT_HARD_LIMIT_MIN,
+                WingsConfigDefaults.FLIGHT_HARD_LIMIT_MAX);
+        assertBetween(settings.hardDownwardLimit(),
                 WingsConfigDefaults.FLIGHT_HARD_LIMIT_MIN,
                 WingsConfigDefaults.FLIGHT_HARD_LIMIT_MAX);
         assertBetween(settings.hardTotalLimit(),
@@ -68,6 +74,8 @@ class WingsConfigDefaultsTest {
         assertBetween(settings.upwardAssistMaxBonus(),
                 WingsConfigDefaults.FLIGHT_UPWARD_ASSIST_MIN,
                 WingsConfigDefaults.FLIGHT_UPWARD_ASSIST_MAX);
+        assertTrue(settings.softDownwardLimit() > 3.92D);
+        assertTrue(settings.hardDownwardLimit() > settings.softDownwardLimit());
     }
 
     @Test

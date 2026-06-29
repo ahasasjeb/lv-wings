@@ -21,7 +21,6 @@ public final class WingsAttachments {
     public static final DeferredHolder<AttachmentType<?>, AttachmentType<Flight>> FLIGHT = ATTACHMENT_TYPES.register("flight", () ->
             AttachmentType.builder(WingsAttachments::createFlight)
                     .serialize(new FlightAttachmentSerializer())
-                    .copyOnDeath()
                     .build()
     );
 

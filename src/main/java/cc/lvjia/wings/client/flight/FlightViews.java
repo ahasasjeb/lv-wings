@@ -18,10 +18,14 @@ public final class FlightViews {
     }
 
     @SuppressWarnings("null")
+    public static FlightView get(AbstractClientPlayer player) {
+        return VIEWS.computeIfAbsent(player, ignored -> new FlightViewDefault(player, Flights.get(player)));
+    }
+
+    @SuppressWarnings("null")
     public static Optional<FlightView> get(LivingEntity entity) {
         if (entity instanceof AbstractClientPlayer player) {
-            return Optional.of(VIEWS.computeIfAbsent(player, ignored -> new FlightViewDefault(player,
-                    Flights.get(player))));
+            return Optional.of(get(player));
         }
         return Optional.empty();
     }

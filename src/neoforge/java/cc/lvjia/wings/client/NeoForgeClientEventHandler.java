@@ -6,7 +6,6 @@ import cc.lvjia.wings.client.asm.ApplyPlayerRotationsEvent;
 import cc.lvjia.wings.client.asm.GetCameraEyeHeightEvent;
 import cc.lvjia.wings.client.audio.WingsSound;
 import cc.lvjia.wings.client.event.EmptyOffHandPresentEvent;
-import cc.lvjia.wings.client.flight.FlightView;
 import cc.lvjia.wings.client.flight.FlightViews;
 import cc.lvjia.wings.server.flight.Flights;
 import net.minecraft.client.Minecraft;
@@ -64,7 +63,7 @@ public final class NeoForgeClientEventHandler {
         Player entity = event.getEntity();
         if (entity instanceof AbstractClientPlayer player) {
             Flights.get(player).tick(player);
-            FlightViews.get(player).ifPresent(FlightView::tick);
+            FlightViews.get(player).tick();
         }
     }
 

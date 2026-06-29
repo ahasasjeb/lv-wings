@@ -5,7 +5,6 @@ import cc.lvjia.wings.client.asm.ApplyPlayerRotationsEvent;
 import cc.lvjia.wings.client.asm.GetCameraEyeHeightEvent;
 import cc.lvjia.wings.client.audio.WingsSound;
 import cc.lvjia.wings.client.event.EmptyOffHandPresentEvent;
-import cc.lvjia.wings.client.flight.FlightView;
 import cc.lvjia.wings.client.flight.FlightViews;
 import cc.lvjia.wings.server.flight.Flights;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents;
@@ -26,7 +25,7 @@ public final class FabricClientEventHandler {
                 for (Player player : client.level.players()) {
                     if (player instanceof AbstractClientPlayer clientPlayer) {
                         Flights.get(clientPlayer).tick(clientPlayer);
-                        FlightViews.get(clientPlayer).ifPresent(FlightView::tick);
+                        FlightViews.get(clientPlayer).tick();
                     }
                 }
             }

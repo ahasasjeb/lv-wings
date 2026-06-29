@@ -61,7 +61,7 @@ public final class ClientEventHandlerSupport {
     // 每 tick 更新飞行时的第三人称摄像机高度
     public static void tickCameraEyeHeight(Entity entity, float value, FloatConsumer setter) {
         if (entity instanceof LocalPlayer player) {
-            FlightViews.get(player).ifPresent(flight -> flight.tickEyeHeight(value, setter));
+            FlightViews.get(player).tickEyeHeight(value, setter);
         }
     }
 

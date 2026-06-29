@@ -58,7 +58,7 @@ public interface Flight {
     // 每 tick 更新飞行物理和状态
     void tick(Player player);
 
-    // 玩家挥动翅膀时调用（触发粒子/音效）
+    // 玩家空中移动时调用（飞行中计算飞行消耗，非飞行下降时计算着陆消耗）
     void onFlown(Player player, Vec3 direction);
 
     // 从旧 Flight 复制状态（克隆/维度切换时）

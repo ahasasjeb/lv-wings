@@ -1,6 +1,7 @@
 package cc.lvjia.wings.client.renderer;
 
 import cc.lvjia.wings.WingsMod;
+import cc.lvjia.wings.client.flight.FlightView;
 import cc.lvjia.wings.client.flight.FlightViews;
 import cc.lvjia.wings.server.apparatus.FlightApparatus;
 import cc.lvjia.wings.server.flight.Flights;
@@ -25,6 +26,8 @@ import org.jspecify.annotations.NonNull;
 import java.util.Objects;
 
 public final class WingsLayerRenderer {
+    private static final ThreadLocal<PoseStack> RENDER_STACK = ThreadLocal.withInitial(PoseStack::new);
+
     private WingsLayerRenderer() {
     }
 
@@ -43,26 +46,30 @@ public final class WingsLayerRenderer {
             return;
         }
 
-        FlightViews.get(player).ifPresent(flight -> {
-            flight.tick();
-            flight.ifFormPresent(form -> {
-                float delta = Mth.clamp(state.ageInTicks - player.tickCount, 0.0F, 1.0F);
-                poseStack.pushPose();
-                if (state.isCrouching) {
-                    poseStack.translate(0.0D, 0.2D, 0.0D);
+        FlightView flight = FlightViews.get(player);
+        flight.tick();
+        flight.ifFormPresent(form -> {
+            float delta = Mth.clamp(state.ageInTicks - player.tickCount, 0.0F, 1.0F);
+            poseStack.pushPose();
+            if (state.isCrouching) {
+                poseStack.translate(0.0D, 0.2D, 0.0D);
+            }
+            ModelPart body = Objects.requireNonNull(parentModel.body, "player body");
+            body.translateAndRotate(poseStack);
+            submitNodeCollector.submitCustomGeometry(poseStack, form.getRenderType(), (pose, buffer) -> {
+                PoseStack.Pose safePose = Objects.requireNonNull(pose, "pose");
+                VertexConsumer safeBuffer = Objects.requireNonNull(buffer, "vertex consumer");
+                PoseStack renderStack = RENDER_STACK.get();
+                while (!renderStack.isEmpty()) {
+                    renderStack.popPose();
                 }
-                ModelPart body = Objects.requireNonNull(parentModel.body, "player body");
-                body.translateAndRotate(poseStack);
-                submitNodeCollector.submitCustomGeometry(poseStack, form.getRenderType(), (pose, buffer) -> {
-                    PoseStack.Pose safePose = Objects.requireNonNull(pose, "pose");
-                    VertexConsumer safeBuffer = Objects.requireNonNull(buffer, "vertex consumer");
-                    PoseStack renderStack = new PoseStack();
-                    PoseStack.Pose renderPose = Objects.requireNonNull(renderStack.last(), "pose");
-                    renderPose.pose().set(safePose.pose());
-                    renderPose.normal().set(safePose.normal());
+                PoseStack.Pose renderPose = Objects.requireNonNull(renderStack.last(), "pose");
+                renderPose.set(safePose);
+                SodiumBypassVertexConsumer renderBuffer = SodiumBypassVertexConsumer.wrap(safeBuffer);
+                try {
                     form.render(
                             renderStack,
-                            SodiumBypassVertexConsumer.wrap(safeBuffer),
+                            renderBuffer,
                             packedLight,
                             OverlayTexture.NO_OVERLAY,
                             1.0F,
@@ -70,9 +77,11 @@ public final class WingsLayerRenderer {
                             1.0F,
                             1.0F,
                             delta);
-                });
-                poseStack.popPose();
+                } finally {
+                    renderBuffer.release();
+                }
             });
+            poseStack.popPose();
         });
     }
 
@@ -116,7 +125,8 @@ public final class WingsLayerRenderer {
     }
 
     private static boolean hasVisibleWings(AbstractClientPlayer player) {
-        FlightApparatus wing = Flights.get(player).getWing();
-        return wing != WingsMod.NONE && wing != WingsMod.WINGLESS;
+        var flight = Flights.get(player);
+        FlightApparatus wing = flight.getWing();
+        return flight.hasEffect(player) && wing != WingsMod.NONE && wing != WingsMod.WINGLESS;
     }
 }

@@ -127,7 +127,7 @@ public final class FlightDefault implements Flight {
     private static FlightDefault fromPersistentData(boolean isFlying, int timeFlying, String wingId) {
         FlightDefault flight = new FlightDefault();
         flight.setIsFlying(isFlying);
-        flight.setTimeFlying(timeFlying);
+        flight.loadTimeFlying(timeFlying);
         flight.setWing(wingFrom(wingId));
         return flight;
     }
@@ -201,6 +201,12 @@ public final class FlightDefault implements Flight {
 
     private void setPrevTimeFlying(int prevTimeFlying) {
         this.prevTimeFlying = prevTimeFlying;
+    }
+
+    // 载入外部快照时同时对齐插值两端，避免下一 tick 前从旧值跳变。
+    private void loadTimeFlying(int timeFlying) {
+        this.setTimeFlying(timeFlying);
+        this.setPrevTimeFlying(timeFlying);
     }
 
     @Override
@@ -362,7 +368,7 @@ public final class FlightDefault implements Flight {
         }
     }
 
-    // 玩家挥翅时委托给当前翅膀装置（触发粒子/音效等）
+    // 空中移动时委托给当前翅膀装置计算飞行或受控下降消耗
     @Override
     public void onFlown(Player player, Vec3 direction) {
         if (this.isFlying()) {
@@ -376,7 +382,7 @@ public final class FlightDefault implements Flight {
     @Override
     public void clone(Flight other) {
         this.setIsFlying(other.isFlying());
-        this.setTimeFlying(other.getTimeFlying());
+        this.loadTimeFlying(other.getTimeFlying());
         this.setWing(other.getWing());
         this.loadAnimationState(other.getAnimationState());
     }
@@ -400,7 +406,7 @@ public final class FlightDefault implements Flight {
     @Override
     public void deserialize(FriendlyByteBuf buf) {
         this.setIsFlying(buf.readBoolean());
-        this.setTimeFlying(buf.readVarInt());
+        this.loadTimeFlying(buf.readVarInt());
         Identifier wingId;
         try {
             wingId = buf.readIdentifier();
@@ -448,7 +454,7 @@ public final class FlightDefault implements Flight {
         public FlightDefault deserialize(CompoundTag compound) {
             FlightDefault f = Objects.requireNonNull(this.factory.get(), "flight factory");
             f.setIsFlying(compound.getBoolean(IS_FLYING).orElse(false), PlayerSet.ofAll());
-            f.setTimeFlying(compound.getInt(TIME_FLYING).orElse(INITIAL_TIME_FLYING));
+            f.loadTimeFlying(compound.getInt(TIME_FLYING).orElse(INITIAL_TIME_FLYING));
             String wingIdRaw = compound.contains(WING)
                     ? compound.getString(WING).orElse(DEFAULT_WING_ID.toString())
                     : DEFAULT_WING_ID.toString();
@@ -467,7 +473,7 @@ public final class FlightDefault implements Flight {
         public FlightDefault deserialize(ValueInput input) {
             FlightDefault flight = Objects.requireNonNull(this.factory.get(), "flight factory");
             flight.setIsFlying(input.getBooleanOr(IS_FLYING, false), PlayerSet.ofAll());
-            flight.setTimeFlying(input.getIntOr(TIME_FLYING, INITIAL_TIME_FLYING));
+            flight.loadTimeFlying(input.getIntOr(TIME_FLYING, INITIAL_TIME_FLYING));
             String wingIdRaw = input.getStringOr(WING, DEFAULT_WING_ID.toString());
             flight.setWing(wingFrom(wingIdRaw));
             return flight;

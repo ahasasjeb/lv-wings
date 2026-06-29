@@ -16,7 +16,9 @@ public final class WingsHooks {
     }
 
     public static boolean onFlightCheck(LivingEntity living, boolean defaultValue) {
-        return living instanceof Player && WingsHooks.onFlightCheck((Player) living, defaultValue);
+        return living instanceof Player player
+                ? WingsHooks.onFlightCheck(player, defaultValue)
+                : defaultValue;
     }
 
     public static boolean onFlightCheck(Player player, boolean defaultValue) {

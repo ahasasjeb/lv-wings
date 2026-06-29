@@ -18,18 +18,20 @@ public final class WingsConfigDefaults {
     public static final double FLIGHT_UPWARD_ASSIST_MIN = 0.0D;
     public static final double FLIGHT_UPWARD_ASSIST_MAX = 5.0D;
 
-    // 反作弊默认配置：默认关闭，由服主在配置文件中启用
+    // 反作弊默认配置：默认开启；下降阈值高于原版约 3.92 blocks/tick 的终端速度，避免正常俯冲误报
     public static final FlightAntiCheatSettings FLIGHT_ANTI_CHEAT = new FlightAntiCheatSettings(
-            false,
+            true,
             12,
             8,
             4,
             10,
             2.0D,
             1.95D,
+            4.25D,
             2.2D,
             3.5D,
             3.2D,
+            6.0D,
             4.0D,
             1.0D,
             0.9D);

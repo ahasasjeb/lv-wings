@@ -92,7 +92,7 @@ public final class FlightSpeedAntiCheat {
                 String.format("%.3f", correction.total()));
     }
 
-    // 记录每次挥翅的移动向量，检测是否超速
+    // 记录翅膀飞行期间的空中移动向量，检测是否超速
     public static void recordMovement(ServerPlayer player, Flight flight, Vec3 movement) {
         long now = System.nanoTime();
         cleanupExpiredStates(now);
@@ -115,9 +115,10 @@ public final class FlightSpeedAntiCheat {
         }
 
         double horizontal = Math.hypot(movement.x(), movement.z());
-        // 俯冲会天然放大负Y位移；这里只统计上升分量，避免把正常俯冲误判为超速。
-        double vertical = Math.max(0.0D, movement.y());
-        double total = Math.hypot(horizontal, vertical);
+        double upward = Math.max(0.0D, movement.y());
+        // 总速度沿用水平+上升分量；下降使用更宽松的独立阈值，既覆盖纯垂直下降绕过，
+        // 又不让正常俯冲接近原版终端速度时触发现有的上升/总速度限制。
+        double total = Math.hypot(horizontal, upward);
         // 水平速度低时允许更多垂直速度（模拟悬停抬升）
         double verticalBonus = computeUpwardVerticalBonus(horizontal, settings);
         double totalBonus = verticalBonus * 0.4D;
@@ -136,11 +137,13 @@ public final class FlightSpeedAntiCheat {
         }
 
         boolean hardViolation = horizontal > settings.hardHorizontalLimit()
-                || vertical > hardVerticalLimit
+                || upward > hardVerticalLimit
+                || FlightMovementChecks.exceedsDownwardLimit(movement.y(), settings.hardDownwardLimit())
                 || total > hardTotalLimit;
         boolean softViolation = hardViolation
                 || horizontal > settings.softHorizontalLimit()
-                || vertical > softVerticalLimit
+                || upward > softVerticalLimit
+                || FlightMovementChecks.exceedsDownwardLimit(movement.y(), settings.softDownwardLimit())
                 || total > softTotalLimit;
 
         if (!softViolation) {
@@ -154,7 +157,7 @@ public final class FlightSpeedAntiCheat {
         state.recordViolation(hardViolation);
         if (state.softViolations >= settings.softViolationLimit()
                 || state.hardViolations >= settings.hardViolationLimit()) {
-            state.pendingCorrection = new PendingCorrection(horizontal, vertical, total);
+            state.pendingCorrection = new PendingCorrection(horizontal, movement.y(), total);
         }
     }
 

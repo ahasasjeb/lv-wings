@@ -101,7 +101,7 @@ public final class ServerEventActions {
         }
     }
 
-    // 每次挥翅时触发：飞行中触发 onFlight，下落中触发 onLanding
+    // 空中移动时触发：翅膀飞行计算飞行消耗，非飞行高速下降计算受控下降消耗
     public static void onPlayerFlown(@NonNull PlayerFlownEvent event) {
         Player player = event.getEntity();
         Flight flight = Flights.get(player);

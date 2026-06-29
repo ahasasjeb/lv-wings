@@ -46,9 +46,11 @@ public final class WingsConfig {
         public int correctionCooldownTicks = WingsConfigDefaults.FLIGHT_ANTI_CHEAT.correctionCooldownTicks();
         public double softHorizontalLimit = WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softHorizontalLimit();
         public double softVerticalLimit = WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softVerticalLimit();
+        public double softDownwardLimit = WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softDownwardLimit();
         public double softTotalLimit = WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softTotalLimit();
         public double hardHorizontalLimit = WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardHorizontalLimit();
         public double hardVerticalLimit = WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardVerticalLimit();
+        public double hardDownwardLimit = WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardDownwardLimit();
         public double hardTotalLimit = WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardTotalLimit();
         public double upwardAssistHorizontalThreshold = WingsConfigDefaults.FLIGHT_ANTI_CHEAT.upwardAssistHorizontalThreshold();
         public double upwardAssistMaxBonus = WingsConfigDefaults.FLIGHT_ANTI_CHEAT.upwardAssistMaxBonus();
@@ -70,11 +72,15 @@ public final class WingsConfig {
                     WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MIN, WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MAX);
             this.softVerticalLimit = WingsConfigDefaults.clamp(this.softVerticalLimit,
                     WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MIN, WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MAX);
+            this.softDownwardLimit = WingsConfigDefaults.clamp(this.softDownwardLimit,
+                    WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MIN, WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MAX);
             this.softTotalLimit = WingsConfigDefaults.clamp(this.softTotalLimit,
                     WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MIN, WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MAX);
             this.hardHorizontalLimit = WingsConfigDefaults.clamp(this.hardHorizontalLimit,
                     WingsConfigDefaults.FLIGHT_HARD_LIMIT_MIN, WingsConfigDefaults.FLIGHT_HARD_LIMIT_MAX);
             this.hardVerticalLimit = WingsConfigDefaults.clamp(this.hardVerticalLimit,
+                    WingsConfigDefaults.FLIGHT_HARD_LIMIT_MIN, WingsConfigDefaults.FLIGHT_HARD_LIMIT_MAX);
+            this.hardDownwardLimit = WingsConfigDefaults.clamp(this.hardDownwardLimit,
                     WingsConfigDefaults.FLIGHT_HARD_LIMIT_MIN, WingsConfigDefaults.FLIGHT_HARD_LIMIT_MAX);
             this.hardTotalLimit = WingsConfigDefaults.clamp(this.hardTotalLimit,
                     WingsConfigDefaults.FLIGHT_HARD_LIMIT_MIN, WingsConfigDefaults.FLIGHT_HARD_LIMIT_MAX);
@@ -93,9 +99,11 @@ public final class WingsConfig {
                     this.correctionCooldownTicks,
                     this.softHorizontalLimit,
                     this.softVerticalLimit,
+                    this.softDownwardLimit,
                     this.softTotalLimit,
                     this.hardHorizontalLimit,
                     this.hardVerticalLimit,
+                    this.hardDownwardLimit,
                     this.hardTotalLimit,
                     this.upwardAssistHorizontalThreshold,
                     this.upwardAssistMaxBonus);

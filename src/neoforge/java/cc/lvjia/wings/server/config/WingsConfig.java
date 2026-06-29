@@ -18,10 +18,12 @@ public final class WingsConfig {
 
     private static final ModConfigSpec.DoubleValue SOFT_HORIZONTAL_LIMIT;
     private static final ModConfigSpec.DoubleValue SOFT_VERTICAL_LIMIT;
+    private static final ModConfigSpec.DoubleValue SOFT_DOWNWARD_LIMIT;
     private static final ModConfigSpec.DoubleValue SOFT_TOTAL_LIMIT;
 
     private static final ModConfigSpec.DoubleValue HARD_HORIZONTAL_LIMIT;
     private static final ModConfigSpec.DoubleValue HARD_VERTICAL_LIMIT;
+    private static final ModConfigSpec.DoubleValue HARD_DOWNWARD_LIMIT;
     private static final ModConfigSpec.DoubleValue HARD_TOTAL_LIMIT;
 
     private static final ModConfigSpec.DoubleValue UPWARD_ASSIST_HORIZONTAL_THRESHOLD;
@@ -42,7 +44,7 @@ public final class WingsConfig {
         builder.comment("Server-side anti-cheat settings for wings flight").push("flightAntiCheat");
 
         ENABLE_FLIGHT_ANTI_CHEAT = builder
-                .comment("Enable wings flight anti-cheat on server side. Default: false")
+                .comment("Enable wings flight anti-cheat on server side. Default: true")
                 .define("enabled", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.enabled());
 
         TAKEOFF_GRACE_TICKS = builder
@@ -79,6 +81,11 @@ public final class WingsConfig {
                 .defineInRange("softVerticalLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softVerticalLimit(),
                         WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MIN, WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MAX);
 
+        SOFT_DOWNWARD_LIMIT = builder
+                .comment("Soft downward movement limit. Kept above vanilla terminal velocity to allow normal dives.")
+                .defineInRange("softDownwardLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softDownwardLimit(),
+                        WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MIN, WingsConfigDefaults.FLIGHT_SOFT_LIMIT_MAX);
+
         SOFT_TOTAL_LIMIT = builder
                 .comment("Soft total movement limit.")
                 .defineInRange("softTotalLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softTotalLimit(),
@@ -92,6 +99,11 @@ public final class WingsConfig {
         HARD_VERTICAL_LIMIT = builder
                 .comment("Hard upward vertical movement limit.")
                 .defineInRange("hardVerticalLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardVerticalLimit(),
+                        WingsConfigDefaults.FLIGHT_HARD_LIMIT_MIN, WingsConfigDefaults.FLIGHT_HARD_LIMIT_MAX);
+
+        HARD_DOWNWARD_LIMIT = builder
+                .comment("Hard downward movement limit.")
+                .defineInRange("hardDownwardLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardDownwardLimit(),
                         WingsConfigDefaults.FLIGHT_HARD_LIMIT_MIN, WingsConfigDefaults.FLIGHT_HARD_LIMIT_MAX);
 
         HARD_TOTAL_LIMIT = builder
@@ -152,12 +164,16 @@ public final class WingsConfig {
                         "softHorizontalLimit"),
                 readDouble(SOFT_VERTICAL_LIMIT, WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softVerticalLimit(),
                         "softVerticalLimit"),
+                readDouble(SOFT_DOWNWARD_LIMIT, WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softDownwardLimit(),
+                        "softDownwardLimit"),
                 readDouble(SOFT_TOTAL_LIMIT, WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softTotalLimit(),
                         "softTotalLimit"),
                 readDouble(HARD_HORIZONTAL_LIMIT, WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardHorizontalLimit(),
                         "hardHorizontalLimit"),
                 readDouble(HARD_VERTICAL_LIMIT, WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardVerticalLimit(),
                         "hardVerticalLimit"),
+                readDouble(HARD_DOWNWARD_LIMIT, WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardDownwardLimit(),
+                        "hardDownwardLimit"),
                 readDouble(HARD_TOTAL_LIMIT, WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardTotalLimit(),
                         "hardTotalLimit"),
                 readDouble(UPWARD_ASSIST_HORIZONTAL_THRESHOLD,

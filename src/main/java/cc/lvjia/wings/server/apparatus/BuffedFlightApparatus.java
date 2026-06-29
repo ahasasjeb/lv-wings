@@ -5,9 +5,11 @@ import cc.lvjia.wings.server.item.WingSettings;
 import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
@@ -18,6 +20,9 @@ import java.util.List;
 import java.util.Objects;
 
 public final class BuffedFlightApparatus implements FlightApparatus {
+    private static final @NonNull EntityTypeTest<@NonNull Entity, @NonNull Mob> MOB_TYPE =
+            EntityTypeTest.forClass(Mob.class);
+
     private final @NonNull FlightApparatus delegate;
     private final @NonNull List<@NonNull EffectSettings> effects;
     private final @NonNull MobAvoidanceSettings mobAvoidance;
@@ -51,7 +56,9 @@ public final class BuffedFlightApparatus implements FlightApparatus {
         return List.copyOf(configuredEffects);
     }
 
-    private static void applyHostileMobAvoidance(@NonNull Player player, @NonNull MobAvoidanceSettings settings) {
+    private static void applyHostileMobAvoidance(@NonNull Player player, @NonNull MobAvoidanceSettings settings,
+                                                 @NonNull List<Mob> hostiles) {
+        hostiles.clear();
         if (!player.isAlive()) {
             return;
         }
@@ -61,14 +68,16 @@ public final class BuffedFlightApparatus implements FlightApparatus {
         }
         double radiusSquared = radius * radius;
         AABB searchBox = player.getBoundingBox().inflate(radius);
-        List<@NonNull Mob> hostiles = player.level().getEntitiesOfClass(Mob.class, searchBox,
-                mob -> isRepellableHostile(mob, player, radiusSquared));
-        if (hostiles.isEmpty()) {
-            return;
-        }
-        for (Mob mob : hostiles) {
-            neutralizeAggression(mob, player);
-            pushAwayFromPlayer(mob, player, settings);
+        try {
+            player.level().getEntities(MOB_TYPE, searchBox,
+                    mob -> isRepellableHostile(mob, player, radiusSquared), hostiles);
+            for (Mob mob : hostiles) {
+                neutralizeAggression(mob, player);
+                pushAwayFromPlayer(mob, player, settings);
+            }
+        } finally {
+            // 避免复用列表在两次查询之间强引用已经卸载或死亡的实体。
+            hostiles.clear();
         }
     }
 
@@ -172,6 +181,7 @@ public final class BuffedFlightApparatus implements FlightApparatus {
         }
         return new FlightState() {
             private int mobAvoidanceCooldown;
+            private final List<Mob> nearbyHostiles = new ArrayList<>();
 
             @Override
             public void onUpdate(@NonNull Player player) {
@@ -183,7 +193,7 @@ public final class BuffedFlightApparatus implements FlightApparatus {
                     if (avoidanceEnabled) {
                         if (--this.mobAvoidanceCooldown <= 0) {
                             this.mobAvoidanceCooldown = Math.max(1, mobAvoidance.intervalTicks());
-                            applyHostileMobAvoidance(player, mobAvoidance);
+                            applyHostileMobAvoidance(player, mobAvoidance, this.nearbyHostiles);
                         }
                     }
                 }
