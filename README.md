@@ -2,6 +2,10 @@
 
 这是 Wings Mod 的一个社区维护分支。
 
+https://www.curseforge.com/minecraft/mc-mods/lv-wings4/preview
+
+https://modrinth.com/mod/lv-wings
+
 ## 📜 项目历史
 
 - **原始项目**: 由 [pau101](https://github.com/pau101/Wings) 创建。
