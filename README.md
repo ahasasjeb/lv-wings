@@ -2,7 +2,7 @@
 
 这是 Wings Mod 的一个社区维护分支。
 
-https://www.curseforge.com/minecraft/mc-mods/lv-wings4/preview
+https://www.curseforge.com/minecraft/mc-mods/lv-wings4
 
 https://modrinth.com/mod/lv-wings
 
