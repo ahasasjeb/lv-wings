@@ -6,6 +6,7 @@ import com.toni.wings.WingsMod;
 import com.toni.wings.client.flight.FlightViews;
 import com.toni.wings.client.model.ModelWingsAvian;
 import com.toni.wings.client.model.ModelWingsInsectoid;
+import com.toni.wings.server.flight.Flights;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -38,6 +39,9 @@ public final class LayerWings extends RenderLayer<AbstractClientPlayer, PlayerMo
     public void render(@Nonnull PoseStack poseStack, @Nonnull MultiBufferSource buffer, int packedLight, @Nonnull AbstractClientPlayer player,
                        float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
         if (player.isInvisible()) {
+            return;
+        }
+        if (Flights.get(player).filter(flight -> flight.hasEffect(player)).isEmpty()) {
             return;
         }
 

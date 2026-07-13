@@ -5,18 +5,23 @@ import com.toni.wings.server.item.WingSettings;
 import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 public final class BuffedFlightApparatus implements FlightApparatus {
+    private static final EntityTypeTest<Entity, Mob> MOB_TYPE = EntityTypeTest.forClass(Mob.class);
+
     private final FlightApparatus delegate;
     private final List<EffectSettings> effects;
     private final MobAvoidanceSettings mobAvoidance;
@@ -72,6 +77,8 @@ public final class BuffedFlightApparatus implements FlightApparatus {
         return new FlightState() {
             private int mobAvoidanceCooldown;
 
+            private final List<Mob> nearbyHostiles = new ArrayList<>();
+
             @Override
             public void onUpdate(Player player) {
                 base.onUpdate(player);
@@ -82,7 +89,7 @@ public final class BuffedFlightApparatus implements FlightApparatus {
                     if (avoidanceEnabled) {
                         if (--this.mobAvoidanceCooldown <= 0) {
                             this.mobAvoidanceCooldown = Math.max(1, mobAvoidance.intervalTicks());
-                            applyHostileMobAvoidance(player, mobAvoidance);
+                            applyHostileMobAvoidance(player, mobAvoidance, this.nearbyHostiles);
                         }
                     }
                 }
@@ -90,7 +97,8 @@ public final class BuffedFlightApparatus implements FlightApparatus {
         };
     }
 
-    private static void applyHostileMobAvoidance(Player player, MobAvoidanceSettings settings) {
+    private static void applyHostileMobAvoidance(Player player, MobAvoidanceSettings settings, List<Mob> hostiles) {
+        hostiles.clear();
         if (player == null || !player.isAlive()) {
             return;
         }
@@ -100,14 +108,15 @@ public final class BuffedFlightApparatus implements FlightApparatus {
         }
         double radiusSquared = radius * radius;
         AABB searchBox = player.getBoundingBox().inflate(radius);
-    List<Mob> hostiles = player.level().getEntitiesOfClass(Mob.class, searchBox,
-            mob -> isRepellableHostile(mob, player, radiusSquared));
-        if (hostiles.isEmpty()) {
-            return;
-        }
-        for (Mob mob : hostiles) {
-            neutralizeAggression(mob, player);
-            pushAwayFromPlayer(mob, player, settings);
+        try {
+            player.level().getEntities(MOB_TYPE, searchBox,
+                mob -> isRepellableHostile(mob, player, radiusSquared), hostiles);
+            for (Mob mob : hostiles) {
+                neutralizeAggression(mob, player);
+                pushAwayFromPlayer(mob, player, settings);
+            }
+        } finally {
+            hostiles.clear();
         }
     }
 

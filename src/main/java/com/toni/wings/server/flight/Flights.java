@@ -2,6 +2,7 @@ package com.toni.wings.server.flight;
 
 import com.toni.wings.WingsAttachments;
 import com.toni.wings.WingsMod;
+import com.toni.wings.server.net.serverbound.MessageControlFlying;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -64,6 +65,11 @@ public final class Flights {
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         get(event.getEntity()).ifPresent(flight -> flight.sync(Flight.PlayerSet.ofSelf()));
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
+        MessageControlFlying.clearRateLimit(event.getEntity());
     }
 
     @SubscribeEvent

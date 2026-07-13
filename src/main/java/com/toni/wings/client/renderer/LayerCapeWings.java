@@ -2,15 +2,12 @@ package com.toni.wings.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.toni.wings.WingsMod;
-import com.toni.wings.client.flight.FlightViews;
 import com.toni.wings.server.flight.Flights;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.CapeLayer;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.Nonnull;
 
@@ -30,16 +27,11 @@ public class LayerCapeWings extends CapeLayer {
     }
 
     private boolean hasVisibleWings(AbstractClientPlayer player) {
-        AtomicBoolean hasWings = new AtomicBoolean(false);
-        FlightViews.get(player).ifPresent(flight -> flight.ifFormPresent(form -> hasWings.set(true)));
-        if (hasWings.get()) {
-            return true;
+        var flight = Flights.get(player).orElse(null);
+        if (flight == null || !flight.hasEffect(player)) {
+            return false;
         }
-        Flights.get(player).ifPresent(flight -> {
-            if (flight.getWing() != WingsMod.NONE && flight.getWing() != WingsMod.WINGLESS) {
-                hasWings.set(true);
-            }
-        });
-        return hasWings.get();
+        var wing = flight.getWing();
+        return wing != WingsMod.NONE && wing != WingsMod.WINGLESS;
     }
 }

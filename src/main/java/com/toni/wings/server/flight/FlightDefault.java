@@ -43,11 +43,15 @@ public final class FlightDefault implements Flight {
 
     private final WingState voidState = new WingState(FlightApparatus.NONE, FlightApparatus.FlightState.NONE);
 
+    private final FlightAnimationTracker animationTracker = new FlightAnimationTracker();
+
     private int prevTimeFlying = INITIAL_TIME_FLYING;
 
     private int timeFlying = INITIAL_TIME_FLYING;
 
     private boolean isFlying;
+
+    private FlightAnimationState animationState = FlightAnimationState.IDLE;
 
     private FlightApparatus flightApparatus = FlightApparatus.NONE;
 
@@ -105,6 +109,16 @@ public final class FlightDefault implements Flight {
     }
 
     @Override
+    public FlightAnimationState getAnimationState() {
+        return this.animationState;
+    }
+
+    @Override
+    public void setAnimationState(FlightAnimationState animationState) {
+        this.loadAnimationState(animationState);
+    }
+
+    @Override
     public float getFlyingAmount(float delta) {
         return FLY_AMOUNT_CURVE
                 .eval(MathH.lerp(this.getPrevTimeFlying(), this.getTimeFlying(), delta) / MAX_TIME_FLYING);
@@ -112,6 +126,11 @@ public final class FlightDefault implements Flight {
 
     private void setPrevTimeFlying(int prevTimeFlying) {
         this.prevTimeFlying = prevTimeFlying;
+    }
+
+    private void loadTimeFlying(int timeFlying) {
+        this.setTimeFlying(timeFlying);
+        this.setPrevTimeFlying(timeFlying);
     }
 
     private int getPrevTimeFlying() {
@@ -206,6 +225,13 @@ public final class FlightDefault implements Flight {
                 this.setTimeFlying(this.getTimeFlying() - 1);
             }
         }
+        if (!player.level().isClientSide) {
+            boolean shouldSyncAnimation = this.animationTracker.tick(this, player);
+            this.animationState = this.animationTracker.getState();
+            if (shouldSyncAnimation) {
+                this.sync(PlayerSet.ofOthers());
+            }
+        }
     }
 
     @Override
@@ -220,8 +246,9 @@ public final class FlightDefault implements Flight {
     @Override
     public void clone(Flight other) {
         this.setIsFlying(other.isFlying());
-        this.setTimeFlying(other.getTimeFlying());
+        this.loadTimeFlying(other.getTimeFlying());
         this.setWing(other.getWing());
+        this.loadAnimationState(other.getAnimationState());
     }
 
     @Override
@@ -234,12 +261,13 @@ public final class FlightDefault implements Flight {
         buf.writeBoolean(this.isFlying());
         buf.writeVarInt(this.getTimeFlying());
         buf.writeResourceLocation(wingIdFor(this.getWing()));
+        buf.writeByte(this.getAnimationState().id());
     }
 
     @Override
     public void deserialize(FriendlyByteBuf buf) {
         this.setIsFlying(buf.readBoolean());
-        this.setTimeFlying(buf.readVarInt());
+        this.loadTimeFlying(buf.readVarInt());
         ResourceLocation wingId;
         try {
             wingId = buf.readResourceLocation();
@@ -247,6 +275,12 @@ public final class FlightDefault implements Flight {
             wingId = DEFAULT_WING_ID;
         }
         this.setWing(wingFrom(wingId));
+        this.loadAnimationState(FlightAnimationState.byId(buf.readUnsignedByte()));
+    }
+
+    private void loadAnimationState(FlightAnimationState animationState) {
+        this.animationState = Objects.requireNonNull(animationState, "animationState");
+        this.animationTracker.load(animationState);
     }
 
     public static final class Serializer implements NBTSerializer<FlightDefault, CompoundTag> {
@@ -275,7 +309,7 @@ public final class FlightDefault implements Flight {
         public FlightDefault deserialize(CompoundTag compound) {
             FlightDefault f = this.factory.get();
             f.setIsFlying(compound.getBoolean(IS_FLYING));
-            f.setTimeFlying(compound.getInt(TIME_FLYING));
+            f.loadTimeFlying(compound.getInt(TIME_FLYING));
             String wingIdRaw = compound.contains(WING, net.minecraft.nbt.Tag.TAG_STRING)
                     ? compound.getString(WING)
                     : DEFAULT_WING_ID.toString();

@@ -10,7 +10,8 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public final class Network {
-    private static final String VERSION = "1";
+    // 飞行快照新增动画状态字段，旧版协议不能与当前版混用。
+    private static final String VERSION = "2";
 
     public void register(IEventBus modBus) {
         modBus.addListener(this::onRegisterPayloadHandlers);

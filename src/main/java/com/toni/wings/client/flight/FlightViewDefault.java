@@ -3,9 +3,9 @@ package com.toni.wings.client.flight;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.toni.wings.client.apparatus.WingForm;
-import com.toni.wings.client.flight.state.State;
-import com.toni.wings.client.flight.state.StateIdle;
 import com.toni.wings.server.flight.Flight;
+import com.toni.wings.server.flight.FlightAnimationEngine;
+import com.toni.wings.server.flight.FlightAnimationState;
 import com.toni.wings.util.function.FloatConsumer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
@@ -41,6 +41,8 @@ public final class FlightViewDefault implements FlightView {
 
     private WingState animator = ABSENT_ANIMATOR;
 
+    private int lastUpdateTick = Integer.MIN_VALUE;
+
     public FlightViewDefault(Player player, Flight flight) {
         this.player = player;
         this.flight = flight;
@@ -53,6 +55,11 @@ public final class FlightViewDefault implements FlightView {
 
     @Override
     public void tick() {
+        int currentTick = this.player.tickCount;
+        if (this.lastUpdateTick == currentTick) {
+            return;
+        }
+        this.lastUpdateTick = currentTick;
         this.animator = WingForm.get(this.flight.getWing())
             .map(view -> this.animator.next(view))
             .orElseGet(this.animator::nextAbsent);
@@ -124,33 +131,17 @@ public final class FlightViewDefault implements FlightView {
 
             private final T animator;
 
-            private State state;
+            private final FormRenderer renderer;
+
+            private final FlightAnimationEngine animationEngine = new FlightAnimationEngine();
+
+            private FlightAnimationState displayedAnimationState;
 
             public WingStrategy(WingForm<T> shape) {
                 this.shape = shape;
                 this.animator = shape.createAnimator();
-                this.state = new StateIdle();
-            }
-
-            @Override
-            public void update(Flight flight, Player player) {
-                this.animator.update();
-                State state = this.state.update(
-                    flight,
-                    player.getX() - player.xo,
-                    player.getY() - player.yo,
-                    player.getZ() - player.zo,
-                    player
-                );
-                if (!this.state.equals(state)) {
-                    state.beginAnimation(this.animator);
-                }
-                this.state = state;
-            }
-
-            @Override
-            public void ifFormPresent(Consumer<FormRenderer> consumer) {
-                consumer.accept(new FormRenderer() {
+                FlightAnimationVisuals.begin(FlightAnimationState.IDLE, this.animator);
+                this.renderer = new FormRenderer() {
                     @Override
                     public ResourceLocation getTexture() {
                         return WingStrategy.this.shape.getTexture();
@@ -162,10 +153,38 @@ public final class FlightViewDefault implements FlightView {
                     }
 
                     @Override
-                    public void render(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha, float delta) {
-                        WingStrategy.this.shape.getModel().render(WingStrategy.this.animator, delta, matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+                    public void render(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay,
+                                       float red, float green, float blue, float alpha, float delta) {
+                        WingStrategy.this.shape.getModel().render(WingStrategy.this.animator, delta, matrixStack, buffer,
+                            packedLight, packedOverlay, red, green, blue, alpha);
                     }
-                });
+                };
+            }
+
+            @Override
+            public void update(Flight flight, Player player) {
+                this.animator.update();
+                if (!player.isLocalPlayer()) {
+                    this.applyRemoteAnimationState(flight.getAnimationState());
+                    return;
+                }
+                if (this.animationEngine.tick(flight, player)) {
+                    FlightAnimationVisuals.begin(this.animationEngine.getState(), this.animator);
+                }
+            }
+
+            private void applyRemoteAnimationState(FlightAnimationState state) {
+                if (this.displayedAnimationState == state) {
+                    return;
+                }
+                this.displayedAnimationState = state;
+                this.animationEngine.load(state);
+                FlightAnimationVisuals.begin(state, this.animator);
+            }
+
+            @Override
+            public void ifFormPresent(Consumer<FormRenderer> consumer) {
+                consumer.accept(this.renderer);
             }
         }
     }

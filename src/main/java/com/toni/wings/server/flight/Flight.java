@@ -32,6 +32,10 @@ public interface Flight {
 
     FlightApparatus getWing();
 
+    FlightAnimationState getAnimationState();
+
+    void setAnimationState(FlightAnimationState animationState);
+
     float getFlyingAmount(float delta);
 
     void registerFlyingListener(FlyingListener listener);

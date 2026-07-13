@@ -1,9 +1,9 @@
 package com.toni.wings.server.net.serverbound;
 
 import com.toni.wings.WingsMod;
-import com.toni.wings.server.flight.Flight;
 import com.toni.wings.server.flight.Flights;
 import com.toni.wings.server.net.Message;
+import com.toni.wings.server.net.clientbound.MessageSyncFlight;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -23,7 +23,13 @@ public record MessageControlFlying(boolean isFlying) implements Message {
 
     public static void handle(MessageControlFlying message, IPayloadContext context) {
         Player player = context.player();
-        Flights.get(player).filter(f -> f.canFly(player))
-            .ifPresent(flight -> flight.setIsFlying(message.isFlying(), Flight.PlayerSet.ofOthers()));
+        Flights.get(player).ifPresent(flight ->
+            ControlFlyingMessageHandler.handle(player, message.isFlying(), flight,
+                (syncPlayer, state) -> context.reply(new MessageSyncFlight(syncPlayer, state)))
+        );
+    }
+
+    public static void clearRateLimit(Player player) {
+        ControlFlyingMessageHandler.clearRateLimit(player);
     }
 }

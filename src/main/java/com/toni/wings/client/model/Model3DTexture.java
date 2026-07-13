@@ -172,6 +172,14 @@ public final class Model3DTexture extends ModelPart.Cube {
 
     @Override
     public void compile(@Nonnull PoseStack.Pose pose, @Nonnull VertexConsumer consumer, int packedLight, int packedOverlay, int packedColor) {
-        super.compile(pose, SodiumBypassVertexConsumer.wrap(consumer), packedLight, packedOverlay, packedColor);
+        boolean ownsWrapper = !(consumer instanceof SodiumBypassVertexConsumer);
+        SodiumBypassVertexConsumer wrapper = SodiumBypassVertexConsumer.wrap(consumer);
+        try {
+            super.compile(pose, wrapper, packedLight, packedOverlay, packedColor);
+        } finally {
+            if (ownsWrapper) {
+                wrapper.release();
+            }
+        }
     }
 }
