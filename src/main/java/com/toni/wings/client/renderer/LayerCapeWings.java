@@ -28,7 +28,7 @@ public class LayerCapeWings extends CapeLayer {
 
     private boolean hasVisibleWings(AbstractClientPlayer player) {
         var flight = Flights.get(player).orElse(null);
-        if (flight == null || !flight.hasEffect(player)) {
+        if (flight == null) {
             return false;
         }
         var wing = flight.getWing();

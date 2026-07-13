@@ -6,7 +6,6 @@ import com.toni.wings.WingsMod;
 import com.toni.wings.client.flight.FlightViews;
 import com.toni.wings.client.model.ModelWingsAvian;
 import com.toni.wings.client.model.ModelWingsInsectoid;
-import com.toni.wings.server.flight.Flights;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -41,10 +40,6 @@ public final class LayerWings extends RenderLayer<AbstractClientPlayer, PlayerMo
         if (player.isInvisible()) {
             return;
         }
-        if (Flights.get(player).filter(flight -> flight.hasEffect(player)).isEmpty()) {
-            return;
-        }
-
         FlightViews.get(player).ifPresent(flight -> flight.ifFormPresent(form -> {
             float delta = Mth.clamp(ageInTicks - player.tickCount, 0.0F, 1.0F);
             VertexConsumer builder = buffer.getBuffer(form.getRenderType());
