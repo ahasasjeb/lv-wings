@@ -27,6 +27,12 @@ public final class AnimatorAvian implements Animator {
 
     private float flapCycle;
 
+    private float preparedDelta = Float.NaN;
+
+    private float preparedFlapTime;
+
+    private double preparedFlapSin;
+
     private void beginMovement(Movement movement, int transitionDuration) {
         this.setMovement(new Transition(this.movement, movement, transitionDuration));
     }
@@ -41,7 +47,23 @@ public final class AnimatorAvian implements Animator {
     }
 
     private float getFlapTime(float delta) {
+        if (Float.floatToIntBits(delta) == Float.floatToIntBits(this.preparedDelta)) {
+            return this.preparedFlapTime;
+        }
         return MathH.lerp(this.prevFlapCycle, this.flapCycle, delta);
+    }
+
+    private double getFlapSin(float delta) {
+        if (Float.floatToIntBits(delta) == Float.floatToIntBits(this.preparedDelta)) {
+            return this.preparedFlapSin;
+        }
+        return Math.sin(this.getFlapTime(delta));
+    }
+
+    public void prepareRender(float delta) {
+        this.preparedDelta = delta;
+        this.preparedFlapTime = MathH.lerp(this.prevFlapCycle, this.flapCycle, delta);
+        this.preparedFlapSin = Math.sin(this.preparedFlapTime);
     }
 
     @Override
@@ -79,6 +101,7 @@ public final class AnimatorAvian implements Animator {
 
     @Override
     public void update() {
+        this.preparedDelta = Float.NaN;
         this.prevFlapCycle = this.flapCycle;
         this.flap(this.movement.update());
     }
@@ -138,7 +161,8 @@ public final class AnimatorAvian implements Animator {
             float cycle = time - pos * 1.2F;
             double x = (Math.sin(cycle + MathH.PI / 2.0D) - 1.0D) / 2.0D * 20.0D + (1.0D - pos) * 50.0D;
             double y = (Math.sin(cycle) * 20.0D + (1.0D - pos) * 14.0D) *
-                (1.0D - pos * (Math.min(Math.sin(cycle + MathH.PI), 0.0D) / 2.0D + 1.0D) * Math.sin(time));
+                (1.0D - pos * (Math.min(Math.sin(cycle + MathH.PI), 0.0D) / 2.0D + 1.0D)
+                    * AnimatorAvian.this.getFlapSin(delta));
             return AnimatorAvian.this.restPosition.getWingRotation(index, delta).add(new Vec3(x, y, 4.0D));
         }
 
@@ -161,8 +185,7 @@ public final class AnimatorAvian implements Animator {
         @Override
         public Vec3 getWingRotation(int index, float delta) {
             float pos = AnimatorAvian.this.getWeight(index);
-            float time = AnimatorAvian.this.getFlapTime(delta);
-            double y = (Math.sin(time) * 5.0D - 14.0D) * pos;
+            double y = (AnimatorAvian.this.getFlapSin(delta) * 5.0D - 14.0D) * pos;
             return AnimatorAvian.this.restPosition.getWingRotation(index, delta).add(0.0D, y, 0.0D);
         }
 
@@ -197,15 +220,13 @@ public final class AnimatorAvian implements Animator {
         @Override
         public Vec3 getWingRotation(int index, float delta) {
             float pos = AnimatorAvian.this.getWeight(index);
-            float time = AnimatorAvian.this.getFlapTime(delta);
-            return this.wing.get(index).add(0.0D, Math.sin(time) * 3.0D * pos, 0.0D);
+            return this.wing.get(index).add(0.0D, AnimatorAvian.this.getFlapSin(delta) * 3.0D * pos, 0.0D);
         }
 
         @Override
         public Vec3 getFeatherRotation(int index, float delta) {
             float pos = AnimatorAvian.this.getWeight(index);
-            float time = AnimatorAvian.this.getFlapTime(delta);
-            return this.feather.get(index).add(0, -Math.sin(time) * 5.0D * pos, 0.0D);
+            return this.feather.get(index).add(0, -AnimatorAvian.this.getFlapSin(delta) * 5.0D * pos, 0.0D);
         }
 
         @Override
@@ -226,7 +247,8 @@ public final class AnimatorAvian implements Animator {
             float cycle = time - pos * 1.2F;
             double x = (Math.sin(cycle + MathH.PI / 2.0D) - 1.0D) / 2.0D * 16.0D + 8.0D;
             double y = (Math.sin(cycle) * 26.0D + 12.0D) *
-                (1.0D - pos * (Math.min(Math.sin(cycle + MathH.PI), 0.0D) / 2.0D + 1.0D) * Math.sin(time));
+                (1.0D - pos * (Math.min(Math.sin(cycle + MathH.PI), 0.0D) / 2.0D + 1.0D)
+                    * AnimatorAvian.this.getFlapSin(delta));
             return AnimatorAvian.this.restPosition.getWingRotation(index, delta).add(x, y, 0.0D);
         }
 
@@ -287,6 +309,10 @@ public final class AnimatorAvian implements Animator {
 
         private boolean isActive = true;
 
+        private float preparedDelta = Float.NaN;
+
+        private float preparedWeight;
+
         private Transition(Movement start, Movement end, int duration) {
             this.start = start;
             this.end = end;
@@ -306,7 +332,7 @@ public final class AnimatorAvian implements Animator {
         private Vec3 lerpRotation(int index, float delta, RotationGetter getter) {
             Vec3 startRot = getter.get(this.start, index, delta);
             Vec3 endRot = getter.get(this.end, index, delta);
-            float t = MathH.easeInOut(MathH.lerp(this.lastTime, this.time, delta) / this.duration);
+            float t = this.getWeight(delta);
             return new Vec3(
                 MathH.lerpDegrees(startRot.x, endRot.x, t),
                 MathH.lerpDegrees(startRot.y, endRot.y, t),
@@ -314,8 +340,17 @@ public final class AnimatorAvian implements Animator {
             );
         }
 
+        private float getWeight(float delta) {
+            if (Float.floatToIntBits(delta) != Float.floatToIntBits(this.preparedDelta)) {
+                this.preparedDelta = delta;
+                this.preparedWeight = MathH.easeInOut(MathH.lerp(this.lastTime, this.time, delta) / this.duration);
+            }
+            return this.preparedWeight;
+        }
+
         @Override
         public float update() {
+            this.preparedDelta = Float.NaN;
             this.lastTime = this.time;
             float flapStart = this.start.update();
             float flapEnd = this.end.update();
