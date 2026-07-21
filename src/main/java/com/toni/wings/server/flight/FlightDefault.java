@@ -260,7 +260,7 @@ public final class FlightDefault implements Flight {
     public void serialize(FriendlyByteBuf buf) {
         buf.writeBoolean(this.isFlying());
         buf.writeVarInt(this.getTimeFlying());
-        buf.writeResourceLocation(wingIdFor(this.getWing()));
+        buf.writeVarInt(WingsMod.WINGS.getId(this.getWing()));
         buf.writeByte(this.getAnimationState().id());
     }
 
@@ -268,13 +268,8 @@ public final class FlightDefault implements Flight {
     public void deserialize(FriendlyByteBuf buf) {
         this.setIsFlying(buf.readBoolean());
         this.loadTimeFlying(buf.readVarInt());
-        ResourceLocation wingId;
-        try {
-            wingId = buf.readResourceLocation();
-        } catch (IllegalArgumentException ex) {
-            wingId = DEFAULT_WING_ID;
-        }
-        this.setWing(wingFrom(wingId));
+        // 未知 id 由 DefaultedMappedRegistry 回退到默认的 NONE。
+        this.setWing(WingsMod.WINGS.byId(buf.readVarInt()));
         this.loadAnimationState(FlightAnimationState.byId(buf.readUnsignedByte()));
     }
 

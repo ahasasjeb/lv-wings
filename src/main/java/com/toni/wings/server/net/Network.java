@@ -10,8 +10,8 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public final class Network {
-    // 飞行快照新增动画状态字段，旧版协议不能与当前版混用。
-    private static final String VERSION = "2";
+    // 飞行快照改用注册表 varint 编码翅膀，协议与旧版不兼容。
+    private static final String VERSION = "3";
 
     public void register(IEventBus modBus) {
         modBus.addListener(this::onRegisterPayloadHandlers);
