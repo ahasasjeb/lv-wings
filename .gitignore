@@ -29,3 +29,9 @@ minecraft_client_26.2
 NeoForge-26.2.x
 mcps
 fabric/.settings/org.eclipse.jdt.core.prefs
+
+# LSP (Eclipse JDT) 生成
+.eclipse/
+bin/
+fabric/bin/
+neoforge/bin/
