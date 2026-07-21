@@ -21,6 +21,8 @@ public final class ControlFlyingMessageHandler {
     public static void handle(Player player, boolean isFlying, FlightGetter flightGetter, FlightSync sync) {
         Integer lastControlTick = LAST_CONTROL_TICKS.get(player.getUUID());
         if (lastControlTick != null && player.tickCount - lastControlTick < MIN_CONTROL_INTERVAL_TICKS) {
+            // 客户端本地预测已切换状态，被限速丢弃时回发当前权威状态纠正，避免两端失同步
+            sync.send(player, flightGetter.get(player));
             return;
         }
         LAST_CONTROL_TICKS.put(player.getUUID(), player.tickCount);

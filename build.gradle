@@ -11,6 +11,12 @@ subprojects {
     }
 
     plugins.withType(JavaPlugin).configureEach {
+        java {
+            toolchain {
+                languageVersion = JavaLanguageVersion.of(25)
+            }
+        }
+
         sourceSets {
             test {
                 java.srcDirs = ['../src/test/java']
