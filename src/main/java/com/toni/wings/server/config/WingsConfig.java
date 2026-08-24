@@ -12,9 +12,13 @@ import java.util.List;
 public final class WingsConfig {
     private static final Logger LOGGER = LogManager.getLogger("WingsConfig");
     private static final List<String> DEFAULT_WEAR_OBSTRUCTIONS = List.of("minecraft:elytra");
+    private static final double DEFAULT_WING_HEIGHT_OFFSET = 0.0D;
+    private static final double MIN_WING_HEIGHT_OFFSET = -1.0D;
+    private static final double MAX_WING_HEIGHT_OFFSET = 1.0D;
 
     public static final ForgeConfigSpec SPEC;
     private static final ForgeConfigSpec.ConfigValue<List<? extends String>> WEAR_OBSTRUCTIONS;
+    private static final ForgeConfigSpec.DoubleValue WING_HEIGHT_OFFSET;
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -23,6 +27,11 @@ public final class WingsConfig {
         WEAR_OBSTRUCTIONS = builder
             .comment("List of item IDs that prevent players from equipping wings.")
             .defineList("wearObstructions", DEFAULT_WEAR_OBSTRUCTIONS, value -> value instanceof String && ResourceLocation.isValidResourceLocation((String) value));
+
+        WING_HEIGHT_OFFSET = builder
+            .comment("Vertical wing render offset in blocks. Positive values move wings upward; only Y is changed.")
+            .defineInRange("wingHeightOffset", DEFAULT_WING_HEIGHT_OFFSET,
+                MIN_WING_HEIGHT_OFFSET, MAX_WING_HEIGHT_OFFSET);
 
         builder.pop();
         SPEC = builder.build();
@@ -62,7 +71,18 @@ public final class WingsConfig {
         return getWearObstructions().toArray(String[]::new);
     }
 
+    public static double getWingHeightOffset() {
+        Double value = WING_HEIGHT_OFFSET.get();
+        if (value == null || !Double.isFinite(value)) {
+            LOGGER.warn("Wing height offset is invalid. Reverting to default {}.", DEFAULT_WING_HEIGHT_OFFSET);
+            WING_HEIGHT_OFFSET.set(DEFAULT_WING_HEIGHT_OFFSET);
+            return DEFAULT_WING_HEIGHT_OFFSET;
+        }
+        return Math.max(MIN_WING_HEIGHT_OFFSET, Math.min(MAX_WING_HEIGHT_OFFSET, value));
+    }
+
     public static void validate() {
         getWearObstructions();
+        getWingHeightOffset();
     }
 }
