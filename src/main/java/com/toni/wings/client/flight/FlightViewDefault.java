@@ -124,12 +124,32 @@ public final class FlightViewDefault implements FlightView {
 
             private final T animator;
 
+            private final FormRenderer renderer;
+
             private State state;
 
             public WingStrategy(WingForm<T> shape) {
                 this.shape = shape;
                 this.animator = shape.createAnimator();
                 this.state = new StateIdle();
+                this.renderer = new FormRenderer() {
+                    @Override
+                    public ResourceLocation getTexture() {
+                        return WingStrategy.this.shape.getTexture();
+                    }
+
+                    @Override
+                    public RenderType getRenderType() {
+                        return WingStrategy.this.shape.getRenderType();
+                    }
+
+                    @Override
+                    public void render(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay,
+                                       float red, float green, float blue, float alpha, float delta) {
+                        WingStrategy.this.shape.getModel().render(WingStrategy.this.animator, delta, matrixStack,
+                            buffer, packedLight, packedOverlay, red, green, blue, alpha);
+                    }
+                };
             }
 
             @Override
@@ -150,22 +170,7 @@ public final class FlightViewDefault implements FlightView {
 
             @Override
             public void ifFormPresent(Consumer<FormRenderer> consumer) {
-                consumer.accept(new FormRenderer() {
-                    @Override
-                    public ResourceLocation getTexture() {
-                        return WingStrategy.this.shape.getTexture();
-                    }
-
-                    @Override
-                    public RenderType getRenderType() {
-                        return WingStrategy.this.shape.getRenderType();
-                    }
-
-                    @Override
-                    public void render(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha, float delta) {
-                        WingStrategy.this.shape.getModel().render(WingStrategy.this.animator, delta, matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
-                    }
-                });
+                consumer.accept(this.renderer);
             }
         }
     }

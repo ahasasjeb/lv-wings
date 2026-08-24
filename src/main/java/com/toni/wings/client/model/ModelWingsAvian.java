@@ -159,6 +159,7 @@ public final class ModelWingsAvian extends ModelWings<AnimatorAvian> {
 
     @Override
     public void render(AnimatorAvian animator, float delta, PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+        animator.prepareRender(delta);
         for (int i = 0; i < this.bonesLeft.size(); i++) {
             ModelPart left = this.bonesLeft.get(i);
             ModelPart right = this.bonesRight.get(i);

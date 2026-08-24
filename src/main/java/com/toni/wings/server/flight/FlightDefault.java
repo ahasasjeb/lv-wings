@@ -91,7 +91,10 @@ public final class FlightDefault implements Flight {
 
     @Override
     public float getFlyingAmount(float delta) {
-        return FLY_AMOUNT_CURVE.eval(MathH.lerp(this.getPrevTimeFlying(), this.getTimeFlying(), delta) / MAX_TIME_FLYING);
+        float amount = FLY_AMOUNT_CURVE.eval(
+            MathH.lerp(this.getPrevTimeFlying(), this.getTimeFlying(), delta) / MAX_TIME_FLYING
+        );
+        return Mth.clamp(amount, 0.0F, 1.0F);
     }
 
     private void setPrevTimeFlying(int prevTimeFlying) {
@@ -100,6 +103,11 @@ public final class FlightDefault implements Flight {
 
     private int getPrevTimeFlying() {
         return this.prevTimeFlying;
+    }
+
+    private void loadTimeFlying(int timeFlying) {
+        this.setTimeFlying(timeFlying);
+        this.setPrevTimeFlying(timeFlying);
     }
 
     @Override
@@ -114,12 +122,15 @@ public final class FlightDefault implements Flight {
 
     @Override
     public boolean canFly(Player player) {
-        return (this.hasEffect(player) && this.flightApparatus.isUsable(player));
+        return !player.isSpectator()
+            && this.hasEffect(player)
+            && player.getFoodData().getFoodLevel() > 0
+            && this.flightApparatus.isUsable(player);
     }
 
     @Override
     public boolean hasEffect(Player player) {
-        return WingsEffects.WINGS.filter(effect -> player.getEffect(effect) != null).isPresent();
+        return WingsEffects.WINGS.isPresent() && player.hasEffect(WingsEffects.WINGS.get());
     }
 
     @Override
@@ -140,11 +151,29 @@ public final class FlightDefault implements Flight {
                 float yaw = -MathH.toRadians(player.getYRot()) - MathH.PI;
                 float vxz = - Mth.cos(pitch);
                 float vy = Mth.sin(pitch);
+                if (player.getXRot() < 0.0F) {
+                    float verticalSpeedScale = MathH.transform(
+                        -player.getXRot(),
+                        0.0F, 90.0F,
+                        1.0F, 0.8F
+                    );
+                    vy *= verticalSpeedScale;
+                }
+                float upwardFactor = 1.0F;
+                if (player.getXRot() > 0.0F) {
+                    upwardFactor = elevationBoost;
+                } else if (player.getXRot() < -30.0F) {
+                    upwardFactor = MathH.transform(
+                        -player.getXRot(),
+                        30.0F, 90.0F,
+                        1.0F, 0.72F
+                    );
+                }
                 float vz = Mth.cos(yaw);
                 float vx = Mth.sin(yaw);
                 player.setDeltaMovement(player.getDeltaMovement().add(
                     vx * vxz * speed,
-                    vy * speed + Y_BOOST * (player.getXRot() > 0.0F ? elevationBoost : 1.0D),
+                    vy * speed + Y_BOOST * upwardFactor,
                     vz * vxz * speed
                 ));
             }
@@ -157,7 +186,7 @@ public final class FlightDefault implements Flight {
             }
         }
         if (!player.level.isClientSide) {
-            if (this.flightApparatus.isUsable(player)) {
+            if (this.canFly(player)) {
                 (this.state = this.state.next(this.flightApparatus)).onUpdate(player);
             } else if (this.isFlying()) {
                 this.setIsFlying(false, PlayerSet.ofAll());
@@ -206,7 +235,7 @@ public final class FlightDefault implements Flight {
     @Override
     public void clone(Flight other) {
         this.setIsFlying(other.isFlying());
-        this.setTimeFlying(other.getTimeFlying());
+        this.loadTimeFlying(other.getTimeFlying());
         this.setWing(other.getWing());
     }
 
@@ -225,7 +254,7 @@ public final class FlightDefault implements Flight {
     @Override
     public void deserialize(FriendlyByteBuf buf) {
         this.setIsFlying(buf.readBoolean());
-        this.setTimeFlying(buf.readVarInt());
+        this.loadTimeFlying(buf.readVarInt());
         ResourceLocation wingId = ResourceLocation.tryParse(buf.readUtf(64));
         FlightApparatus wing = wingId != null
             ? WingsMod.WINGS.getOptional(wingId).orElse(FlightApparatus.NONE)
@@ -259,7 +288,7 @@ public final class FlightDefault implements Flight {
         public FlightDefault deserialize(CompoundTag compound) {
             FlightDefault f = this.factory.get();
             f.setIsFlying(compound.getBoolean(IS_FLYING));
-            f.setTimeFlying(compound.getInt(TIME_FLYING));
+            f.loadTimeFlying(compound.getInt(TIME_FLYING));
             ResourceLocation wingId = ResourceLocation.tryParse(compound.getString(WING));
             FlightApparatus wing = wingId != null
                 ? WingsMod.WINGS.getOptional(wingId).orElse(FlightApparatus.NONE)

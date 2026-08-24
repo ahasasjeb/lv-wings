@@ -70,15 +70,22 @@ public abstract class Proxy {
     }
 
     public void addFlightListeners(Player player, Flight instance) {
-        if (player instanceof ServerPlayer) {
-            instance.registerFlyingListener(isFlying -> player.getAbilities().mayfly = isFlying);
+        if (player instanceof ServerPlayer serverPlayer) {
+            instance.registerFlyingListener(isFlying -> {
+                boolean hasVanillaFlight = player.getAbilities().instabuild || player.isSpectator();
+                player.getAbilities().mayfly = isFlying || hasVanillaFlight;
+                if (isFlying || !hasVanillaFlight) {
+                    player.getAbilities().flying = false;
+                }
+                serverPlayer.onUpdateAbilities();
+            });
             instance.registerFlyingListener(isFlying -> {
                 if (isFlying) {
                     player.removeVehicle();
                 }
             });
             Flight.Notifier notifier = Flight.Notifier.of(
-                () -> this.network.sendToPlayer(new MessageSyncFlight(player, instance), (ServerPlayer) player),
+                () -> this.network.sendToPlayer(new MessageSyncFlight(player, instance), serverPlayer),
                 p -> this.network.sendToPlayer(new MessageSyncFlight(player, instance), p),
                 () -> this.network.sendToAllTracking(new MessageSyncFlight(player, instance), player)
             );
