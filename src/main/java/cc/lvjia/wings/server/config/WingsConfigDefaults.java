@@ -3,6 +3,9 @@ package cc.lvjia.wings.server.config;
 // 配置默认值与范围常量，双加载器共享
 public final class WingsConfigDefaults {
     public static final boolean ALLOW_UNDERWATER_FLIGHT = false;
+    public static final double WING_HEIGHT_OFFSET = 0.0D;
+    public static final double WING_HEIGHT_OFFSET_MIN = -1.0D;
+    public static final double WING_HEIGHT_OFFSET_MAX = 1.0D;
 
     // === 反作弊参数范围 ===
     public static final int FLIGHT_TAKEOFF_GRACE_TICKS_MIN = 0;

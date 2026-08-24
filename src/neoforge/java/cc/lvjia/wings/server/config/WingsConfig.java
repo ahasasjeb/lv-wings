@@ -9,6 +9,7 @@ public final class WingsConfig {
     private static final Logger LOGGER = LogManager.getLogger("WingsConfig");
 
     private static final ModConfigSpec.BooleanValue ALLOW_UNDERWATER_FLIGHT;
+    private static final ModConfigSpec.DoubleValue WING_HEIGHT_OFFSET;
 
     private static final ModConfigSpec.BooleanValue ENABLE_FLIGHT_ANTI_CHEAT;
     private static final ModConfigSpec.IntValue TAKEOFF_GRACE_TICKS;
@@ -30,6 +31,7 @@ public final class WingsConfig {
     private static final ModConfigSpec.DoubleValue UPWARD_ASSIST_MAX_BONUS;
 
     private static volatile FlightAntiCheatSettings FLIGHT_ANTI_CHEAT_SETTINGS = WingsConfigDefaults.FLIGHT_ANTI_CHEAT;
+    private static volatile double WING_HEIGHT_OFFSET_VALUE = WingsConfigDefaults.WING_HEIGHT_OFFSET;
 
     static {
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
@@ -38,6 +40,12 @@ public final class WingsConfig {
         ALLOW_UNDERWATER_FLIGHT = builder
                 .comment("Whether players can fly while underwater. Disabled by default.")
                 .define("allowUnderwaterFlight", WingsConfigDefaults.ALLOW_UNDERWATER_FLIGHT);
+
+        WING_HEIGHT_OFFSET = builder
+                .comment("Vertical wing render offset in blocks. Positive values move wings upward; only Y is changed.")
+                .defineInRange("wingHeightOffset", WingsConfigDefaults.WING_HEIGHT_OFFSET,
+                        WingsConfigDefaults.WING_HEIGHT_OFFSET_MIN,
+                        WingsConfigDefaults.WING_HEIGHT_OFFSET_MAX);
 
         builder.pop();
 
@@ -144,8 +152,16 @@ public final class WingsConfig {
         return FLIGHT_ANTI_CHEAT_SETTINGS;
     }
 
+    public static double getWingHeightOffset() {
+        return WING_HEIGHT_OFFSET_VALUE;
+    }
+
     public static void validate() {
         isUnderwaterFlightAllowed();
+        WING_HEIGHT_OFFSET_VALUE = WingsConfigDefaults.clamp(
+                readDouble(WING_HEIGHT_OFFSET, WingsConfigDefaults.WING_HEIGHT_OFFSET, "wingHeightOffset"),
+                WingsConfigDefaults.WING_HEIGHT_OFFSET_MIN,
+                WingsConfigDefaults.WING_HEIGHT_OFFSET_MAX);
         FLIGHT_ANTI_CHEAT_SETTINGS = loadFlightAntiCheatSettings();
     }
 

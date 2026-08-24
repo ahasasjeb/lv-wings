@@ -4,6 +4,7 @@ import cc.lvjia.wings.WingsMod;
 import cc.lvjia.wings.client.flight.FlightView;
 import cc.lvjia.wings.client.flight.FlightViews;
 import cc.lvjia.wings.server.apparatus.FlightApparatus;
+import cc.lvjia.wings.server.config.WingsConfig;
 import cc.lvjia.wings.server.flight.Flights;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -54,6 +55,7 @@ public final class WingsLayerRenderer {
             if (state.isCrouching) {
                 poseStack.translate(0.0D, 0.2D, 0.0D);
             }
+            poseStack.translate(0.0D, -WingsConfig.getWingHeightOffset(), 0.0D);
             ModelPart body = Objects.requireNonNull(parentModel.body, "player body");
             body.translateAndRotate(poseStack);
             submitNodeCollector.submitCustomGeometry(poseStack, form.getRenderType(), (pose, buffer) -> {

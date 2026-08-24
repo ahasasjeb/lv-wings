@@ -12,6 +12,10 @@ public final class WingsConfig {
         return DATA.allowUnderwaterFlight;
     }
 
+    public static double getWingHeightOffset() {
+        return DATA.wingHeightOffset;
+    }
+
     public static FlightAntiCheatSettings getFlightAntiCheatSettings() {
         return FLIGHT_ANTI_CHEAT_SETTINGS;
     }
@@ -23,6 +27,7 @@ public final class WingsConfig {
 
     public static final class Data {
         public boolean allowUnderwaterFlight = WingsConfigDefaults.ALLOW_UNDERWATER_FLIGHT;
+        public double wingHeightOffset = WingsConfigDefaults.WING_HEIGHT_OFFSET;
         public AntiCheatData flightAntiCheat = new AntiCheatData();
 
         static Data defaults() {
@@ -30,6 +35,11 @@ public final class WingsConfig {
         }
 
         Data normalize() {
+            this.wingHeightOffset = Double.isFinite(this.wingHeightOffset)
+                    ? WingsConfigDefaults.clamp(this.wingHeightOffset,
+                            WingsConfigDefaults.WING_HEIGHT_OFFSET_MIN,
+                            WingsConfigDefaults.WING_HEIGHT_OFFSET_MAX)
+                    : WingsConfigDefaults.WING_HEIGHT_OFFSET;
             if (this.flightAntiCheat == null) {
                 this.flightAntiCheat = new AntiCheatData();
             }

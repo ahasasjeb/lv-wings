@@ -96,6 +96,13 @@ class WingsConfigDefaultsTest {
                 WingsConfigDefaults.WING_MAX_EXERTION);
     }
 
+    @Test
+    void defaultWingHeightOffsetStaysInsidePublishedRange() {
+        assertBetween(WingsConfigDefaults.WING_HEIGHT_OFFSET,
+                WingsConfigDefaults.WING_HEIGHT_OFFSET_MIN,
+                WingsConfigDefaults.WING_HEIGHT_OFFSET_MAX);
+    }
+
     private static void assertBetween(int value, int min, int max) {
         assertEquals(value, WingsConfigDefaults.clamp(value, min, max));
     }
