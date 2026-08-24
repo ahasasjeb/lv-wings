@@ -48,8 +48,6 @@ public final class WingsItems {
     public static void buildCreativeTabContents(CreativeModeTabEvent.BuildContents event) {
         if (event.getTab() == CreativeModeTabs.FOOD_AND_DRINKS) {
             event.accept(BAT_BLOOD_BOTTLE.get());
-        }
-        if (event.getTab() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             event.accept(ANGEL_WINGS_BOTTLE.get());
             event.accept(PARROT_WINGS_BOTTLE.get());
             event.accept(SLIME_WINGS_BOTTLE.get());

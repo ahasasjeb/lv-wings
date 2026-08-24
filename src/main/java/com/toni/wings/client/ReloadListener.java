@@ -5,6 +5,7 @@ import com.toni.wings.WingsMod;
 import com.toni.wings.client.apparatus.WingForm;
 import com.toni.wings.client.renderer.LayerCapeWings;
 import com.toni.wings.client.renderer.LayerWings;
+import com.toni.wings.server.config.WingsConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -69,6 +70,7 @@ public class ReloadListener implements ResourceManagerReloadListener {
                         if (player.isCrouching()) {
                             stack.translate(0.0D, 0.2D, 0.0D);
                         }
+                        stack.translate(0.0D, -WingsConfig.getWingHeightOffset(), 0.0D);
                         body.translateAndRotate(stack);
                     }));
                 });
