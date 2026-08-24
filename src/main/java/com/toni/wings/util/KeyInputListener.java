@@ -20,10 +20,13 @@ public final class KeyInputListener {
 
     @SubscribeEvent
     public void onKey(InputEvent.Key event) {
-        this.bindings.asMap().entrySet().stream()
-            .filter(e -> e.getKey().consumeClick())
-            .flatMap(e -> e.getValue().stream())
-            .forEach(Runnable::run);
+        for (KeyMapping binding : this.bindings.keySet()) {
+            if (binding.consumeClick()) {
+                for (Runnable handler : this.bindings.get(binding)) {
+                    handler.run();
+                }
+            }
+        }
     }
 
     public static Builder builder() {

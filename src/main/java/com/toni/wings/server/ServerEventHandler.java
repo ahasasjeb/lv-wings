@@ -8,6 +8,7 @@ import com.toni.wings.server.command.WingsCommand;
 import com.toni.wings.server.flight.Flight;
 import com.toni.wings.server.flight.Flights;
 import com.toni.wings.server.item.WingsItems;
+import com.toni.wings.server.net.serverbound.MessageControlFlying;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -22,6 +23,7 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -37,6 +39,11 @@ public final class ServerEventHandler {
         InteractionHand hand = event.getHand();
         ItemStack stack = player.getItemInHand(hand);
         if (event.getTarget() instanceof Bat && stack.getItem() == Items.GLASS_BOTTLE) {
+            event.setCancellationResult(InteractionResult.SUCCESS);
+            event.setCanceled(true);
+            if (player.level.isClientSide) {
+                return;
+            }
             player.level.playSound(
                 player,
                 player.getX(), player.getY(), player.getZ(),
@@ -57,7 +64,6 @@ public final class ServerEventHandler {
             } else if (!player.getInventory().add(batBlood)) {
                 player.drop(batBlood, false);
             }
-            event.setCancellationResult(InteractionResult.SUCCESS);
         }
     }
 
@@ -75,9 +81,19 @@ public final class ServerEventHandler {
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
-            Flights.get(event.player).ifPresent(flight ->
-                flight.tick(event.player)
-            );
+            Flights.get(event.player).ifPresent(flight -> {
+                if (!event.player.level.isClientSide && event.player.isSpectator()) {
+                    flight.setIsFlying(false, Flight.PlayerSet.ofAll());
+                    return;
+                }
+                flight.tick(event.player);
+                if (!event.player.level.isClientSide && flight.isFlying() && event.player.getAbilities().flying) {
+                    event.player.getAbilities().flying = false;
+                    if (event.player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+                        serverPlayer.onUpdateAbilities();
+                    }
+                }
+            });
         }
     }
 
@@ -89,7 +105,15 @@ public final class ServerEventHandler {
     }
 
     @SubscribeEvent
+    public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
+        MessageControlFlying.clearRateLimit(event.getEntity());
+    }
+
+    @SubscribeEvent
     public static void onPlayerFlightCheck(PlayerFlightCheckEvent event) {
+        if (event.getEntity().isSpectator()) {
+            return;
+        }
         Flights.get(event.getEntity()).filter(Flight::isFlying)
             .ifPresent(flight -> event.setFlying());
     }
@@ -97,6 +121,9 @@ public final class ServerEventHandler {
     @SubscribeEvent
     public static void onPlayerFlown(PlayerFlownEvent event) {
         Player player = event.getEntity();
+        if (player.isSpectator()) {
+            return;
+        }
         Flights.get(player).ifPresent(flight -> {
             flight.onFlown(player, event.getDirection());
         });
@@ -105,6 +132,9 @@ public final class ServerEventHandler {
     @SubscribeEvent
     public static void onGetLivingHeadLimit(GetLivingHeadLimitEvent event) {
         Flights.ifPlayer(event.getEntity(), (player, flight) -> {
+            if (player.isSpectator()) {
+                return;
+            }
             if (flight.isFlying()) {
                 event.setHardLimit(50.0F);
                 event.disableSoftLimit();
