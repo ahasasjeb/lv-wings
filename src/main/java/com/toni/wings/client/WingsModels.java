@@ -2,7 +2,7 @@ package com.toni.wings.client;
 
 import com.toni.wings.WingsMod;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -12,6 +12,6 @@ public final class WingsModels {
     }
 
     @SubscribeEvent
-    public static void onRegister(ModelEvent.RegisterAdditional event) {
+    public static void onRegister(ModelRegistryEvent event) {
     }
 }

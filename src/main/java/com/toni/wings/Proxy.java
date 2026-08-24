@@ -3,6 +3,7 @@ package com.toni.wings;
 import com.toni.wings.server.config.WingsConfig;
 import com.toni.wings.server.config.WingsItemsConfig;
 import com.toni.wings.server.config.WingsOreConfig;
+import com.toni.wings.server.command.WingsArgument;
 import com.toni.wings.server.dreamcatcher.InSomniable;
 import com.toni.wings.server.flight.Flight;
 import com.toni.wings.server.item.WingsItems;
@@ -10,6 +11,8 @@ import com.toni.wings.server.net.Network;
 import com.toni.wings.server.net.clientbound.MessageSyncFlight;
 import com.toni.wings.server.potion.PotionMix;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.commands.synchronization.ArgumentTypes;
+import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -42,6 +45,11 @@ public abstract class Proxy {
         //CapabilityManager.INSTANCE.register(Flight.class, SimpleStorage.ofVoid(), FlightDefault::new);
         //CapabilityManager.INSTANCE.register(InSomniable.class, SimpleStorage.ofVoid(), InSomniable::new);
         event.enqueueWork(() -> {
+            ArgumentTypes.register(
+                WingsMod.locate("wings").toString(),
+                WingsArgument.class,
+                new EmptyArgumentSerializer<>(WingsArgument::wings)
+            );
             BiConsumer<ItemLike, RegistryObject<Item>> reg = (item, obj) -> {
                 BrewingRecipeRegistry.addRecipe(
                     new PotionMix(Potions.SLOW_FALLING, Ingredient.of(item), new ItemStack(obj.get()))

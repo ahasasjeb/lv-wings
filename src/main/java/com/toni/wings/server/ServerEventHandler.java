@@ -35,7 +35,7 @@ public final class ServerEventHandler {
 
     @SubscribeEvent
     public static void onPlayerEntityInteract(PlayerInteractEvent.EntityInteract event) {
-        Player player = event.getEntity();
+        Player player = event.getPlayer();
         InteractionHand hand = event.getHand();
         ItemStack stack = player.getItemInHand(hand);
         if (event.getTarget() instanceof Bat && stack.getItem() == Items.GLASS_BOTTLE) {
@@ -106,21 +106,21 @@ public final class ServerEventHandler {
 
     @SubscribeEvent
     public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
-        MessageControlFlying.clearRateLimit(event.getEntity());
+        MessageControlFlying.clearRateLimit(event.getPlayer());
     }
 
     @SubscribeEvent
     public static void onPlayerFlightCheck(PlayerFlightCheckEvent event) {
-        if (event.getEntity().isSpectator()) {
+        if (event.getPlayer().isSpectator()) {
             return;
         }
-        Flights.get(event.getEntity()).filter(Flight::isFlying)
+        Flights.get(event.getPlayer()).filter(Flight::isFlying)
             .ifPresent(flight -> event.setFlying());
     }
 
     @SubscribeEvent
     public static void onPlayerFlown(PlayerFlownEvent event) {
-        Player player = event.getEntity();
+        Player player = event.getPlayer();
         if (player.isSpectator()) {
             return;
         }

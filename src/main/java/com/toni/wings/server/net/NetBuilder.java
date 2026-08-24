@@ -154,7 +154,7 @@ public final class NetBuilder {
                     msg.decode(buf);
                     return msg;
                 })
-                .consumerNetworkThread(this.consumerFactory.create(consumer))
+                .consumer(this.consumerFactory.create(consumer))
                 .add();
             return NetBuilder.this;
         }

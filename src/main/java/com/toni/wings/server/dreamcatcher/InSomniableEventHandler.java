@@ -21,9 +21,9 @@ public final class InSomniableEventHandler {
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
-        Player player = event.getEntity();
+        Player player = event.getPlayer();
         if (player instanceof ServerPlayer && !player.isCreative()) {
-            Level world = event.getLevel();
+            Level world = event.getWorld();
             BlockPos pos = event.getPos();
             BlockState state = world.getBlockState(pos);
             Block block = state.getBlock();

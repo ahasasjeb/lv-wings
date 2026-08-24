@@ -20,9 +20,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ViewportEvent;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -34,7 +34,7 @@ public final class ClientEventHandler {
 
     @SubscribeEvent
     public static void onAnimatePlayerModel(AnimatePlayerModelEvent event) {
-        Player player = event.getEntity();
+        Player player = event.getPlayer();
         Flights.get(player).ifPresent(flight -> {
             float delta = event.getTicksExisted() - player.tickCount;
             float amt = flight.getFlyingAmount(delta);
@@ -52,7 +52,7 @@ public final class ClientEventHandler {
 
     @SubscribeEvent
     public static void onApplyRotations(ApplyPlayerRotationsEvent event) {
-        Flights.ifPlayer(event.getEntity(), (player, flight) -> {
+        Flights.ifPlayer(event.getPlayer(), (player, flight) -> {
             PoseStack matrixStack = event.getMatrixStack();
             float delta = event.getDelta();
             float amt = flight.getFlyingAmount(delta);
@@ -81,9 +81,9 @@ public final class ClientEventHandler {
     }
 
     @SubscribeEvent
-    public static void onCameraSetup(ViewportEvent.ComputeCameraAngles event) {
+    public static void onCameraSetup(EntityViewRenderEvent.CameraSetup event) {
     Flights.ifPlayer(event.getCamera().getEntity(), (player, flight) -> {
-            float delta = (float) event.getPartialTick();
+            float delta = (float) event.getPartialTicks();
             float amt = flight.getFlyingAmount(delta);
             if (amt > 0.0F) {
                 float roll = MathH.lerpDegrees(
@@ -111,7 +111,7 @@ public final class ClientEventHandler {
     }
 
     @SubscribeEvent
-    public static void onEntityJoinWorld(EntityJoinLevelEvent event) {
+    public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
         Flights.ifPlayer(event.getEntity(), Player::isLocalPlayer, (player, flight) ->
             Minecraft.getInstance().getSoundManager().play(new WingsSound(player, flight))
         );

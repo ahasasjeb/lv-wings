@@ -19,14 +19,13 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
 
 @Mod(WingsMod.ID)
 public final class WingsMod {
@@ -36,21 +35,8 @@ public final class WingsMod {
 
     public static final Registry<FlightApparatus> WINGS = new DefaultedRegistry<>(Names.NONE.toString(), ResourceKey.createRegistryKey(locate("wings")), Lifecycle.experimental(), null);
 
-    // Deferred register for command argument types
-    private static final DeferredRegister<net.minecraft.commands.synchronization.ArgumentTypeInfo<?, ?>> COMMAND_ARGUMENT_TYPES = 
-        DeferredRegister.create(Registry.COMMAND_ARGUMENT_TYPE_REGISTRY, ID);
-
-    // Register the wings argument type
-    public static final RegistryObject<net.minecraft.commands.synchronization.SingletonArgumentInfo<com.toni.wings.server.command.WingsArgument>> WINGS_ARGUMENT_TYPE = 
-        COMMAND_ARGUMENT_TYPES.register("wings", () -> 
-            net.minecraft.commands.synchronization.ArgumentTypeInfos.registerByClass(
-                com.toni.wings.server.command.WingsArgument.class, 
-                net.minecraft.commands.synchronization.SingletonArgumentInfo.contextFree(com.toni.wings.server.command.WingsArgument::wings)
-            )
-        );
-
     public static final FlightApparatus NONE = Registry.register(WINGS, Names.NONE, FlightApparatus.NONE);
-    public static final FlightApparatus WINGLESS = Registry.register(WINGS, Names.WINGLESS, FlightApparatus.NONE);
+    public static final FlightApparatus WINGLESS = Registry.register(WINGS, Names.WINGLESS, createWingless());
     public static final FlightApparatus ANGEL_WINGS = Registry.register(WINGS, Names.ANGEL, new SimpleFlightApparatus(WingsItemsConfig.ANGEL));
 	public static final FlightApparatus PARROT_WINGS = Registry.register(WINGS, Names.PARROT, new SimpleFlightApparatus(WingsItemsConfig.PARROT));
     public static final FlightApparatus BAT_WINGS = Registry.register(WINGS, Names.BAT, new SimpleFlightApparatus(WingsItemsConfig.BAT));
@@ -81,7 +67,6 @@ public final class WingsMod {
     WingsItems.REG.register(bus);
         WingsSounds.REG.register(bus);
         WingsEffects.REG.register(bus);
-        COMMAND_ARGUMENT_TYPES.register(bus);
         this.proxy = DistExecutor.unsafeRunForDist(() -> () -> new ClientProxy(), () -> () -> new ServerProxy());
         this.proxy.init(bus);
     }
@@ -114,6 +99,35 @@ public final class WingsMod {
         return INSTANCE;
     }
 
+    private static FlightApparatus createWingless() {
+        return new FlightApparatus() {
+            @Override
+            public void onFlight(Player player, Vec3 direction) {
+                FlightApparatus.NONE.onFlight(player, direction);
+            }
+
+            @Override
+            public void onLanding(Player player, Vec3 direction) {
+                FlightApparatus.NONE.onLanding(player, direction);
+            }
+
+            @Override
+            public boolean isUsable(Player player) {
+                return FlightApparatus.NONE.isUsable(player);
+            }
+
+            @Override
+            public boolean isLandable(Player player) {
+                return FlightApparatus.NONE.isLandable(player);
+            }
+
+            @Override
+            public FlightState createState(Flight flight) {
+                return FlightApparatus.NONE.createState(flight);
+            }
+        };
+    }
+
     public void invalidateFlightView(Player player) {
         this.requireProxy().invalidateFlightView(player);
     }
@@ -127,11 +141,7 @@ public final class WingsMod {
 
     public static ResourceLocation locate(String name)
     {
-        ResourceLocation location = ResourceLocation.tryBuild(WingsMod.ID, name);
-        if (location == null) {
-            throw new IllegalArgumentException("Invalid resource path: " + name);
-        }
-        return location;
+        return new ResourceLocation(WingsMod.ID, name);
     }
 
     public static final class Names {
@@ -155,11 +165,7 @@ public final class WingsMod {
             LVJIA_SUPER = create("lvjia_super_wing");
 
         private static ResourceLocation create(String path) {
-            ResourceLocation location = ResourceLocation.tryBuild(ID, path);
-            if (location == null) {
-                throw new IllegalArgumentException("Invalid resource path: " + path);
-            }
-            return location;
+            return new ResourceLocation(ID, path);
         }
     }
 }

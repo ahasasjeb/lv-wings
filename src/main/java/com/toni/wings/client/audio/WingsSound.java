@@ -5,7 +5,6 @@ import com.toni.wings.server.sound.WingsSounds;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 
 public final class WingsSound extends AbstractTickableSoundInstance {
@@ -18,7 +17,7 @@ public final class WingsSound extends AbstractTickableSoundInstance {
     }
 
     private WingsSound(Player player, Flight flight, boolean repeat, int repeatDelay, float volume) {
-        super(WingsSounds.ITEM_WINGS_FLYING.get(), SoundSource.PLAYERS, RandomSource.create());
+        super(WingsSounds.ITEM_WINGS_FLYING.get(), SoundSource.PLAYERS);
         this.player = player;
         this.flight = flight;
         this.looping = repeat;

@@ -3,11 +3,12 @@ package com.toni.wings.util;
 import com.google.common.collect.ImmutableListMultimap;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
+import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.settings.IKeyConflictContext;
 import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 public final class KeyInputListener {
     private static final java.util.List<KeyMapping> KEY_MAPPINGS = new java.util.ArrayList<>();
@@ -19,7 +20,7 @@ public final class KeyInputListener {
     }
 
     @SubscribeEvent
-    public void onKey(InputEvent.Key event) {
+    public void onKey(InputEvent.KeyInputEvent event) {
         for (KeyMapping binding : this.bindings.keySet()) {
             if (binding.consumeClick()) {
                 for (Runnable handler : this.bindings.get(binding)) {
@@ -118,7 +119,7 @@ public final class KeyInputListener {
         }
     }
 
-    public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
-        KEY_MAPPINGS.forEach(event::register);
+    public static void registerKeyMappings(FMLClientSetupEvent event) {
+        event.enqueueWork(() -> KEY_MAPPINGS.forEach(ClientRegistry::registerKeyBinding));
     }
 }

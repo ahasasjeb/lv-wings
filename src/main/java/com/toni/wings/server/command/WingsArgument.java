@@ -11,7 +11,7 @@ import com.toni.wings.WingsMod;
 import com.toni.wings.server.apparatus.FlightApparatus;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.Arrays;
@@ -20,7 +20,9 @@ import java.util.concurrent.CompletableFuture;
 
 public class WingsArgument implements ArgumentType<FlightApparatus> {
     private static final Collection<String> EXAMPLES = Arrays.asList("magical", "wings");
-    public static final DynamicCommandExceptionType ERROR_UNKNOWN_WING = new DynamicCommandExceptionType(e -> Component.translatable("wings.wingsNotFound", e));
+    public static final DynamicCommandExceptionType ERROR_UNKNOWN_WING = new DynamicCommandExceptionType(
+        e -> new TranslatableComponent("wings.wingsNotFound", e)
+    );
 
     public WingsArgument() {
     }

@@ -77,30 +77,30 @@ public final class Flights {
     public static void onPlayerClone(PlayerEvent.Clone event) {
         if (!event.isWasDeath()) {
             get(event.getOriginal()).ifPresent(oldInstance ->
-                get(event.getEntity()).ifPresent(newInstance -> newInstance.clone(oldInstance))
+                get(event.getPlayer()).ifPresent(newInstance -> newInstance.clone(oldInstance))
             );
         }
     }
 
     @SubscribeEvent
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
-        get(event.getEntity()).ifPresent(flight -> flight.sync(Flight.PlayerSet.ofSelf()));
+        get(event.getPlayer()).ifPresent(flight -> flight.sync(Flight.PlayerSet.ofSelf()));
     }
 
     @SubscribeEvent
     public static void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
-        get(event.getEntity()).ifPresent(flight -> flight.sync(Flight.PlayerSet.ofSelf()));
+        get(event.getPlayer()).ifPresent(flight -> flight.sync(Flight.PlayerSet.ofSelf()));
     }
 
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-        get(event.getEntity()).ifPresent(flight -> flight.sync(Flight.PlayerSet.ofSelf()));
+        get(event.getPlayer()).ifPresent(flight -> flight.sync(Flight.PlayerSet.ofSelf()));
     }
 
     @SubscribeEvent
     public static void onPlayerStartTracking(PlayerEvent.StartTracking event) {
         ifPlayer(event.getTarget(), (player, flight) ->
-            flight.sync(Flight.PlayerSet.ofPlayer((ServerPlayer) event.getEntity()))
+            flight.sync(Flight.PlayerSet.ofPlayer((ServerPlayer) event.getPlayer()))
         );
     }
 }

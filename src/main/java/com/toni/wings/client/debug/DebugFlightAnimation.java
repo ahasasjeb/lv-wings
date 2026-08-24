@@ -2,7 +2,7 @@ package com.toni.wings.client.debug;
 
 import com.toni.wings.WingsMod;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -14,7 +14,7 @@ public final class DebugFlightAnimation {
     private static State state = new DisabledState();
 
     @SubscribeEvent
-    public static void init(ModelEvent.RegisterAdditional event) {
+    public static void init(ModelRegistryEvent event) {
         state = state.init();
     }
 

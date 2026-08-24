@@ -46,7 +46,7 @@ public final class InSomniableCapability {
     @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event) {
         getInSomniable(event.getOriginal())
-            .ifPresent(oldInstance -> getInSomniable(event.getEntity())
+            .ifPresent(oldInstance -> getInSomniable(event.getPlayer())
                 .ifPresent(newInstance -> newInstance.clone(oldInstance))
             );
     }

@@ -4,7 +4,7 @@ import com.toni.wings.server.item.WingsItems;
 import com.toni.wings.util.NBTSerializer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -76,7 +76,7 @@ public final class InSomniable {
         public State onPlay(Level world, Player player, BlockPos pos, int note) {
             if (note >= 6 && note <= 14 && ((this.state = (this.state | this.mask[note - 6]) << 1) & 0x20000) == 0) {
                 ItemStack stack = new ItemStack(WingsItems.ANGEL_WINGS_BOTTLE.get());
-                stack.setHoverName(Component.translatable(this.members[world.random.nextInt(this.members.length)]));
+                stack.setHoverName(new TranslatableComponent(this.members[world.random.nextInt(this.members.length)]));
                 ItemEntity entity = new ItemEntity(world, pos.getX() + 0.5D, pos.getY() + 1.25D, pos.getZ() + 0.5D, stack);
                 entity.setDefaultPickUpDelay();
                 world.addFreshEntity(entity);

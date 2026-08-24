@@ -21,7 +21,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.common.MinecraftForge;
@@ -110,10 +110,7 @@ public final class ClientProxy extends Proxy {
 
     private static  <A extends Animator> WingForm<A> createWings(ResourceLocation name, Supplier<A> animator, ModelWings<A> model, Supplier<RenderType> renderType) {
         String texturePath = String.format("textures/entity/%s.png", name.getPath());
-        ResourceLocation texture = ResourceLocation.tryBuild(name.getNamespace(), texturePath);
-        if (texture == null) {
-            throw new IllegalArgumentException("Invalid texture path: " + texturePath);
-        }
+        ResourceLocation texture = new ResourceLocation(name.getNamespace(), texturePath);
         Supplier<RenderType> actualRenderType = renderType != null ? renderType : () -> RenderType.entityCutout(texture);
         return WingForm.of(
             animator,
@@ -133,7 +130,10 @@ public final class ClientProxy extends Proxy {
         // Refresh FlightView after sync
     }
 
-    private static void registerItemColors(RegisterColorHandlersEvent.Item event) {
-        event.register((stack, tintIndex) -> tintIndex == 0 ? 0x9B172D : 0xFFFFFF, WingsItems.BAT_BLOOD_BOTTLE.get());
+    private static void registerItemColors(ColorHandlerEvent.Item event) {
+        event.getItemColors().register(
+            (stack, tintIndex) -> tintIndex == 0 ? 0x9B172D : 0xFFFFFF,
+            WingsItems.BAT_BLOOD_BOTTLE.get()
+        );
     }
 }
