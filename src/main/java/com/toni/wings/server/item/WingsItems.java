@@ -41,7 +41,7 @@ public final class WingsItems {
 
     private static Supplier<Item> bottle(Supplier<FlightApparatus> wings) {
         return () -> new WingsBottleItem(new Item.Properties()
-            .tab(CreativeModeTab.TAB_FOOD)
+            .tab(CreativeModeTab.TAB_BREWING)
             .craftRemainder(Items.GLASS_BOTTLE)
             .stacksTo(16), wings.get());
     }
