@@ -1,5 +1,6 @@
 package cc.lvjia.wings.server.flight;
 
+import cc.lvjia.wings.server.net.serverbound.ControlFlyingMessageHandler;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -35,6 +36,7 @@ public final class FlightEventSupport {
     // 玩家克隆（如维度切换）时复制飞行状态
     public static void onPlayerClone(Player oldPlayer, Player newPlayer, boolean copyFlightState,
                                      Function<Player, Flight> flights) {
+        ControlFlyingMessageHandler.clearRateLimit(oldPlayer);
         if (copyFlightState) {
             flights.apply(newPlayer).clone(flights.apply(oldPlayer));
         }
@@ -42,6 +44,7 @@ public final class FlightEventSupport {
 
     // 向玩家自己同步飞行状态（登录/重生/换维度后）
     public static void syncSelf(Player player, Function<Player, Flight> flights) {
+        ControlFlyingMessageHandler.clearRateLimit(player);
         flights.apply(player).sync(Flight.PlayerSet.ofSelf());
     }
 

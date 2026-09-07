@@ -7,6 +7,7 @@ import cc.lvjia.wings.server.flight.Flight;
 import cc.lvjia.wings.server.flight.FlightSpeedAntiCheat;
 import cc.lvjia.wings.server.flight.FlightStateReset;
 import cc.lvjia.wings.server.flight.Flights;
+import cc.lvjia.wings.server.net.serverbound.ControlFlyingMessageHandler;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -71,6 +72,7 @@ public final class ServerEventActions {
     public static void onPlayerTick(@NonNull Player player) {
         Flight flight = Flights.get(player);
         if (FlightStateReset.clearSpectator(player, flight)) {
+            ControlFlyingMessageHandler.flushCorrection(player);
             return;
         }
         flight.tick(player);
@@ -81,6 +83,7 @@ public final class ServerEventActions {
             }
             FlightSpeedAntiCheat.tick(serverPlayer, flight);
         }
+        ControlFlyingMessageHandler.flushCorrection(player);
     }
 
     // 生物死亡时停飞并清除反作弊记录

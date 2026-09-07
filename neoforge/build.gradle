@@ -9,6 +9,11 @@ version = mod_version
 group = mod_group_id
 
 sourceSets {
+    // 网络消息单元测试需要 Minecraft 类型；普通 Java 测试不会自动继承 moddev 的游戏依赖。
+    test {
+        compileClasspath += sourceSets.main.compileClasspath
+        runtimeClasspath += sourceSets.main.runtimeClasspath
+    }
     main {
         java {
             srcDirs = ['../src/main/java', '../src/neoforge/java']

@@ -6,26 +6,18 @@ import net.minecraft.world.entity.player.Player;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-
 public final class ControlFlyingMessageHandler {
     private static final Logger LOGGER = LogManager.getLogger("WingsNetwork");
-    private static final int MIN_CONTROL_INTERVAL_TICKS = 2;
-    private static final Map<UUID, Integer> LAST_CONTROL_TICKS = new ConcurrentHashMap<>();
+    private static final ControlFlyingRateLimiter RATE_LIMITER = new ControlFlyingRateLimiter();
 
     private ControlFlyingMessageHandler() {
     }
 
     public static void handle(Player player, boolean isFlying, FlightGetter flightGetter, FlightSync sync) {
-        Integer lastControlTick = LAST_CONTROL_TICKS.get(player.getUUID());
-        if (lastControlTick != null && player.tickCount - lastControlTick < MIN_CONTROL_INTERVAL_TICKS) {
-            // 客户端本地预测已切换状态，被限速丢弃时回发当前权威状态纠正，避免两端失同步
-            sync.send(player, flightGetter.get(player));
+        if (!RATE_LIMITER.tryAcquire(player.getUUID(), player.tickCount,
+                () -> sync.send(player, flightGetter.get(player)))) {
             return;
         }
-        LAST_CONTROL_TICKS.put(player.getUUID(), player.tickCount);
 
         Flight flight = flightGetter.get(player);
         boolean wasFlying = flight.isFlying();
@@ -36,7 +28,7 @@ public final class ControlFlyingMessageHandler {
             sync.send(player, flight);
             return;
         }
-        if (!flight.canFly(player)) {
+        if (isFlying && (!player.isAlive() || !flight.canFly(player))) {
             LOGGER.debug("Player {} failed canFly check, ignoring control_flying", player.getName().getString());
             sync.send(player, flight);
             return;
@@ -48,7 +40,11 @@ public final class ControlFlyingMessageHandler {
     }
 
     public static void clearRateLimit(Player player) {
-        LAST_CONTROL_TICKS.remove(player.getUUID());
+        RATE_LIMITER.clear(player.getUUID());
+    }
+
+    public static void flushCorrection(Player player) {
+        RATE_LIMITER.flushCorrection(player.getUUID());
     }
 
     @FunctionalInterface

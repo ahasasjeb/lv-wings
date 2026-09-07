@@ -1,6 +1,6 @@
 package cc.lvjia.wings.server.net.clientbound;
 
-import cc.lvjia.wings.WingsMod;
+import cc.lvjia.wings.WingsCore;
 import cc.lvjia.wings.server.flight.Flight;
 import cc.lvjia.wings.server.flight.FlightDefault;
 import cc.lvjia.wings.server.net.Message;
@@ -16,8 +16,15 @@ import net.minecraft.world.entity.player.Player;
  */
 @SuppressWarnings("null")
 public record MessageSyncFlight(int playerId, Flight flight) implements Message {
+    public MessageSyncFlight {
+        // 在发送线程捕获状态，避免网络线程编码时读取仍在变化的 attachment。
+        FlightDefault snapshot = new FlightDefault();
+        snapshot.clone(flight);
+        flight = snapshot;
+    }
+
     public static final CustomPacketPayload.Type<MessageSyncFlight> TYPE = new CustomPacketPayload.Type<>(
-            WingsMod.locate("sync_flight"));
+            WingsCore.locate("sync_flight"));
     public static final StreamCodec<FriendlyByteBuf, MessageSyncFlight> STREAM_CODEC = StreamCodec
             .of((buf, message) -> {
                 buf.writeVarInt(message.playerId());
