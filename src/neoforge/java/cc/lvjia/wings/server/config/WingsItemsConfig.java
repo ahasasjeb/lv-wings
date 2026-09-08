@@ -46,6 +46,8 @@ public final class WingsItemsConfig {
     }
 
     public static void validate() {
-        ALL.forEach(ConfigWingSettings::validate);
+        for (ConfigWingSettings settings : ALL) {
+            settings.validate();
+        }
     }
 }

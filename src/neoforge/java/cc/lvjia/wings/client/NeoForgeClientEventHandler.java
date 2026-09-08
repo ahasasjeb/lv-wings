@@ -54,7 +54,7 @@ public final class NeoForgeClientEventHandler {
 
     @SubscribeEvent
     public static void onEntityJoinWorld(EntityJoinLevelEvent event) {
-        Flights.ifPlayer(event.getEntity(), Player::isLocalPlayer,
+        Flights.ifPlayer(event.getEntity(), player -> player.isLocalPlayer(),
                 (player, flight) -> Minecraft.getInstance().getSoundManager().play(new WingsSound(player, flight)));
     }
 

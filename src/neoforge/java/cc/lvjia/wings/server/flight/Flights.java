@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.player.Player;
+import org.jspecify.annotations.NonNull;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.EntityCapability;
@@ -35,7 +36,7 @@ public final class Flights {
         FlightEventSupport.ifPlayer(entity, Flights::get, action);
     }
 
-    public static void ifPlayer(Entity entity, Predicate<Player> condition, BiConsumer<Player, Flight> action) {
+    public static void ifPlayer(Entity entity, Predicate<@NonNull Player> condition, BiConsumer<Player, Flight> action) {
         FlightEventSupport.ifPlayer(entity, condition, Flights::get, action);
     }
 

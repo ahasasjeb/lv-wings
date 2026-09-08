@@ -4,6 +4,7 @@ import cc.lvjia.wings.server.net.serverbound.ControlFlyingMessageHandler;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import org.jspecify.annotations.NonNull;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -21,7 +22,7 @@ public final class FlightEventSupport {
     }
 
     // 带条件的 ifPlayer，只有满足 condition 时才执行
-    public static void ifPlayer(Entity entity, Predicate<Player> condition, Function<Player, Flight> flights,
+    public static void ifPlayer(Entity entity, Predicate<@NonNull Player> condition, Function<Player, Flight> flights,
                                 BiConsumer<Player, Flight> action) {
         if (entity instanceof Player player && condition.test(player)) {
             action.accept(player, flights.apply(player));

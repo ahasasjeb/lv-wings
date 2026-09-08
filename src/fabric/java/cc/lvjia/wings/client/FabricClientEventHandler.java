@@ -57,7 +57,7 @@ public final class FabricClientEventHandler {
     }
 
     public static void onEntityJoinWorld(Entity entity) {
-        Flights.ifPlayer(entity, Player::isLocalPlayer,
+        Flights.ifPlayer(entity, player -> player.isLocalPlayer(),
                 (player, flight) -> Minecraft.getInstance().getSoundManager().play(new WingsSound(player, flight)));
     }
 

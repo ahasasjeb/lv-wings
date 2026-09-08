@@ -130,11 +130,6 @@ public final class AnimatorAvian implements Animator {
         }
     }
 
-    @FunctionalInterface
-    private interface RotationGetter {
-        void get(Movement movement, int index, float delta, RotationAngles rotation);
-    }
-
     private record WingPose(float[] x, float[] y, float[] z) {
             private static final int POSE_SIZE = 4;
 
@@ -371,17 +366,19 @@ public final class AnimatorAvian implements Animator {
 
         @Override
         public void getWingRotation(int index, float delta, RotationAngles rotation) {
-            this.lerpRotation(index, delta, Movement::getWingRotation, rotation);
+            this.start.getWingRotation(index, delta, this.startRotation);
+            this.end.getWingRotation(index, delta, this.endRotation);
+            this.lerpRotation(delta, rotation);
         }
 
         @Override
         public void getFeatherRotation(int index, float delta, RotationAngles rotation) {
-            this.lerpRotation(index, delta, Movement::getFeatherRotation, rotation);
+            this.start.getFeatherRotation(index, delta, this.startRotation);
+            this.end.getFeatherRotation(index, delta, this.endRotation);
+            this.lerpRotation(delta, rotation);
         }
 
-        private void lerpRotation(int index, float delta, RotationGetter getter, RotationAngles rotation) {
-            getter.get(this.start, index, delta, this.startRotation);
-            getter.get(this.end, index, delta, this.endRotation);
+        private void lerpRotation(float delta, RotationAngles rotation) {
             float t = this.getWeight(delta);
             rotation.set(
                     MathH.lerpDegrees(this.startRotation.x(), this.endRotation.x(), t),

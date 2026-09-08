@@ -103,7 +103,7 @@ public interface Flight {
         }
 
         static PlayerSet ofSelf() {
-            return Notifier::notifySelf;
+            return notifier -> notifier.notifySelf();
         }
 
         static PlayerSet ofPlayer(ServerPlayer player) {
@@ -111,7 +111,7 @@ public interface Flight {
         }
 
         static PlayerSet ofOthers() {
-            return Notifier::notifyOthers;
+            return notifier -> notifier.notifyOthers();
         }
 
         static PlayerSet ofAll() {
