@@ -49,32 +49,33 @@ public final class WingsConfig {
 
         builder.pop();
 
-        builder.comment("Server-side anti-cheat settings for wings flight").push("flightAntiCheat");
+        builder.comment("Server-side anti-cheat settings for wings flight. Speed limits are blocks per server tick;",
+                "unused movement allowance and elapsed-time lag compensation are capped at three ticks.").push("flightAntiCheat");
 
         ENABLE_FLIGHT_ANTI_CHEAT = builder
                 .comment("Enable wings flight anti-cheat on server side. Default: true")
                 .define("enabled", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.enabled());
 
         TAKEOFF_GRACE_TICKS = builder
-                .comment("Grace ticks after takeoff before speed checks are enforced.")
+                .comment("Server ticks before soft speed checks begin. Hard checks always apply; brief flight toggles do not renew grace.")
                 .defineInRange("takeoffGraceTicks", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.takeoffGraceTicks(),
                         WingsConfigDefaults.FLIGHT_TAKEOFF_GRACE_TICKS_MIN,
                         WingsConfigDefaults.FLIGHT_TAKEOFF_GRACE_TICKS_MAX);
 
         SOFT_VIOLATION_LIMIT = builder
-                .comment("How many soft violations trigger correction.")
+                .comment("How many soft violating server ticks trigger correction (at most one violation per tick).")
                 .defineInRange("softViolationLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.softViolationLimit(),
                         WingsConfigDefaults.FLIGHT_VIOLATION_LIMIT_MIN,
                         WingsConfigDefaults.FLIGHT_VIOLATION_LIMIT_MAX);
 
         HARD_VIOLATION_LIMIT = builder
-                .comment("How many hard violations trigger correction.")
+                .comment("How many hard violating server ticks trigger correction (at most one violation per tick).")
                 .defineInRange("hardViolationLimit", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.hardViolationLimit(),
                         WingsConfigDefaults.FLIGHT_VIOLATION_LIMIT_MIN,
                         WingsConfigDefaults.FLIGHT_VIOLATION_LIMIT_MAX);
 
         CORRECTION_COOLDOWN_TICKS = builder
-                .comment("Cooldown ticks between corrections.")
+                .comment("Server ticks during which restarting wings flight is blocked after a correction.")
                 .defineInRange("correctionCooldownTicks", WingsConfigDefaults.FLIGHT_ANTI_CHEAT.correctionCooldownTicks(),
                         WingsConfigDefaults.FLIGHT_CORRECTION_COOLDOWN_TICKS_MIN,
                         WingsConfigDefaults.FLIGHT_CORRECTION_COOLDOWN_TICKS_MAX);

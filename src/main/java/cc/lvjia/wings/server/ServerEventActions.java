@@ -112,9 +112,6 @@ public final class ServerEventActions {
             return;
         }
         flight.onFlown(player, event.getDirection());
-        if (player instanceof ServerPlayer serverPlayer && !serverPlayer.level().isClientSide()) {
-            FlightSpeedAntiCheat.recordMovement(serverPlayer, flight, event.getDirection());
-        }
     }
 
     // 飞行时限制玩家头部转动范围（硬限 50°，禁用软限）

@@ -1,6 +1,8 @@
 package cc.lvjia.wings.mixin;
 
 import cc.lvjia.wings.server.asm.WingsHooks;
+import cc.lvjia.wings.server.flight.FlightSpeedAntiCheat;
+import cc.lvjia.wings.server.flight.Flights;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.FluidTags;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,6 +16,8 @@ public abstract class ServerPlayerMixin {
     @Inject(method = "checkMovementStatistics(DDD)V", at = @At("TAIL"))
     private void wings$trackFlight(double x, double y, double z, CallbackInfo ci) {
         ServerPlayer player = (ServerPlayer) (Object) this;
+        // 反作弊必须看到全部已接受移动，不能受下面的饥饿统计分支过滤。
+        FlightSpeedAntiCheat.recordMovement(player, Flights.get(player), x, y, z);
         // 上游钩子位于原版移动统计最后的“空中、非鞘翅飞行”分支。这里保留 TAIL
         // 注入以降低对方法内部指令序号的耦合，但显式复刻该分支条件，避免把游泳、攀爬
         // 或地面移动误算成翅膀飞行/下降消耗。

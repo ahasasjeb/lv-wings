@@ -2,6 +2,7 @@ package cc.lvjia.wings.server.net.serverbound;
 
 import cc.lvjia.wings.server.flight.Flight;
 import cc.lvjia.wings.server.flight.FlightStateReset;
+import cc.lvjia.wings.server.flight.FlightSpeedAntiCheat;
 import net.minecraft.world.entity.player.Player;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,8 +29,9 @@ public final class ControlFlyingMessageHandler {
             sync.send(player, flight);
             return;
         }
-        if (isFlying && (!player.isAlive() || !flight.canFly(player))) {
-            LOGGER.debug("Player {} failed canFly check, ignoring control_flying", player.getName().getString());
+        if (isFlying && (!player.isAlive() || !flight.canFly(player)
+                || !FlightSpeedAntiCheat.canStartFlight(player))) {
+            LOGGER.debug("Player {} cannot start wings flight or is in correction cooldown", player.getName().getString());
             sync.send(player, flight);
             return;
         }

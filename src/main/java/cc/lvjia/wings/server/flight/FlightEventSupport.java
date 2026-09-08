@@ -37,6 +37,8 @@ public final class FlightEventSupport {
     public static void onPlayerClone(Player oldPlayer, Player newPlayer, boolean copyFlightState,
                                      Function<Player, Flight> flights) {
         ControlFlyingMessageHandler.clearRateLimit(oldPlayer);
+        FlightSpeedAntiCheat.clear(oldPlayer);
+        FlightSpeedAntiCheat.clear(newPlayer);
         if (copyFlightState) {
             flights.apply(newPlayer).clone(flights.apply(oldPlayer));
         }
@@ -45,6 +47,7 @@ public final class FlightEventSupport {
     // 向玩家自己同步飞行状态（登录/重生/换维度后）
     public static void syncSelf(Player player, Function<Player, Flight> flights) {
         ControlFlyingMessageHandler.clearRateLimit(player);
+        FlightSpeedAntiCheat.clear(player);
         flights.apply(player).sync(Flight.PlayerSet.ofSelf());
     }
 
