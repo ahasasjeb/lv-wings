@@ -1,17 +1,13 @@
 package cc.lvjia.wings.client.hooks;
 
-import cc.lvjia.wings.util.Access;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MapItem;
 
 import org.jspecify.annotations.NonNull;
-
-import java.lang.invoke.MethodHandle;
 
 public final class ItemInHandHookSupport {
     private static int selectedItemSlot = 0;
@@ -38,7 +34,7 @@ public final class ItemInHandHookSupport {
         return !OptiFineHolder.PRESENT && !isMap(mainHandItem);
     }
 
-    public static boolean onCheckDoReequipAnimation(ItemStack from, ItemStack to, int slot,
+    public static boolean onCheckDoReequipAnimation(ItemStack from, ItemStack to, int slot, ItemStack visibleMainHand,
                                                     EmptyOffhandAllowance emptyOffhandAllowance, NormalReequipRule normalReequipRule) {
         boolean fromEmpty = from.isEmpty();
         boolean toEmpty = to.isEmpty();
@@ -49,7 +45,7 @@ public final class ItemInHandHookSupport {
             if (player == null) {
                 return true;
             }
-            boolean fromMap = isMap(GetItemStackMainHand.invoke(mc.gameRenderer.itemInHandRenderer));
+            boolean fromMap = isMap(visibleMainHand);
             boolean toMap = isMap(player.getMainHandItem());
             if (fromMap || toMap) {
                 return fromMap != toMap;
@@ -77,23 +73,6 @@ public final class ItemInHandHookSupport {
     @FunctionalInterface
     public interface NormalReequipRule {
         boolean shouldReequip(@NonNull ItemStack from, @NonNull ItemStack to, boolean hasSlotChange);
-    }
-
-    private static final class GetItemStackMainHand {
-        private static final MethodHandle MH = Access.getter(ItemInHandRenderer.class)
-                .name("mainHandItem")
-                .type(ItemStack.class);
-
-        private GetItemStackMainHand() {
-        }
-
-        private static ItemStack invoke(ItemInHandRenderer instance) {
-            try {
-                return (ItemStack) MH.invokeExact(instance);
-            } catch (Throwable t) {
-                throw Access.rethrow(t);
-            }
-        }
     }
 
     private static final class OptiFineHolder {

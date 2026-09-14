@@ -158,6 +158,13 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
+    doFirst {
+        def targetVersion = project.minecraft_version.split('-')[0]
+        if (!project.neo_version.startsWith("${targetVersion}.")) {
+            throw new GradleException("NeoForge ${project.neo_version} does not target Minecraft ${targetVersion}. " +
+                    'Update neo_version after a compatible release; use -PfabricOnly=true :fabric:build for now.')
+        }
+    }
 }
 
 idea {

@@ -20,7 +20,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jspecify.annotations.NonNull;
-import org.lwjgl.glfw.GLFW;
+import com.mojang.blaze3d.platform.InputConstants;
 
 public final class NeoForgeClientProxy extends NeoForgeProxy {
     private static final Logger LOGGER = LogManager.getLogger("WingsClient");
@@ -37,7 +37,7 @@ public final class NeoForgeClientProxy extends NeoForgeProxy {
         NeoForgeLayerWings.init(modBus);
         NeoForge.EVENT_BUS.register(NeoForgeKeyInputListener.builder()
                 .category(WINGS_KEY_CATEGORY)
-                .key("key.wings.fly", KeyConflictContext.IN_GAME, KeyModifier.NONE, GLFW.GLFW_KEY_R)
+                .key("key.wings.fly", KeyConflictContext.IN_GAME, KeyModifier.NONE, InputConstants.KEY_R)
                 .onPress(ClientFlightInputActions::toggleLocalFlight)
                 .build()
         );

@@ -234,7 +234,7 @@ public final class AnimatorAvian implements Animator {
 
         @Override
         public void getFeatherRotation(int index, float delta, RotationAngles rotation) {
-            double x = this.noise.getValue((this.time + delta) * 0.17D, index * 0.13D) * 1.25D;
+            double x = this.noise.get((this.time + delta) * 0.17D, index * 0.13D) * 1.25D;
             AnimatorAvian.this.restPosition.getFeatherRotation(index, delta, rotation);
             rotation.add(x, 0.0D, 0.0D);
         }
@@ -328,14 +328,14 @@ public final class AnimatorAvian implements Animator {
 
         @Override
         public void getWingRotation(int index, float delta, RotationAngles rotation) {
-            double n = this.noise.getValue((this.time + delta) * 0.18D, index * 0.13D) * 0.92D * (index + 1);
+            double n = this.noise.get((this.time + delta) * 0.18D, index * 0.13D) * 0.92D * (index + 1);
             this.wing.get(index, rotation);
             rotation.add(n, 0.0D, n);
         }
 
         @Override
         public void getFeatherRotation(int index, float delta, RotationAngles rotation) {
-            double n = this.noise.getValue((this.time + delta) * 0.2D, index * 0.13D) * 1.75D;
+            double n = this.noise.get((this.time + delta) * 0.2D, index * 0.13D) * 1.75D;
             rotation.set(-n, n * 4.0D, 0.0D);
         }
 

@@ -5,40 +5,15 @@ import cc.lvjia.wings.server.flight.Flight;
 import cc.lvjia.wings.server.net.Message;
 import cc.lvjia.wings.server.net.Network;
 import cc.lvjia.wings.server.net.clientbound.MessageSyncFlight;
-import cc.lvjia.wings.server.potion.PotionMix;
-import cc.lvjia.wings.server.potion.WingsBrewingCatalog;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.alchemy.Potions;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.ItemLike;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 
-import java.util.function.BiConsumer;
-import java.util.function.Supplier;
-
-// NeoForge 平台代理：网络注册 + 酿造配方 + 飞行监听器绑定
+// NeoForge 平台代理：网络注册和飞行监听器绑定；酿造配方由共享数据包加载。
 public class NeoForgeProxy {
     protected final Network network = new Network();
 
     public void init(IEventBus modBus) {
         this.network.register(modBus);
-        // NeoForge 特有：通过事件总线注册酿造配方
-        NeoForge.EVENT_BUS.addListener(this::registerBrewingRecipes);
-    }
-
-    // 注册瓶装翅膀的酿造配方（缓降药水 + 翅膀材料）
-    private void registerBrewingRecipes(RegisterBrewingRecipesEvent event) {
-        var builder = event.getBuilder();
-        BiConsumer<ItemLike, Supplier<? extends Item>> reg = (item, supplier) -> {
-            builder.addRecipe(new PotionMix(Potions.SLOW_FALLING, Ingredient.of(item), new ItemStack(supplier.get())));
-            builder.addRecipe(new PotionMix(Potions.LONG_SLOW_FALLING, Ingredient.of(item), new ItemStack(supplier.get())));
-        };
-
-        WingsBrewingCatalog.forEachMix(reg);
     }
 
     // 为玩家 Flight 注册同步监听器，使用 NeoForge 网络 API 发送包

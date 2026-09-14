@@ -51,8 +51,8 @@ public final class ClientEventHandlerSupport {
             if (FlightPoseSupport.shouldApplyFlightPose(player, amount)) {
                 FlightPoseSupport.FlightPoseAngles angles = FlightPoseSupport.getFlightPoseAngles(player,
                         flight.isFlying(), amount, delta);
-                matrixStack.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(amount, 0.0F, angles.roll())));
-                matrixStack.mulPose(Axis.XP.rotationDegrees(Mth.lerp(amount, 0.0F, angles.pitch())));
+                matrixStack.rotateDegrees(Axis.ZP, Mth.lerp(amount, 0.0F, angles.roll()));
+                matrixStack.rotateDegrees(Axis.XP, Mth.lerp(amount, 0.0F, angles.pitch()));
                 matrixStack.translate(0.0D, -1.2D * MathH.easeInOut(amount), 0.0D);
             }
         });

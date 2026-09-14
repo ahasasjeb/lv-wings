@@ -100,7 +100,7 @@ public final class NeoForgeKeyInputListener {
 
         @Override
         public BindingBuilder key(String desc, IKeyConflictContext context, KeyModifier modifier, int keyCode) {
-            KeyMapping binding = new KeyMapping(desc, context, modifier, InputConstants.Type.KEYSYM, keyCode, this.category);
+            KeyMapping binding = new KeyMapping(desc, context, modifier, InputConstants.Type.KEYBOARD, keyCode, this.category);
             KEY_MAPPINGS.add(binding);
             return new BindingBuilder(this, binding);
         }

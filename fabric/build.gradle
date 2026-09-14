@@ -51,7 +51,8 @@ dependencies {
 processResources {
     def replaceProperties = [
             version            : project.version,
-            minecraft_version  : minecraft_version,
+            // Loader 使用语义化 RC / pre 版本，Maven 下载仍使用 Mojang 的原始版本号。
+            minecraft_version  : minecraft_version.replaceFirst(/-(rc|pre)-(\d+)$/, '-$1.$2'),
             loader_version     : fabric_loader_version,
             mod_id             : mod_id,
             mod_name           : mod_name,

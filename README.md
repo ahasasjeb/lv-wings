@@ -78,7 +78,7 @@ Brewing steps:
 
 ### 翅膀药水酿造
 
-所有翅膀药水都通过药水酿造台酿造，使用**缓慢坠落药水**或**长效缓慢坠落药水**作为基础药水：
+所有翅膀药水都通过药水酿造台酿造，使用**缓降药水**作为基础药水：
 
 | 翅膀名称                    | 中文名称      | 酿造材料   |
 |-------------------------|-----------|--------|
@@ -99,6 +99,6 @@ Brewing steps:
 2. 在上方槽位放入对应的材料
 3. 等待酿造完成即可获得对应的翅膀药水
 
-由GPT-5.2-codex、GPT-5.3-codex、GPT-5.4、GPT-5.5、Minimax 2.7维护，人类进入游戏测试。
+由GPT-6维护，人类进入游戏测试。
 
-Maintained by GPT-5.2-codex, GPT-5.3-codex, GPT-5.4, GPT-5.5 and Minimax 2.7, humans enter the game for testing.
+Maintained by GPT-6, humans enter the game for testing.

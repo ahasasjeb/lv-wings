@@ -17,7 +17,7 @@ import net.minecraft.world.entity.player.Player;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jspecify.annotations.NonNull;
-import org.lwjgl.glfw.GLFW;
+import com.mojang.blaze3d.platform.InputConstants;
 
 public final class FabricClientProxy extends FabricProxy {
     private static final Logger LOGGER = LogManager.getLogger("WingsClient");
@@ -34,7 +34,7 @@ public final class FabricClientProxy extends FabricProxy {
         FabricClientEventHandler.register();
         FabricKeyInputListener.builder()
                 .category(WINGS_KEY_CATEGORY)
-                .key("key.wings.fly", GLFW.GLFW_KEY_R)
+                .key("key.wings.fly", InputConstants.KEY_R)
                 .onPress(ClientFlightInputActions::toggleLocalFlight)
                 .build()
                 .register();

@@ -1,0 +1,31 @@
+gradle.projectsEvaluated {
+    def fabric = gradle.rootProject.project(':fabric')
+    def smokeDir = gradle.rootProject.file('build/fabric-migration-verification')
+    def sourceDir = gradle.rootProject.file('scripts/fabric-migration-verification')
+    def prepareSmoke = fabric.tasks.register('prepareMigrationSmoke', Copy) {
+        from sourceDir
+        include 'fabric.mod.json'
+        into smokeDir
+    }
+    def compileSmoke = fabric.tasks.register('compileMigrationSmoke', JavaCompile) {
+        source = fabric.fileTree(sourceDir) { include '*.java' }
+        classpath = fabric.sourceSets.main.runtimeClasspath
+        destinationDirectory = smokeDir
+        options.encoding = 'UTF-8'
+        javaCompiler = fabric.javaToolchains.compilerFor { languageVersion = JavaLanguageVersion.of(25) }
+        dependsOn fabric.tasks.named('classes'), prepareSmoke
+    }
+    fabric.tasks.register('migrationSmoke', JavaExec) {
+        dependsOn compileSmoke
+        classpath = fabric.sourceSets.main.runtimeClasspath
+        mainClass = 'net.fabricmc.loader.impl.launch.knot.KnotClient'
+        javaLauncher = fabric.javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }
+        maxHeapSize = '2G'
+        workingDir = smokeDir
+        systemProperty 'fabric.development', 'true'
+        systemProperty 'fabric.noGui', 'true'
+        systemProperty 'fabric.addMods', smokeDir.absolutePath
+        systemProperty 'wings.recipeDir', gradle.rootProject.file('src/main/resources/data/wings/recipe/brewing').absolutePath
+        jvmArgs '--enable-native-access=ALL-UNNAMED'
+    }
+}

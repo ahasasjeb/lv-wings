@@ -1,6 +1,6 @@
 # 项目结构说明
 
-这是一个 Minecraft 26.1.x / 26.1.2 的 Fabric + NeoForge 双加载器项目。源码统一放在根目录的 `src` 下，通过 source set 区分共享代码和平台胶水代码。
+这是一个 Minecraft 26.3-rc-2 的 Fabric + NeoForge 双加载器项目。当前 RC 迁移只验证 Fabric；NeoForge 源码同步迁移，等待兼容 26.3 的加载器发布后再编译验证。源码统一放在根目录的 `src` 下，通过 source set 区分共享代码和平台胶水代码。
 
 ## 目录约定
 
@@ -41,7 +41,7 @@
     `BuffedFlightApparatus`）。
   - `cc.lvjia.wings.server.item`：物品行为（`WingsItemCatalog`、`WingsBottleItem`、
     `WingsBottleActions`、`BatBloodBottleItem`、`WingSettings`）。
-  - `cc.lvjia.wings.server.potion.WingsBrewingCatalog`：瓶装翅膀酿造配方清单。
+  - `src/main/resources/data/wings/recipe/brewing`：两平台共享的原版 JSON 酿造配方，替代旧酿造注册和 mixin。
   - `cc.lvjia.wings.server.effect.WingedEffect`：翅膀药水效果。
   - `cc.lvjia.wings.server.net`：共享网络协议（`Message`、`ControlFlyingMessageHandler`）。
   - `cc.lvjia.wings.server.dreamcatcher.InSomniable`：梦境捕获能力接口。
@@ -65,12 +65,15 @@
     客户端 mixin/hook 后的共享行为。
 
 ## 构建与验证
-- 完整验证命令：`.\gradlew.bat build`
+- 当前 RC 验证命令：`.\gradlew.bat -PfabricOnly=true :fabric:build`。此开关不配置 NeoForge。
+- 无窗口迁移验证：`.\gradlew.bat -PfabricOnly=true -I scripts/verify-fabric-migration.gradle :fabric:migrationSmoke`。
+  实际验证 Fabric Mixin 变换、两种翅膀模型和酿造配方；不替代进世界后的视觉和联机测试。
+- NeoForge 26.3 发布并更新 `neo_version` 后，双平台完整验证命令仍为 `.\gradlew.bat build`。
 - 编译需要 JDK 25
 - 结构漂移快速检查：`.\gradlew.bat reportPlatformSourceDrift`，输出在
   `build/reports/platform-source-drift.txt`。这个报告用于定位同路径平台文件和同名异路径文件；看到同路径差异不代表必须合并，
   需要按上面的平台 facade 规则判断是否还有业务逻辑可下沉。
-- 成功标准是 Fabric 和 NeoForge 两个子项目都编译、处理资源并产出 jar。
+- 当前 RC 成功标准为 Fabric 编译、测试、处理资源并产出 jar；不能将此结果视为 NeoForge 已验证。
 - 参考工程和本地依赖目录只作对照，不应纳入版本控制；`.gitignore` 已排除 `NeoForge-26.1.x/`、
   `NeoForge-26.2.x/`、`minecraft_client_26.1.2/`、`minecraft_client_26.2/`、
   `fabric-api-26.1.2/`、`fabric-api-26.2/` 等目录。

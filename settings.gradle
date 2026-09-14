@@ -16,4 +16,7 @@ plugins {
 rootProject.name = "lv-wings-fabric-neoforge"
 
 include 'fabric'
-include 'neoforge'
+// 快照 / RC 迁移时可用 -PfabricOnly=true，避免配置不支持该游戏版本的 NeoForge。
+if (!providers.gradleProperty('fabricOnly').map { it.toBoolean() }.getOrElse(false)) {
+    include 'neoforge'
+}

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:brewing",
+  "input": {
+    "item": "minecraft:potion",
+    "potion_contents": {
+      "potions": ["minecraft:slow_falling", "minecraft:long_slow_falling"]
+    }
+  },
+  "reagent": {
+    "item": "minecraft:red_dye"
+  },
+  "output": {
+    "id": "wings:parrot_wings_bottle"
+  }
+}

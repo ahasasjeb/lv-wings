@@ -88,7 +88,7 @@ public final class FabricKeyInputListener {
         public @NonNull BindingBuilder key(@NonNull String desc, int keyCode) {
             KeyMapping binding = KeyMappingHelper
                     .registerKeyMapping(new KeyMapping(Objects.requireNonNull(desc, "description"),
-                            InputConstants.Type.KEYSYM, keyCode, this.category));
+                            InputConstants.Type.KEYBOARD, keyCode, this.category));
             return new BindingBuilder(this, binding);
         }
     }

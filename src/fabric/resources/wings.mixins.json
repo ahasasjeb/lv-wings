@@ -7,13 +7,14 @@
     "FabricEntityMixin",
     "LivingEntityMixin",
     "PlayerMixin",
-    "PotionBrewingMixin",
     "ServerGamePacketListenerImplMixin",
     "ServerPlayerMixin"
   ],
   "client": [
     "FabricCameraMixin",
-    "FabricItemInHandRendererMixin",
+    "FirstPersonHandsAndItemsMixin",
+    "FirstPersonHandsAndItemsRendererMixin",
+    "FirstPersonHandsAndItemsRenderStateMixin",
     "PlayerModelMixin",
     "PlayerRendererMixin",
     "client.LivingEntityRendererAccessor"

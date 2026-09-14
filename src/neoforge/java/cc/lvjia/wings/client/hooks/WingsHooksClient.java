@@ -44,11 +44,12 @@ public final class WingsHooksClient {
         return isMainHand || ItemInHandHookSupport.canRenderEmptyOffhand(itemStackMainHand);
     }
 
-    public static boolean onCheckDoReequipAnimation(ItemStack from, ItemStack to, int slot) {
+    public static boolean onCheckDoReequipAnimation(ItemStack from, ItemStack to, int slot, ItemStack visibleMainHand) {
         return ItemInHandHookSupport.onCheckDoReequipAnimation(
                 from,
                 to,
                 slot,
+                visibleMainHand,
                 player -> {
                     EmptyOffHandPresentEvent ev = new EmptyOffHandPresentEvent(player);
                     NeoForge.EVENT_BUS.post(ev);

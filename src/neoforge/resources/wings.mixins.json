@@ -10,9 +10,10 @@
     "ServerPlayerMixin"
   ],
   "client": [
-    "ClientHooksMixin",
     "NeoForgeCameraMixin",
-    "NeoForgeItemInHandRendererMixin",
+    "FirstPersonHandsAndItemsMixin",
+    "FirstPersonHandsAndItemsRendererMixin",
+    "FirstPersonHandsAndItemsRenderStateMixin",
     "PlayerModelMixin",
     "PlayerRendererMixin",
     "client.LivingEntityRendererAccessor"

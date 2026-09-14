@@ -52,11 +52,12 @@ public final class WingsHooksClient {
         return ItemInHandHookSupport.canRenderEmptyOffhand(offHandItem, mainHandItem);
     }
 
-    public static boolean onCheckDoReequipAnimation(ItemStack from, ItemStack to, int slot) {
+    public static boolean onCheckDoReequipAnimation(ItemStack from, ItemStack to, int slot, ItemStack visibleMainHand) {
         return ItemInHandHookSupport.onCheckDoReequipAnimation(
                 from,
                 to,
                 slot,
+                visibleMainHand,
                 player -> {
                     EmptyOffHandPresentEvent ev = new EmptyOffHandPresentEvent(player);
                     FabricClientEventHandler.onEmptyOffHandPresentEvent(ev);

@@ -80,6 +80,12 @@ public final class SodiumBypassVertexConsumer implements VertexConsumer {
     }
 
     @Override
+    public @NonNull VertexConsumer setUv3(float u, float v) {
+        this.delegate().setUv3(u, v);
+        return this;
+    }
+
+    @Override
     public @NonNull VertexConsumer setNormal(float normalX, float normalY, float normalZ) {
         this.delegate().setNormal(normalX, normalY, normalZ);
         return this;

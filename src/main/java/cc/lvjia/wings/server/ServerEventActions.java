@@ -12,6 +12,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -63,7 +64,7 @@ public final class ServerEventActions {
             }
             player.setItemInHand(hand, batBlood);
         } else if (!player.getInventory().add(batBlood)) {
-            player.drop(batBlood, false);
+            player.drop(batBlood, false, Prediction.SERVER_ONLY);
         }
         return InteractionResult.SUCCESS;
     }

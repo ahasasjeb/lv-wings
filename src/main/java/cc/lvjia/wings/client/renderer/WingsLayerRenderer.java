@@ -112,8 +112,7 @@ public final class WingsLayerRenderer {
                 RenderTypes.entitySolid(capeTexture.texturePath()),
                 packedLight,
                 OverlayTexture.NO_OVERLAY,
-                state.outlineColor,
-                null);
+                state.outlineColor);
         poseStack.popPose();
     }
 
